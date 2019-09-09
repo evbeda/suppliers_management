@@ -9,6 +9,6 @@ install:
   - pip install -r requirements.txt
 # command to run tests
 script:
-  - coverage run --source='.' ./manage.py test
+  - coverage run --source='.' ./manage.py test --setting=supplier_management_site.settings.testing
 after_success:
   - coveralls
