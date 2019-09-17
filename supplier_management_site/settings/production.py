@@ -1,6 +1,7 @@
 from .base import *
 import dj_database_url
 
+from supplier_management_site import get_env_variable
 
 ALLOWED_HOSTS = ['secure-plateau-22734.herokuapp.com']
 
