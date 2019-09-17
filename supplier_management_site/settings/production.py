@@ -14,6 +14,11 @@ DATABASES = {
     }
 }
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_env_variable('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env_variable(
+   'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'
+)
+
 INSTALLED_APPS = [
     'users_app',
     'social_django',
