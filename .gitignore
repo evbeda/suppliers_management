@@ -2,7 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+
 db.sqlitetesting3
+setup_environment.sh
+
+
 # C extensions
 *.so
 
