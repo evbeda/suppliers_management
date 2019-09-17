@@ -23,12 +23,15 @@
               </div>
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
               <hr class="my-4">
+              <div>
+                <a class="button is-warning is-hovered" href="{% url "social:begin" "eventbrite" %}">Login with Eventbrite</a>
+              </div>
               <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Eventbrite</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-  </div>    
-       
+  </div>
+
 {% endblock %}
