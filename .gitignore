@@ -5,6 +5,7 @@ __pycache__/
 
 db.sqlitetesting3
 setup_environment.sh
+*.sh
 
 
 # C extensions
