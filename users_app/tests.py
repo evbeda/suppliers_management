@@ -166,9 +166,9 @@ class TestLoginRedirect(TestCase):
         url_ap, status_code_ap = response_ap.redirect_chain[0]
         url_sup, status_code_sup = response_supplier.redirect_chain[0]
         self.assertEqual(HTTPStatus.FOUND, status_code_ap)
-        self.assertEqual('/en{}'.format(AP_HOME), url_ap)
+        self.assertEqual('/?next={}'.format(AP_HOME), url_ap)
         self.assertEqual(HTTPStatus.FOUND, status_code_sup)
-        self.assertEqual('/en{}'.format(SUPPLIER_HOME), url_sup)
+        self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
         self.client.force_login(self.user_with_google_social)
