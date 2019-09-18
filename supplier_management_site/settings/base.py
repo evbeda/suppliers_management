@@ -123,3 +123,5 @@ LANGUAGES = (
     ('es', _('Espanol')),
     ('pt-br', _('Portuguese (Brazil)')),
 )
+
+AUTH_USER_MODEL = 'users_app.User'
