@@ -1,8 +1,8 @@
 import os
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'supplier_management_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates', os.path.join(BASE_DIR, "supplier_management_site/tests/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -111,3 +113,13 @@ STATIC_URL = '/static/'
 SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/home'
 SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/apsite/home'
 LOGOUT_REDIRECT_URL = '/'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'supplier_management_site/locale'),
+)
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('es', _('Espanol')),
+    ('pt-br', _('Portuguese (Brazil)')),
+)
