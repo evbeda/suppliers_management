@@ -115,6 +115,6 @@ class TestLoginErrorTemplate(TestCase):
         self.client = Client()
 
     def test_template_login_error(self):
-        activate('en')
+        # activate('en')
         response = self.client.get(reverse('login-error'))
         self.assertEqual(response.status_code, 200)
