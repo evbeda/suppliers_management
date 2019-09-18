@@ -1,13 +1,10 @@
 from django.http import HttpResponseRedirect
-<<<<<<< HEAD
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from django.contrib.auth import get_user_model
-=======
-from django.test import TestCase, Client
->>>>>>> added login error template
 from parameterized import parameterized
 from django.urls import reverse
+from django.utils.translation import activate
 
 
 from social_core.backends.eventbrite import EventbriteOAuth2
@@ -111,11 +108,13 @@ class TestUser(TestCase):
         with self.assertRaises(ValueError):
             User.objects.create_superuser(
                 email='super@user.com', password='foo', is_superuser=False)
+
+
 class TestLoginErrorTemplate(TestCase):
     def setup(self):
         self.client = Client()
-        
-    def test_template_login_error(self):
-       response = self.client.get(reverse('login-error'))
-       self.assertEqual(response.status_code, 200)
 
+    def test_template_login_error(self):
+        activate('en')
+        response = self.client.get(reverse('login-error'))
+        self.assertEqual(response.status_code, 200)
