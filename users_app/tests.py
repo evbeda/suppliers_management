@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.test import TestCase, Client
-
+from users_app.models import User
 from django.contrib.auth import get_user_model
 from parameterized import parameterized
 from django.urls import reverse
@@ -11,6 +11,7 @@ from social_core.backends.eventbrite import EventbriteOAuth2
 from social_core.backends.google import GoogleOAuth2
 from social_django.strategy import DjangoStrategy
 from social_django.models import DjangoStorage
+from social_django.models import UserSocialAuth
 
 from .validate_ap_user import allowed_email_for_admin, create_user
 
@@ -118,3 +119,58 @@ class TestLoginErrorTemplate(TestCase):
         # activate('en')
         response = self.client.get(reverse('login-error'))
         self.assertEqual(response.status_code, 200)
+
+
+SUPPLIER_HOME = '/suppliersite/home'
+AP_HOME = '/apsite/home'
+
+
+class TestLoginRedirect(TestCase):
+    def setUp(self):
+        self.GENERIC_PASSWORD = '1234'
+        self.client = Client()
+        self.user_with_eb_social = \
+            User.objects.create_user(email='nicolas', password=self.GENERIC_PASSWORD)
+        UserSocialAuth.objects.create(
+            user=self.user_with_eb_social,
+            provider='eventbrite',
+            uid='1233543645',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+        self.user_with_google_social = \
+            User.objects.create_user(email='pepe', password=self.GENERIC_PASSWORD)
+        UserSocialAuth.objects.create(
+            user=self.user_with_google_social,
+            provider='google',
+            uid='1233543645',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+
+    def test_login_success_with_EB_should_redirect_to_suppliersite(self):
+        self.client.force_login(self.user_with_eb_social)
+        response = self.client.get(SUPPLIER_HOME)
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('supplier_app/supplier-home.html', response.template_name[0])
+
+    def test_login_fail_should_redirect_to_loginfailview(self):
+        response_supplier = self.client.get(SUPPLIER_HOME, follow=True)
+        response_ap = self.client.get(AP_HOME, follow=True)
+        url_ap, status_code_ap = response_ap.redirect_chain[0]
+        url_sup, status_code_sup = response_supplier.redirect_chain[0]
+        self.assertEqual(302, status_code_ap)
+        self.assertEqual('/?next={}'.format(AP_HOME), url_ap)
+        self.assertEqual(302, status_code_sup)
+        self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
+
+    def test_login_success_with_Google_should_redirect_to_apsite(self):
+        self.client.force_login(self.user_with_google_social)
+        response = self.client.get(AP_HOME)
+        self.assertEqual(200, response.status_code)
