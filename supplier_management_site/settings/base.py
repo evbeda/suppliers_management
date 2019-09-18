@@ -108,6 +108,6 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = '/users/login/'
+SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/home'
+SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/apsite/home'
+LOGOUT_REDIRECT_URL = '/'
