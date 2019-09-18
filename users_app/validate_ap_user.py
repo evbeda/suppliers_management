@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.urls import reverse
 
 USER_FIELDS = ['email']
 
@@ -18,7 +19,7 @@ def create_user(strategy, details, backend, user=None, *args, **kwargs):
         return
 
     if backend.name == 'google-oauth2' and not allowed_email_for_admin(fields['email']):
-        return redirect('/login-failed-view', *args, permanent=False, **kwargs)
+        return redirect(reverse('login-error'), *args, permanent=False, **kwargs)
 
     return {
         'is_new': True,
