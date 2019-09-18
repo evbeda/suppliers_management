@@ -1,7 +1,10 @@
 from django.conf.urls import url
-from . import views
-
+from .views import (
+    SupplierLoginView,
+    SupplierLogoutView,
+)
 
 urlpatterns = [
-    url(r'^$', views.GeneralLoginView.as_view(), name='login'),
+    url(r'^$', SupplierLoginView.as_view(), name='login'),
+    url(r'^logout$', SupplierLogoutView.as_view(), name='logout'),
 ]

@@ -1,6 +1,10 @@
-from django.shortcuts import render
-from django.contrib.auth.views import LoginView
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView
 
 
-class GeneralLoginView(LoginView):
+class SupplierLoginView(TemplateView):
+    template_name = 'registration/login.html'
+
+
+class SupplierLogoutView(LogoutView):
     pass
