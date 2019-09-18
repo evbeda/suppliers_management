@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 
-USER_FIELDS = ['username', 'email']
+USER_FIELDS = ['email']
 
 
 def allowed_email_for_admin(email):
