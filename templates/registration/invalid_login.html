@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}" />
+{% endblock %}
+
 {% block content %}
 <div class="container">
   <div class="row">
@@ -6,8 +12,8 @@
       <div class="card card-signin my-5">
         <div class="card-body">
           <h4 class="card-title text-danger text-center">ERROR</h4>
-              <h5 class="text-muted text-center">If you are a supplier please:</h5>
-              <a class="btn btn-lg btn-warning btn-block text-uppercase" href="{% url 'social:begin' 'eventbrite' %}"> Sign in with Eventbrite</a>
+              <h5 class="text-center">If you are a supplier please:</h5>
+              <a class="btn btn-eb btn-block text-uppercase" href="{% url 'social:begin' 'eventbrite' %}"> Sign in with Eventbrite</a>
           </div>
         </div>
       </div>
