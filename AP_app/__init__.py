@@ -1,1 +1,1 @@
-ALLOWED_AP_ACCOUNTS = ['juan.vallejo@eventbrite.com', 'ap@eventbrite.com']
+ALLOWED_AP_ACCOUNTS = ['ap@eventbrite.com']

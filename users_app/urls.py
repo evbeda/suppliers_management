@@ -8,5 +8,5 @@ from .views import (
 urlpatterns = [
     url(r'^$', SupplierLoginView.as_view(), name='login'),
     url(r'^logout$', SupplierLogoutView.as_view(), name='logout'),
-    url(r'^error/invalidemail', ErrorLoginView.as_view(), name="login-error"),
+    url(r'^login-error$', ErrorLoginView.as_view(), name="login-error"),
     ]

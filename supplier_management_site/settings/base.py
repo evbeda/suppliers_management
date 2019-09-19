@@ -31,6 +31,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 SOCIAL_AUTH_PIPELINE = (
@@ -39,10 +40,12 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'users_app.validate_ap_user.create_user',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -116,7 +119,12 @@ STATICFILES_DIRS = (
 
 SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/home'
 SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/apsite/home'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force', 'hd': 'eventbrite.com'}
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['eventbrite.com']
+# SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['juan@eventbrite.com']
+
 LOGOUT_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error'
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'supplier_management_site/locale'),
@@ -129,5 +137,3 @@ LANGUAGES = (
 )
 
 AUTH_USER_MODEL = 'users_app.User'
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force', 'hd': 'eventbrite.com'}
