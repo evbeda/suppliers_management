@@ -25,26 +25,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env_variable(
 )
 
 
-INSTALLED_APPS = [
-    'users_app',
-    'social_django',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+INSTALLED_APPS += [
     'whitenoise.runserver_nostatic'
 ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+MIDDLEWARE += [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
