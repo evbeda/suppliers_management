@@ -110,6 +110,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/home'
 SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/apsite/home'
 LOGOUT_REDIRECT_URL = '/'

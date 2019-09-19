@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block styles %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}" />
+{% endblock %}
 
+{% block content %}
+<h1 class="text-center"> Welcome to BriteSU </h1>
 <div class="container">
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -10,17 +15,21 @@
             <h5 class="card-title text-center">Sign In</h5>
               <hr class="my-4">
               <div>
-              <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit">
-                <i class="fab fa-google mr-2"></i> 
-                <a class="button is-warning is-hovered" href="{% url 'social:begin' 'eventbrite' %}">Login with Eventbrite</a>
-              </button>
+                <h4> If you are a supplier please:</h3>
+                <button class="btn btn-eb btn-block text-uppercase">
+                  <a href="{% url 'social:begin' 'eventbrite' %}">
+                      Login with Eventbrite
+                  </a>
+                </button>
               </div>
               <hr>
               <div>
-              <button class="btn btn-lg btn-warning btn-block text-uppercase" type="submit">
-                <i class="fab fa-google mr-2"></i> 
-                <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>              
-              </button>
+                <h4> If you are a EB employee please:</h3>
+                <button class="btn btn-google btn-block text-uppercase">
+                  <a href="{% url 'social:begin' 'google-oauth2' %}">
+                      Login with Google              
+                  </a>
+                </button>
               </div>
             </form>
           </div>
@@ -28,5 +37,8 @@
       </div>
     </div>
   </div>
+  <footer>
+    Eventbrite
+  </footer>
 
 {% endblock %}
