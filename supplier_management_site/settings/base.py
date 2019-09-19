@@ -129,3 +129,5 @@ LANGUAGES = (
 )
 
 AUTH_USER_MODEL = 'users_app.User'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force', 'hd': 'eventbrite.com'}

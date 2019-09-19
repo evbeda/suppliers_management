@@ -1,8 +1,6 @@
-from django.http import HttpResponseRedirect
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from django.utils.translation import activate
 
 from social_core.backends.eventbrite import EventbriteOAuth2
 from social_core.backends.google import GoogleOAuth2
@@ -77,7 +75,7 @@ class TestOauth(TestCase):
         }
         ret = create_user(self.strategy, details, backend, None, self.kwargs)
         # Assert that the user is not created, can be an excepcion also
-        self.assertTrue(isinstance(ret, HttpResponseRedirect))
+        self.assertEqual(ret.url, reverse('login-error'))
 
 
 class TestUser(TestCase):
@@ -142,7 +140,7 @@ class TestLoginRedirect(TestCase):
             }
         )
         self.user_with_google_social = \
-            User.objects.create_user(email='pepe@eventbrite.com', password=GENERIC_PASSWORD)
+            User.objects.create_user(email='ap@eventbrite.com', password=GENERIC_PASSWORD)
         UserSocialAuth.objects.create(
             user=self.user_with_google_social,
             provider='google-oauth2',
