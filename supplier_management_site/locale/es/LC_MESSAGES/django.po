@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-16 15:04+0000\n"
+"POT-Creation-Date: 2019-09-19 15:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: supplier_management_site/settings/base.py:86
+#: supplier_management_site/settings/base.py:126
 msgid "English"
 msgstr ""
 
-#: supplier_management_site/settings/base.py:87
+#: supplier_management_site/settings/base.py:127
 msgid "Espanol"
 msgstr ""
 
-#: supplier_management_site/settings/base.py:88
+#: supplier_management_site/settings/base.py:128
 msgid "Portuguese (Brazil)"
 msgstr ""
 
-#: supplier_management_site/templates/supplier_management_site/index.html:4
+#: supplier_management_site/tests/templates/tests/index.html:4
+#: supplier_management_site/tests/test.py:13
 msgid "Hello world"
 msgstr "Hola Mundo"
+
+#: templates/AP_app/ap-home.html:3
+msgid "Welcome AP "
+msgstr "Bienvenido AP"
+
+#: templates/supplier_app/supplier-home.html:3
+msgid "Welcome Supplier"
+msgstr "Bienvenido Proveedor"
+
+#: users_app/models.py:16
+msgid "The Email must be set"
+msgstr ""
+
+#: users_app/models.py:31
+msgid "Superuser must have is_staff=True."
+msgstr ""
+
+#: users_app/models.py:33
+msgid "Superuser must have is_superuser=True."
+msgstr ""
+
+#: users_app/models.py:39
+msgid "email address"
+msgstr ""
