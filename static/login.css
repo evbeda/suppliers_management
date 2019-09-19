@@ -1,0 +1,27 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    background-color: rgba(167, 153, 153, 0.411)
+}
+
+a{
+    color: white;
+    text-decoration: none;
+    display: block
+}
+
+a:hover{
+    text-decoration: none;
+    color:black
+}
+
+.btn-eb{
+    background-color: #F05537
+}
+
+.btn-google{
+    background-color: #4285F4
+}
