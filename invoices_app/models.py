@@ -1,5 +1,7 @@
 from django.db import models
 from users_app.models import User
+from django.conf import settings
+from datetime import datetime
 
 
 class Company(models.Model):
@@ -77,3 +79,17 @@ class BankAccount(models.Model):
             self.account_type,
             self.account_number,
             self.identifier)
+
+
+class Invoice(models.Model):
+    #eb_company = models.CharField(max_length=200)
+    tax_payer = models.ForeignKey(TaxPayer, on_delete=models.)
+    currency = models.CharField(max_length=200)
+    po_number = models.CharField(max_length=200)
+    invoice_date = models.DateTimeField(auto_now=True)
+    invoice_date_received = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      on_delete=models.CASCADE
+    )
+    pdf_url = models.CharField(max_length=200)

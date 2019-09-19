@@ -58,6 +58,7 @@ AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account', 'hd':'eventbrite.com'}
 ROOT_URLCONF = 'supplier_management_site.urls'
 
 TEMPLATES = [
