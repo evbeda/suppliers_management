@@ -45,6 +45,14 @@ class TestUser(TestCase):
         with self.assertRaises(ValueError):
             User.objects.create_superuser(
                 email='super@user.com', password='foo', is_superuser=False)
+        with self.assertRaises(ValueError):
+            User.objects.create_superuser(
+                email='super@user.com', password='foo', is_staff=False)
+
+    def test_string_representation(self):
+        User = get_user_model()
+        admin_user = User.objects.create_superuser('super@user.com', 'foo')
+        self.assertEqual(str(admin_user), 'super@user.com')
 
 
 class TestLoginErrorTemplate(TestCase):
