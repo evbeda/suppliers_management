@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-# from . import ALLOWED_AP_ACCOUNTS
+from . import ALLOWED_AP_ACCOUNTS
 
 
 class APHome(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
