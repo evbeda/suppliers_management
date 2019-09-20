@@ -10,7 +10,7 @@ class APHome(UserPassesTestMixin, LoginRequiredMixin, TemplateView):
 
     def test_func(self):
         if self.request.user.is_authenticated():
-            # return self.request.user.email in ALLOWED_AP_ACCOUNTS
-            return self.request.user.email.endswith('@eventbrite.com')
+            return self.request.user.email in ALLOWED_AP_ACCOUNTS
+            # return self.request.user.email.endswith('@eventbrite.com')
         else:
             return False
