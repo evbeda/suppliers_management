@@ -1,4 +1,15 @@
+{% extends 'navbar.html'%}
 {% load i18n %}
 
-<h1> {% trans "Welcome AP "%}</h1>
-<a href="{% url 'logout' %}"><button>Logout</button></a>
+{% block navbar %}
+    <li>
+        <a class='nav-link' href="#">Opcion 2</a> 
+    </li>
+    <li>
+    <a class='nav-link' href="#">Opcion 2</a> 
+    </li>
+{% endblock %}
+{% block content %}
+{{ block.super }}
+    <h1 class='text-center'> {% trans "Welcome AP "%}</h1>
+{% endblock%}

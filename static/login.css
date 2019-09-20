@@ -1,28 +1,19 @@
-html{
-    height: 100%;
-}
-
-body{
-    height: 100%;
-    background-color: rgb(57, 54, 79)
-}
-
 a:hover{
     text-decoration: none
-}
-
-a.btn{
-    color:white
-}
-
-.btn:hover{
-    background-color: rgba(184, 160, 149, 0.527)
 }
 
 .btn-eb{
     background-color: #F05537
 }
 
+.btn-eb:hover{
+    background-color: rgb(223, 79, 51)
+}
+
 .btn-google{
     background-color: #4285F4
+}
+
+.btn-google:hover{
+    background-color: rgb(64, 129, 235)
 }
