@@ -3,6 +3,15 @@ from users_app.models import User
 from django.conf import settings
 from datetime import datetime
 
+<<<<<<< HEAD
+=======
+
+class Country(models.Model):
+    country_code = models.CharField(max_length=4)
+    description = models.CharField(max_length=40)
+    default_language = models.CharField(max_length=40)
+
+>>>>>>> added models
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
@@ -35,9 +44,12 @@ class TaxPayer(models.Model):
     tax_payer_state = models.ForeignKey(TaxPayerState, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
+<<<<<<< HEAD
     def __str__(self):
         return self.name
 
+=======
+>>>>>>> added models
 
 class TaxPayerArgentina(TaxPayer):
     razon_social = models.CharField(max_length=200)
