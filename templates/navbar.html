@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark justify-content-between blue-eb">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class='navbar-nav '>
+            {% block navbar %}
+            {% endblock %}
+        </ul>
+    </div>
+    <div>
+        <a class='btn btn-danger' href="{% url 'logout' %}">Logout</a>
+    </div>
+</nav>
+{% endblock %}
