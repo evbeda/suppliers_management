@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa
 import dj_database_url
 from supplier_management_site import get_env_variable
 
@@ -24,11 +24,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env_variable(
    'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'
 )
 
-INSTALLED_APPS += [
-    'whitenoise.runserver_nostatic',
+INSTALLED_APPS += [  # noqa
+    'whitenoise.runserver_nostatic'
 ]
 
-MIDDLEWARE += [
+MIDDLEWARE += [  # noqa
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
@@ -39,7 +39,7 @@ DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_FROM_ENV)
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'project_name/static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # noqa
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'project_name/static')]  # noqa
 
 DEBUG = True

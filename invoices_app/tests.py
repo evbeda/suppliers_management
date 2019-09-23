@@ -1,6 +1,4 @@
-from parameterized import parameterized
 from django.test import TestCase
-from .models import Address, BankAccount, Company, CompanyUserPermission, TaxPayer, TaxPayerArgentina, TaxPayerState
 from users_app.models import User
 from datetime import datetime
 from pytz import UTC
@@ -9,12 +7,12 @@ from unittest import mock
 
 from django.core.files import File
 from .forms import InvoiceForm
-from users_app.models import User
 
 from .models import (
     Address,
     BankAccount,
     Company,
+    CompanyUserPermission,
     InvoiceArg,
     TaxPayer,
     TaxPayerArgentina,
@@ -28,7 +26,12 @@ class TestModels(TestCase):
         self.state.save()
         self.company1 = Company(name='Supra', description='Best catering worlwide')
         self.company1.save()
-        self.tax_payer = TaxPayer(name='Eventbrite', workday_id='12345', tax_payer_state=self.state, company=self.company1)
+        self.tax_payer = TaxPayer(
+            name='Eventbrite',
+            workday_id='12345',
+            tax_payer_state=self.state,
+            company=self.company1
+        )
         self.tax_payer.save()
         self.company = {
             'name': 'Eventbrite',
@@ -146,7 +149,12 @@ class TestInvoice(TestCase):
         self.state.save()
         self.company = Company.objects.create(name='Company testing')
         self.user = User.objects.create_user(email='test_test@test.com')
-        self.tax_payer = TaxPayer(name='Eventbrite', workday_id='12345', tax_payer_state=self.state, company=self.company)
+        self.tax_payer = TaxPayer(
+            name='Eventbrite',
+            workday_id='12345',
+            tax_payer_state=self.state,
+            company=self.company
+        )
         self.tax_payer.save()
         self.invoice_creation_valid_data = {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
@@ -169,7 +177,7 @@ class TestInvoice(TestCase):
             remove(self.file_mock.name)
 
     def test_invoice_create(self):
-        
+
         form = InvoiceForm(
             data=self.invoice_creation_valid_data,
             files={
@@ -199,4 +207,3 @@ class TestInvoice(TestCase):
             user=self.user,
             )
         self.assertEqual(InvoiceArg.objects.get(invoice_number='1234'), invoice)
-
