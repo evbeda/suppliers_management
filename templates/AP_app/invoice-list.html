@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+    <h1 class='text-center'> {% trans "Invoice List"%}</h1>
+    <table class="table">
+        <th>
+            <td>Invoice</td>
+        </th>
+        {% for invoice in object_list %}
+            <tr>
+                <td>invoice.id</td>
+                <td>invoice.invoice_date_received</td>
+                <td>invoice.tax_payer.name</td>
+                <td>invoice.tax_payer.po_number</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock%}

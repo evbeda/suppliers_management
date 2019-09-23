@@ -18,8 +18,8 @@ INVOICE_SATUS = [
 ]
 
 ARS_INVOICE_TYPES = [
-    ('A','A'),
-    ('C','C'),
+    ('A', 'A'),
+    ('C', 'C'),
 
 ]
 
@@ -57,8 +57,8 @@ class TaxPayer(models.Model):
 
     def __str__(self):
         return self.name
-       
-        
+
+
 class TaxPayerArgentina(TaxPayer):
     razon_social = models.CharField(max_length=200)
     cuit = models.CharField(max_length=200)
