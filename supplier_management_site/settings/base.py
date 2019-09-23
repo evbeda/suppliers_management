@@ -20,7 +20,11 @@ INSTALLED_APPS = [
     'supplier_app',
     'users_app',
     'social_django',
+<<<<<<< HEAD
     'invoices_app',
+=======
+    'invoices_app'
+>>>>>>> create invoice view
 ]
 
 MIDDLEWARE = [
