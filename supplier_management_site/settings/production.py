@@ -24,9 +24,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env_variable(
    'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'
 )
 
-
 INSTALLED_APPS += [
-    'whitenoise.runserver_nostatic'
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE += [
@@ -34,6 +33,8 @@ MIDDLEWARE += [
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 
 DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_FROM_ENV)
