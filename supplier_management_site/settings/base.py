@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'supplier_app',
     'users_app',
     'social_django',
+    'invoices_app',
 ]
 
 MIDDLEWARE = [
