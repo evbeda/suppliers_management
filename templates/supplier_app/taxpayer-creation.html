@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<form method="post">
+    {% csrf_token %}
+    <h4>Taxpayer info</h4>
+    {{taxpayer_form.as_p}}
+    <hr>
+    <h4>Address info</h4>
+    {{address_form.as_p}}
+    <hr>
+    <h4>Bank account info</h4>
+    {{bankaccount_form.as_p}}
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}
