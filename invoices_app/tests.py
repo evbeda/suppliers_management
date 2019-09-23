@@ -1,4 +1,13 @@
 from django.test import TestCase
+from .models import (
+    Address,
+    BankAccount,
+    Company,
+    CompanyUserPermission,
+    TaxPayer,
+    TaxPayerArgentina,
+    InvoiceArg
+)
 from users_app.models import User
 from datetime import datetime
 from pytz import UTC
@@ -8,31 +17,11 @@ from unittest import mock
 from django.core.files import File
 from .forms import InvoiceForm
 
-from .models import (
-    Address,
-    BankAccount,
-    Company,
-    CompanyUserPermission,
-    InvoiceArg,
-    TaxPayer,
-    TaxPayerArgentina,
-    TaxPayerState,
-)
-
 
 class TestModels(TestCase):
     def setUp(self):
-        self.state = TaxPayerState()
-        self.state.save()
-        self.company1 = Company(name='Supra', description='Best catering worlwide')
-        self.company1.save()
-        self.tax_payer = TaxPayer(
-            name='Eventbrite',
-            workday_id='12345',
-            tax_payer_state=self.state,
-            company=self.company1
-        )
-        self.tax_payer.save()
+        self.company1 = Company.objects.create(name='Supra', description='Best catering worldwide')
+        self.taxpayer = TaxPayer.objects.create(name='Eventbrite', workday_id='12345', company=self.company1)
         self.company = {
             'name': 'Eventbrite',
             'description': 'Bringing the world together through live experiences',
@@ -40,10 +29,10 @@ class TestModels(TestCase):
         self.user = {
             'email': 'pepe@pepe.com',
         }
-        self.tax_payer_ar = {
+        self.taxpayer_ar = {
             'name': 'Eventbrite',
             'workday_id': '12345',
-            'tax_payer_state': self.state,
+            'taxpayer_state':'PEN',
             'razon_social': 'Sociedad Anonima',
             'cuit': '20-31789965-3'
         }
@@ -54,16 +43,16 @@ class TestModels(TestCase):
         self.assertEqual(company.description, self.company['description'])
         self.assertEqual(
             str(company),
-            "Company:{} Description:{}".format(
-                self.company['name'],
-                self.company['description']
+            "Company:{}".format(
+                self.company['name']
             )
         )
 
     def test_company_user_permissions(self):
         user = User.objects.create(**self.user)
         company = Company.objects.create(**self.company)
-        company_user_permissions = CompanyUserPermission.objects.create(user=user, company=company)
+        company_user_permissions = \
+            CompanyUserPermission.objects.create(user=user, company=company)
         self.assertEqual(
             company_user_permissions.user.email,
             self.user['email']
@@ -74,30 +63,28 @@ class TestModels(TestCase):
         )
 
     def test_company_of_tax_payer(self):
-        tax_payer1 = self.tax_payer
-        self.assertEqual(tax_payer1.company.name, "Supra")
+        taxpayer1 = self.taxpayer
+        self.assertEqual(taxpayer1.company.name, "Supra")
 
     def test_tax_payer_entity(self):
-        tax_payer = self.tax_payer
-        self.assertEqual(tax_payer.name, 'Eventbrite')
-        self.assertEqual(tax_payer.workday_id, '12345')
-        self.assertEqual(tax_payer.tax_payer_state, self.state)
-        self.assertEqual(str(tax_payer), tax_payer.name)
+        taxpayer = self.taxpayer
+        self.assertEqual(taxpayer.name, 'Eventbrite')
+        self.assertEqual(taxpayer.workday_id, '12345')
 
     def test_state_when_create_tax_payer_first_time(self):
-        tax_payer = self.tax_payer
-        self.assertEqual(tax_payer.tax_payer_state.name_tax_payer_state, "Pending")
-        self.assertEqual(str(tax_payer.tax_payer_state), "Status: {}".format("Pending"))
+        taxpayer = self.taxpayer
+        self.assertEqual(taxpayer.taxpayer_state, "PEND")
+        self.assertEqual(str(taxpayer), "Name:Eventbrite Status:PEND")
 
     def test_create_child_of_tax_payer(self):
-        tax_payer_ar = TaxPayerArgentina(**self.tax_payer_ar)
-        self.assertTrue(isinstance(tax_payer_ar, TaxPayer))
-        self.assertEqual(tax_payer_ar.name, 'Eventbrite')
+        taxpayer_ar = TaxPayerArgentina(**self.taxpayer_ar)
+        self.assertTrue(isinstance(taxpayer_ar, TaxPayer))
+        self.assertEqual(taxpayer_ar.name, 'Eventbrite')
         self.assertEqual(
-            str(tax_payer_ar),
+            str(taxpayer_ar),
             "Razon Social: {} CUIT: {}".format(
-                self.tax_payer_ar['razon_social'],
-                self.tax_payer_ar['cuit'],
+                self.taxpayer_ar['razon_social'],
+                self.taxpayer_ar['cuit'],
             )
         )
 
@@ -109,7 +96,7 @@ class TestModels(TestCase):
             city='Godoy Cruz',
             state='Mendoza',
             country='Argentina',
-            tax_payer=self.tax_payer
+            taxpayer=self.taxpayer
         )
         self.assertEqual(
             str(address),
@@ -120,13 +107,13 @@ class TestModels(TestCase):
                 'Godoy Cruz',
                 'Mendoza',
                 'Argentina',
-                self.tax_payer
+                self.taxpayer
             )
         )
-        self.assertEqual(address.tax_payer, self.tax_payer)
+        self.assertEqual(address.taxpayer, self.taxpayer)
 
     def test_bank_account(self):
-        taxpayer = self.tax_payer
+        taxpayer = self.taxpayer
         bank = BankAccount.objects.create(
             bank_name='Supervielle',
             account_type='CA $',
@@ -145,17 +132,13 @@ class TestModels(TestCase):
 
 class TestInvoice(TestCase):
     def setUp(self):
-        self.state = TaxPayerState()
-        self.state.save()
         self.company = Company.objects.create(name='Company testing')
         self.user = User.objects.create_user(email='test_test@test.com')
-        self.tax_payer = TaxPayer(
-            name='Eventbrite',
-            workday_id='12345',
-            tax_payer_state=self.state,
-            company=self.company
-        )
-        self.tax_payer.save()
+        self.taxpayer = \
+            TaxPayer.objects.create(
+                name='Eventbrite',
+                workday_id='12345',
+                company=self.company)
         self.invoice_creation_valid_data = {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
@@ -166,7 +149,7 @@ class TestInvoice(TestCase):
             'vat': '1200',
             'total_amount': '5200',
             'invoice_file': 'test.pdf',
-            'tax_payer': self.tax_payer,
+            'taxpayer': self.taxpayer,
         }
         self.invoice_creation_empty_data = {}
         self.file_mock = mock.MagicMock(spec=File)
@@ -177,7 +160,6 @@ class TestInvoice(TestCase):
             remove(self.file_mock.name)
 
     def test_invoice_create(self):
-
         form = InvoiceForm(
             data=self.invoice_creation_valid_data,
             files={
@@ -195,7 +177,7 @@ class TestInvoice(TestCase):
     def test_invoice_create_db(self):
         invoice = InvoiceArg.objects.create(
             invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            tax_payer=self.tax_payer,
+            taxpayer=self.taxpayer,
             invoice_type='A',
             invoice_number='1234',
             po_number='98876',
@@ -206,4 +188,6 @@ class TestInvoice(TestCase):
             invoice_file=self.file_mock,
             user=self.user,
             )
-        self.assertEqual(InvoiceArg.objects.get(invoice_number='1234'), invoice)
+        self.assertEqual(
+            InvoiceArg.objects.get(invoice_number='1234'), invoice
+            )

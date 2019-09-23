@@ -1,6 +1,130 @@
+from unittest.mock import patch
+
+from django.http import QueryDict
 from django.test import TestCase
+from django.test import Client
+from django.http import HttpResponseRedirect
+
+from .views import (
+    CreateTaxPayerView,
+    AddressCreateForm,
+    BankAccountCreateForm,
+    TaxPayerCreateForm,
+)
+
+from users_app.models import User
+from social_django.models import UserSocialAuth
+from invoices_app.models import (
+    Company,
+    TaxPayer,
+    TaxPayerArgentina,
+    BankAccount,
+    Address
+)
+
+GENERIC_PASSWORD = '1234'
+POST = {
+            'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
+            'taxpayer_form-workday_id': '1',
+            'taxpayer_form-name': 'EB ARG',
+            'taxpayer_form-company': '1',
+            'taxpayer_form-razon_social': 'Monotributista',
+            'taxpayer_form-cuit': '20-3123214-0',
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'Argentina',
+            'bankaccount_form-bank_name': 'Ganicia',
+            'bankaccount_form-account_type': 'Cta Cte',
+            'bankaccount_form-account_number': '123214',
+            'bankaccount_form-identifier': '12312512'
+}
 
 
-class Test(TestCase):
-    def test_dummie(self):
-        self.assertTrue(True)
+class TestCreateTaxPayer(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.create_taxpayer_view = CreateTaxPayerView()
+        self.company = Company.objects.create(name='FakeCompany', description='Best catering worldwide')
+        self.user_with_eb_social = \
+            User.objects.create_user(email='nicolas', password=GENERIC_PASSWORD)
+        UserSocialAuth.objects.create(
+            user=self.user_with_eb_social,
+            provider='eventbrite',
+            uid='1233543645',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+        self.client.force_login(self.user_with_eb_social)
+
+    def _get_example_forms(self):
+        FORM_POST = QueryDict('', mutable=True)
+        FORM_POST.update(POST)
+        forms = {
+            'address_form': AddressCreateForm(FORM_POST),
+            'bankaccount_form': BankAccountCreateForm(FORM_POST),
+            'taxpayer_form': TaxPayerCreateForm(FORM_POST)
+        }
+        return forms
+
+    def test_get_success_url_should_redirect_to_home(self):
+        self.assertEqual(
+            '/suppliersite/home', self.create_taxpayer_view.get_success_url()
+            )
+
+    def test_GET_taxpayer_view_should_render_3_forms(self):
+        response = self.client.get('/suppliersite/taxpayer/create')
+        taxpayer_form = response.context_data['taxpayer_form']
+        address_form = response.context_data['address_form']
+        bankaccount_form = response.context_data['bankaccount_form']
+        self.assertEqual(AddressCreateForm, type(address_form))
+        self.assertEqual(BankAccountCreateForm, type(bankaccount_form))
+        self.assertEqual(TaxPayerCreateForm, type(taxpayer_form))
+
+    def test_valid_forms_pass_validation(self):
+        forms = self._get_example_forms()
+        self.assertTrue(self.create_taxpayer_view.forms_are_valid(forms))
+
+    @patch(
+        'supplier_app.views.CreateTaxPayerView.form_valid',
+        return_value=HttpResponseRedirect('/suppliersite/home')
+        )
+    def test_form_valid_method_should_be_called_with_an_valid_POST(self, mocked_valid_form):
+        self.client.post('/suppliersite/taxpayer/create', POST)
+        mocked_valid_form.assert_called()
+
+    @patch(
+        'supplier_app.views.CreateTaxPayerView.form_invalid',
+        return_value=HttpResponseRedirect('/suppliersite/home')
+        )
+    def test_form_invalid_method_should_be_called_with_an_invalid_POST(self, mocked_invalid_form):
+        self.client.post('/suppliersite/taxpayer/create', {
+            'asda': 'asd',
+        })
+        mocked_invalid_form.assert_called()
+
+    def test_form_valid_method_should_save_taxpayer_address_bankaccount(self):
+        forms = self._get_example_forms()
+        self.create_taxpayer_view.form_valid(forms)
+        taxpayer = TaxPayerArgentina.objects.filter(name='EB ARG')
+        address = Address.objects.filter(street='San Martin')
+        bankaccount = BankAccount.objects.filter(bank_name='Ganicia')
+        self.assertEqual(
+            TaxPayerArgentina, type(taxpayer[0])
+        )
+        self.assertGreaterEqual(1, len(taxpayer))
+        self.assertGreaterEqual(1, len(bankaccount))
+        self.assertGreaterEqual(1, len(address))
+
+    def test_address_bankaccount_should_be_related_with_taxpayer(self):
+        forms = self._get_example_forms()
+        self.create_taxpayer_view.form_valid(forms)
+        address = Address.objects.get(street='San Martin')
+        bankaccount = BankAccount.objects.get(bank_name='Ganicia')
+        self.assertEqual('Name:EB ARG Status:PEND', str(address.taxpayer))
+        self.assertEqual('Name:EB ARG Status:PEND', str(bankaccount.taxpayer))

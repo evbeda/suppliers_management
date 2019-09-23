@@ -28,14 +28,7 @@ class Company(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return "Company:{} Description:{}".format(self.name, self.description)
-
-
-class TaxPayerState(models.Model):
-    name_tax_payer_state = models.CharField(default="Pending", max_length=200)
-
-    def __str__(self):
-        return "Status: {}".format(self.name_tax_payer_state)
+        return "Company:{}".format(self.name)
 
 
 class CompanyUserPermission(models.Model):
@@ -49,13 +42,21 @@ class CompanyUserPermission(models.Model):
 
 
 class TaxPayer(models.Model):
+    TaxPayerStates = [
+        ("PEND", "Pending"),
+        ("ACT", "Active"),
+    ]
     workday_id = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
-    tax_payer_state = models.ForeignKey(TaxPayerState, on_delete=models.CASCADE)
+    taxpayer_state = models.CharField(
+        max_length=200,
+        choices=TaxPayerStates,
+        default="PEND",
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return "Name:{} Status:{}".format(self.name, self.taxpayer_state)
 
 
 class TaxPayerArgentina(TaxPayer):
@@ -73,7 +74,7 @@ class Address(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    tax_payer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
+    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
     def __str__(self):
         return "ADDRESS \n Street: {} Number: {} Zip_Code: {} City: {} State: {} Country: {}".format(
@@ -82,10 +83,10 @@ class Address(models.Model):
 
 
 class BankAccount(models.Model):
-    bank_name = models.CharField(max_length=200)
-    account_type = models.CharField(max_length=200)
-    account_number = models.CharField(max_length=200)
-    identifier = models.CharField(max_length=200)
+    bank_name = models.CharField(max_length=200, default='')
+    account_type = models.CharField(max_length=200, default='')
+    account_number = models.CharField(max_length=200, default='')
+    identifier = models.CharField(max_length=200, default='')
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
@@ -102,7 +103,7 @@ class BankAccount(models.Model):
 
 class Invoice(models.Model):
     # eb_company = models.CharField(max_length=200)
-    tax_payer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
+    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
     currency = models.CharField(max_length=200, choices=CURRENCIES)
     status = models.CharField(max_length=40, choices=INVOICE_SATUS, default='NEW')
     po_number = models.CharField(max_length=200)
