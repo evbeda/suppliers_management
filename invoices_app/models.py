@@ -45,5 +45,24 @@ class Address(models.Model):
 
     def __str__(self):
         return "DOMICILIO \n Calle: {} Numero: {} Código postal: {} \nCiudad: {} Provincia: {} País: {}".format(
-            self.street, self.number, self.zip_code, self.city, self.state, self.country
+            self.street, self.number, self.zip_code, self.city, self.state, self.country)
+
+
+class BankAccount(models.Model):
+    bank_name = models.CharField(max_length=200)
+    account_type = models.CharField(max_length=200)
+    account_number = models.CharField(max_length=200)
+    identifier = models.CharField(max_length=200)
+    taxpayer = models.ForeignKey(
+        TaxPayer,
+        on_delete=models.CASCADE,
+        default=None
+    )
+
+    def __str__(self):
+        return "Bank:{} account_type:{} account_number:{} identifier:{}".format(
+            self.bank_name,
+            self.account_type,
+            self.account_number,
+            self.identifier
         )
