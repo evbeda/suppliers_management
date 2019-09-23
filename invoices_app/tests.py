@@ -1,6 +1,6 @@
 from parameterized import parameterized
 from django.test import TestCase
-from .models import Company, TaxPayer, TaxPayerState, TaxPayerArgentina, Address
+from .models import Company, BankAccount, TaxPayer, TaxPayerState, TaxPayerArgentina, Address
 
 
 class TestModels(TestCase):
@@ -50,3 +50,23 @@ class TestModels(TestCase):
     def test_address(self, street, number, zip_code, city, state, country):
         address = Address(street=street, number=number, zip_code=zip_code, city=city, state=state, country=country, tax_payer=self.tax_payer)
         self.assertEqual(address.tax_payer, self.tax_payer)
+        ('Eventbrite', 'Bringing the world together through live experiences')
+
+    # def test_bank_account(self, bank_name, account_type, account_number, identifier):
+    #     taxpayer = TaxPayer.objects.create(
+
+    #     )
+    #     bank = BankAccount.objects.create(
+    #         bank_name=bank_name,
+    #         account_type=account_type,
+    #         account_number=account_number,
+    #         identifier=identifier,
+    #         taxpayer=taxpayer
+    #     )
+    #     self.assertEqual(bank.name, bank_name)
+    #     self.assertEqual(str(bank), "Bank:{} account_type:{} account_number:{} identifier:{}".format(
+    #         bank_name,
+    #         account_type,
+    #         account_number,
+    #         identifier
+    #     ))
