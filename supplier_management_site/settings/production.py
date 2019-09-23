@@ -42,4 +42,4 @@ DATABASES['default'].update(DB_FROM_ENV)
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'project_name/static')]
 
-DEBUG = False
+DEBUG = True
