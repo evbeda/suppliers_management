@@ -13,9 +13,11 @@ from invoices_app.models import (
     BankAccount,
     Invoice
 )
-
-from .models import File
-from .forms import InvoiceForm
+from .models import PDFFile
+from .forms import (
+    InvoiceForm,
+    PDFFileForm
+)
 from django.urls import (
     reverse_lazy
 )
@@ -38,14 +40,14 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
 
 
 class CreateFileView(CreateView):
-    model = File
-    fields = ['file']
+    model = PDFFile
+    form_class = PDFFileForm
 
     def get_success_url(self):
         return reverse_lazy('supplier-home')
 
     def form_valid(self, form):
-        form.instance.file = self.request.FILES['file']
+        form.instance.file = self.request.FILES['pdf_file']
         self.object = form.save()
         return super(CreateFileView, self).form_valid(form)
 

@@ -12,3 +12,4 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlitetesting3'),  # noqa
     }
 }
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
