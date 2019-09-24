@@ -23,6 +23,7 @@ from .models import (
     TaxPayerState,
 )
 
+
 class TestModels(TestCase):
     def setUp(self):
         self.state = TaxPayerState()
