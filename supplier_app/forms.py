@@ -1,5 +1,5 @@
 from django import forms
-from .models import InvoiceArg
+from invoices_app.models import InvoiceArg
 
 
 class InvoiceForm(forms.ModelForm):
