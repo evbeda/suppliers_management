@@ -7,7 +7,9 @@ class TestModels(TestCase):
     def setUp(self):
         self.state = TaxPayerState()
         self.state.save()
-        self.tax_payer = TaxPayer(name='Eventbrite', workday_id='12345', tax_payer_state=self.state)
+        self.company1 = Company(name='Supra', description='Best catering worlwide')
+        self.company1.save()
+        self.tax_payer = TaxPayer(name='Eventbrite', workday_id='12345', tax_payer_state=self.state, company=self.company1)
         self.tax_payer.save()
 
     @parameterized.expand([
@@ -22,18 +24,26 @@ class TestModels(TestCase):
     @parameterized.expand([
         ('Eventbrite', '1234')
     ])
-    def test_tax_payer(self, name, workday_id):
-        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state)
+    def test_tax_payer_entity(self, name, workday_id):
+        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
         self.assertEqual(tax_payer1.name, name)
         self.assertEqual(tax_payer1.workday_id, workday_id)
-        self.assertEqual(tax_payer1.tax_payer_state, self.state)
+        self.assertEqual(str(tax_payer1), tax_payer1.name)
 
     @parameterized.expand([
         ('Eventbrite', '1234')
     ])
     def test_state_when_create_tax_payer_first_time(self, name, workday_id):
-        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state)
-        self.assertEqual(tax_payer1.tax_payer_state.name_tax_payer_state, "Pendiente")
+        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
+        self.assertEqual(tax_payer1.tax_payer_state.name_tax_payer_state, "Pending")
+        self.assertEqual(str(tax_payer1.tax_payer_state), "Status: {}".format("Pending"))
+
+    @parameterized.expand([
+        ('Eventbrite', '1234')
+    ])
+    def test_company_of_tax_payer(self, name, workday_id):
+        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
+        self.assertEqual(tax_payer1.company.name, "Supra")
 
     @parameterized.expand([
         ('Sociedad Anonima', '123456789')
@@ -63,8 +73,8 @@ class TestModels(TestCase):
             country=country,
             tax_payer=self.tax_payer
         )
+        self.assertEqual(str(address), "ADDRESS \n Street: {} Number: {} Zip_Code: {} City: {} State: {} Country: {}".format(street, number, zip_code, city, state, country))
         self.assertEqual(address.tax_payer, self.tax_payer)
-        ('Eventbrite', 'Bringing the world together through live experiences')
 
     def test_bank_account(self):
         taxpayer = self.tax_payer
