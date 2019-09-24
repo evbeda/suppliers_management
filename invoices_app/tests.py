@@ -39,7 +39,13 @@ class TestModels(TestCase):
         ('Sociedad Anonima', '123456789')
     ])
     def test_create_child_of_tax_payer(self, razon_social, cuit):
-        tax_payer_ar = TaxPayerArgentina(name='Eventbrite', workday_id='12345', tax_payer_state=self.state, razon_social=razon_social, cuit=cuit)
+        tax_payer_ar = TaxPayerArgentina(
+            name='Eventbrite',
+            workday_id='12345',
+            tax_payer_state=self.state,
+            razon_social=razon_social,
+            cuit=cuit
+        )
         self.assertTrue(isinstance(tax_payer_ar, TaxPayer))
         self.assertEqual(tax_payer_ar.name, 'Eventbrite')
         self.assertEqual(str(tax_payer_ar), "Razon Social: {} CUIT: {}".format(razon_social, cuit))
@@ -48,25 +54,31 @@ class TestModels(TestCase):
         ('Rep. del Libano', '981', '5501', 'Godoy Cruz', 'Mendoza', 'Argentina')
     ])
     def test_address(self, street, number, zip_code, city, state, country):
-        address = Address(street=street, number=number, zip_code=zip_code, city=city, state=state, country=country, tax_payer=self.tax_payer)
+        address = Address(
+            street=street,
+            number=number,
+            zip_code=zip_code,
+            city=city,
+            state=state,
+            country=country,
+            tax_payer=self.tax_payer
+        )
         self.assertEqual(address.tax_payer, self.tax_payer)
         ('Eventbrite', 'Bringing the world together through live experiences')
 
-    # def test_bank_account(self, bank_name, account_type, account_number, identifier):
-    #     taxpayer = TaxPayer.objects.create(
-
-    #     )
-    #     bank = BankAccount.objects.create(
-    #         bank_name=bank_name,
-    #         account_type=account_type,
-    #         account_number=account_number,
-    #         identifier=identifier,
-    #         taxpayer=taxpayer
-    #     )
-    #     self.assertEqual(bank.name, bank_name)
-    #     self.assertEqual(str(bank), "Bank:{} account_type:{} account_number:{} identifier:{}".format(
-    #         bank_name,
-    #         account_type,
-    #         account_number,
-    #         identifier
-    #     ))
+    def test_bank_account(self):
+        taxpayer = self.tax_payer
+        bank = BankAccount.objects.create(
+            bank_name='Supervielle',
+            account_type='CA $',
+            account_number='44-2417027-3',
+            identifier='0280042780024150240076',
+            taxpayer=taxpayer
+        )
+        self.assertEqual(bank.taxpayer.name, 'Eventbrite')
+        self.assertEqual(str(bank), "Bank:{} account_type:{} account_number:{} identifier:{}".format(
+            'Supervielle',
+            'CA $',
+            '44-2417027-3',
+            '0280042780024150240076'
+        ))
