@@ -1,0 +1,107 @@
+{% extends 'supplier_app/supplier-home.html' %}
+{% load i18n %}
+
+
+{% block content %}
+{{ block.super }}    
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+                <h4 class="text-center">New Invoice</h4>
+        </div>
+        <div class="container">
+                <form method="post" class="form-row" enctype="multipart/form-data">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="form-group col-md-2">
+                            {{ form.invoice_type.label_tag }} {{ form.invoice_type }}
+                            {{ form.invoice_type.errors }}
+                            {% if form.invoice_type.help_text %}
+                            <p class="help">{{ form.invoice_type.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    <div class="form-group col-md-3">
+                        {{ form.invoice_number.label_tag }} {{ form.invoice_number }}
+                        {{ form.invoice_number.errors }}
+                        {% if form.invoice_number.help_text %}
+                        <p class="help">{{ form.invoice_number.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-3">
+                            {{ form.invoice_date.label_tag }} {{ form.invoice_date }}
+                            <div class="text-danger">
+                                    {{ form.invoice_date.errors }}
+                            </div>
+                            {% if form.invoice_date.help_text %}
+                            <p class="help">{{ form.invoice_date.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-2">
+
+                        </div>
+                    <div class="form-group col-md-3">
+                            {{ form.po_number.label_tag }} {{ form.po_number }}
+                            {{ form.po_number.errors }}
+                            {% if form.po_number.help_text %}
+                            <p class="help">{{ form.po_number.help_text|safe }}</p>
+                            {% endif %}
+                    </div>
+                    <div class="col-md-7">
+
+                    </div>
+                    <div class="col-md-2">
+                        
+                        </div>
+                    <div class="form-group col-md-1">
+                        {{ form.currency.label_tag }} {{ form.currency }}
+                        {{ form.currency.errors }}
+                        {% if form.currency.help_text %}
+                        <p class="help">{{ form.currency.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="id_po_number">Net Amount</label>
+                        {{ form.net_amount }}
+                        {{ form.net_amount.errors }}
+                        {% if form.net_amount.help_text %}
+                        <p class="help">{{ form.net_amount.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form.vat.label_tag }} {{ form.vat }}
+                        {{ form.vat.errors }}
+                        {% if form.vat.help_text %}
+                        <p class="help">{{ form.vat.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form.total_amount.label_tag }} {{ form.total_amount }}
+                        {{ form.total_amount.errors }}
+                        {% if form.total_amount.help_text %}
+                        <p class="help">{{ form.total_amount.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-2">
+                            {{ form.invoice_file.label_tag }} {{ form.invoice_file }}
+                            {{ form.invoice_file.errors }}
+                            {% if form.invoice_file.help_text %}
+                            <p class="help">{{ form.invoice_file.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                {% csrf_token %}
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary">
+                            Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>    
+
+{% endblock %}

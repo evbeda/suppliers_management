@@ -1,8 +1,27 @@
 from parameterized import parameterized
 from django.test import TestCase
+<<<<<<< HEAD
 from .models import Address, BankAccount, Company, CompanyUserPermission, TaxPayer, TaxPayerArgentina, TaxPayerState
 from users_app.models import User
+=======
+from datetime import date
+from os import path, remove
+from unittest import mock
+>>>>>>> [MINOR] EDA-526: Created invoice view and template
 
+from django.core.files import File
+from .forms import InvoiceForm
+from users_app.models import User
+
+from .models import (
+    Address,
+    BankAccount,
+    Company,
+    InvoiceArg,
+    TaxPayer,
+    TaxPayerArgentina,
+    TaxPayerState,
+)
 
 class TestModels(TestCase):
     def setUp(self):
@@ -120,3 +139,69 @@ class TestModels(TestCase):
             '44-2417027-3',
             '0280042780024150240076'
         ))
+
+
+class TestInvoice(TestCase):
+    def setUp(self):
+
+        self.company = Company.objects.create(name='Company testing')
+        self.user = User.objects.create_user(email='test_test@test.com')
+        self.tax_payer = TaxPayer.objects.create(
+            workday_id='4',
+            name='Test',
+            payment_option='Test',
+            company=self.company,
+            user=self.user
+        )
+        self.invoice_creation_valid_data = {
+            'invoice_date': date(2007, 12, 5),
+            'invoice_type': 'A',
+            'invoice_number': '1234',
+            'po_number': '98876',
+            'currency': 'ARS',
+            'net_amount': '4000',
+            'vat': '1200',
+            'total_amount': '5200',
+            'invoice_file': 'test.pdf',
+            'tax_payer': self.tax_payer,
+        }
+        self.invoice_creation_empty_data = {}
+        self.file_mock = mock.MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+
+    def tearDown(self):
+        if path.exists(self.file_mock.name):
+            remove(self.file_mock.name)
+
+    def test_invoice_create(self):
+        
+        form = InvoiceForm(
+            data=self.invoice_creation_valid_data,
+            files={
+                'invoice_file': self.file_mock,
+            }
+        )
+        self.assertTrue(form.is_valid())
+
+    def test_invoice_create_required_fields(self):
+        form = InvoiceForm(
+            data=self.invoice_creation_empty_data
+        )
+        self.assertFalse(form.is_valid())
+
+    def test_invoice_create_db(self):
+        invoice = InvoiceArg.objects.create(
+            invoice_date=date(2007, 12, 5),
+            tax_payer=self.tax_payer,
+            invoice_type='A',
+            invoice_number='1234',
+            po_number='98876',
+            currency='ARS',
+            net_amount='4000',
+            vat='1200',
+            total_amount='5200',
+            invoice_file=self.file_mock,
+            user=self.user,
+            )
+        self.assertEqual(InvoiceArg.objects.get(invoice_number='1234'), invoice)
+

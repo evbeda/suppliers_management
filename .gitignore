@@ -109,3 +109,4 @@ setup_env.sh
 .mypy_cache/
 
 .vscode
+.DS_Store
