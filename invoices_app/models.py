@@ -1,4 +1,5 @@
 from django.db import models
+from users_app.models import User
 
 
 class Company(models.Model):
@@ -14,6 +15,16 @@ class TaxPayerState(models.Model):
 
     def __str__(self):
         return "Status: {}".format(self.name_tax_payer_state)
+
+
+class CompanyUserPermission(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        default=None
+    )
+    permission = None
 
 
 class TaxPayer(models.Model):
