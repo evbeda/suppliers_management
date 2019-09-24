@@ -1,6 +1,9 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 
-class File(models.Model):
-    file_date_received = models.DateTimeField(auto_now=True)
-    file = models.FileField(upload_to='cuil', blank=True)
+class PDFFile(models.Model):
+    pdf_file = models.FileField(
+        upload_to='cuil',
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])

@@ -1,16 +1,35 @@
+import os
+from os import (
+    path,
+    remove
+)
 from unittest.mock import patch
 from unittest.mock import MagicMock
+from unittest import mock
+from parameterized import parameterized
+
 from datetime import datetime
 from pytz import UTC
-from os import path, remove
 
 from .forms import InvoiceForm
 
 from django.core.files import File
 from django.http import QueryDict
+
+
 from django.test import TestCase
 from django.test import Client
+from django.http import QueryDict
 from django.http import HttpResponseRedirect
+from django.core.files import File as DjangoFile
+from django.core.urlresolvers import (
+    resolve,
+    reverse,
+    reverse_lazy
+)
+
+from .models import PDFFile
+from .forms import PDFFileForm
 
 from .views import (
     CreateTaxPayerView,
@@ -200,3 +219,84 @@ class TestInvoice(TestCase):
         self.assertEqual(
             InvoiceArg.objects.get(invoice_number='1234'), invoice
             )
+
+
+class TestBase(TestCase):
+    def setUp(self):
+        super(TestBase, self).setUp()
+        self.client = Client()
+        self.file_mock = []
+
+    def tearDown(self):
+        if(
+            self.file_mock and os.path.exists('cuil/' + self.file_mock.name)
+        ):
+            os.remove('cuil/' + self.file_mock.name)
+
+
+class ViewTest(TestBase):
+
+    def test_create_file_exists(self):
+        view = resolve('/suppliersite/file/create')
+        self.assertEqual(view.view_name, 'create-file')
+
+    def test_pdf_file_submission(self):
+        self.file_mock = mock.MagicMock(spec=DjangoFile)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+        data = {
+            'pdf_file': self.file_mock
+        }
+        response = self.client.post(
+            reverse(
+                'create-file',
+            ),
+            data
+        )
+        result = PDFFile.objects.get()
+        self.assertEquals(result.pdf_file.name, 'cuil/test.pdf')
+
+    def test_pdf_file_redirect(self):
+        self.file_mock = mock.MagicMock(spec=DjangoFile)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+        data = {
+            'pdf_file': self.file_mock
+        }
+        response = self.client.post(
+            reverse(
+                'create-file',
+            ),
+            data
+        )
+        self.assertEquals(response.status_code, 302)
+
+class ModelTest(TestBase):
+
+    def test_model_file_type_valid(self):
+        self.file_mock = mock.MagicMock(spec=DjangoFile)
+        self.file_mock.name = 'test.pdf'
+        pdf_file = PDFFile.objects.create(pdf_file=self.file_mock)
+        self.assertTrue('.pdf' in pdf_file.pdf_file.name)
+
+
+class FormTest(TestBase):
+
+    @parameterized.expand([
+        ('test.pdf', 20, True),
+        ('test.xml', 20, False),
+        ('test.pdf', 500000000, False),
+        ('test.xml', 500000000, False),
+
+    ])
+    def test_form_is_valid(self, name_file, size_file, expected):
+        self.file_mock = mock.MagicMock(spec=DjangoFile)
+        self.file_mock.name = name_file
+        self.file_mock.size = size_file
+        form = PDFFileForm(
+            data={},
+            files={
+                'pdf_file': self.file_mock,
+            }
+        )
+        self.assertEqual(form.is_valid(), expected)
