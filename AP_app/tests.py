@@ -76,4 +76,5 @@ class TestAP(TestCase):
         response = self.client.get(
             reverse('ap-invoices')
         )
-        self.assertContains(response, invoice.id)
+        self.assertContains(response, invoice.tax_payer.name)
+        self.assertContains(response, invoice.po_number)

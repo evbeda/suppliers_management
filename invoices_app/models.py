@@ -20,7 +20,6 @@ INVOICE_SATUS = [
 ARS_INVOICE_TYPES = [
     ('A', 'A'),
     ('C', 'C'),
-
 ]
 
 
