@@ -25,7 +25,12 @@ class TestModels(TestCase):
         ('Eventbrite', '1234')
     ])
     def test_tax_payer_entity(self, name, workday_id):
-        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
+        tax_payer1 = TaxPayer(
+            name=name,
+            workday_id=workday_id,
+            tax_payer_state=self.state,
+            company=self.company1
+        )
         self.assertEqual(tax_payer1.name, name)
         self.assertEqual(tax_payer1.workday_id, workday_id)
         self.assertEqual(str(tax_payer1), tax_payer1.name)
@@ -34,7 +39,12 @@ class TestModels(TestCase):
         ('Eventbrite', '1234')
     ])
     def test_state_when_create_tax_payer_first_time(self, name, workday_id):
-        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
+        tax_payer1 = TaxPayer(
+            name=name,
+            workday_id=workday_id,
+            tax_payer_state=self.state,
+            company=self.company1
+        )
         self.assertEqual(tax_payer1.tax_payer_state.name_tax_payer_state, "Pending")
         self.assertEqual(str(tax_payer1.tax_payer_state), "Status: {}".format("Pending"))
 
@@ -42,7 +52,12 @@ class TestModels(TestCase):
         ('Eventbrite', '1234')
     ])
     def test_company_of_tax_payer(self, name, workday_id):
-        tax_payer1 = TaxPayer(name=name, workday_id=workday_id, tax_payer_state=self.state, company=self.company1)
+        tax_payer1 = TaxPayer(
+            name=name,
+            workday_id=workday_id,
+            tax_payer_state=self.state,
+            company=self.company1
+        )
         self.assertEqual(tax_payer1.company.name, "Supra")
 
     @parameterized.expand([
