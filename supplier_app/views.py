@@ -11,12 +11,25 @@ from invoices_app.models import (
     TaxPayerArgentina,
     Address,
     BankAccount,
+    Invoice
 )
 
 from .models import File
+from .forms import InvoiceForm
 from django.urls import (
     reverse_lazy
 )
+
+
+class InvoiceCreateView(CreateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'supplier_app/invoices_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.save()
+        return super(InvoiceCreateView, self).form_valid(form)
 
 
 class SupplierHome(LoginRequiredMixin, TemplateView):
