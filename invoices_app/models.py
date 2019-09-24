@@ -10,17 +10,17 @@ class Company(models.Model):
 
 
 class TaxPayerState(models.Model):
-    name_tax_payer_state = models.CharField(default="Pendiente", max_length=200)
+    name_tax_payer_state = models.CharField(default="Pending", max_length=200)
 
     def __str__(self):
-        return self.name_tax_payer_state
+        return "Status: {}".format(self.name_tax_payer_state)
 
 
 class TaxPayer(models.Model):
     workday_id = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     tax_payer_state = models.ForeignKey(TaxPayerState, on_delete=models.CASCADE)
-    # company = models.ForeignKey(models.Company)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -44,8 +44,9 @@ class Address(models.Model):
     tax_payer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "DOMICILIO \n Calle: {} Numero: {} Código postal: {} \nCiudad: {} Provincia: {} País: {}".format(
-            self.street, self.number, self.zip_code, self.city, self.state, self.country)
+        return "ADDRESS \n Street: {} Number: {} Zip_Code: {} City: {} State: {} Country: {}".format(
+                self.street, self.number, self.zip_code, self.city, self.state, self.country
+            )
 
 
 class BankAccount(models.Model):
@@ -64,5 +65,4 @@ class BankAccount(models.Model):
             self.bank_name,
             self.account_type,
             self.account_number,
-            self.identifier
-        )
+            self.identifier)
