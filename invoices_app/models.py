@@ -1,21 +1,28 @@
 from django.db import models
 from users_app.models import User
+from decimal import Decimal
 from django.conf import settings
-from datetime import datetime
+from django.core.validators import MinValueValidator
 
-<<<<<<< HEAD
-=======
 
-# class Country(models.Model):
-#     country_code = models.CharField(max_length=4)
-#     description = models.CharField(max_length=40)
-#     default_language = models.CharField(max_length=40)
 CURRENCIES = [
     ('ARS', 'ARS'),
     ('USD', 'USD')
     ]
+INVOICE_SATUS = [
+    ('1', 'NEW'),
+    ('2', 'APPROVED'),
+    ('3', 'CHANGES REQUEST'),
+    ('4', 'REJECTED'),
+    ('5', 'PAID'),
+]
 
->>>>>>> added models
+ARS_INVOICE_TYPES = [
+    ('A','A'),
+    ('C','C'),
+
+]
+
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
@@ -45,26 +52,13 @@ class CompanyUserPermission(models.Model):
 class TaxPayer(models.Model):
     workday_id = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
-<<<<<<< HEAD
     tax_payer_state = models.ForeignKey(TaxPayerState, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
-<<<<<<< HEAD
     def __str__(self):
         return self.name
-=======
-    payment_option = models.CharField(max_length=200)
-    company = models.ForeignKey(Company)
-    user = models.ForeignKey(
-      settings.AUTH_USER_MODEL,
-      on_delete=models.CASCADE
-    )
->>>>>>> create invoice view
 
-=======
->>>>>>> added models
 
-<<<<<<< HEAD
 class TaxPayerArgentina(TaxPayer):
     razon_social = models.CharField(max_length=200)
     cuit = models.CharField(max_length=200)
@@ -105,62 +99,25 @@ class BankAccount(models.Model):
             self.account_type,
             self.account_number,
             self.identifier)
-=======
-# class TaxPayerInfoArgentina(TaxPayer):
-#     razon_social = models.CharField(max_length=200)
-#     cuit = models.CharField(max_length=200)
-#     tipo_de_iva = models.CharField(max_length=200)
-
-
-# class BankAccount(models.Model):
-#     name_on_bank_account = models.CharField(max_length=40)
-#     bank_name = models.CharField(max_length=40)
-#     bank_address = models.CharField(max_length=200)
-#     account_number = models.CharField(max_length=40)
-#     account_number_type = models.CharField(max_length=40)
-#     swift_code = models.CharField(max_length=40)
-#     bsb_code = models.CharField(max_length=40)
-#     is_active = models.DateTimeField()
-#     is_approved = models.DateTimeField()
-#     tax_payer = models.ForeignKey(TaxPayer)
-
-
-# class Address(models.Model):
-#     street = models.CharField(max_length=40)
-#     number = models.CharField(max_length=10)
-#     zip_code = models.CharField(max_length=10)
-#     state = models.CharField(max_length=40)
-#     city = models.CharField(max_length=40)
-#     info = models.TextField
-#     country = models.ForeignKey(Country)
-#     is_active = models.DateTimeField()
-#     is_approved = models.DateTimeField()
-#     tax_payer = models.ForeignKey(TaxPayer,
-#       on_delete=models.CASCADE)
->>>>>>> create invoice view
-
 
 class Invoice(models.Model):
-    #eb_company = models.CharField(max_length=200)
+    # eb_company = models.CharField(max_length=200)
     tax_payer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
-    currency = models.CharField(max_length=200, choices=CURRENCIES) 
+    currency = models.CharField(max_length=200, choices=CURRENCIES)
+    status = models.CharField(max_length=40, choices=INVOICE_SATUS, default='NEW')
     po_number = models.CharField(max_length=200)
-    invoice_date = models.DateTimeField(auto_now=True)
+    invoice_date = models.DateTimeField()
     invoice_date_received = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
       settings.AUTH_USER_MODEL,
       on_delete=models.CASCADE
     )
-    pdf_url = models.CharField(max_length=200)
-<<<<<<< HEAD
-=======
-    
-# class SupplierPermissions(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-#         on_delete=models.CASCADE,
-#     )
-#     company = models.ForeignKey(Company , on_delete=models.CASCADE)
-#     permissions = models.CharField(max_length=40)
+    invoice_file = models.FileField(null=True)
 
 
->>>>>>> create invoice view
+class InvoiceArg(Invoice):
+    invoice_number = models.CharField(max_length=20)
+    invoice_type = models.CharField(max_length=200, choices=ARS_INVOICE_TYPES)
+    net_amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    vat = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    total_amount = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])

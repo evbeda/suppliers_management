@@ -1,16 +1,7 @@
-{% extends 'navbar.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 
-{% block navbar %}
-    <li>
-        <a class='nav-link' href="#">Opcion 2</a> 
-    </li>
-    <li>
-       <a class='nav-link' href="#">Opcion 2</a> 
-    </li>
-{% endblock %}
-
 {% block content %}
-{{ block.super }}
+{% include 'navbar.html' %}
 <h1 class='text-center'> {% trans "Welcome Supplier" %}</h1>
 {% endblock %}

@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Invoice
+from .forms import InvoiceForm
 
 
 class InvoiceCreateView(CreateView):
     model = Invoice
-    template_name = 'invoices/supplier/invoice_form.html'
-
+    form_class = InvoiceForm
+    template_name = 'invoices/supplier/invoices_form.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
