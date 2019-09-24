@@ -23,3 +23,7 @@ class APHome(LoginRequiredMixin, IsApUser, TemplateView):
 class InvoiceListView(LoginRequiredMixin, IsApUser, ListView):
     template_name = 'AP_app/invoice-list.html'
     model = Invoice
+
+    def get_queryset(self):
+        queryset = Invoice.objects.filter(status='NEW')
+        return queryset
