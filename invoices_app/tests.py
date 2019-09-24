@@ -1,13 +1,11 @@
 from parameterized import parameterized
 from django.test import TestCase
-<<<<<<< HEAD
 from .models import Address, BankAccount, Company, CompanyUserPermission, TaxPayer, TaxPayerArgentina, TaxPayerState
 from users_app.models import User
-=======
-from datetime import date
+from datetime import datetime
+from pytz import UTC
 from os import path, remove
 from unittest import mock
->>>>>>> [MINOR] EDA-526: Created invoice view and template
 
 from django.core.files import File
 from .forms import InvoiceForm
@@ -144,18 +142,14 @@ class TestModels(TestCase):
 
 class TestInvoice(TestCase):
     def setUp(self):
-
+        self.state = TaxPayerState()
+        self.state.save()
         self.company = Company.objects.create(name='Company testing')
         self.user = User.objects.create_user(email='test_test@test.com')
-        self.tax_payer = TaxPayer.objects.create(
-            workday_id='4',
-            name='Test',
-            payment_option='Test',
-            company=self.company,
-            user=self.user
-        )
+        self.tax_payer = TaxPayer(name='Eventbrite', workday_id='12345', tax_payer_state=self.state, company=self.company)
+        self.tax_payer.save()
         self.invoice_creation_valid_data = {
-            'invoice_date': date(2007, 12, 5),
+            'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
             'invoice_number': '1234',
             'po_number': '98876',
@@ -192,7 +186,7 @@ class TestInvoice(TestCase):
 
     def test_invoice_create_db(self):
         invoice = InvoiceArg.objects.create(
-            invoice_date=date(2007, 12, 5),
+            invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             tax_payer=self.tax_payer,
             invoice_type='A',
             invoice_number='1234',

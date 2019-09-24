@@ -57,8 +57,8 @@ class TaxPayer(models.Model):
 
     def __str__(self):
         return self.name
-
-
+       
+        
 class TaxPayerArgentina(TaxPayer):
     razon_social = models.CharField(max_length=200)
     cuit = models.CharField(max_length=200)
@@ -99,6 +99,7 @@ class BankAccount(models.Model):
             self.account_type,
             self.account_number,
             self.identifier)
+
 
 class Invoice(models.Model):
     # eb_company = models.CharField(max_length=200)
