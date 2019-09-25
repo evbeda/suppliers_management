@@ -25,6 +25,7 @@
                                 {% if form.invoice_type.help_text %}
                                 <p class="help">{{ form.invoice_type.help_text|safe }}</p>
                                 {% endif %}
+                                {{ form.select_example }}
                             </div>
                             <div class="form-group col-md-4">
                                 {% blocktrans with amount=article.form.invoice_number.label %}

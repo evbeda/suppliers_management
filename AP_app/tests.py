@@ -61,9 +61,12 @@ class TestAP(TestCase):
             reverse(page_name),
             follow=True,
         )
-        self.assertIn(('/login-error?next='+reverse(page_name), 302), response.redirect_chain)
+        self.assertIn(
+            ('/suppliersite/home?next={}'.format(reverse(page_name)), 302),
+            response.redirect_chain
+            )
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.template_name, ['registration/invalid_login.html'])
+        self.assertEqual(response.template_name, ['supplier_app/supplier-home.html'])
 
     def test_ap_invoices_list_view(self):
         self.client.force_login(self.user)

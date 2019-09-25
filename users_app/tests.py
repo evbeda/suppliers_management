@@ -106,7 +106,7 @@ class TestLoginRedirect(TestCase):
         url_ap, status_code_ap = response_ap.redirect_chain[0]
         url_sup, status_code_sup = response_supplier.redirect_chain[0]
         self.assertEqual(HTTPStatus.FOUND, status_code_ap)
-        self.assertEqual('/login-error?next={}'.format(AP_HOME), url_ap)
+        self.assertEqual('/suppliersite/home?next=/apsite/home'.format(AP_HOME), url_ap)
         self.assertEqual(HTTPStatus.FOUND, status_code_sup)
         self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
 
