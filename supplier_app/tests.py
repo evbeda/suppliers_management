@@ -270,15 +270,15 @@ class TestBase(TestCase):
 
     def tearDown(self):
         if(
-            self.file_mock and os.path.exists('cuil/' + self.file_mock.name)
+            self.file_mock and os.path.exists('file/' + self.file_mock.name)
         ):
-            os.remove('cuil/' + self.file_mock.name)
+            os.remove('file/' + self.file_mock.name)
 
 
 class ViewTest(TestBase):
 
     def test_create_file_exists(self):
-        view = resolve('/suppliersite/file/create')
+        view = resolve('/suppliersite/files/create')
         self.assertEqual(view.view_name, 'create-file')
 
     def test_pdf_file_submission(self):
@@ -295,7 +295,7 @@ class ViewTest(TestBase):
             data
         )
         result = PDFFile.objects.get()
-        self.assertEquals(result.pdf_file.name, 'cuil/test.pdf')
+        self.assertEquals(result.pdf_file.name, 'file/test.pdf')
 
     def test_pdf_file_redirect(self):
         self.file_mock = mock.MagicMock(spec=DjangoFile)

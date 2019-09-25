@@ -42,6 +42,9 @@ class PDFFileForm(forms.ModelForm):
     class Meta:
         model = PDFFile
         fields = ['pdf_file']
+        widgets = {
+            'pdf_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
+        }
 
     def is_valid(self):
         valid = super(PDFFileForm, self).is_valid()
