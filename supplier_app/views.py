@@ -2,25 +2,21 @@ from functools import reduce
 
 from django.db import transaction
 from django.views.generic import TemplateView
-from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
-from django.forms.models import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.core.files.storage import FileSystemStorage
+# from django.core.files.storage import FileSystemStorage
 
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.models import (
-    Address,
-    BankAccount,
     Invoice,
     TaxPayer,
-    TaxPayerArgentina,
+    TaxPayerArgentina
 )
 from .models import PDFFile
 from .forms import (

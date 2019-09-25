@@ -4,14 +4,54 @@
 {% include 'supplier_app/navbar.html' %}
 <form method="post">
     {% csrf_token %}
-    <h4>Taxpayer info</h4>
-    {{taxpayer_form.as_p}}
+    <div class="row m-3">
+        <div class="col-md-6 form-group">
+            <h4>Taxpayer info</h4>
+            {{taxpayer_form.as_p}}
+        </div>
+        <div class='col-md-6 form-group'>
+            <h4>Bank account</h4>
+            {{bankaccount_form.as_p}}
+        </div>
+    </div>
+
     <hr>
-    <h4>Address info</h4>
-    {{address_form.as_p}}
-    <hr>
-    <h4>Bank account info</h4>
-    {{bankaccount_form.as_p}}
-    <input type="submit" value="Submit">
+    <div class="row m-3">
+        <div class="col-md-12 form-group">
+            <h4>Address info</h4>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="">{{address_form.country.label}}</label>
+                    {{address_form.country}}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="">{{address_form.state.label}}</label>
+                    {{address_form.state}}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="">{{address_form.city.label}}</label>
+                    {{address_form.city}}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="">{{address_form.zip_code.label}}</label>
+                    {{address_form.zip_code}}
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label for="">{{address_form.street.label}}</label>
+                        {{address_form.street}}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="">{{address_form.number.label}}</label>
+                        {{address_form.number}}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="row col-md-3 justify-content-end">
+        <input class="btn btn-primary d-block w-100" type="submit" value="Submit">
+    </div>
 </form>
 {% endblock %}
