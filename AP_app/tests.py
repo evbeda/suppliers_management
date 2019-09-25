@@ -85,7 +85,7 @@ class TestAP(TestCase):
         )
         other_invoice_data = self.invoice_creation_valid_data
         other_invoice_data['taxpayer'] = other_tax_payer
-        invoice2 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
         invoice2.status = 'APPROVED'
         invoice2.save()
 
