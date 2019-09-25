@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^files/$', PDFFileView.as_view(), name='show-files'),
     url(r'^taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(r'^(?P<taxpayer_id>[0-9]+)/invoices/$', InvoiceListView.as_view(), name='supplier-invoice-list'),
-    url(r'^invoices/new/$', InvoiceCreateView.as_view(), name='invoice-create')
+    url(r'^(?P<taxpayer_id>[0-9]+)/invoices/new/$', InvoiceCreateView.as_view(), name='invoice-create')
 ]

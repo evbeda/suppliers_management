@@ -6,7 +6,7 @@
 {% include 'supplier_app/navbar.html' %}
     <br/>
     <h1 class="text-center"> {% trans "Invoice List"%}</h1>
-    <br/>
+<a class='btn btn-success float-right' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}">Create a new invoice</a>
     <div class="container">
         <table class="table table-hover">
             <thead class="thead-dark">
