@@ -1,9 +1,7 @@
 from django import forms
-from .models import InvoiceArg
-from bootstrap_datepicker_plus import DatePickerInput
-
-from .models import PDFFile
 from invoices_app.models import InvoiceArg
+from bootstrap_datepicker_plus import DatePickerInput
+from .models import PDFFile
 from . import (
     MAX_SIZE_FILE,
     ALLOWED_FILE_EXTENSIONS
