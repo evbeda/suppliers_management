@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'AP_app',
     'social_django',
     'invoices_app',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [

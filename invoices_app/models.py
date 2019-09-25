@@ -106,7 +106,7 @@ class Invoice(models.Model):
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
     currency = models.CharField(max_length=200, choices=CURRENCIES)
     status = models.CharField(max_length=40, choices=INVOICE_SATUS, default='NEW')
-    po_number = models.CharField(max_length=200)
+    po_number = models.CharField(max_length=200,help_text="ex: 12341234")
     invoice_date = models.DateTimeField()
     invoice_date_received = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
