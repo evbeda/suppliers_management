@@ -71,5 +71,27 @@ class TestAP(TestCase):
         response = self.client.get(
             reverse('ap-invoices')
         )
-        # self.assertContains(response, invoice.taxpayer.name)
         self.assertContains(response, invoice.po_number)
+        self.assertContains(response, invoice.taxpayer.name)
+
+    def test_ap_invoices_list_are_in_new_status(self):
+        self.client.force_login(self.user)
+        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+
+        other_tax_payer = TaxPayer.objects.create(
+            name='Test Tax Payer',
+            workday_id='12345',
+            company=self.company,
+        )
+        other_invoice_data = self.invoice_creation_valid_data
+        other_invoice_data['taxpayer'] = other_tax_payer
+        invoice2 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice2.status = 'APPROVED'
+        invoice2.save()
+
+        response = self.client.get(
+            reverse('ap-invoices')
+        )
+        # Only the invoice with NEW status should be listed.
+        self.assertContains(response, invoice1.taxpayer.name)
+        self.assertNotContains(response, invoice2.taxpayer.name)
