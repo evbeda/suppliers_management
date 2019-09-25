@@ -1,12 +1,20 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark justify-content-between blue-eb">
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="col-md-10">
+        <a href="{% url 'supplier-home' %}">
+            <img src="{% static 'images/eventbrite.png' %}" width=50 heigth=50 alt="">
+        </a>
+    </div>
+
+    <div class="collapse navbar-collapse col-md-1" id="navbarSupportedContent">
         <ul class='navbar-nav '>
             <li>
-                <a href="#">{{user.first_name}} {{user.last_name}}</a>
+                <a class="text-white" href="#">{{user.first_name}} {{user.last_name}}</a>
             </li>
         </ul>
     </div>
-    <div>
+
+    <div class="col-md-1">
         <a class='btn btn-danger' href="{% url 'logout' %}">Logout</a>
     </div>
 </nav>
