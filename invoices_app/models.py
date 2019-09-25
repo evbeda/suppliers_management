@@ -10,6 +10,7 @@ CURRENCIES = [
     ('ARS', 'ARS'),
     ('USD', 'USD')
     ]
+
 INVOICE_SATUS = [
     ('1', 'NEW'),
     ('2', 'APPROVED'),

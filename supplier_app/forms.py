@@ -109,6 +109,14 @@ class AddressCreateForm(ModelForm):
     class Meta:
         model = Address
         exclude = ['taxpayer']
+        widgets = {
+             'street': forms.TextInput(attrs={'class': 'form-control'}),
+             'number': forms.TextInput(attrs={'class': 'form-control'}),
+             'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
+             'city': forms.TextInput(attrs={'class': 'form-control'}),
+             'state': forms.TextInput(attrs={'class': 'form-control'}),
+             'country': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class TaxPayerCreateForm(ModelForm):
@@ -124,6 +132,11 @@ class TaxPayerCreateForm(ModelForm):
     class Meta:
         model = TaxPayerArgentina
         exclude = ['taxpayer_state', 'workday_id']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'razon_social': forms.TextInput(attrs={'class': 'form-control'}),
+            'cuit': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class BankAccountCreateForm(ModelForm):
@@ -132,3 +145,9 @@ class BankAccountCreateForm(ModelForm):
     class Meta:
         model = BankAccount
         exclude = ['taxpayer']
+        widgets = {
+            'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'account_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'account_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'identifier': forms.TextInput(attrs={'class': 'form-control'}),
+        }
