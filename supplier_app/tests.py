@@ -44,6 +44,7 @@ from invoices_app.models import (
     BankAccount,
     Address,
     InvoiceArg,
+    CompanyUserPermission
 )
 
 
@@ -86,6 +87,8 @@ class TestCreateTaxPayer(TestCase):
             }
         )
         self.client.force_login(self.user_with_eb_social)
+        self.companyuserpermission = \
+            CompanyUserPermission.objects.create(company=self.company, user=self.user_with_eb_social)
 
     def _get_example_forms(self):
         FORM_POST = QueryDict('', mutable=True)
@@ -93,7 +96,7 @@ class TestCreateTaxPayer(TestCase):
         forms = {
             'address_form': AddressCreateForm(FORM_POST),
             'bankaccount_form': BankAccountCreateForm(FORM_POST),
-            'taxpayer_form': TaxPayerCreateForm(FORM_POST)
+            'taxpayer_form': TaxPayerCreateForm(self.user_with_eb_social, FORM_POST)
         }
         return forms
 
@@ -101,6 +104,10 @@ class TestCreateTaxPayer(TestCase):
         self.assertEqual(
             '/suppliersite/home', self.create_taxpayer_view.get_success_url()
             )
+
+    def test_user_with_1_company_should_only_select_his_1_company(self):
+        taxpayer_form = TaxPayerCreateForm(self.user_with_eb_social)
+        self.assertEqual(1, len(taxpayer_form.get_user_companies(self.user_with_eb_social)))
 
     def test_GET_taxpayer_view_should_render_3_forms(self):
         response = self.client.get('/suppliersite/taxpayer/create')

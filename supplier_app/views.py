@@ -2,25 +2,23 @@ from django.db import transaction
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
-from django.forms.models import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from invoices_app.models import (
-    Address,
-    BankAccount,
     Invoice,
     TaxPayer,
-    TaxPayerArgentina,
 )
 from .models import PDFFile
 from .forms import (
     InvoiceForm,
-    PDFFileForm
+    PDFFileForm,
+    AddressCreateForm,
+    BankAccountCreateForm,
+    TaxPayerCreateForm
 )
 from django.urls import (
     reverse_lazy
@@ -64,29 +62,6 @@ class PDFFileView(ListView):
         context['files'] = PDFFile.objects.all()
         return context
 
-class AddressCreateForm(ModelForm):
-    prefix = 'address_form'
-
-    class Meta:
-        model = Address
-        exclude = ['taxpayer']
-
-
-class TaxPayerCreateForm(ModelForm):
-    prefix = 'taxpayer_form'
-
-    class Meta:
-        model = TaxPayerArgentina
-        exclude = ['taxpayer_state']
-
-
-class BankAccountCreateForm(ModelForm):
-    prefix = 'bankaccount_form'
-
-    class Meta:
-        model = BankAccount
-        exclude = ['taxpayer']
-
 
 class CreateTaxPayerView(TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
@@ -94,14 +69,14 @@ class CreateTaxPayerView(TemplateView, FormView):
     def get(self, request, *args, **kwargs):
         context = {
             'address_form': AddressCreateForm(),
-            'taxpayer_form': TaxPayerCreateForm(),
+            'taxpayer_form': TaxPayerCreateForm(self.request.user),
             'bankaccount_form': BankAccountCreateForm(),
         }
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         forms = {
-            'taxpayer_form': TaxPayerCreateForm(self.request.POST),
+            'taxpayer_form': TaxPayerCreateForm(request.user, self.request.POST),
             'address_form': AddressCreateForm(self.request.POST),
             'bankaccount_form': BankAccountCreateForm(self.request.POST),
         }

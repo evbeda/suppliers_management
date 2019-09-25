@@ -9,7 +9,7 @@ from . import ALLOWED_AP_ACCOUNTS
 
 
 class IsApUser(UserPassesTestMixin):
-    login_url = 'login-error'
+    login_url = 'supplier-home'
 
     def test_func(self):
         return self.request.user.email in ALLOWED_AP_ACCOUNTS

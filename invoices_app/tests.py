@@ -24,7 +24,6 @@ class TestModels(TestCase):
         self.taxpayer_ar = {
             'name': 'Eventbrite',
             'workday_id': '12345',
-            'taxpayer_state':'PEN',
             'razon_social': 'Sociedad Anonima',
             'cuit': '20-31789965-3'
         }
@@ -74,10 +73,7 @@ class TestModels(TestCase):
         self.assertEqual(taxpayer_ar.name, 'Eventbrite')
         self.assertEqual(
             str(taxpayer_ar),
-            "Razon Social: {} CUIT: {}".format(
-                self.taxpayer_ar['razon_social'],
-                self.taxpayer_ar['cuit'],
-            )
+            "Name:Eventbrite Status:PEND"
         )
 
     def test_address(self):
