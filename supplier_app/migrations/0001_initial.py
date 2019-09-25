@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='PDFFile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('pdf_file', models.FileField(blank=True, upload_to='cuil', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf'])])),
+                ('pdf_file', models.FileField(blank=True, upload_to='file', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf'])])),
             ],
         ),
     ]

@@ -5,6 +5,7 @@ from django.views.generic.edit import FormView
 from django.forms.models import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -40,7 +41,7 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
     login_url = '/'
 
 
-class CreateFileView(CreateView):
+class CreatePDFFileView(CreateView):
     model = PDFFile
     form_class = PDFFileForm
 
@@ -50,8 +51,16 @@ class CreateFileView(CreateView):
     def form_valid(self, form):
         form.instance.file = self.request.FILES['pdf_file']
         self.object = form.save()
-        return super(CreateFileView, self).form_valid(form)
+        return super(CreatePDFFileView, self).form_valid(form)
 
+
+class PDFFileView(ListView):
+    model = PDFFile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['files'] = PDFFile.objects.all()
+        return context
 
 class AddressCreateForm(ModelForm):
     prefix = 'address_form'

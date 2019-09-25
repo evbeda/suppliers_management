@@ -1,0 +1,7 @@
+{% block content %}
+  <ul>
+  {% for file in files %}
+    <li><a href='{{ file.pdf_file.url }}'>{{ file.pdf_file }}</a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
