@@ -7,13 +7,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from invoices_app.models import (
-    TaxPayerArgentina,
     Address,
     BankAccount,
-    Invoice
+    Invoice,
+    TaxPayer,
+    TaxPayerArgentina,
 )
 from .models import PDFFile
 from .forms import (
@@ -137,5 +139,6 @@ class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
 
     def get_queryset(self):
-        queryset = Invoice.objects.filter(taxpayer=self.kwargs['taxpayer_id'])
+        tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        queryset = Invoice.objects.filter(taxpayer=tax_payer.id)
         return queryset

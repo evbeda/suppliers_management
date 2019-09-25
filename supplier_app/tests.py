@@ -1,4 +1,3 @@
-import os
 from os import (
     path,
     remove
@@ -19,13 +18,11 @@ from django.http import QueryDict
 
 from django.test import TestCase
 from django.test import Client
-from django.http import QueryDict
 from django.http import HttpResponseRedirect
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import (
     resolve,
     reverse,
-    reverse_lazy
 )
 
 from .models import PDFFile
@@ -261,6 +258,13 @@ class TestInvoice(TestCase):
         self.assertContains(response, invoice1.taxpayer.name)
         self.assertNotContains(response, invoice2.taxpayer.name)
 
+    def test_supplier_invoices_list_404_if_invalid_supplier(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            reverse('supplier-invoice-list', kwargs={'taxpayer_id': 999}),
+        )
+        self.assertEqual(response.status_code, 404)
+
 
 class TestBase(TestCase):
     def setUp(self):
@@ -270,9 +274,9 @@ class TestBase(TestCase):
 
     def tearDown(self):
         if(
-            self.file_mock and os.path.exists('file/' + self.file_mock.name)
+            self.file_mock and path.exists('file/' + self.file_mock.name)
         ):
-            os.remove('file/' + self.file_mock.name)
+            remove('file/' + self.file_mock.name)
 
 
 class ViewTest(TestBase):
