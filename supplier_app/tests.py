@@ -162,11 +162,11 @@ class TestInvoice(TestCase):
     def setUp(self):
         self.company = Company.objects.create(name='Company testing')
         self.user = User.objects.create_user(email='test_test@test.com')
-        self.taxpayer = \
-            TaxPayer.objects.create(
-                name='Eventbrite',
-                workday_id='12345',
-                company=self.company)
+        self.taxpayer = TaxPayer.objects.create(
+            name='Eventbrite',
+            workday_id='12345',
+            company=self.company
+        )
         self.invoice_creation_valid_data = {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
@@ -178,6 +178,7 @@ class TestInvoice(TestCase):
             'total_amount': '5200',
             'invoice_file': 'test.pdf',
             'taxpayer': self.taxpayer,
+            'user': self.user,
         }
         self.invoice_creation_empty_data = {}
         self.file_mock = MagicMock(spec=File)
@@ -220,6 +221,46 @@ class TestInvoice(TestCase):
             InvoiceArg.objects.get(invoice_number='1234'), invoice
             )
 
+    def test_supplier_invoices_list_view(self):
+        self.client.force_login(self.user)
+        invoice = InvoiceArg.objects.create(
+            invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
+            taxpayer=self.taxpayer,
+            invoice_type='A',
+            invoice_number='1234',
+            po_number='98876',
+            currency='ARS',
+            net_amount='4000',
+            vat='1200',
+            total_amount='5200',
+            user=self.user,
+        )
+        response = self.client.get(
+            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
+        )
+        self.assertContains(response, invoice.po_number)
+        self.assertContains(response, invoice.taxpayer.name)
+
+    def test_supplier_invoices_list_only_taxpayer_invoices(self):
+        self.client.force_login(self.user)
+        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+
+        other_tax_payer = TaxPayer.objects.create(
+            name='Test Tax Payer',
+            workday_id='12345',
+            company=self.company,
+        )
+        other_invoice_data = self.invoice_creation_valid_data
+        other_invoice_data['taxpayer'] = other_tax_payer
+        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
+
+        response = self.client.get(
+            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
+        )
+        # Only the invoice with from the tax payer should be listed.
+        self.assertContains(response, invoice1.taxpayer.name)
+        self.assertNotContains(response, invoice2.taxpayer.name)
+
 
 class TestBase(TestCase):
     def setUp(self):
@@ -247,7 +288,7 @@ class ViewTest(TestBase):
         data = {
             'pdf_file': self.file_mock
         }
-        response = self.client.post(
+        self.client.post(
             reverse(
                 'create-file',
             ),
@@ -270,6 +311,7 @@ class ViewTest(TestBase):
             data
         )
         self.assertEquals(response.status_code, 302)
+
 
 class ModelTest(TestBase):
 

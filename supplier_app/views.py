@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.views.generic import TemplateView
+from django.views.generic.list import ListView
 from django.views.generic.edit import FormView
 from django.forms.models import ModelForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -120,3 +121,12 @@ class CreateTaxPayerView(TemplateView, FormView):
         bankaccount.taxpayer = taxpayer
         bankaccount.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class InvoiceListView(LoginRequiredMixin, ListView):
+    template_name = 'supplier_app/invoice-list.html'
+    model = Invoice
+
+    def get_queryset(self):
+        queryset = Invoice.objects.filter(taxpayer=self.kwargs['taxpayer_id'])
+        return queryset
