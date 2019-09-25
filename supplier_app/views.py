@@ -30,9 +30,14 @@ class InvoiceCreateView(CreateView):
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
 
+    def get_success_url(self):
+        return reverse_lazy('supplier-invoice-list', kwargs={'taxpayer_id':self.kwargs['taxpayer_id']})
+
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.save()
+        tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        form.instance.taxpayer = tax_payer
+        self.object = form.save()
         return super(InvoiceCreateView, self).form_valid(form)
 
 
@@ -117,3 +122,8 @@ class InvoiceListView(LoginRequiredMixin, ListView):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         queryset = Invoice.objects.filter(taxpayer=tax_payer.id)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        return context

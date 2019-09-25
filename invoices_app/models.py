@@ -3,6 +3,7 @@ from users_app.models import User
 from decimal import Decimal
 from django.conf import settings
 from django.core.validators import MinValueValidator
+from django.core.validators import FileExtensionValidator
 
 
 CURRENCIES = [
@@ -103,14 +104,17 @@ class Invoice(models.Model):
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
     currency = models.CharField(max_length=200, choices=CURRENCIES)
     status = models.CharField(max_length=40, choices=INVOICE_SATUS, default='NEW')
-    po_number = models.CharField(max_length=200, help_text="ex: 12341234")
-    invoice_date = models.DateTimeField()
+    po_number = models.CharField(max_length=200,help_text="ex: 12341234")
+    invoice_date = models.DateField()
     invoice_date_received = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
       settings.AUTH_USER_MODEL,
       on_delete=models.CASCADE
     )
-    invoice_file = models.FileField(null=True)
+    invoice_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
 
 class InvoiceArg(Invoice):

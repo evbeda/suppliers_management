@@ -28,9 +28,6 @@
                                 {{ form.select_example }}
                             </div>
                             <div class="form-group col-md-4">
-                                {% blocktrans with amount=article.form.invoice_number.label %}
-                                That will cost $ {{ amount }}.
-                                {% endblocktrans %}
                                 {{ form.invoice_number.label_tag }}  
                                 {{ form.invoice_number }}
                                 {{ form.invoice_number.errors }}

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import ModelForm
 from invoices_app.models import InvoiceArg
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from .models import PDFFile
 from . import (
     MAX_SIZE_FILE,
@@ -48,6 +48,28 @@ class InvoiceForm(forms.ModelForm):
             'net_amount': forms.NumberInput(attrs={'class': 'form-control',  'placeholder': 'Net Amount'}),
             'invoice_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Invoice Number'}),
         }
+
+    def is_valid(self):
+        valid = super(InvoiceForm, self).is_valid()
+        if not valid:
+            return valid
+        if self.cleaned_data['invoice_file'].size <= MAX_SIZE_FILE:
+            valid_file_extensions = \
+                [i for i in ALLOWED_FILE_EXTENSIONS if i in self.cleaned_data['invoice_file'].name]
+            if len(valid_file_extensions) == 1:
+                return True
+            else:
+                self.add_error(
+                    'invoice_file',
+                    'Your file is not a pdf'
+                )
+                return False
+
+        self.add_error(
+            'invoice_file',
+            'Your file is greater than 3096KB.'
+        )
+        return False
 
 
 class PDFFileForm(forms.ModelForm):
