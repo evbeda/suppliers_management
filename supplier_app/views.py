@@ -13,6 +13,8 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 
+from pure_pagination.mixins import PaginationMixin
+
 from invoices_app.models import (
     Address,
     BankAccount,
@@ -139,13 +141,14 @@ class CreateTaxPayerView(TemplateView, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class InvoiceListView(LoginRequiredMixin, ListView):
+class InvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
     template_name = 'supplier_app/invoice-list.html'
     model = Invoice
+    paginate_by = 10
 
     def get_queryset(self):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
-        queryset = Invoice.objects.filter(taxpayer=tax_payer.id)
+        queryset = Invoice.objects.filter(taxpayer=tax_payer.id).order_by('id')
         return queryset
 
     def get_context_data(self, **kwargs):

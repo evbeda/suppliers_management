@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import ModelForm
 from invoices_app.models import InvoiceArg
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+from bootstrap_datepicker_plus import DatePickerInput
 from .models import PDFFile
 from . import (
     MAX_SIZE_FILE,
@@ -34,7 +34,7 @@ class InvoiceForm(forms.ModelForm):
         exclude = ('user', 'tax_payer', 'status')
         widgets = {
             'invoice_date': DatePickerInput(options={
-                    "format": "DD/MM/YYYY",
+                    "format": "MM/DD/YYYY",
                     # "locale": "en",
                 },
                 attrs={'placeholder': 'Invoice Date', }

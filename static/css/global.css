@@ -3,7 +3,7 @@ html, body{
 }
 
 .blue-eb{
-    background-color: rgb(57, 54, 79)
+    background-color: #1E0A3C
 }
 
 a:hover{
@@ -28,4 +28,31 @@ a:hover{
 
 .btn-google:hover{
     background-color: rgb(64, 129, 235)
+}
+
+.page-item.disabled .page-link {
+    color: #ffffff;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #A9A8B3;
+    border-color: #A9A8B3;
+}
+
+.page-item.active .page-link {
+    color: #ffffff;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #F05537;
+    border-color:  #F05537;
+}
+
+.page-item .page-link {
+    color: #ffffff;
+    background-color: #1E0A3C;
+    border-color:  #1E0A3C;
+}
+
+.thead-eb-dark {
+    color: #ffffff;
+    background-color: #1E0A3C;
 }
