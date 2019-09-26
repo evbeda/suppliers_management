@@ -1,7 +1,12 @@
 {% block content %}
   <ul>
   {% for file in files %}
-    <li><a href='{{ file.pdf_file.url }}'>{{ file.pdf_file }}</a></li>
+    <!-- En una pestaña distinta -->
+    <li><a href="https://docs.google.com/viewerng/viewer?url={{ file.pdf_file.url }}" target="_blank">{{ file.pdf_file }}</a></li>
+    <!-- Para descargar -->
+    <li><a href="{{ file.pdf_file.url }}">Descarga de {{ file.pdf_file }}</a></li>
+    <!-- Embebido -->
+    <li><iframe src="http://docs.google.com/gview?url={{ file.pdf_file.url }}&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe></li>
   {% endfor %}
   </ul>
 {% endblock %}

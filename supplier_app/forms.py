@@ -114,7 +114,7 @@ class AddressCreateForm(ModelForm):
 class TaxPayerCreateForm(ModelForm):
     prefix = 'taxpayer_form'
 
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['company'].queryset = self.get_user_companies(user)
 
