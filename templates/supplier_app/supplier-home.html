@@ -2,16 +2,14 @@
 {% load i18n %}
 
 {% block styles %}
-    {% load static %}
-    <link rel="stylesheet" type='text/css' href="{% static 'css/sidebar.css' , 'css/global.css' %}">
+{% load static %}
 {% endblock %}
 
 {% block content %}
-{% include 'navbar.html' %}
+{% include 'supplier_app/navbar.html' %}
 <div class="container h-100 m-0 p-0">
     <div class="row h-100">
             <div class="col-md-2">
-                    {% include 'sidebar.html' %}
                 </div>
                 <div class="col-md-10 col-md-offset-2">
                     <div class="row">
