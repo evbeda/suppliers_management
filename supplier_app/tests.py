@@ -187,6 +187,7 @@ class TestInvoice(TestCase):
         self.invoice_creation_empty_data = {}
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
 
     def tearDown(self):
         if path.exists(self.file_mock.name):
@@ -238,12 +239,13 @@ class TestInvoice(TestCase):
             vat='1200',
             total_amount='5200',
             user=self.user,
+            invoice_file=self.file_mock
         )
         response = self.client.get(
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
         )
         self.assertContains(response, invoice.po_number)
-        self.assertContains(response, invoice.taxpayer.name)
+        self.assertContains(response, invoice.status)
 
     def test_supplier_invoices_list_only_taxpayer_invoices(self):
         self.client.force_login(self.user)
@@ -262,8 +264,15 @@ class TestInvoice(TestCase):
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
         )
         # Only the invoice with from the tax payer should be listed.
-        self.assertContains(response, invoice1.taxpayer.name)
-        self.assertNotContains(response, invoice2.taxpayer.name)
+        self.assertIn(
+            invoice1.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertNotIn(
+            invoice2.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+
 
     def test_supplier_invoices_list_404_if_invalid_supplier(self):
         self.client.force_login(self.user)
