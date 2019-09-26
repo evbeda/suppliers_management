@@ -33,9 +33,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('bank_name', models.CharField(default='', max_length=200)),
-                ('account_type', models.CharField(default='', max_length=200)),
+                ('bank_code', models.CharField(default='', max_length=200)),
                 ('account_number', models.CharField(default='', max_length=200)),
-                ('identifier', models.CharField(default='', max_length=200)),
             ],
         ),
         migrations.CreateModel(
@@ -71,6 +70,7 @@ class Migration(migrations.Migration):
                 ('workday_id', models.CharField(max_length=200)),
                 ('name', models.CharField(max_length=200)),
                 ('taxpayer_state', models.CharField(choices=[('PEND', 'Pending'), ('ACT', 'Active')], default='PEND', max_length=200)),
+                ('country', models.CharField(default='AR', max_length=50)),
             ],
         ),
         migrations.CreateModel(
@@ -91,6 +91,8 @@ class Migration(migrations.Migration):
                 ('taxpayer_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='invoices_app.TaxPayer')),
                 ('razon_social', models.CharField(max_length=200)),
                 ('cuit', models.CharField(max_length=200)),
+                ('justificacion', models.CharField(max_length=200)),
+                ('forma_de_pago', models.CharField(max_length=200)),
             ],
             bases=('invoices_app.taxpayer',),
         ),

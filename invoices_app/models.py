@@ -55,15 +55,30 @@ class TaxPayer(models.Model):
         choices=TaxPayerStates,
         default="PEND",
     )
+    country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Name:{} Status:{}".format(self.name, self.taxpayer_state)
 
+    def get_taxpayer_childs():
+        taxpayers = []
+        for c in COUNTRIES:
+            for taxpayer in TaxPayer.objects.filter(country=c):
+                taxpayers.append(COUNTRIES[c].objects.get(pk=taxpayer.id))
+        return taxpayers
+
 
 class TaxPayerArgentina(TaxPayer):
     razon_social = models.CharField(max_length=200)
     cuit = models.CharField(max_length=200)
+    justificacion = models.CharField(max_length=200)
+    forma_de_pago = models.CharField(max_length=200)
+
+
+COUNTRIES = {
+    'AR': TaxPayerArgentina,
+}
 
 
 class Address(models.Model):
@@ -83,9 +98,8 @@ class Address(models.Model):
 
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length=200, default='')
-    account_type = models.CharField(max_length=200, default='')
+    bank_code = models.CharField(max_length=200, default='')
     account_number = models.CharField(max_length=200, default='')
-    identifier = models.CharField(max_length=200, default='')
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
@@ -93,11 +107,11 @@ class BankAccount(models.Model):
     )
 
     def __str__(self):
-        return "Bank:{} account_type:{} account_number:{} identifier:{}".format(
+        return "Bank:{} bank_code:{} account_number:{}".format(
             self.bank_name,
-            self.account_type,
+            self.bank_code,
             self.account_number,
-            self.identifier)
+        )
 
 
 class Invoice(models.Model):
@@ -105,7 +119,7 @@ class Invoice(models.Model):
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
     currency = models.CharField(max_length=200, choices=CURRENCIES)
     status = models.CharField(max_length=40, choices=INVOICE_SATUS, default='NEW')
-    po_number = models.CharField(max_length=200,help_text="ex: 12341234")
+    po_number = models.CharField(max_length=200, help_text="ex: 12341234")
     invoice_date = models.DateField()
     invoice_date_received = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
