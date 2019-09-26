@@ -5,7 +5,9 @@ from .models import (
     Address,
     BankAccount,
     TaxPayerArgentina,
-    CompanyUserPermission
+    CompanyUserPermission,
+    Invoice,
+    InvoiceArg
 )
 
 admin.site.register(Company)
@@ -13,3 +15,5 @@ admin.site.register(Address)
 admin.site.register(BankAccount)
 admin.site.register(TaxPayerArgentina)
 admin.site.register(CompanyUserPermission)
+admin.site.register(Invoice)
+admin.site.register(InvoiceArg)
