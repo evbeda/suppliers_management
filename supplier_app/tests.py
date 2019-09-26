@@ -16,7 +16,7 @@ from django.core.files import File
 from django.http import QueryDict
 
 
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.test import Client
 from django.http import HttpResponseRedirect
 from django.core.files import File as DjangoFile
@@ -44,9 +44,10 @@ from invoices_app.models import (
     BankAccount,
     Address,
     InvoiceArg,
-    CompanyUserPermission
+    CompanyUserPermission,
 )
 
+from supplier_app.views import SupplierHome
 
 GENERIC_PASSWORD = '1234'
 POST = {
@@ -273,7 +274,6 @@ class TestInvoice(TestCase):
             [taxpayer.id for taxpayer in response.context['object_list']]
         )
 
-
     def test_supplier_invoices_list_404_if_invalid_supplier(self):
         self.client.force_login(self.user)
         response = self.client.get(
@@ -362,3 +362,52 @@ class FormTest(TestBase):
             }
         )
         self.assertEqual(form.is_valid(), expected)
+
+
+class TestTaxpayerList(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.company = Company.objects.create(
+            name='Supra',
+            description='Best catering worldwide'
+        )
+        #self.taxpayer = TaxPayer.objects.create(name='Eventbrite', workday_id='12345', company=self.company)
+        self.taxpayer_ar = TaxPayerArgentina.objects.create(
+            name='Eventbrite',
+            workday_id='12345',
+            taxpayer_state='PEN',
+            razon_social='Sociedad Anonima',
+            cuit='20-31789965-3',
+            company=self.company,
+        )
+
+        self.user_with_social_evb = \
+            User.objects.create_user(email='nahuel', password="1234asdf")
+        UserSocialAuth.objects.create(
+            user=self.user_with_social_evb,
+            provider='eventbrite',
+            uid='1234567890',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+
+        self.companyuserpermission = CompanyUserPermission.objects.create(
+            company=self.company,
+            user=self.user_with_social_evb
+        )
+
+    def test_get_taxpayers_child(self):
+        request = self.factory.get('/suppliersite/home')
+        request.user = self.user_with_social_evb
+
+        supplier_home = SupplierHome()
+        supplier_home.request = request
+        taxpayer_child = supplier_home.get_taxpayers()
+
+        self.assertEqual(str(taxpayer_child), '[<TaxPayerArgentina: Name:Eventbrite Status:PEN>]')
+        self.assertEqual(len(taxpayer_child), 1)

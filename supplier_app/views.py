@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.db import transaction
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
@@ -48,8 +50,25 @@ class InvoiceCreateView(CreateView):
 
 
 class SupplierHome(LoginRequiredMixin, TemplateView):
+    model = TaxPayerArgentina
     template_name = 'supplier_app/supplier-home.html'
     login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        contex = super().get_context_data(**kwargs)
+        contex['taxpayers'] = self.get_taxpayers()
+        return contex
+
+    def get_taxpayers(self):
+        user = self.request.user
+        companyuser = user.companyuserpermission_set.all()
+        company = [c.company for c in companyuser]
+        taxpayerlist = [c.taxpayer_set.all() for c in company]
+        if not taxpayerlist:
+            return []
+        taxpayerlist = reduce(lambda a, b: a+b, taxpayerlist)
+        taxpayer_child = [tax.taxpayerargentina for tax in taxpayerlist]
+        return taxpayer_child
 
 
 class CreatePDFFileView(CreateView):

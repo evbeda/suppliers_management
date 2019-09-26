@@ -16,6 +16,7 @@ from .views import (
 
 urlpatterns = [
     url(r'^home$', SupplierHome.as_view(), name='supplier-home'),
+    # url(r'^home/taxpayers$', SupplierHome.as_view(), name='supplier-home'),
     url(r'^files/create$', CreatePDFFileView.as_view(), name='create-file'),
     url(r'^files/$', PDFFileView.as_view(), name='show-files'),
     url(r'^taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),

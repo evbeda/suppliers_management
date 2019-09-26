@@ -7,7 +7,7 @@ from .models import (
     TaxPayerArgentina,
     CompanyUserPermission,
     Invoice,
-    InvoiceArg
+    InvoiceArg,
 )
 
 admin.site.register(Company)
