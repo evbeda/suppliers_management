@@ -3,7 +3,7 @@
 
 
 {% block content %}
-{% include 'navbar.html' %}
+{% include 'AP_app/navbar.html' %}
     <br/>
     <h1 class="text-center"> {% trans "Invoice List"%}</h1>
     <br/>
@@ -15,6 +15,7 @@
                     <th scope="col">{% trans "Date"%}</th>
                     <th scope="col">{% trans "Tax Payer"%}</th>
                     <th scope="col">{% trans "PO Number"%}</th>
+                    <th scope="col">{% trans "Status"%}</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,7 @@
                     <td>{{invoice.invoice_date_received}}</td>
                     <td>{{invoice.taxpayer.name}}</td>
                     <td>{{invoice.po_number}}</td>
+                    <td>{{invoice.status}}</td>
                 </tr>
             {% endfor %}
             </tbody>

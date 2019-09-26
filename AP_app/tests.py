@@ -40,7 +40,7 @@ class TestAP(TestCase):
 
     @parameterized.expand([
         ('ap-home',),
-        ('ap-invoices',),
+        ('ap-welcome',),
     ])
     def test_ap_site_permission(self, page_name):
         self.client.force_login(self.user)
@@ -52,7 +52,7 @@ class TestAP(TestCase):
 
     @parameterized.expand([
         ('ap-home',),
-        ('ap-invoices',),
+        ('ap-welcome',),
     ])
     def test_ap_site_access_denied(self, page_name):
         user = User.objects.create_user(email='not_allowed@user.com')
@@ -69,7 +69,7 @@ class TestAP(TestCase):
         self.client.force_login(self.user)
         invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
-            reverse('ap-invoices')
+            reverse('ap-home')
         )
         self.assertContains(response, invoice.po_number)
         self.assertContains(response, invoice.taxpayer.name)
@@ -90,7 +90,7 @@ class TestAP(TestCase):
         invoice2.save()
 
         response = self.client.get(
-            reverse('ap-invoices')
+            reverse('ap-home')
         )
         # Only the invoice with NEW status should be listed.
         self.assertContains(response, invoice1.taxpayer.name)
