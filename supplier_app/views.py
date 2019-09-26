@@ -64,6 +64,8 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
         companyuser = user.companyuserpermission_set.all()
         company = [c.company for c in companyuser]
         taxpayerlist = [c.taxpayer_set.all() for c in company]
+        if not taxpayerlist:
+            return []
         taxpayerlist = reduce(lambda a, b: a+b, taxpayerlist)
         taxpayer_child = [tax.taxpayerargentina for tax in taxpayerlist]
         return taxpayer_child
