@@ -8,8 +8,8 @@
     <h1 class="text-center"> {% trans "Invoice List"%}</h1>
     <br/>
     <div class="container">
-        <table class="table table-hover">
-            <thead class="thead-dark">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
                 <tr>
                     <th scope="col">{% trans "Invoice ID"%}</th>
                     <th scope="col">{% trans "Date"%}</th>
@@ -25,10 +25,11 @@
                     <td>{{invoice.invoice_date_received}}</td>
                     <td>{{invoice.taxpayer.name}}</td>
                     <td>{{invoice.po_number}}</td>
-                    <td>{{invoice.status}}</td>
+                    <td><span class="badge badge-success">{{invoice.status}}</span></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% include "_pagination.html" %}
     </div>
 {% endblock%}

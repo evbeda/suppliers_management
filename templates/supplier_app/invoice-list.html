@@ -6,46 +6,39 @@
 {% include 'supplier_app/navbar.html' %}
 <div class="row">
     <div class="col-md-12 ">
-        <h1 class="text-center"> {% trans "My Invoices"%}
-    
-        </h1>
+        <h1 class="text-center"> {% trans "My Invoices"%}</h1>
     </div>
-            <div class="col-md-2">
-                    <ul class="nav flex-column text-center">
-                            <li class="nav-item">
-                                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i class="fa fa-plus"></i> New Invoice </a>
-                            </li>
-                          </ul>
-                </div>
-                <div class="col-md-9">
-                        <table class="table table-sm table-hover">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">{% trans "Invoice ID"%}</th>
-                                        <th scope="col">{% trans "Date"%}</th>
-                                        <th scope="col">{% trans "Status"%}</th>
-                                        <th scope="col">{% trans "PO Number"%}</th>
-                                        <th scope="col">{% trans "Invoice" %}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for invoice in object_list %}
-                                    <tr>
-                                        <th scope="row">{{invoice.id}}</td>
-                                        <td>{{invoice.invoice_date_received}}</td>
-                                        <td><span class="badge badge-success">{{invoice.status}}</span></td>
-                                        <td>{{invoice.po_number}}</td>
-                                        <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-paperclip"></i></a></td>
-                                    </tr>
-                                    
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                </div>
-                <div class="col-md-1">
-
-                </div>
-
-
+    <div class="col-md-2">
+        <ul class="nav flex-column text-center">
+            <li class="nav-item">
+                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i class="fa fa-plus"></i> New Invoice </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <table class="table table-sm table-hover">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "Invoice ID"%}</th>
+                    <th scope="col">{% trans "Date"%}</th>
+                    <th scope="col">{% trans "Status"%}</th>
+                    <th scope="col">{% trans "PO Number"%}</th>
+                    <th scope="col">{% trans "Invoice" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for invoice in object_list %}
+                <tr>
+                    <th scope="row">{{invoice.id}}</td>
+                    <td>{{invoice.invoice_date_received}}</td>
+                    <td><span class="badge badge-success">{{invoice.status}}</span></td>
+                    <td>{{invoice.po_number}}</td>
+                    <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-paperclip"></i></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "_pagination.html" %}
 </div>
 {% endblock%}

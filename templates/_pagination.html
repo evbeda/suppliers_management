@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load static %}
+<ul class="pagination justify-content-center bg-evb">
+
+    {% if page_obj.has_previous %}
+        <li class="page-item" >
+            <a href="?{{ page_obj.previous_page_number.querystring }}" class="page-link"><i class="fa fa-arrow-left"></i></a>
+        </li>
+    {% else %}
+        <li class="page-item disabled">
+            <a href="#" class="page-link"><i class="fa fa-arrow-left"></i></a>
+        </li>
+    {% endif %}
+
+    {% for page in page_obj.pages %}
+        {% if page %}
+            {% ifequal page page_obj.number %}
+                <li class="page-item active">
+                    <span class="page-link active">{{ page }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a href="?{{ page.querystring }}" class="page-link">{{ page }}</a>
+                </li>
+            {% endifequal %}
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a href="?{{ page_obj.next_page_number.querystring }}" class="page-link"><i class="fa fa-arrow-right"></i> </a>
+        </li>
+    {% else %}
+        <li class="page-item disabled">
+                <a href="#" class="page-link"><i class="fa fa-arrow-right"></i></a>
+        </li>
+    {% endif %}
+</ul>
