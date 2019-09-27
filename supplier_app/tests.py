@@ -54,7 +54,6 @@ POST = {
             'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
             'taxpayer_form-workday_id': '1',
             'taxpayer_form-name': 'EB ARG',
-            'taxpayer_form-company': '1',
             'taxpayer_form-razon_social': 'Monotributista',
             'taxpayer_form-cuit': '20-3123214-0',
             'taxpayer_form-country': 'AR',
@@ -92,6 +91,7 @@ class TestCreateTaxPayer(TestCase):
         self.client.force_login(self.user_with_eb_social)
         self.companyuserpermission = \
             CompanyUserPermission.objects.create(company=self.company, user=self.user_with_eb_social)
+        self.factory = RequestFactory()
 
     def _get_example_forms(self):
         FORM_POST = QueryDict('', mutable=True)
@@ -108,9 +108,9 @@ class TestCreateTaxPayer(TestCase):
             '/suppliersite/home', self.create_taxpayer_view.get_success_url()
             )
 
-    def test_user_with_1_company_should_only_select_his_1_company(self):
-        taxpayer_form = TaxPayerCreateForm(self.user_with_eb_social)
-        self.assertEqual(1, len(taxpayer_form.get_user_companies(self.user_with_eb_social)))
+    # def test_user_with_1_company_should_only_select_his_1_company(self):
+    #     taxpayer_form = TaxPayerCreateForm(self.user_with_eb_social)
+    #     self.assertEqual(1, len(taxpayer_form.get_user_companies(self.user_with_eb_social)))
 
     def test_GET_taxpayer_view_should_render_3_forms(self):
         response = self.client.get('/suppliersite/taxpayer/create')
@@ -145,6 +145,9 @@ class TestCreateTaxPayer(TestCase):
 
     def test_form_valid_method_should_save_taxpayer_address_bankaccount(self):
         forms = self._get_example_forms()
+        request = self.factory.get('/suppliersite/home')
+        request.user = self.user_with_eb_social
+        self.create_taxpayer_view.request = request
         self.create_taxpayer_view.form_valid(forms)
         taxpayer = TaxPayerArgentina.objects.filter(name='EB ARG')
         address = Address.objects.filter(street='San Martin')
@@ -158,6 +161,9 @@ class TestCreateTaxPayer(TestCase):
 
     def test_address_bankaccount_should_be_related_with_taxpayer(self):
         forms = self._get_example_forms()
+        request = self.factory.get('/suppliersite/home')
+        request.user = self.user_with_eb_social
+        self.create_taxpayer_view.request = request
         self.create_taxpayer_view.form_valid(forms)
         address = Address.objects.get(street='San Martin')
         bankaccount = BankAccount.objects.get(bank_name='Ganicia')
