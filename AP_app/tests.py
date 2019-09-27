@@ -2,9 +2,12 @@ from datetime import datetime
 from http import HTTPStatus
 from parameterized import parameterized
 from pytz import UTC
+from unittest.mock import MagicMock
+from os import path, remove
 
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.core.files import File
 
 from users_app.models import User
 from invoices_app.models import (
@@ -23,6 +26,9 @@ class TestAP(TestCase):
             workday_id='12345',
             company=self.company,
         )
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
         self.invoice_creation_valid_data = {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
@@ -34,9 +40,14 @@ class TestAP(TestCase):
             'total_amount': '5200',
             'taxpayer': self.taxpayer,
             'user': self.user,
+            'invoice_file':self.file_mock
         }
         self.invoice_creation_empty_data = {}
         self.client = Client()
+    
+    def tearDown(self):
+        if path.exists(self.file_mock.name):
+            remove(self.file_mock.name)
 
     @parameterized.expand([
         ('ap-home',),
@@ -80,7 +91,6 @@ class TestAP(TestCase):
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.user)
         invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
-
         other_tax_payer = TaxPayer.objects.create(
             name='Test Tax Payer',
             workday_id='12345',
