@@ -131,11 +131,13 @@ class TaxPayerCreateForm(ModelForm):
 
     class Meta:
         model = TaxPayerArgentina
-        exclude = ['taxpayer_state', 'workday_id']
+        exclude = ['taxpayer_state', 'workday_id', 'country']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'razon_social': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
+            'justificacion': forms.TextInput(attrs={'class': 'form-control'}),
+            'forma_de_pago': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 
@@ -147,7 +149,6 @@ class BankAccountCreateForm(ModelForm):
         exclude = ['taxpayer']
         widgets = {
             'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'account_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_code': forms.TextInput(attrs={'class': 'form-control'}),
             'account_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'identifier': forms.TextInput(attrs={'class': 'form-control'}),
         }

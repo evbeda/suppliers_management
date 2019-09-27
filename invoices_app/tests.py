@@ -12,8 +12,10 @@ from users_app.models import User
 
 class TestModels(TestCase):
     def setUp(self):
-        self.company1 = Company.objects.create(name='Supra', description='Best catering worldwide')
-        self.taxpayer = TaxPayer.objects.create(name='Eventbrite', workday_id='12345', company=self.company1)
+        self.taxpayer = {
+            'name': 'Eventbrite',
+            'workday_id': '12345',
+        }
         self.company = {
             'name': 'Eventbrite',
             'description': 'Bringing the world together through live experiences',
@@ -21,11 +23,18 @@ class TestModels(TestCase):
         self.user = {
             'email': 'pepe@pepe.com',
         }
-        self.taxpayer_ar = {
+        self.taxpayer_ar1 = {
             'name': 'Eventbrite',
             'workday_id': '12345',
             'razon_social': 'Sociedad Anonima',
             'cuit': '20-31789965-3'
+        }
+        self.taxpayer_ar2 = {
+            'name': 'Cocacola',
+            'workday_id': '67890',
+            'taxpayer_state': 'PEN',
+            'razon_social': 'Sociedad Anonima',
+            'cuit': '30-31789965-5'
         }
 
     def test_company(self):
@@ -54,29 +63,34 @@ class TestModels(TestCase):
         )
 
     def test_company_of_tax_payer(self):
-        taxpayer1 = self.taxpayer
-        self.assertEqual(taxpayer1.company.name, "Supra")
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
+        self.assertEqual(taxpayer1.company.name, "Eventbrite")
 
     def test_tax_payer_entity(self):
-        taxpayer = self.taxpayer
+        company = Company.objects.create(**self.company)
+        taxpayer = TaxPayer.objects.create(**self.taxpayer, company=company)
         self.assertEqual(taxpayer.name, 'Eventbrite')
         self.assertEqual(taxpayer.workday_id, '12345')
 
     def test_state_when_create_tax_payer_first_time(self):
-        taxpayer = self.taxpayer
+        company = Company.objects.create(**self.company)
+        taxpayer = TaxPayer.objects.create(**self.taxpayer, company=company)
         self.assertEqual(taxpayer.taxpayer_state, "PEND")
         self.assertEqual(str(taxpayer), "Name:Eventbrite Status:PEND")
 
     def test_create_child_of_tax_payer(self):
-        taxpayer_ar = TaxPayerArgentina(**self.taxpayer_ar)
-        self.assertTrue(isinstance(taxpayer_ar, TaxPayer))
-        self.assertEqual(taxpayer_ar.name, 'Eventbrite')
+        taxpayer_ar1 = TaxPayerArgentina(**self.taxpayer_ar1)
+        self.assertTrue(isinstance(taxpayer_ar1, TaxPayer))
+        self.assertEqual(taxpayer_ar1.name, 'Eventbrite')
         self.assertEqual(
-            str(taxpayer_ar),
+            str(taxpayer_ar1),
             "Name:Eventbrite Status:PEND"
         )
 
     def test_address(self):
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
         address = Address(
             street='Rep. del Libano',
             number='981',
@@ -84,7 +98,7 @@ class TestModels(TestCase):
             city='Godoy Cruz',
             state='Mendoza',
             country='Argentina',
-            taxpayer=self.taxpayer
+            taxpayer=taxpayer1
         )
         self.assertEqual(
             str(address),
@@ -95,24 +109,34 @@ class TestModels(TestCase):
                 'Godoy Cruz',
                 'Mendoza',
                 'Argentina',
-                self.taxpayer
+                taxpayer1
             )
         )
-        self.assertEqual(address.taxpayer, self.taxpayer)
+        self.assertEqual(address.taxpayer, taxpayer1)
 
     def test_bank_account(self):
-        taxpayer = self.taxpayer
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
         bank = BankAccount.objects.create(
             bank_name='Supervielle',
-            account_type='CA $',
+            bank_code='CA $',
             account_number='44-2417027-3',
-            identifier='0280042780024150240076',
-            taxpayer=taxpayer
+            taxpayer=taxpayer1
         )
         self.assertEqual(bank.taxpayer.name, 'Eventbrite')
-        self.assertEqual(str(bank), "Bank:{} account_type:{} account_number:{} identifier:{}".format(
+        self.assertEqual(str(bank), "Bank:{} bank_code:{} account_number:{}".format(
             'Supervielle',
             'CA $',
             '44-2417027-3',
-            '0280042780024150240076'
         ))
+
+    def test_get_taxpayer_childs(self):
+
+        company = Company.objects.create(**self.company)
+        TaxPayerArgentina.objects.create(**self.taxpayer_ar1, company=company)
+        TaxPayerArgentina.objects.create(**self.taxpayer_ar2, company=company)
+        taxpayers = TaxPayer.get_taxpayer_childs()
+        self.assertEqual(
+            str(taxpayers),
+            '[<TaxPayerArgentina: Name:Eventbrite Status:PEND>, <TaxPayerArgentina: Name:Cocacola Status:PEN>]'
+        )

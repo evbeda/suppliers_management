@@ -57,6 +57,9 @@ POST = {
             'taxpayer_form-company': '1',
             'taxpayer_form-razon_social': 'Monotributista',
             'taxpayer_form-cuit': '20-3123214-0',
+            'taxpayer_form-country': 'AR',
+            'taxpayer_form-justificacion': 'dafsadsffasdf',
+            'taxpayer_form-forma_de_pago': 'dafsadsffasdf',
             'address_form-street': 'San Martin',
             'address_form-number': '21312',
             'address_form-zip_code': '123',
@@ -64,9 +67,8 @@ POST = {
             'address_form-state': 'Mendoza',
             'address_form-country': 'Argentina',
             'bankaccount_form-bank_name': 'Ganicia',
-            'bankaccount_form-account_type': 'Cta Cte',
+            'bankaccount_form-bank_code': 'Cta Cte',
             'bankaccount_form-account_number': '123214',
-            'bankaccount_form-identifier': '12312512'
 }
 
 
