@@ -27,18 +27,25 @@
                 </tr>
             </thead>
             <tbody>
+            {% if not object_list%}
+            <tr><td  class="table-danger text-center" colspan="5">{% trans "No invoices" %} <a href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}">Create one?</a></td> </tr>
+            {% endif %}
             {% for invoice in object_list %}
                 <tr>
                     <th scope="row">{{invoice.id}}</td>
                     <td>{{invoice.invoice_date_received}}</td>
                     <td><span class="badge badge-success">{{invoice.status}}</span></td>
                     <td>{{invoice.po_number}}</td>
-                    <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-paperclip"></i></a></td>
+                    <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-download"></i></a>
+                        <a href="https://docs.google.com/viewerng/viewer?url={{ invoice.invoice_file.url }}" target="_blank"><i class="fa fa-eye ml-2"></i></a>
+                    
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% include "_pagination.html" %}
     </div>
-    {% include "_pagination.html" %}
+    
 </div>
 {% endblock%}

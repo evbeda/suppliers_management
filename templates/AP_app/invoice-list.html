@@ -16,6 +16,7 @@
                     <th scope="col">{% trans "Tax Payer"%}</th>
                     <th scope="col">{% trans "PO Number"%}</th>
                     <th scope="col">{% trans "Status"%}</th>
+                    <th scope="col">{% trans "View"%}</th>                    
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,9 @@
                     <td>{{invoice.taxpayer.name}}</td>
                     <td>{{invoice.po_number}}</td>
                     <td><span class="badge badge-success">{{invoice.status}}</span></td>
+                    <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-download"></i></a>
+                        <a href="https://docs.google.com/viewerng/viewer?url={{ invoice.invoice_file.url }}" target="_blank"><i class="fa fa-eye ml-2"></i></a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
