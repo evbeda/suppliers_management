@@ -47,6 +47,11 @@ class InvoiceCreateView(CreateView):
         self.object = form.save()
         return super(InvoiceCreateView, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        return context
+
 
 class SupplierHome(LoginRequiredMixin, TemplateView):
     model = TaxPayerArgentina
