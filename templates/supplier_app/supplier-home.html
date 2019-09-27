@@ -16,6 +16,7 @@
                         <div class="col-md-12">
                             <div>
                                 <h1 class='text-center'> {% trans "Welcome Supplier" %}</h1>
+                                <br><br><br>
                                 <table class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
@@ -24,7 +25,7 @@
                                                 <th scope="col">{% trans "Razon Social"%}</th>
                                                 <th scope="col">{% trans "Company"%}</th>
                                                 <th scope="col">{% trans "Status"%}</th>
-                                                <th scope="col"></th>
+                                                <!-- <th scope="col"></th> -->
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
@@ -36,9 +37,9 @@
                                                 <td>{{taxpayer.razon_social}}</td>
                                                 <td>{{taxpayer.company.name}}</td>
                                                 <td>{{taxpayer.taxpayer_state}}</td>
-                                                <td>
+                                                <!-- <td>
                                                     <a class='btn btn-info' href="#">Edit</a>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <a class='btn btn-info' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">Invoices</a>
                                                 </td>
