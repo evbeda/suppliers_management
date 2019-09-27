@@ -25,6 +25,7 @@
                                                 <th scope="col">{% trans "Company"%}</th>
                                                 <th scope="col">{% trans "Status"%}</th>
                                                 <th scope="col"></th>
+                                                <th scope="col"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -36,8 +37,10 @@
                                                 <td>{{taxpayer.company.name}}</td>
                                                 <td>{{taxpayer.taxpayer_state}}</td>
                                                 <td>
-                                                    <!--<a class='btn btn-info' href="{% url 'taxpayer-create' %}">Edit</a>-->
                                                     <a class='btn btn-info' href="#">Edit</a>
+                                                </td>
+                                                <td>
+                                                    <a class='btn btn-info' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">Invoices</a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
