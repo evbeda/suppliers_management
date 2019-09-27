@@ -124,20 +124,20 @@ class TaxPayerCreateForm(ModelForm):
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['company'].queryset = self.get_user_companies(user)
+        # self.fields['company'].queryset = self.get_user_companies(user)
 
     def get_user_companies(self, user):
         return Company.objects.filter(companyuserpermission__user=user)
 
     class Meta:
         model = TaxPayerArgentina
-        exclude = ['taxpayer_state', 'workday_id', 'country']
+        exclude = ['taxpayer_state', 'workday_id', 'company', 'country']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'razon_social': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'justificacion': forms.TextInput(attrs={'class': 'form-control'}),
             'forma_de_pago': forms.TextInput(attrs={'class': 'form-control'}),
+            'justificacion': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'})
         }
 
 

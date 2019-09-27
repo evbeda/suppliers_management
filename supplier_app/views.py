@@ -16,7 +16,8 @@ from pure_pagination.mixins import PaginationMixin
 from invoices_app.models import (
     Invoice,
     TaxPayer,
-    TaxPayerArgentina
+    TaxPayerArgentina,
+    Company
 )
 from .models import PDFFile
 from .forms import (
@@ -127,7 +128,10 @@ class CreateTaxPayerView(TemplateView, FormView):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        taxpayer = forms['taxpayer_form'].save()
+        taxpayer = forms['taxpayer_form'].save(commit=False)
+        company = Company.objects.filter(companyuserpermission__user=self.request.user)[0]
+        taxpayer.company = company
+        taxpayer.save()
         address = forms['address_form'].save(commit=False)
         address.taxpayer = taxpayer
         address.save()
