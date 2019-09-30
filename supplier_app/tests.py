@@ -2,52 +2,42 @@ from os import (
     path,
     remove
 )
-from unittest.mock import patch
-from unittest.mock import MagicMock
-from unittest import mock
 from parameterized import parameterized
+from unittest import mock
+from unittest.mock import patch
 
-from datetime import datetime
-from pytz import UTC
-
-from .forms import InvoiceForm
-
-from django.core.files import File
-from django.http import QueryDict
-
-
+from django.http import HttpResponseRedirect, QueryDict
 from django.test import TestCase, RequestFactory
 from django.test import Client
-from django.http import HttpResponseRedirect
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import (
     resolve,
     reverse,
 )
 
-from .models import PDFFile
-from .forms import PDFFileForm
-
-from .views import (
-    CreateTaxPayerView,
+from supplier_app.forms import (
+    PDFFileForm,
     AddressCreateForm,
     BankAccountCreateForm,
     TaxPayerCreateForm,
 )
 
+from supplier_app.views import (
+    CreateTaxPayerView,
+    SupplierHome
+)
+
 from users_app.models import User
 from social_django.models import UserSocialAuth
-from invoices_app.models import (
+from supplier_app.models import (
     Company,
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
     Address,
-    InvoiceArg,
     CompanyUserPermission,
+    PDFFile
 )
-
-from supplier_app.views import SupplierHome
 
 GENERIC_PASSWORD = '1234'
 POST = {
@@ -69,6 +59,146 @@ POST = {
             'bankaccount_form-bank_code': 'Cta Cte',
             'bankaccount_form-account_number': '123214',
 }
+
+
+class TestModels(TestCase):
+    def setUp(self):
+        self.taxpayer = {
+            'name': 'Eventbrite',
+            'workday_id': '12345',
+        }
+        self.company = {
+            'name': 'Eventbrite',
+            'description': 'Bringing the world together through live experiences',
+        }
+        self.user = {
+            'email': 'pepe@pepe.com',
+        }
+        self.taxpayer_ar1 = {
+            'name': 'Eventbrite',
+            'workday_id': '12345',
+            'razon_social': 'Sociedad Anonima',
+            'cuit': '20-31789965-3'
+        }
+        self.taxpayer_ar2 = {
+            'name': 'Cocacola',
+            'workday_id': '67890',
+            'taxpayer_state': 'PENDING',
+            'razon_social': 'Sociedad Anonima',
+            'cuit': '30-31789965-5'
+        }
+
+    def test_company(self):
+        company = Company(**self.company)
+        self.assertEqual(company.name, self.company['name'])
+        self.assertEqual(company.description, self.company['description'])
+        self.assertEqual(
+            str(company),
+            "Company:{}".format(
+                self.company['name']
+            )
+        )
+
+    def test_company_user_permissions(self):
+        user = User.objects.create(**self.user)
+        company = Company.objects.create(**self.company)
+        company_user_permissions = \
+            CompanyUserPermission.objects.create(user=user, company=company)
+        self.assertEqual(
+            company_user_permissions.user.email,
+            self.user['email']
+        )
+        self.assertEqual(
+            company_user_permissions.company.name,
+            self.company['name']
+        )
+
+    def test_company_of_tax_payer(self):
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
+        self.assertEqual(taxpayer1.company.name, "Eventbrite")
+
+    def test_tax_payer_entity(self):
+        company = Company.objects.create(**self.company)
+        taxpayer = TaxPayer.objects.create(**self.taxpayer, company=company)
+        self.assertEqual(taxpayer.name, 'Eventbrite')
+        self.assertEqual(taxpayer.workday_id, '12345')
+
+    def test_state_when_create_tax_payer_first_time(self):
+        company = Company.objects.create(**self.company)
+        taxpayer = TaxPayer.objects.create(**self.taxpayer, company=company)
+        self.assertEqual(taxpayer.taxpayer_state, "PENDING")
+        self.assertEqual(str(taxpayer), "Name:Eventbrite Status:PENDING")
+
+    def test_create_child_of_tax_payer(self):
+        taxpayer_ar1 = TaxPayerArgentina(**self.taxpayer_ar1)
+        self.assertTrue(isinstance(taxpayer_ar1, TaxPayer))
+        self.assertEqual(taxpayer_ar1.name, 'Eventbrite')
+        self.assertEqual(
+            str(taxpayer_ar1),
+            "Name:Eventbrite Status:PENDING"
+        )
+
+    def test_address(self):
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
+        address = Address(
+            street='Rep. del Libano',
+            number='981',
+            zip_code='5501',
+            city='Godoy Cruz',
+            state='Mendoza',
+            country='Argentina',
+            taxpayer=taxpayer1
+        )
+        self.assertEqual(
+            str(address),
+            "ADDRESS \n Street: {} Number: {} Zip_Code: {} City: {} State: {} Country: {}".format(
+                'Rep. del Libano',
+                '981',
+                '5501',
+                'Godoy Cruz',
+                'Mendoza',
+                'Argentina',
+                taxpayer1
+            )
+        )
+        self.assertEqual(address.taxpayer, taxpayer1)
+
+    def test_bank_account(self):
+        company = Company.objects.create(**self.company)
+        taxpayer1 = TaxPayer.objects.create(**self.taxpayer, company=company)
+        bank = BankAccount.objects.create(
+            bank_name='Supervielle',
+            bank_code='CA $',
+            account_number='44-2417027-3',
+            taxpayer=taxpayer1
+        )
+        self.assertEqual(bank.taxpayer.name, 'Eventbrite')
+        self.assertEqual(str(bank), "Bank:{} bank_code:{} account_number:{}".format(
+            'Supervielle',
+            'CA $',
+            '44-2417027-3',
+        ))
+
+    def test_get_taxpayer_childs(self):
+
+        company = Company.objects.create(**self.company)
+        TaxPayerArgentina.objects.create(**self.taxpayer_ar1, company=company)
+        TaxPayerArgentina.objects.create(**self.taxpayer_ar2, company=company)
+        taxpayers = TaxPayer.get_taxpayer_childs()
+        self.assertEqual(
+            str(taxpayers),
+            '[<TaxPayerArgentina: Name:Eventbrite Status:PENDING>, <TaxPayerArgentina: Name:Cocacola Status:PENDING>]'
+        )
+    
+    def test_get_taxpayer_child(self):
+        company = Company.objects.create(**self.company)
+        taxpayerar = TaxPayerArgentina.objects.create(**self.taxpayer_ar1, company=company)
+        self.assertEqual(
+            str(taxpayerar.get_taxpayer_child()),
+            'Name:Eventbrite Status:PENDING'
+        )
 
 
 class TestCreateTaxPayer(TestCase):
@@ -105,15 +235,11 @@ class TestCreateTaxPayer(TestCase):
 
     def test_get_success_url_should_redirect_to_home(self):
         self.assertEqual(
-            '/suppliersite/home', self.create_taxpayer_view.get_success_url()
+            '/suppliersite/supplier', self.create_taxpayer_view.get_success_url()
             )
 
-    # def test_user_with_1_company_should_only_select_his_1_company(self):
-    #     taxpayer_form = TaxPayerCreateForm(self.user_with_eb_social)
-    #     self.assertEqual(1, len(taxpayer_form.get_user_companies(self.user_with_eb_social)))
-
     def test_GET_taxpayer_view_should_render_3_forms(self):
-        response = self.client.get('/suppliersite/taxpayer/create')
+        response = self.client.get('/suppliersite/supplier/taxpayer/create')
         taxpayer_form = response.context_data['taxpayer_form']
         address_form = response.context_data['address_form']
         bankaccount_form = response.context_data['bankaccount_form']
@@ -127,18 +253,18 @@ class TestCreateTaxPayer(TestCase):
 
     @patch(
         'supplier_app.views.CreateTaxPayerView.form_valid',
-        return_value=HttpResponseRedirect('/suppliersite/home')
+        return_value=HttpResponseRedirect('/suppliersite/supplier')
         )
     def test_form_valid_method_should_be_called_with_an_valid_POST(self, mocked_valid_form):
-        self.client.post('/suppliersite/taxpayer/create', POST)
+        self.client.post('/suppliersite/supplier/taxpayer/create', POST)
         mocked_valid_form.assert_called()
 
     @patch(
         'supplier_app.views.CreateTaxPayerView.form_invalid',
-        return_value=HttpResponseRedirect('/suppliersite/home')
+        return_value=HttpResponseRedirect('/suppliersite/supplier')
         )
     def test_form_invalid_method_should_be_called_with_an_invalid_POST(self, mocked_invalid_form):
-        self.client.post('/suppliersite/taxpayer/create', {
+        self.client.post('/suppliersite/supplier/taxpayer/create', {
             'asda': 'asd',
         })
         mocked_invalid_form.assert_called()
@@ -167,127 +293,8 @@ class TestCreateTaxPayer(TestCase):
         self.create_taxpayer_view.form_valid(forms)
         address = Address.objects.get(street='San Martin')
         bankaccount = BankAccount.objects.get(bank_name='Ganicia')
-        self.assertEqual('Name:EB ARG Status:PEND', str(address.taxpayer))
-        self.assertEqual('Name:EB ARG Status:PEND', str(bankaccount.taxpayer))
-
-
-class TestInvoice(TestCase):
-    def setUp(self):
-        self.company = Company.objects.create(name='Company testing')
-        self.user = User.objects.create_user(email='test_test@test.com')
-        self.taxpayer = TaxPayer.objects.create(
-            name='Eventbrite',
-            workday_id='12345',
-            company=self.company
-        )
-        self.invoice_creation_valid_data = {
-            'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            'invoice_type': 'A',
-            'invoice_number': '1234',
-            'po_number': '98876',
-            'currency': 'ARS',
-            'net_amount': '4000',
-            'vat': '1200',
-            'total_amount': '5200',
-            'invoice_file': 'test.pdf',
-            'taxpayer': self.taxpayer,
-            'user': self.user,
-        }
-        self.invoice_creation_empty_data = {}
-        self.file_mock = MagicMock(spec=File)
-        self.file_mock.name = 'test.pdf'
-        self.file_mock.size = 50
-
-    def tearDown(self):
-        if path.exists(self.file_mock.name):
-            remove(self.file_mock.name)
-
-    def test_invoice_create(self):
-        form = InvoiceForm(
-            data=self.invoice_creation_valid_data,
-            files={
-                'invoice_file': self.file_mock,
-            }
-        )
-        self.assertTrue(form.is_valid())
-
-    def test_invoice_create_required_fields(self):
-        form = InvoiceForm(
-            data=self.invoice_creation_empty_data
-        )
-        self.assertFalse(form.is_valid())
-
-    def test_invoice_create_db(self):
-        invoice = InvoiceArg.objects.create(
-            invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            taxpayer=self.taxpayer,
-            invoice_type='A',
-            invoice_number='1234',
-            po_number='98876',
-            currency='ARS',
-            net_amount='4000',
-            vat='1200',
-            total_amount='5200',
-            invoice_file=self.file_mock,
-            user=self.user,
-            )
-        self.assertEqual(
-            InvoiceArg.objects.get(invoice_number='1234'), invoice
-            )
-
-    def test_supplier_invoices_list_view(self):
-        self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(
-            invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            taxpayer=self.taxpayer,
-            invoice_type='A',
-            invoice_number='1234',
-            po_number='98876',
-            currency='ARS',
-            net_amount='4000',
-            vat='1200',
-            total_amount='5200',
-            user=self.user,
-            invoice_file=self.file_mock
-        )
-        response = self.client.get(
-            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
-        )
-        self.assertContains(response, invoice.po_number)
-        self.assertContains(response, invoice.status)
-
-    def test_supplier_invoices_list_only_taxpayer_invoices(self):
-        self.client.force_login(self.user)
-        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
-
-        other_tax_payer = TaxPayer.objects.create(
-            name='Test Tax Payer',
-            workday_id='12345',
-            company=self.company,
-        )
-        other_invoice_data = self.invoice_creation_valid_data
-        other_invoice_data['taxpayer'] = other_tax_payer
-        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
-
-        response = self.client.get(
-            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
-        )
-        # Only the invoice with from the tax payer should be listed.
-        self.assertIn(
-            invoice1.taxpayer.id,
-            [taxpayer.id for taxpayer in response.context['object_list']]
-        )
-        self.assertNotIn(
-            invoice2.taxpayer.id,
-            [taxpayer.id for taxpayer in response.context['object_list']]
-        )
-
-    def test_supplier_invoices_list_404_if_invalid_supplier(self):
-        self.client.force_login(self.user)
-        response = self.client.get(
-            reverse('supplier-invoice-list', kwargs={'taxpayer_id': 999}),
-        )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual('Name:EB ARG Status:PENDING', str(address.taxpayer))
+        self.assertEqual('Name:EB ARG Status:PENDING', str(bankaccount.taxpayer))
 
 
 class TestBase(TestCase):
@@ -385,7 +392,7 @@ class TestTaxpayerList(TestCase):
         self.taxpayer_ar = TaxPayerArgentina.objects.create(
             name='Eventbrite',
             workday_id='12345',
-            taxpayer_state='PEN',
+            taxpayer_state='PENDING',
             razon_social='Sociedad Anonima',
             cuit='20-31789965-3',
             company=self.company,
@@ -417,5 +424,6 @@ class TestTaxpayerList(TestCase):
         supplier_home.request = request
         taxpayer_child = supplier_home.get_taxpayers()
 
-        self.assertEqual(str(taxpayer_child), '[<TaxPayerArgentina: Name:Eventbrite Status:PEN>]')
+        self.assertEqual(str(taxpayer_child), '[<TaxPayerArgentina: Name:Eventbrite Status:PENDING>]')
         self.assertEqual(len(taxpayer_child), 1)
+

@@ -20,5 +20,3 @@ exclude_lines =
     pragma: no cover
     def setUp
     def test_
-    return raw_input
-    print

@@ -7,50 +7,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
-# from django.core.files.storage import FileSystemStorage
+from django.urls import (
+    reverse_lazy,
+    reverse
+)
 
-from pure_pagination.mixins import PaginationMixin
-
-from invoices_app.models import (
-    Invoice,
-    TaxPayer,
+from users_app.views import IsApUser
+from supplier_app.models import (
+    PDFFile,
     TaxPayerArgentina,
     Company
 )
-from .models import PDFFile
-from .forms import (
-    InvoiceForm,
+
+from supplier_app.forms import (
     PDFFileForm,
     AddressCreateForm,
     BankAccountCreateForm,
     TaxPayerCreateForm
 )
-from django.urls import (
-    reverse_lazy
-)
-
-
-class InvoiceCreateView(CreateView):
-    model = Invoice
-    form_class = InvoiceForm
-    template_name = 'supplier_app/invoices_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('supplier-invoice-list', kwargs={'taxpayer_id':self.kwargs['taxpayer_id']})
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
-        form.instance.taxpayer = tax_payer
-        self.object = form.save()
-        return super(InvoiceCreateView, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
-        return context
 
 
 class SupplierHome(LoginRequiredMixin, TemplateView):
@@ -59,9 +33,9 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
     login_url = '/'
 
     def get_context_data(self, **kwargs):
-        contex = super().get_context_data(**kwargs)
-        contex['taxpayers'] = self.get_taxpayers()
-        return contex
+        context = super().get_context_data(**kwargs)
+        context['taxpayers'] = self.get_taxpayers()
+        return context
 
     def get_taxpayers(self):
         user = self.request.user
@@ -71,7 +45,7 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
         if not taxpayerlist:
             return []
         taxpayerlist = reduce(lambda a, b: a+b, taxpayerlist)
-        taxpayer_child = [tax.taxpayerargentina for tax in taxpayerlist]
+        taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayerlist]
         return taxpayer_child
 
 
@@ -146,17 +120,5 @@ class CreateTaxPayerView(TemplateView, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class InvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
-    template_name = 'supplier_app/invoice-list.html'
-    model = Invoice
-    paginate_by = 10
-
-    def get_queryset(self):
-        tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
-        queryset = Invoice.objects.filter(taxpayer=tax_payer.id).order_by('id')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
-        return context
+class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
+    template_name = 'AP_app/ap-taxpayers.html'

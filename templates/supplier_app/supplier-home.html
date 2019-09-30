@@ -20,10 +20,9 @@
                                 <table class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th scope="col">{% trans "Taxpayer ID"%}</th>
                                                 <th scope="col">{% trans "Name"%}</th>
+                                                <th scope="col">{% trans "CUIT"%}</th>
                                                 <th scope="col">{% trans "Razon Social"%}</th>
-                                                <th scope="col">{% trans "Company"%}</th>
                                                 <th scope="col">{% trans "Status"%}</th>
                                                 <!-- <th scope="col"></th> -->
                                                 <th scope="col"></th>
@@ -32,10 +31,9 @@
                                         <tbody>
                                         {% for taxpayer in taxpayers %}
                                             <tr>
-                                                <th scope="row">{{taxpayer.id}}</td>
                                                 <td>{{taxpayer.name}}</td>
+                                                <td>{{taxpayer.cuit}}</td>
                                                 <td>{{taxpayer.razon_social}}</td>
-                                                <td>{{taxpayer.company.name}}</td>
                                                 <td>{{taxpayer.taxpayer_state}}</td>
                                                 <!-- <td>
                                                     <a class='btn btn-info' href="#">Edit</a>

@@ -7,7 +7,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
-    url(r'^apsite/', include('AP_app.urls')),
+    url(r'^invoices/', include('invoices_app.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^suppliersite/', include('supplier_app.urls')),
     url(r'^', include('users_app.urls')),

@@ -1,5 +1,6 @@
 import os
 from django.utils.translation import ugettext_lazy as _
+from supplier_management_site import get_env_variable
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -8,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(3^5*had+a94!&*bx4fo#q_g*ny&g2%h(0#d$k$^q=5yd&05wu'
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -19,7 +20,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'supplier_app',
     'users_app',
-    'AP_app',
     'social_django',
     'invoices_app',
     'bootstrap_datepicker_plus',
@@ -122,8 +122,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/home'
-SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = 'ap-welcome'
+SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/supplier'
+SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/suppliersite/ap'
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force', 'hd': 'eventbrite.com'}
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['eventbrite.com']
 # SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['juan@eventbrite.com']
