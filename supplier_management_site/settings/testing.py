@@ -1,5 +1,6 @@
 from .base import *  # noqa
 
+SECRET_KEY = 'testpepe'
 DEBUG = True
 
 ALLOWED_HOSTS = [

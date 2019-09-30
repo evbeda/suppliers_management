@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import (
+from users_app.views import (
     LoginView,
     LogoutView,
     ErrorLoginView

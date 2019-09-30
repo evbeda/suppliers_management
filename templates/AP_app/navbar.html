@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
 <nav class="navbar navbar-expand-lg navbar-dark justify-content-between blue-eb">
-    <a class="navbar navbar-brand" href="{% url 'ap-home' %}">
+    <a class="navbar navbar-brand" href="{% url 'ap-taxpayers' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
     </a>
 
@@ -13,9 +13,9 @@
                     Management
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'ap-home' %}"><i
+                    <a class="dropdown-item" href="{% url 'invoices-list' %}"><i
                             class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
-                    <a class="dropdown-item" href="{% url 'ap-welcome' %}"><i
+                    <a class="dropdown-item" href="{% url 'ap-taxpayers' %}"><i
                         class="fa fa-building mr-2"></i>{% trans "Taxpayers" %}</a>
             </li>
         </ul>
