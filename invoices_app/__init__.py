@@ -21,5 +21,3 @@ ARS_INVOICE_TYPES = [
     ('A', 'A'),
     ('C', 'C'),
 ]
-
-
