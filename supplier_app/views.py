@@ -1,27 +1,28 @@
 from django.db import transaction
-from django.views.generic import TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic import (
+    TemplateView,
+    ListView,
+)
+from django.views.generic.edit import (
+    CreateView,
+    FormView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
-from django.views.generic import ListView
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import (
     reverse_lazy,
     reverse
 )
-
 from users_app.views import IsApUser
 from supplier_app.models import (
-    Address,
-    BankAccount,
     Company,
+    CompanyUserPermission,
     PDFFile,
     TaxPayer,
     TaxPayerArgentina,
-    TaxPayer
 )
-
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
@@ -32,10 +33,70 @@ from supplier_app.forms import (
 from . import TAXPAYER_STATUS_AP
 
 
-class SupplierHome(LoginRequiredMixin, TemplateView):
-    model = TaxPayerArgentina
+class SupplierWithoutCompanyMixin(UserPassesTestMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            self.login_url = '/'
+            return self.handle_no_permission()
+        user_test_result = self.get_test_func()()
+        if not user_test_result:
+            self.login_url = reverse('company')
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
+
+    def test_func(self):
+        user_company = self.request.user.companyuserpermission_set.all()
+        return len(user_company) > 0
+
+
+class CompanySelectorView(LoginRequiredMixin, CreateView):
+    model = CompanyUserPermission
+    fields = ['company']
+    template_name = 'supplier_app/company_selector.html'
+
+    def get_success_url(self):
+        return reverse('supplier-home')
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect(reverse_lazy('company'), status=422)
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        form.instance.user = self.request.user
+        form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class CompanyCreatorView(LoginRequiredMixin, CreateView):
+    model = Company
+    fields = ['name', 'description']
+    template_name = 'supplier_app/company_creation.html'
+
+    def get_success_url(self):
+        return reverse('supplier-home')
+
+    @transaction.atomic
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        company = form.save()
+        companyuserpermission = CompanyUserPermission()
+        companyuserpermission.user = self.request.user
+        companyuserpermission.company = company
+        companyuserpermission.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class SupplierHome(
+    SupplierWithoutCompanyMixin,
+    TemplateView
+):
+    model = TaxPayer
     template_name = 'supplier_app/supplier-home.html'
-    login_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,7 +132,7 @@ class PDFFileView(ListView):
         return context
 
 
-class CreateTaxPayerView(TemplateView, FormView):
+class CreateTaxPayerView(SupplierWithoutCompanyMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
 
     def get(self, request, *args, **kwargs):

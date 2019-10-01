@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block styles %}
+{% load static %}
+{% endblock %}
+
+{% block content %}
+{% include 'supplier_app/navbar.html' %}
+    <h1 class='text-center'> {% trans "Hello World" %}</h1>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save" class='btn btn-success'>
+    </form>
+    <a class='btn btn-success' href="{% url 'company-create' %}">Create Company</a>
+{% endblock %}
