@@ -1,10 +1,9 @@
 from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
-from django.views.generic.list import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse, reverse_lazy
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.forms import InvoiceForm
@@ -78,16 +77,42 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvoiceArg
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
+    redirect_field_name = None
 
     def get_success_url(self):
-        return reverse_lazy(
-            'supplier-invoice-list',
-            kwargs={'taxpayer_id': self.kwargs['taxpayer_id']}
-        )
+        taxpayer_id = self.kwargs.get('taxpayer_id')
+        if taxpayer_id:
+            return reverse_lazy(
+                'supplier-invoice-list',
+                kwargs={'taxpayer_id': taxpayer_id}
+            )
+        else:
+            return reverse_lazy(
+                'invoices-list',
+            )
+
+    def user_has_permission(self):
+        if self.request.user.is_AP:
+            return True
+        else:
+            # Only allow supplier to edit the invoice if it's status is 'CHANGES REQUEST'
+            invoice = get_object_or_404(InvoiceArg, id=self.kwargs['pk'])
+            return invoice.status == 'CHANGES REQUEST'
+
+    def get_test_func(self):
+        return self.user_has_permission
+
+    def get_login_url(self):
+        taxpayer_id = self.kwargs.get('taxpayer_id')
+        if taxpayer_id:
+            return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
+        else:
+            return reverse('invoices-list')
+
 
 @is_ap_or_403()
 def approve_invoice(request, pk):
@@ -95,6 +120,7 @@ def approve_invoice(request, pk):
     invoice.status = INVOICE_STATUS_APPROVED
     invoice.save()
     return redirect('invoices-list')
+
 
 @is_ap_or_403()
 def reject_invoice(request, pk):
