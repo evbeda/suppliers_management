@@ -394,13 +394,13 @@ class TestApViews(TestBase):
             reverse('invoices-list')
         )
         self.assertContains(response, invoice.po_number)
-        self.assertContains(response, invoice.taxpayer.name)
+        self.assertContains(response, invoice.taxpayer.business_name)
 
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.ap_user)
         invoice1 = Invoice.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
-            name='Test Tax Payer',
+            business_name='Test Tax Payer',
             workday_id='12345',
             company=self.company,
         )
@@ -414,8 +414,8 @@ class TestApViews(TestBase):
             reverse('invoices-list')
         )
         # Only the invoice with NEW status should be listed.
-        self.assertContains(response, invoice1.taxpayer.name)
-        self.assertNotContains(response, invoice2.taxpayer.name)
+        self.assertContains(response, invoice1.taxpayer.business_name)
+        self.assertNotContains(response, invoice2.taxpayer.business_name)
 
 
 class TestAP(TestBase):
@@ -427,13 +427,13 @@ class TestAP(TestBase):
             reverse('invoices-list')
         )
         self.assertContains(response, invoice.po_number)
-        self.assertContains(response, invoice.taxpayer.name)
+        self.assertContains(response, invoice.taxpayer.business_name)
 
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.ap_user)
         invoice1 = Invoice.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
-            name='Test Tax Payer',
+            business_name='Test Tax Payer',
             workday_id='12345',
             company=self.company,
         )
@@ -447,8 +447,8 @@ class TestAP(TestBase):
             reverse('invoices-list')
         )
         # Only the invoice with NEW status should be listed.
-        self.assertContains(response, invoice1.taxpayer.name)
-        self.assertNotContains(response, invoice2.taxpayer.name)
+        self.assertContains(response, invoice1.taxpayer.business_name)
+        self.assertNotContains(response, invoice2.taxpayer.business_name)
 
 
 class DetailInvoiceTest(TestBase):
@@ -491,7 +491,7 @@ class DetailInvoiceTest(TestBase):
         self.other_user = User.objects.create_user(email='other_test@test.com')
         self.other_company = Company.objects.create(name='Other Company testing')
         self.other_taxpayer = TaxPayer.objects.create(
-            name='Other',
+            business_name='Other',
             workday_id='1234',
             company=self.other_company
         )
@@ -539,7 +539,7 @@ class TestInvoiceHistory(TestCase):
         self.company = Company.objects.create(name='Company testing')
         self.user = User.objects.create_user(email='ap@eventbrite.com')
         self.taxpayer = TaxPayer.objects.create(
-            name='Eventbrite',
+            business_name='Eventbrite',
             workday_id='12345',
             company=self.company,
         )

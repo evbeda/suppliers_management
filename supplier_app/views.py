@@ -135,19 +135,26 @@ class PDFFileView(ListView):
 class CreateTaxPayerView(SupplierWithoutCompanyMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
 
-    def get(self, request, *args, **kwargs):
-        context = {
+    def get_context_data(self, **kwargs):
+        """
+        Insert the form into the context dict.
+        """
+        kwargs.update({
             'address_form': AddressCreateForm(),
-            'taxpayer_form': TaxPayerCreateForm(self.request.user),
-            'bankaccount_form': BankAccountCreateForm(),
-        }
-        return self.render_to_response(context)
+            'taxpayer_form': TaxPayerCreateForm(),
+            'bank_account_form': BankAccountCreateForm(),
+        })
+        return kwargs
 
     def post(self, request, *args, **kwargs):
         forms = {
-            'taxpayer_form': TaxPayerCreateForm(request.user, self.request.POST),
-            'address_form': AddressCreateForm(self.request.POST),
-            'bankaccount_form': BankAccountCreateForm(self.request.POST),
+            'taxpayer_form': TaxPayerCreateForm(
+                data=request.POST,
+                files=request.FILES),
+            'address_form': AddressCreateForm(data=request.POST),
+            'bankaccount_form': BankAccountCreateForm(
+                data=request.POST,
+                files=request.FILES),
         }
         if self.forms_are_valid(forms):
             return self.form_valid(forms)
