@@ -1,5 +1,3 @@
-from functools import reduce
-
 from django.db import transaction
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
@@ -17,6 +15,7 @@ from supplier_app.models import (
     Company,
     PDFFile,
     TaxPayerArgentina,
+    TaxPayer
 )
 
 from supplier_app.forms import (
@@ -41,13 +40,8 @@ class SupplierHome(LoginRequiredMixin, TemplateView):
 
     def get_taxpayers(self):
         user = self.request.user
-        companyuser = user.companyuserpermission_set.all()
-        company = [c.company for c in companyuser]
-        taxpayerlist = [c.taxpayer_set.all() for c in company]
-        if not taxpayerlist:
-            return []
-        taxpayerlist = reduce(lambda a, b: a+b, taxpayerlist)
-        taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayerlist]
+        taxpayer_list = TaxPayer.objects.filter(company__companyuserpermission__user=user)
+        taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayer_list]
         return taxpayer_child
 
 

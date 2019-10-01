@@ -8,26 +8,29 @@ from pytz import UTC
 from django.core.files import File
 from django.test import Client, TestCase
 from django.urls import reverse
-
+from invoices_app.factory_boy import InvoiceArgentinaFactory
+from supplier_app.factory_boy import (
+    TaxPayerArgentinaFactory,
+    CompanyFactory
+)
+from users_app.factory_boy import UserFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import InvoiceArg
 from users_app.models import User
 from supplier_app.models import (
     Company,
     TaxPayer,
-
 )
 
 
 class TestInvoice(TestCase):
     def setUp(self):
-        self.company = Company.objects.create(name='Company testing')
-        self.user = User.objects.create_user(email='test_test@test.com')
-        self.taxpayer = TaxPayer.objects.create(
-            name='Eventbrite',
-            workday_id='12345',
-            company=self.company
-        )
+        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+        self.company = CompanyFactory()
+        self.user = UserFactory()
+        self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
+        self.user2 = UserFactory()
+        self.taxpayer1_user2 = TaxPayerArgentinaFactory(company=self.company)
         self.invoice_creation_valid_data = {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
@@ -119,16 +122,16 @@ class TestInvoice(TestCase):
 
     def test_supplier_invoices_list_only_taxpayer_invoices(self):
         self.client.force_login(self.user)
-        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
-
-        other_tax_payer = TaxPayer.objects.create(
-            name='Test Tax Payer',
-            workday_id='12345',
-            company=self.company,
+        invoice1 = InvoiceArgentinaFactory(
+            user=self.user,
+            taxpayer=self.taxpayer
         )
-        other_invoice_data = self.invoice_creation_valid_data
-        other_invoice_data['taxpayer'] = other_tax_payer
-        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
+
+        other_tax_payer = TaxPayerArgentinaFactory(company=self.company)
+        invoice2 = InvoiceArgentinaFactory(
+            user=self.user,
+            taxpayer=other_tax_payer
+        )
 
         response = self.client.get(
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
@@ -142,6 +145,55 @@ class TestInvoice(TestCase):
             invoice2.taxpayer.id,
             [taxpayer.id for taxpayer in response.context['object_list']]
         )
+
+    def test_supplier_with_two_invoices_list_only_two_invoices(self):
+        self.client.force_login(self.user2)
+
+        invoice1 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+
+        response = self.client.get(
+            reverse('invoices-list')
+        )
+        # Only the invoice with from the tax payer should be listed.
+        self.assertIn(
+            invoice1.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertIn(
+            invoice2.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertEqual(2, len(response.context_data['object_list']))
+
+    def test_AP_should_see_all_invoices(self):
+        self.client.force_login(self.ap_user)
+
+        invoice1_user1 = InvoiceArgentinaFactory(user=self.user, taxpayer=self.taxpayer)
+        invoice2_user1 = InvoiceArgentinaFactory(user=self.user, taxpayer=self.taxpayer)        
+        invoice1_user2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice2_user2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        response = self.client.get(
+            reverse('invoices-list')
+        )
+        # Only the invoice with from the tax payer should be listed.
+        self.assertIn(
+            invoice1_user1.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertIn(
+            invoice1_user2.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertIn(
+            invoice2_user1.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertIn(
+            invoice2_user2.taxpayer.id,
+            [taxpayer.id for taxpayer in response.context['object_list']]
+        )
+        self.assertEqual(4, len(response.context_data['object_list']))
 
     def test_supplier_invoices_list_404_if_invalid_supplier(self):
         self.client.force_login(self.user)
