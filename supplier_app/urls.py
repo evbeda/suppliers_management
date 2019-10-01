@@ -1,11 +1,11 @@
 from django.conf.urls import url
 
 from supplier_app.views import (
-    SupplierHome,
-    CreateTaxPayerView,
     ApTaxpayers,
     CreatePDFFileView,
+    CreateTaxPayerView,
     PDFFileView,
+    SupplierHome,
 )
 
 urlpatterns = [

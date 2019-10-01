@@ -16,28 +16,28 @@ from django.core.urlresolvers import (
 )
 
 from supplier_app.forms import (
-    PDFFileForm,
     AddressCreateForm,
     BankAccountCreateForm,
+    PDFFileForm,
     TaxPayerCreateForm,
 )
 
 from supplier_app.views import (
+    ApTaxpayers,
     CreateTaxPayerView,
     SupplierHome,
-    ApTaxpayers,
 )
 
 from users_app.models import User
 from social_django.models import UserSocialAuth
 from supplier_app.models import (
-    Company,
-    TaxPayer,
-    TaxPayerArgentina,
-    BankAccount,
     Address,
+    BankAccount,
+    Company,
     CompanyUserPermission,
     PDFFile,
+    TaxPayer,
+    TaxPayerArgentina,
 )
 
 GENERIC_PASSWORD = '1234'

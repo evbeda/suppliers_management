@@ -14,17 +14,19 @@ from django.urls import (
 
 from users_app.views import IsApUser
 from supplier_app.models import (
+    Company,
     PDFFile,
     TaxPayerArgentina,
-    Company
 )
 
 from supplier_app.forms import (
-    PDFFileForm,
     AddressCreateForm,
     BankAccountCreateForm,
-    TaxPayerCreateForm
+    PDFFileForm,
+    TaxPayerCreateForm,
 )
+
+from . import TAXPAYER_STATUS_AP
 
 
 class SupplierHome(LoginRequiredMixin, TemplateView):
@@ -130,7 +132,5 @@ class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
         return context
 
     def get_queryset(self):
-        queryset = \
-            TaxPayerArgentina.objects.filter(taxpayer_state='PENDING') | \
-            TaxPayerArgentina.objects.filter(taxpayer_state='CHANGE REQUIRED')
+        queryset = TaxPayerArgentina.objects.filter(taxpayer_state__in=TAXPAYER_STATUS_AP)
         return queryset
