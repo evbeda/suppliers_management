@@ -11,6 +11,13 @@ from invoices_app import (
 from supplier_app.models import (
     TaxPayer
 )
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED
+)
 
 
 class Invoice(models.Model):
@@ -19,7 +26,7 @@ class Invoice(models.Model):
     status = models.CharField(
         max_length=40,
         choices=INVOICE_STATUS,
-        default='NEW'
+        default=INVOICE_STATUS_NEW
     )
     po_number = models.CharField(max_length=200, help_text="ex: 12341234")
     invoice_date = models.DateField()

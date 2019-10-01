@@ -1,15 +1,21 @@
+from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.forms import InvoiceForm
-
 from invoices_app.models import Invoice, InvoiceArg
 from supplier_app.models import TaxPayer
+from users_app.decorators import is_ap_or_403
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_REJECTED
+)
 
 
 class InvoiceListView(
@@ -29,7 +35,7 @@ class InvoiceListView(
     def get_queryset(self):
         user = self.request.user
         if user.is_AP:
-            queryset = Invoice.objects.filter(status='NEW').order_by('id')
+            queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).order_by('id')
         else:
             queryset = Invoice.objects.filter(user=user)
         return queryset
@@ -82,3 +88,17 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
             'supplier-invoice-list',
             kwargs={'taxpayer_id': self.kwargs['taxpayer_id']}
         )
+
+@is_ap_or_403()
+def approve_invoice(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    invoice.status = INVOICE_STATUS_APPROVED
+    invoice.save()
+    return redirect('invoices-list')
+
+@is_ap_or_403()
+def reject_invoice(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    invoice.status = INVOICE_STATUS_REJECTED
+    invoice.save()
+    return redirect('invoices-list')

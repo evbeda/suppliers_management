@@ -2,6 +2,7 @@ from os import (
     path,
     remove
 )
+from parameterized import parameterized
 from unittest.mock import MagicMock
 from datetime import datetime
 from pytz import UTC
@@ -20,6 +21,11 @@ from users_app.models import User
 from supplier_app.models import (
     Company,
     TaxPayer,
+)
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED
 )
 
 
@@ -201,6 +207,41 @@ class TestInvoice(TestCase):
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': 999}),
         )
         self.assertEqual(response.status_code, 404)
+    
+    @parameterized.expand([
+        ('invoice-approve', 1, 302),
+        ('invoice-approve', 31, 404),
+        ('invoice-reject', 1, 302),
+        ('invoice-reject', 31, 404),
+    ])
+    def test_invoice_change_status(self, url, invoice_id, expected):
+        self.client.force_login(self.ap_user)
+        InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        response = self.client.get(
+            reverse(url, kwargs={'pk': invoice_id}),
+        )
+        self.assertEqual(response.status_code, expected)
+
+    @parameterized.expand([
+        ('invoice-approve', INVOICE_STATUS_APPROVED),
+        ('invoice-reject', INVOICE_STATUS_REJECTED),
+    ])
+    def test_invoice_change_status_changed(self, url, expected):
+        self.client.force_login(self.ap_user)
+        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        self.client.get(
+            reverse(url, kwargs={'pk': 1}),
+        )
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.status, expected)
+
+    def test_invoice_change_status_only_ap_fail(self):
+        self.client.force_login(self.user)
+        InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        request = self.client.get(
+            reverse('invoice-approve', kwargs={'pk': 1}),
+        )
+        self.assertEqual(request.status_code, 403)
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)
@@ -280,7 +321,7 @@ class TestApViews(TestCase):
         other_invoice_data = self.invoice_creation_valid_data
         other_invoice_data['taxpayer'] = other_tax_payer
         invoice2 = InvoiceArg.objects.create(**other_invoice_data)
-        invoice2.status = 'APPROVED'
+        invoice2.status = INVOICE_STATUS_APPROVED
         invoice2.save()
 
         response = self.client.get(
@@ -314,7 +355,7 @@ class TestAP(TestCase):
             'total_amount': '5200',
             'taxpayer': self.taxpayer,
             'user': self.user,
-            'invoice_file': self.file_mock.name,
+            'invoice_file': self.file_mock.name
         }
         self.invoice_creation_empty_data = {}
         self.client = Client()
@@ -343,7 +384,7 @@ class TestAP(TestCase):
         other_invoice_data = self.invoice_creation_valid_data
         other_invoice_data['taxpayer'] = other_tax_payer
         invoice2 = InvoiceArg.objects.create(**other_invoice_data)
-        invoice2.status = 'APPROVED'
+        invoice2.status = INVOICE_STATUS_APPROVED
         invoice2.save()
 
         response = self.client.get(
