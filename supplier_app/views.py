@@ -139,6 +139,9 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer'] = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
-        context['taxpayer_address'] = Address.objects.filter(taxpayer__id=self.kwargs['taxpayer_id'])
-        context['taxpayer_bank_account'] = BankAccount.objects.filter(taxpayer__id=self.kwargs['taxpayer_id'])
+
+        context['taxpayer_address'] = context['taxpayer'].address_set.get()
+        context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
+
+        #import ipdb; ipdb.set_trace()
         return context
