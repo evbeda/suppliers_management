@@ -33,6 +33,7 @@
                     <td><span class="badge badge-success">{{invoice.status}}</span></td>
                     <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-download"></i></a>
                         <a href="https://docs.google.com/viewerng/viewer?url={{ invoice.invoice_file.url }}" target="_blank"><i class="fa fa-eye ml-2"></i></a>
+                        <a href="{% url 'invoice-approve' pk=invoice.id %}" ><i class="fa fa-check ml-2"></i></a>
                     </td>
                 </tr>
             {% endfor %}
