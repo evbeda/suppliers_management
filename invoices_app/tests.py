@@ -37,7 +37,7 @@ class TestInvoice(TestCase):
             'net_amount': '4000',
             'vat': '1200',
             'total_amount': '5200',
-            'invoice_file': 'test.pdf',
+            'invoice_file': 'file/test.pdf',
             'taxpayer': self.taxpayer,
             'user': self.user,
         }
@@ -45,10 +45,23 @@ class TestInvoice(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
+        self.invoice_edit_data = {
+                'invoice_date': '2019-10-01',
+                'invoice_type': 'A',
+                'invoice_number': '987654321',
+                'po_number': '98876',
+                'currency': 'ARS',
+                'net_amount': '4000',
+                'vat': '1200',
+                'total_amount': '5200',
+                'taxpayer': self.taxpayer.id,
+                'user': self.user.id,
+                'invoice_file': self.file_mock,
+            }
 
     def tearDown(self):
-        if path.exists(self.file_mock.name):
-            remove(self.file_mock.name)
+        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
+            remove('file/{}'.format(self.file_mock.name))
 
     def test_invoice_create(self):
         form = InvoiceForm(
@@ -96,7 +109,7 @@ class TestInvoice(TestCase):
             vat='1200',
             total_amount='5200',
             user=self.user,
-            invoice_file=self.file_mock
+            invoice_file=self.file_mock,
         )
         response = self.client.get(
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
@@ -137,6 +150,30 @@ class TestInvoice(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_supplier_invoice_edit(self):
+        self.client.force_login(self.user)
+        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        res = self.client.post(
+            reverse('taxpayer-invoice-update', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': invoice.id}),
+            self.invoice_edit_data
+        )
+        self.assertEqual(res.status_code, 302)
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.invoice_number, '987654321')
+
+    def test_supplier_invalid_invoice_edit(self):
+        self.client.force_login(self.user)
+        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        old_invoice_number = invoice.invoice_number
+        res = self.client.post(
+            reverse('taxpayer-invoice-update', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': invoice.id}),
+            {}
+        )
+        self.assertEqual(res.status_code, 200)
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.invoice_number, old_invoice_number)
+        self.assertContains(res, 'This field is required.')
+
 
 class TestApViews(TestCase):
 
@@ -162,14 +199,14 @@ class TestApViews(TestCase):
             'total_amount': '5200',
             'taxpayer': self.taxpayer,
             'user': self.user,
-            'invoice_file':self.file_mock
+            'invoice_file': self.file_mock.name,
         }
         self.invoice_creation_empty_data = {}
         self.client = Client()
-    
+
     def tearDown(self):
-        if path.exists(self.file_mock.name):
-            remove(self.file_mock.name)
+        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
+            remove('file/{}'.format(self.file_mock.name))
 
     def test_ap_invoices_list_view(self):
         self.client.force_login(self.user)
@@ -225,14 +262,14 @@ class TestAP(TestCase):
             'total_amount': '5200',
             'taxpayer': self.taxpayer,
             'user': self.user,
-            'invoice_file':self.file_mock
+            'invoice_file': self.file_mock.name,
         }
         self.invoice_creation_empty_data = {}
         self.client = Client()
 
     def tearDown(self):
-        if path.exists(self.file_mock.name):
-            remove(self.file_mock.name)
+        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
+            remove('file/{}'.format(self.file_mock.name))
 
     def test_ap_invoices_list_view(self):
         self.client.force_login(self.user)
