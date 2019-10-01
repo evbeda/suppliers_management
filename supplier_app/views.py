@@ -121,4 +121,16 @@ class CreateTaxPayerView(TemplateView, FormView):
 
 
 class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
+    model = TaxPayerArgentina
     template_name = 'AP_app/ap-taxpayers.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayers'] = self.get_queryset()
+        return context
+
+    def get_queryset(self):
+        queryset = \
+            TaxPayerArgentina.objects.filter(taxpayer_state='PENDING') | \
+            TaxPayerArgentina.objects.filter(taxpayer_state='CHANGE REQUIRED')
+        return queryset

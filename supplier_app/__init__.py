@@ -4,4 +4,5 @@ ALLOWED_FILE_EXTENSIONS = ['.pdf']
 TAXPAYER_STATUS = [
     ("PENDING", "Pending"),
     ("ACTIVE", "Active"),
+    ("CHANGE REQUIRED", "Change required"),
 ]
