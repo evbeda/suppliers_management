@@ -24,7 +24,8 @@ from supplier_app.forms import (
 
 from supplier_app.views import (
     CreateTaxPayerView,
-    SupplierHome
+    SupplierHome,
+    ApTaxpayers,
 )
 
 from users_app.models import User
@@ -36,7 +37,7 @@ from supplier_app.models import (
     BankAccount,
     Address,
     CompanyUserPermission,
-    PDFFile
+    PDFFile,
 )
 
 GENERIC_PASSWORD = '1234'
@@ -427,3 +428,92 @@ class TestTaxpayerList(TestCase):
         self.assertEqual(str(taxpayer_child), '[<TaxPayerArgentina: Name:Eventbrite Status:PENDING>]')
         self.assertEqual(len(taxpayer_child), 1)
 
+
+class TestTaxpayerApList(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.company1 = Company.objects.create(
+            name='Empresa 1',
+            description='Descripcion de la empresa 1'
+        )
+        self.company2 = Company.objects.create(
+            name='Empresa 2',
+            description='Descripcion de la empresa 2'
+        )
+
+        self.taxpayer_ar1 = TaxPayerArgentina.objects.create(
+            name='Pyme 1',
+            workday_id='1',
+            taxpayer_state='PENDING',
+            razon_social='Empresa 1 Sociedad Anonima',
+            cuit='20-31789965-3',
+            company=self.company1,
+        )
+        self.taxpayer_ar2 = TaxPayerArgentina.objects.create(
+            name='Pyme 2',
+            workday_id='2',
+            taxpayer_state='CHANGE REQUIRED',
+            razon_social='Empresa 2 Sociedad Responsabilidad Limitada',
+            cuit='20-39237968-5',
+            company=self.company2,
+        )
+
+        self.user_with_social_evb1 = \
+            User.objects.create_user(email='nahuel', password="1234asdf")
+        UserSocialAuth.objects.create(
+            user=self.user_with_social_evb1,
+            provider='eventbrite',
+            uid='1234567890',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+
+        self.user_with_social_evb2 = \
+            User.objects.create_user(email='nicolas', password="nicolas123")
+        UserSocialAuth.objects.create(
+            user=self.user_with_social_evb2,
+            provider='eventbrite',
+            uid='0987654321',
+            extra_data={
+                'auth_time': 1567127106,
+                'access_token': 'testToken',
+                'token_type': 'bearer',
+            }
+        )
+
+        self.companyuserpermission1 = CompanyUserPermission.objects.create(
+            company=self.company1,
+            user=self.user_with_social_evb1
+        )
+        self.companyuserpermission2 = CompanyUserPermission.objects.create(
+            company=self.company2,
+            user=self.user_with_social_evb2
+        )
+
+    def test_get_taxpayers_with_status_pendindg_or_request_changed_in_ap_site(self):
+        request = self.factory.get('/suppliersite/ap')
+        user_ap = User.objects.create_user(email='ap@eventbrite.com')
+        request.user = user_ap
+
+        ap_home = ApTaxpayers()
+        ap_home.request = request
+
+        response_queryset = ap_home.get_queryset()
+
+        self.assertIn(self.taxpayer_ar1, response_queryset)
+        self.assertIn(self.taxpayer_ar2, response_queryset)
+
+    def test_get_taxpayers_list_success(self):
+        request = self.factory.get('/suppliersite/ap')
+        user_ap = User.objects.create_user(email='ap@eventbrite.com')
+        request.user = user_ap
+
+        response = ApTaxpayers()
+        response = ApTaxpayers.as_view()(request)
+
+        self.assertEqual(response.status_code, 200)
