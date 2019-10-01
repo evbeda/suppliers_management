@@ -35,7 +35,7 @@
                                             <td>{{taxpayer.razon_social}}</td>
                                             <td>{{taxpayer.taxpayer_state}}</td>
                                             <td>
-                                                <a class='btn btn-info' href="#">More Details</a>
+                                                <a class='btn btn-info' href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">More Details</a>
                                             </td>
                                         </tr>
                                     {% endfor %}
