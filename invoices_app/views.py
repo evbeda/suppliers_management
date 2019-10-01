@@ -1,14 +1,14 @@
-from django.views.generic.list import ListView
 from django.views.generic import CreateView
+from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from pure_pagination.mixins import PaginationMixin
 
-from invoices_app.forms import (
-    InvoiceForm
-)
-from invoices_app.models import Invoice
+from invoices_app.forms import InvoiceForm
+
+from invoices_app.models import Invoice, InvoiceArg
 from supplier_app.models import TaxPayer
 
 
@@ -42,7 +42,7 @@ class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
         return context
 
 
-class SupplierInvoiceCreateView(CreateView):
+class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
@@ -61,3 +61,15 @@ class SupplierInvoiceCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         return context
+
+
+class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+    model = InvoiceArg
+    form_class = InvoiceForm
+    template_name = 'supplier_app/invoices_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'supplier-invoice-list',
+            kwargs={'taxpayer_id': self.kwargs['taxpayer_id']}
+        )

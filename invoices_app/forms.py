@@ -44,11 +44,13 @@ class InvoiceForm(forms.ModelForm):
         valid = super(InvoiceForm, self).is_valid()
         if not valid:
             return valid
+
         if self.cleaned_data['invoice_file'].size <= MAX_SIZE_FILE:
-            valid_file_extensions = \
-                [i for i in ALLOWED_FILE_EXTENSIONS if i in self.cleaned_data['invoice_file'].name]
-            if len(valid_file_extensions) == 1:
+            if any(
+                [self.cleaned_data['invoice_file'].name.endswith(extension) for extension in ALLOWED_FILE_EXTENSIONS]
+            ):
                 return True
+
             else:
                 self.add_error(
                     'invoice_file',
