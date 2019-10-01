@@ -12,8 +12,11 @@ from django.urls import (
 
 from users_app.views import IsApUser
 from supplier_app.models import (
+    Address,
+    BankAccount,
     Company,
     PDFFile,
+    TaxPayer,
     TaxPayerArgentina,
     TaxPayer
 )
@@ -128,3 +131,14 @@ class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
     def get_queryset(self):
         queryset = TaxPayerArgentina.objects.filter(taxpayer_state__in=TAXPAYER_STATUS_AP)
         return queryset
+
+
+class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
+    template_name = 'AP_app/ap-taxpayer-details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer'] = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        context['taxpayer_address'] = Address.objects.filter(taxpayer__id=self.kwargs['taxpayer_id'])
+        context['taxpayer_bank_account'] = BankAccount.objects.filter(taxpayer__id=self.kwargs['taxpayer_id'])
+        return context
