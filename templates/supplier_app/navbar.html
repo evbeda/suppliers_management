@@ -44,20 +44,21 @@
             </li>
 
         </ul>
-        <div class="collapse navbar-collapse justify-content-end" >
+        <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-                    <li class="nav-item dropdown navbar-right btn-">
-                            <a class="nav-link dropdown-toggle " id="navbarDropdownMenuLink-4" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-user mr-2"></i> {{ user.first_name }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-                                <a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt mr-2"></i>
-                                    Log out
-                                </a>
-                            </div>
-                        </li>
+                <li class="nav-item dropdown navbar-right btn-">
+                    <a class="nav-link dropdown-toggle " id="navbarDropdownMenuLink-4" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user mr-2"></i> {{ user.first_name }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-info"
+                        aria-labelledby="navbarDropdownMenuLink-4">
+                        <a class="dropdown-item" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Log out
+                        </a>
+                    </div>
+                </li>
             </ul>
         </div>
 

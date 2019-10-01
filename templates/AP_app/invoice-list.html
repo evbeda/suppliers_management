@@ -3,7 +3,11 @@
 
 
 {% block content %}
+{% if is_AP %}
 {% include 'AP_app/navbar.html' %}
+{% else %}
+{% include 'supplier_app/navbar.html' %}
+{% endif %}
     <br/>
     <h1 class="text-center"> {% trans "Invoice List"%}</h1>
     <br/>

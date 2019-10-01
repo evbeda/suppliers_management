@@ -5,6 +5,8 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 
+from users_app import ALLOWED_AP_ACCOUNTS
+
 
 class UserManager(BaseUserManager):
     """
@@ -41,7 +43,6 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -49,3 +50,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    @property
+    def is_AP(self):
+        return self.email in ALLOWED_AP_ACCOUNTS

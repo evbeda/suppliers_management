@@ -21,8 +21,17 @@ class InvoiceListView(
     model = Invoice
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_AP'] = self.request.user.is_AP
+        return context
+
     def get_queryset(self):
-        queryset = Invoice.objects.filter(status='NEW').order_by('id')
+        user = self.request.user
+        if user.is_AP:
+            queryset = Invoice.objects.filter(status='NEW').order_by('id')
+        else:
+            queryset = Invoice.objects.filter(user=user)
         return queryset
 
 
