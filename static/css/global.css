@@ -56,3 +56,7 @@ a:hover{
     color: #ffffff;
     background-color: #1E0A3C;
 }
+
+.inline {
+  display: inline-block;
+}

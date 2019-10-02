@@ -6,7 +6,8 @@ from invoices_app.views import (
     SupplierInvoiceListView,
     SupplierInvoiceCreateView,
     approve_invoice,
-    reject_invoice
+    reject_invoice,
+    InvoiceDetailView
 )
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     url(
         r'^(?P<pk>[0-9]+)/update$', InvoiceUpdateView.as_view(), name='invoice-update'
     ),
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/detail/(?P<pk>[0-9]+)/$', InvoiceDetailView.as_view(), name='invoices-detail'),
 ]
