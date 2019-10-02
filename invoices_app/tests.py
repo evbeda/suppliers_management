@@ -122,6 +122,25 @@ class TestInvoice(TestBase):
         )
         self.assertFalse(form.is_valid())
 
+    @parameterized.expand([
+        ('test.pdf', 20, True),
+        ('test.xml', 20, False),
+        ('test.pdf', 500000000, False),
+        ('test.xml', 500000000, False),
+
+    ])
+    def test_form_file_is_valid(self, name_file, size_file, expected):
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = name_file
+        self.file_mock.size = size_file
+        form = InvoiceForm(
+            data=self.invoice_post_data,
+            files={
+                'invoice_file': self.file_mock,
+            }
+        )
+        self.assertEqual(form.is_valid(), expected)
+
     def test_invoice_create_db(self):
         invoice = InvoiceArg.objects.create(
             invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
