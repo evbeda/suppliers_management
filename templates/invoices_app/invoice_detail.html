@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% include 'AP_app/navbar.html' %}
+{{ block.super }}
+{% csrf_token %}
+
+<div class="row m-2">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header">
+        Invoice
+        <strong>{{invoice.invoice_date}}</strong>
+        <span class="float-right">
+          <strong>Status:</strong>
+          {% if invoice.status == 'NEW' or  invoice.status == 'PAID' or invoice.status == 'APPROVED' %}
+          <span class="badge badge-success">{{invoice.status}}</span>
+          {% endif %}
+          {% if invoice.status == 'REJECTED' %}
+          <span class="badge badge-danger">{{invoice.status}}</span>
+          {% endif %}
+          {% if invoice.status == 'CHANGES REQUEST' %}
+          <span class="badge badge-warning">{{invoice.status}}</span>
+          {% endif %}
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-sm-4">
+            <h6 class="mb-3">From:</h6>
+            <div>
+              <strong>{{taxpayer.razon_social}}</strong>
+            </div>
+            <div>{{address.street}} {{address.number}}</div>
+            <div>{{address.zip_code}} {{address.city}}</div>
+            <div>{{address.country}}</div>
+          </div>
+          <div class="col-sm-4">
+            <h6 class="mb-3">Details:</h6>
+            <div><strong>CUIT:</strong> {{taxpayer.cuit}}</div>
+            <div><strong>Payment option:</strong> {{taxpayer.forma_de_pago}}</div>
+            <div><strong>PO Number:</strong> {{invoice.po_number}}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-sm-5 ml-auto">
+            <table class="table table-clear">
+              <tbody>
+                <tr>
+                  <td class="left">
+                    <strong>Net Amount: </strong>
+                  </td>
+                  <td class="right">
+                    <strong>{{invoice.currency}}</strong> {{invoice.invoicearg.net_amount}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left">
+                    <strong>VAT</strong>
+                  </td>
+                  <td class="right">
+                    <strong>{{invoice.currency}}</strong> {{invoice.invoicearg.vat}}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="left">
+                    <strong>Total</strong>
+                  </td>
+                  <td class="right">
+                    <strong>{{invoice.currency}}</strong> {{invoice.invoicearg.total_amount}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <iframe src="http://docs.google.com/gview?url={{ invoice.invoice_file.url }}&embedded=true" style="width:100%; height:100%;" frameborder="0"></iframe>
+  </div>
+  <div class="col-md-12 text-center mt-4">
+    {% if invoice.status == 'CHANGES REQUEST' %}
+    <span><button type="button" class="btn btn-info">Edit info</button></span>
+    {% endif %}
+    {% if is_AP %}
+    <span><a href="{% url 'invoice-approve' pk=invoice.id %}" ><button type="button" class="btn btn-success">Approve</button></a></span>
+    <span><a href="{% url 'invoice-reject' pk=invoice.id %}" ><button type="button" class="btn btn-danger">Reject</button></a></span>
+    <span><button type="button" class="btn btn-warning">Request Changes</button></span>
+    {% endif %}
+    <span><a href="{{ invoice.invoice_file.url }}"><button type="button" class="btn btn-info">Download PDF</button></a></span>
+  </div>
+
+</div>
+{% endblock%}

@@ -1,19 +1,31 @@
-from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin
+)
+
+from django.urls import (
+    reverse,
+    reverse_lazy
+)
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse, reverse_lazy
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice, InvoiceArg
-from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_REJECTED
+)
+
+from supplier_app.models import (
+    TaxPayer,
+    Address
 )
 
 
@@ -128,3 +140,37 @@ def reject_invoice(request, pk):
     invoice.status = INVOICE_STATUS_REJECTED
     invoice.save()
     return redirect('invoices-list')
+
+
+class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Invoice
+    template_name = 'invoices_app/invoice_detail.html'
+    login_url = '/'
+
+    def test_func(self):
+        taxpayer_id_in_url = self.kwargs['taxpayer_id']
+        taxpayers_from_url = TaxPayer.objects.filter(pk=taxpayer_id_in_url)
+        if not taxpayers_from_url:
+            return False
+
+        for taxpayer_from_url in taxpayers_from_url:
+            company_from_taxpayer_in_url = taxpayer_from_url.company
+            company_id = company_from_taxpayer_in_url.id
+
+            # Is there a CompanyUserPermission that has that User and Company?
+            companyuserpermission = \
+                self.request.user.companyuserpermission_set.filter(
+                    company=company_from_taxpayer_in_url
+                )
+            return True if companyuserpermission else False
+
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['invoice'] = Invoice.objects.get(id=self.kwargs['pk'])
+        father_taxpayer = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
+        context['is_AP'] = self.request.user.is_AP
+        context['taxpayer'] = father_taxpayer.get_taxpayer_child()
+        context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
+        return context

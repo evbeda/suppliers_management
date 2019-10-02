@@ -6,21 +6,30 @@ from parameterized import parameterized
 from unittest.mock import MagicMock
 from datetime import datetime
 from pytz import UTC
+from http import HTTPStatus
+
 from django.core.files import File
-from django.test import Client, TestCase
+from django.test import (
+    Client,
+    TestCase
+)
 from django.urls import reverse
+from django.http import HttpResponseRedirect
+
 from invoices_app.factory_boy import InvoiceArgentinaFactory
 from supplier_app.factory_boy import (
     TaxPayerArgentinaFactory,
     CompanyFactory
 )
 from users_app.factory_boy import UserFactory
+
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import InvoiceArg
 from users_app.models import User
 from supplier_app.models import (
     Company,
     TaxPayer,
+    CompanyUserPermission
 )
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -29,15 +38,15 @@ from invoices_app import (
 )
 
 
-class TestInvoice(TestCase):
-    def setUp(self):
-        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.company = CompanyFactory()
-        self.user = UserFactory()
-        self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
-        self.user2 = UserFactory()
-        self.taxpayer1_user2 = TaxPayerArgentinaFactory(company=self.company)
-        self.invoice_creation_valid_data = {
+class TestBase(TestCase):
+    def invoice_creation(self, taxpayer=None, user=None):
+        if not taxpayer:
+            taxpayer = self.taxpayer
+
+        if not user:
+            user = self.user
+
+        return {
             'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             'invoice_type': 'A',
             'invoice_number': '1234',
@@ -46,14 +55,36 @@ class TestInvoice(TestCase):
             'net_amount': '4000',
             'vat': '1200',
             'total_amount': '5200',
-            'invoice_file': 'file/test.pdf',
-            'taxpayer': self.taxpayer,
-            'user': self.user,
+            'invoice_file': 'test.pdf',
+            'taxpayer': taxpayer,
+            'user': user,
         }
-        self.invoice_creation_empty_data = {}
+
+    def setUp(self):
+        self.company = CompanyFactory()
+        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+        self.user = UserFactory()
+        self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
+        self.user2 = UserFactory()
+        self.taxpayer1_user2 = TaxPayerArgentinaFactory(company=self.company)
+        self.invoice_creation_valid_data = self.invoice_creation()
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
+        self.invoice_edit_data = {
+            'invoice_date': '2019-10-01',
+            'invoice_type': 'A',
+            'invoice_number': '987654321',
+            'po_number': '98876',
+            'currency': 'ARS',
+            'net_amount': '4000',
+            'vat': '1200',
+            'total_amount': '5200',
+            'taxpayer': self.taxpayer.id,
+            'user': self.user.id,
+            'invoice_file': self.file_mock,
+        }
+        self.invoice_creation_empty_data = {}
         self.invoice_post_data = {
                 'invoice_date': '2019-10-01',
                 'invoice_type': 'A',
@@ -67,10 +98,14 @@ class TestInvoice(TestCase):
                 'user': self.user.id,
                 'invoice_file': self.file_mock,
             }
+        self.client = Client()
 
     def tearDown(self):
         if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
             remove('file/{}'.format(self.file_mock.name))
+
+
+class TestInvoice(TestBase):
 
     def test_invoice_create(self):
         form = InvoiceForm(
@@ -311,41 +346,10 @@ class TestInvoice(TestCase):
         self.assertEqual(invoice.invoice_number, self.invoice_post_data['invoice_number'])
 
 
-class TestApViews(TestCase):
-
-    def setUp(self):
-        self.company = Company.objects.create(name='Company testing')
-        self.user = User.objects.create_user(email='ap@eventbrite.com')
-        self.taxpayer = TaxPayer.objects.create(
-            name='Eventbrite',
-            workday_id='12345',
-            company=self.company,
-        )
-        self.file_mock = MagicMock(spec=File)
-        self.file_mock.name = 'test.pdf'
-        self.file_mock.size = 50
-        self.invoice_creation_valid_data = {
-            'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            'invoice_type': 'A',
-            'invoice_number': '1234',
-            'po_number': '98876',
-            'currency': 'ARS',
-            'net_amount': '4000',
-            'vat': '1200',
-            'total_amount': '5200',
-            'taxpayer': self.taxpayer,
-            'user': self.user,
-            'invoice_file': self.file_mock.name,
-        }
-        self.invoice_creation_empty_data = {}
-        self.client = Client()
-
-    def tearDown(self):
-        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
-            remove('file/{}'.format(self.file_mock.name))
+class TestApViews(TestBase):
 
     def test_ap_invoices_list_view(self):
-        self.client.force_login(self.user)
+        self.client.force_login(self.ap_user)
         invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
             reverse('invoices-list')
@@ -354,7 +358,7 @@ class TestApViews(TestCase):
         self.assertContains(response, invoice.taxpayer.name)
 
     def test_ap_invoices_list_are_in_new_status(self):
-        self.client.force_login(self.user)
+        self.client.force_login(self.ap_user)
         invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
             name='Test Tax Payer',
@@ -375,40 +379,10 @@ class TestApViews(TestCase):
         self.assertNotContains(response, invoice2.taxpayer.name)
 
 
-class TestAP(TestCase):
-    def setUp(self):
-        self.company = Company.objects.create(name='Company testing')
-        self.user = User.objects.create_user(email='ap@eventbrite.com')
-        self.taxpayer = TaxPayer.objects.create(
-            name='Eventbrite',
-            workday_id='12345',
-            company=self.company,
-        )
-        self.file_mock = MagicMock(spec=File)
-        self.file_mock.name = 'test.pdf'
-        self.file_mock.size = 50
-        self.invoice_creation_valid_data = {
-            'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
-            'invoice_type': 'A',
-            'invoice_number': '1234',
-            'po_number': '98876',
-            'currency': 'ARS',
-            'net_amount': '4000',
-            'vat': '1200',
-            'total_amount': '5200',
-            'taxpayer': self.taxpayer,
-            'user': self.user,
-            'invoice_file': self.file_mock.name
-        }
-        self.invoice_creation_empty_data = {}
-        self.client = Client()
-
-    def tearDown(self):
-        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
-            remove('file/{}'.format(self.file_mock.name))
+class TestAP(TestBase):
 
     def test_ap_invoices_list_view(self):
-        self.client.force_login(self.user)
+        self.client.force_login(self.ap_user)
         invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
             reverse('invoices-list')
@@ -417,7 +391,7 @@ class TestAP(TestCase):
         self.assertContains(response, invoice.taxpayer.name)
 
     def test_ap_invoices_list_are_in_new_status(self):
-        self.client.force_login(self.user)
+        self.client.force_login(self.ap_user)
         invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
             name='Test Tax Payer',
@@ -436,3 +410,69 @@ class TestAP(TestCase):
         # Only the invoice with NEW status should be listed.
         self.assertContains(response, invoice1.taxpayer.name)
         self.assertNotContains(response, invoice2.taxpayer.name)
+
+class DetailInvoiceTest(TestBase):
+
+    def test_click_in_row_invoice_redirects_to_detail_invoice(self):
+        self.client.force_login(self.user)
+        invoice = InvoiceArg.objects.create(
+            **self.invoice_creation_valid_data
+        )
+        response = self.client.get(
+            reverse('invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice.taxpayer.id,
+                'pk': invoice.id,
+                }
+            ),
+        )
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertEqual("/?next=/invoices/taxpayer/1/detail/1/", response.url)
+
+    def test_get_detail_invoice_without_login(self):
+        invoice = InvoiceArg.objects.create(
+            **self.invoice_creation_valid_data
+        )
+        response = self.client.get(
+            reverse('invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice.taxpayer.id,
+                'pk': invoice.id,
+                }
+            ),
+        )
+        self.assertEqual(type(response), HttpResponseRedirect)
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertEqual(response.url, "/?next=/invoices/taxpayer/1/detail/1/")
+
+    def test_get_detail_invoice_with_no_corresponding_supplier(self):
+        self.client.force_login(self.user)
+
+        self.other_user = User.objects.create_user(email='other_test@test.com')
+        self.other_company = Company.objects.create(name='Other Company testing')
+        self.other_taxpayer = TaxPayer.objects.create(
+            name='Other',
+            workday_id='1234',
+            company=self.other_company
+        )
+        self.companuuserpermission = CompanyUserPermission.objects.create(
+            company=self.company,
+            user=self.user
+        )
+
+        invoice_from_other_user = InvoiceArg.objects.create(
+            **self.invoice_creation(self.other_taxpayer, self.other_user)
+        )
+
+        response = self.client.get(
+            reverse('invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice_from_other_user.taxpayer.id,
+                'pk': invoice_from_other_user.id,
+                }
+            ),
+        )
+
+        self.assertEqual(type(response), HttpResponseRedirect)
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertEqual(response.url, "/?next=/invoices/taxpayer/3/detail/1/")

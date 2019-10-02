@@ -33,13 +33,13 @@
             {% endif %}
             {% for invoice in object_list %}
                 <tr>
-                    <th scope="row">{{invoice.id}}</td>
+                    <th scope="row">{{invoice.id}}</th>
                     <td>{{invoice.invoice_date_received}}</td>
                     <td><span class="badge badge-success">{{invoice.status}}</span></td>
                     <td>{{invoice.po_number}}</td>
-                    <td>
-                        <a href="{{invoice.invoice_file.url}}"><i class="fa fa-download"></i></a>
-                        <a href="https://docs.google.com/viewerng/viewer?url={{ invoice.invoice_file.url }}" target="_blank"><i class="fa fa-eye ml-2"></i></a>
+                    <td><a href="{{invoice.invoice_file.url}}"><i class="fa fa-file"></i></a>
+                        <a href="https://docs.google.com/viewerng/viewer?url={{ invoice.invoice_file.url }}" target="_blank"><i class="fa fa-download ml-2"></i></a>
+                        <a href="{% url 'invoices-detail' taxpayer_id=taxpayer_id pk=invoice.id %}"><i class="fa fa-eye ml-2"></i></a>
                     </td>
                 </tr>
             {% endfor %}
@@ -47,6 +47,6 @@
         </table>
         {% include "_pagination.html" %}
     </div>
-    
+
 </div>
 {% endblock%}
