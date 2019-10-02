@@ -45,21 +45,11 @@ class InvoiceForm(forms.ModelForm):
         if not valid:
             return valid
 
-        if self.cleaned_data['invoice_file'].size <= MAX_SIZE_FILE:
-            if any(
-                [self.cleaned_data['invoice_file'].name.endswith(extension) for extension in ALLOWED_FILE_EXTENSIONS]
-            ):
-                return True
+        if self.cleaned_data['invoice_file'].size > MAX_SIZE_FILE:
+            self.add_error(
+                'invoice_file',
+                'Your file is greater than {}KB.'.format(MAX_SIZE_FILE)
+            )
+            return False
 
-            else:
-                self.add_error(
-                    'invoice_file',
-                    'Your file is not a pdf'
-                )
-                return False
-
-        self.add_error(
-            'invoice_file',
-            'Your file is greater than 3096KB.'
-        )
-        return False
+        return True
