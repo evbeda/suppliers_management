@@ -34,7 +34,7 @@ class InvoiceListView(
     PaginationMixin,
     ListView
 ):
-    template_name = 'AP_app/invoice-list.html'
+    template_name = 'invoices_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
 
@@ -53,18 +53,21 @@ class InvoiceListView(
 
 
 class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
-    template_name = 'supplier_app/invoice-list.html'
+    template_name = 'invoices_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
 
     def get_queryset(self):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         queryset = Invoice.objects.filter(taxpayer=tax_payer.id).order_by('id')
+        import ipdb; ipdb.set_trace()
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        import ipdb; ipdb.set_trace()
+        # context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        context['is_AP'] = self.request.user.is_AP
         return context
 
 
