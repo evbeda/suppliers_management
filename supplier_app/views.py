@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import (
     reverse_lazy,
     reverse
@@ -138,10 +139,9 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer'] = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
 
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
 
-        #import ipdb; ipdb.set_trace()
         return context

@@ -6,13 +6,24 @@ from parameterized import parameterized
 from unittest import mock
 from unittest.mock import patch
 
-from django.http import HttpResponseRedirect, QueryDict
-from django.test import TestCase, RequestFactory
-from django.test import Client
 from django.core.files import File as DjangoFile
 from django.core.urlresolvers import (
     resolve,
     reverse,
+)
+from django.http import HttpResponseRedirect, QueryDict
+from django.test import (
+    Client,
+    TestCase,
+    RequestFactory,
+)
+
+from social_django.models import UserSocialAuth
+from supplier_app.factory_boy import (
+    AddressFactory,
+    BankAccountFactory,
+    CompanyUserPermissionFactory,
+    TaxPayerArgentinaFactory,
 )
 
 from supplier_app.forms import (
@@ -22,14 +33,6 @@ from supplier_app.forms import (
     TaxPayerCreateForm,
 )
 
-from supplier_app.views import (
-    ApTaxpayers,
-    CreateTaxPayerView,
-    SupplierHome,
-)
-
-from users_app.models import User
-from social_django.models import UserSocialAuth
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -39,6 +42,15 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
 )
+
+from supplier_app.views import (
+    ApTaxpayers,
+    CreateTaxPayerView,
+    SupplierDetailsView,
+    SupplierHome,
+)
+
+from users_app.models import User
 
 GENERIC_PASSWORD = '1234'
 POST = {
@@ -517,3 +529,50 @@ class TestTaxpayerApList(TestCase):
         response = ApTaxpayers.as_view()(request)
 
         self.assertEqual(response.status_code, 200)
+
+
+class TestTaxpayerApDetails(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.factory = RequestFactory()
+
+        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+
+        self.company_user_permission = CompanyUserPermissionFactory()
+        self.taxpayer = TaxPayerArgentinaFactory(company=self.company_user_permission.company)
+        self.address = AddressFactory(taxpayer=self.taxpayer)
+        self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+    def test_get_taxpayers_details_in_ap_site(self):
+
+        request = self.factory.get('/suppliersite/taxpayer/{}/details/'.format(self.taxpayer.id))
+
+        request.user = self.ap_user
+
+        response = SupplierDetailsView.as_view()(request, **self.kwargs)
+
+        self.assertEqual(self.taxpayer, response.context_data['taxpayer'])
+        self.assertEqual(self.taxpayer, response.context_data['taxpayer_address'].taxpayer)
+        self.assertEqual(self.taxpayer, response.context_data['taxpayer_bank_account'].taxpayer)
+
+    def test_get_taxpayers_details_success(self):
+
+        request = self.factory.get('/suppliersite/taxpayer/{}/details/'.format(self.taxpayer.id))
+
+        request.user = self.ap_user
+
+        response = SupplierDetailsView.as_view()(request, **self.kwargs)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_404_when_try_to_get_taxpayer_details_with_invalid_id(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('supplier-details', kwargs={'taxpayer_id': 999}),
+        )
+        self.assertEqual(response.status_code, 404)
