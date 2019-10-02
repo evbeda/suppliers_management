@@ -168,8 +168,8 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['invoice'] = Invoice.objects.get(id=self.kwargs['pk'])
-        father_taxpayer = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
+        context['invoice'] = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        father_taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
