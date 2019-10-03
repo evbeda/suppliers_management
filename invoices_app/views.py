@@ -91,7 +91,7 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView, UserPassesTestMixin):
+class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
