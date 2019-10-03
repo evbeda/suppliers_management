@@ -19,7 +19,8 @@ from django.http import HttpResponseRedirect
 from invoices_app.factory_boy import InvoiceFactory
 from supplier_app.factory_boy import (
     TaxPayerArgentinaFactory,
-    CompanyFactory
+    CompanyFactory,
+    AddressFactory,
 )
 from invoices_app.views import invoice_history_changes
 from users_app.factory_boy import UserFactory
@@ -66,6 +67,7 @@ class TestBase(TestCase):
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
         self.user = UserFactory()
         self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
+        self.address = AddressFactory(taxpayer=self.taxpayer)
         self.user2 = UserFactory()
         self.taxpayer1_user2 = TaxPayerArgentinaFactory(company=self.company)
         self.invoice_creation_valid_data = self.invoice_creation()
@@ -377,6 +379,11 @@ class TestInvoice(TestBase):
         invoice.refresh_from_db()
         self.assertEqual(invoice.invoice_number, self.invoice_post_data['invoice_number'])
 
+    def test_invoice_create_get_context_data(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}))
+        self.assertEqual(response.context['taxpayer_id'], str(self.taxpayer.id))
+
 
 class TestApViews(TestBase):
 
@@ -509,6 +516,22 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(type(response), HttpResponseRedirect)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(response.url, "/?next=/invoices/taxpayer/3/detail/1/")
+    
+    def test_suplier_invoice_detail_view_address(self):
+        self.client.force_login(self.user)
+        CompanyUserPermission.objects.create(
+            company=self.taxpayer.company,
+            user=self.user
+        )
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
+        response = self.client.get(reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id,'pk': invoice.id}))
+        self.assertEqual(response.context['address'], self.address)
+
+    def test_ap_invoice_detail_view_address(self):
+        self.client.force_login(self.ap_user)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
+        response = self.client.get(reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id,'pk': invoice.id}))
+        self.assertEqual(response.context['address'],self.address)
 
 
 class TestInvoiceHistory(TestCase):
