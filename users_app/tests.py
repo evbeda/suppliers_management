@@ -1,13 +1,19 @@
 from http import HTTPStatus
 from parameterized import parameterized
 
-from django.test import TestCase, Client
+from django.test import (
+    Client,
+    TestCase,
+)
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from social_django.models import UserSocialAuth
 
 from users_app.models import User
-
+from supplier_app.models import (
+    Company,
+    CompanyUserPermission,
+)
 SUPPLIER_HOME = '/suppliersite/supplier'
 AP_HOME = reverse('ap-taxpayers')
 GENERIC_PASSWORD = '1234'
@@ -95,12 +101,6 @@ class TestLoginRedirect(TestCase):
             }
         )
 
-    def test_login_success_with_EB_should_redirect_to_suppliersite(self):
-        self.client.force_login(self.user_with_eb_social)
-        response = self.client.get(SUPPLIER_HOME, follow=True)
-        self.assertEqual(HTTPStatus.OK, response.status_code)
-        self.assertEqual('supplier_app/supplier-home.html', response.template_name[0])
-
     def test_login_fail_should_redirect_to_loginfailview(self):
         response_supplier = self.client.get(SUPPLIER_HOME, follow=True)
         response_ap = self.client.get(AP_HOME, follow=True)
@@ -110,6 +110,26 @@ class TestLoginRedirect(TestCase):
         self.assertEqual(reverse('supplier-home')+'?next={}'.format(AP_HOME), url_ap)
         self.assertEqual(HTTPStatus.FOUND, status_code_sup)
         self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
+
+    def test_first_login_success_with_EB_should_redirect_to_company(self):
+        self.client.force_login(self.user_with_eb_social)
+        response = self.client.get(SUPPLIER_HOME, follow=True)
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertEqual('supplier_app/company_selector.html', response.template_name[0])
+
+    def test_login_success_with_EB_should_redirect_to_supplier(self):
+        company = Company.objects.create(
+            name='Eventbrite',
+            description='Best event organizer platform in town'
+        )
+        CompanyUserPermission.objects.create(
+            user=self.user_with_eb_social,
+            company=company
+        )
+        self.client.force_login(self.user_with_eb_social)
+        response = self.client.get(SUPPLIER_HOME, follow=True)
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertEqual('supplier_app/supplier-home.html', response.template_name[0])
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
         self.client.force_login(self.user_with_google_social)
@@ -129,20 +149,16 @@ class TestLoginRedirect(TestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    @parameterized.expand([
-        # ('invoices-list',),
-        ('ap-taxpayers',),
-    ])
-    def test_ap_site_access_denied(self, page_name):
+    def test_ap_site_access_denied(self):
         user = User.objects.create_user(email='not_allowed@user.com')
         self.client.force_login(user)
         response = self.client.get(
-            reverse(page_name),
+            reverse('ap-taxpayers'),
             follow=True,
         )
         self.assertIn(
-            ('/suppliersite/supplier?next={}'.format(reverse(page_name)), 302),
+            ('/suppliersite/supplier?next={}'.format(reverse('ap-taxpayers')), 302),
             response.redirect_chain
             )
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.template_name, ['supplier_app/supplier-home.html'])
+        self.assertEqual(response.template_name, ['supplier_app/company_selector.html'])

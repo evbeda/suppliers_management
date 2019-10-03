@@ -19,9 +19,6 @@ class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
 
-    def __str__(self):
-        return "Company:{}".format(self.name)
-
 
 class CompanyUserPermission(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -50,12 +47,6 @@ class TaxPayer(models.Model):
 
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
-
-    def get_taxpayer_childs():
-        taxpayers = []
-        for code, country_model in COUNTRIES.items():
-            taxpayers.extend(country_model.objects.filter(country=code))
-        return taxpayers
 
 
 class TaxPayerArgentina(TaxPayer):
@@ -94,10 +85,3 @@ class BankAccount(models.Model):
         on_delete=models.CASCADE,
         default=None
     )
-
-    def __str__(self):
-        return "Bank:{} bank_code:{} account_number:{}".format(
-            self.bank_name,
-            self.bank_code,
-            self.account_number,
-        )
