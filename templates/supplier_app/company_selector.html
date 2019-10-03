@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block styles %}
-{% load static %}
-{% endblock %}
-
 {% block content %}
 {% include 'supplier_app/navbar.html' %}
-    <h1 class='text-center'> {% trans "Hello World" %}</h1>
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Save" class='btn btn-success'>
-    </form>
-    <a class='btn btn-success' href="{% url 'company-create' %}">Create Company</a>
+    <h1 class='text-center mb-5'> 
+        {% trans "Please select your Company from list or Create a new one" %}
+    </h1>
+    <div class="col-sm-4 offset-sm-4 text-center">
+        <form method="post" class="form-inlin justify-content-center">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="m-3 text-center">
+                    <h6>{{form.company.label}}</h6>
+                </div>
+                <div class="m-2">
+                    {{form.company}}
+                </div>
+            </div>
+            <input type="submit" value="Join Company" class='btn btn-success m-2'>
+        </form>
+        <div class="m-3">
+            <a class='btn btn-success' href="{% url 'company-create' %}">Create Company</a>
+        </div>
+    </div>
+    
+    
 {% endblock %}
