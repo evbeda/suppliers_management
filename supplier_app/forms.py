@@ -127,7 +127,7 @@ class TaxPayerCreateForm(BasePrefixCreateForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'payment_term': forms.TextInput(attrs={'class': 'form-control'}),
+            'payment_type': forms.TextInput(attrs={'class': 'form-control'}),
             'comments': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': '3'
@@ -152,6 +152,9 @@ class BankAccountCreateForm(BasePrefixCreateForm):
         widgets = {
             'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_code': forms.TextInput(attrs={'class': 'form-control'}),
-            'account_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'cbu_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
+            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_cbu_file': forms.FileInput(attrs={
+                'accept': 'application/pdf',
+                'class': 'form-control'
+            }),
         }

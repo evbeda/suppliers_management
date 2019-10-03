@@ -30,6 +30,10 @@ class TestCompanyModels(TestCase):
             company.description,
             Company.objects.all().last().description
         )
+        self.assertEqual(
+            str(company),
+            Company.objects.all().last().name.capitalize()
+        )
 
     def test_company_tax_payer_relationship(self):
         company = CompanyFactory()

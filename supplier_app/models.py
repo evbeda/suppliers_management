@@ -19,6 +19,9 @@ class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
 
+    def __str__(self):
+        return self.name.capitalize()
+
 
 class CompanyUserPermission(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
