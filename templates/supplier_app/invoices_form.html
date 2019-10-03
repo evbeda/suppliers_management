@@ -13,7 +13,7 @@
                 <h4 class="text-center">New Invoice</h4>
         </div>
         <div class="container">
-            <form method="post" class="form-row" enctype="multipart/form-data">
+            <form id="invoice-form" method="post" class="form-row" enctype="multipart/form-data">
                 <div class="col-md-2">
                 </div>
                 <div class="col-md-10 align-self-center">
@@ -96,7 +96,7 @@
                         </div>
                 </div>
                 <div class="col-md-12 text-center">
-                    <button type="submit" class="btn btn-primary">
+                    <button id="submit-btn" type="submit" class="btn btn-primary">
                             Submit
                     </button>
                 </div>
@@ -107,4 +107,13 @@
     </div>
 </div>
 
+</script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#invoice-form").submit(function () {
+        $("#submit-btn").attr("disabled", true);
+        return true;
+    });
+});
+</script>
 {% endblock %}

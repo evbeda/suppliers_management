@@ -51,5 +51,14 @@ class InvoiceForm(forms.ModelForm):
                 'Your file is greater than {}KB.'.format(MAX_SIZE_FILE)
             )
             return False
-
-        return True
+        invoice_number = self.cleaned_data['invoice_number']
+        taxpayer = self.data.get('taxpayer')
+        try:
+            Invoice.objects.get(taxpayer=taxpayer, invoice_number=invoice_number)
+            self.add_error(
+                'invoice_number',
+                'The invoice {} already exists'.format(invoice_number)
+            )
+            return False
+        except Invoice.DoesNotExist:
+            return True
