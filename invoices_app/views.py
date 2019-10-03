@@ -91,7 +91,7 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(LoginRequiredMixin, UpdateView, UserPassesTestMixin):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
@@ -174,7 +174,8 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         taxpayers_from_url = TaxPayer.objects.filter(pk=taxpayer_id_in_url)
         if not taxpayers_from_url:
             return False
-
+        if self.request.user.is_AP:
+            return True
         for taxpayer_from_url in taxpayers_from_url:
             company_from_taxpayer_in_url = taxpayer_from_url.company
             company_id = company_from_taxpayer_in_url.id
