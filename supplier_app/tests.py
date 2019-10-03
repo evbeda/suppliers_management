@@ -111,15 +111,14 @@ class TestModels(TestCase):
         company = Company.objects.create(**self.company)
         taxpayer = TaxPayer.objects.create(**self.taxpayer, company=company)
         self.assertEqual(taxpayer.taxpayer_state, "PENDING")
-        self.assertEqual(str(taxpayer), "Name:Eventbrite Status:PENDING")
 
     def test_create_child_of_tax_payer(self):
         taxpayer_ar1 = TaxPayerArgentina(**self.taxpayer_ar1)
         self.assertTrue(isinstance(taxpayer_ar1, TaxPayer))
         self.assertEqual(taxpayer_ar1.name, 'Eventbrite')
         self.assertEqual(
-            str(taxpayer_ar1),
-            "Name:Eventbrite Status:PENDING"
+            taxpayer_ar1.razon_social,
+            'Sociedad Anonima'
         )
 
     def test_get_taxpayer_child(self):

@@ -42,7 +42,7 @@ class TestCompanyModels(TestCase):
         company_user_permissions = CompanyUserPermission.objects.create(
                 user=user,
                 company=company
-            )
+        )
         self.assertEqual(
             company_user_permissions.user.email,
             user.email
@@ -63,7 +63,7 @@ class TestCompanySelectorView(TestCase):
 
     def test_valid_company_selection_and_redirection(self):
         response = self.client.post(
-            reverse_lazy('company'),
+            reverse_lazy('company-selector'),
             {
                 'company': '1',
             },
@@ -85,7 +85,7 @@ class TestCompanySelectorView(TestCase):
 
     def test_invalid_company_selection(self):
         response = self.client.post(
-            reverse_lazy('company'),
+            reverse_lazy('company-selector'),
             {
                 'company': '-1',
             },

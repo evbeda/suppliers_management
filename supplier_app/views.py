@@ -41,7 +41,7 @@ class SupplierWithoutCompanyMixin(UserPassesTestMixin):
             return self.handle_no_permission()
         user_test_result = self.get_test_func()()
         if not user_test_result:
-            self.login_url = reverse('company')
+            self.login_url = reverse('company-selector')
             return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
@@ -59,7 +59,7 @@ class CompanySelectorView(LoginRequiredMixin, CreateView):
         return reverse('supplier-home')
 
     def form_invalid(self, form):
-        return HttpResponseRedirect(reverse_lazy('company'), status=422)
+        return HttpResponseRedirect(reverse_lazy('company-selector'), status=422)
 
     def form_valid(self, form):
         """

@@ -14,7 +14,7 @@ from supplier_app.views import (
 urlpatterns = [
     url(r'^ap$', ApTaxpayers.as_view(), name='ap-taxpayers'),
     url(r'^supplier$', SupplierHome.as_view(), name='supplier-home'),
-    url(r'^supplier/company$', CompanySelectorView.as_view(), name='company'),
+    url(r'^supplier/company$', CompanySelectorView.as_view(), name='company-selector'),
     url(r'^supplier/company/create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^supplier/taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/details/$', SupplierDetailsView.as_view(), name='supplier-details'),
