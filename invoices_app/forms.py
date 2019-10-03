@@ -1,5 +1,5 @@
 from django import forms
-from invoices_app.models import InvoiceArg
+from invoices_app.models import Invoice
 from bootstrap_datepicker_plus import DatePickerInput
 from supplier_app import (
     MAX_SIZE_FILE,
@@ -10,7 +10,7 @@ from supplier_app import (
 class InvoiceForm(forms.ModelForm):
 
     class Meta:
-        model = InvoiceArg
+        model = Invoice
         fields = (
             'invoice_date',
             'invoice_type',

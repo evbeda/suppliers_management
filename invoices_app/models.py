@@ -18,6 +18,7 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED
 )
+from simple_history.models import HistoricalRecords
 
 
 class Invoice(models.Model):
@@ -30,18 +31,7 @@ class Invoice(models.Model):
     )
     po_number = models.CharField(max_length=200, help_text="ex: 12341234")
     invoice_date = models.DateField()
-    invoice_date_received = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(
-      settings.AUTH_USER_MODEL,
-      on_delete=models.CASCADE
-    )
-    invoice_file = models.FileField(
-        upload_to='file',
-        blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
-
-
-class InvoiceArg(Invoice):
+    invoice_date_received = models.DateTimeField(auto_now_add=True)
     invoice_number = models.CharField(max_length=20)
     invoice_type = models.CharField(max_length=200, choices=ARS_INVOICE_TYPES)
     net_amount = models.DecimalField(
@@ -59,3 +49,13 @@ class InvoiceArg(Invoice):
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.01'))]
     )
+    user = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      on_delete=models.CASCADE
+    )
+    invoice_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+
+    history = HistoricalRecords()

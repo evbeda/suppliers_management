@@ -16,15 +16,16 @@ from django.test import (
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from invoices_app.factory_boy import InvoiceArgentinaFactory
+from invoices_app.factory_boy import InvoiceFactory
 from supplier_app.factory_boy import (
     TaxPayerArgentinaFactory,
     CompanyFactory
 )
+from invoices_app.views import invoice_history_changes
 from users_app.factory_boy import UserFactory
 
 from invoices_app.forms import InvoiceForm
-from invoices_app.models import InvoiceArg
+from invoices_app.models import Invoice
 from users_app.models import User
 from supplier_app.models import (
     Company,
@@ -142,7 +143,7 @@ class TestInvoice(TestBase):
         self.assertEqual(form.is_valid(), expected)
 
     def test_invoice_create_db(self):
-        invoice = InvoiceArg.objects.create(
+        invoice = Invoice.objects.create(
             invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             taxpayer=self.taxpayer,
             invoice_type='A',
@@ -156,7 +157,7 @@ class TestInvoice(TestBase):
             user=self.user,
             )
         self.assertEqual(
-            InvoiceArg.objects.get(invoice_number='1234'), invoice
+            Invoice.objects.get(invoice_number='1234'), invoice
             )
 
     def test_invoice_create_view(self):
@@ -166,12 +167,12 @@ class TestInvoice(TestBase):
             self.invoice_post_data,
         )
         self.assertEqual(response.status_code, 302)
-        invoice = InvoiceArg.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
+        invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
         self.assertEqual(invoice.status, INVOICE_STATUS_NEW)
 
     def test_supplier_invoices_list_view(self):
         self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(
+        invoice = Invoice.objects.create(
             invoice_date=datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
             taxpayer=self.taxpayer,
             invoice_type='A',
@@ -192,13 +193,13 @@ class TestInvoice(TestBase):
 
     def test_supplier_invoices_list_only_taxpayer_invoices(self):
         self.client.force_login(self.user)
-        invoice1 = InvoiceArgentinaFactory(
+        invoice1 = InvoiceFactory(
             user=self.user,
             taxpayer=self.taxpayer
         )
 
         other_tax_payer = TaxPayerArgentinaFactory(company=self.company)
-        invoice2 = InvoiceArgentinaFactory(
+        invoice2 = InvoiceFactory(
             user=self.user,
             taxpayer=other_tax_payer
         )
@@ -219,8 +220,8 @@ class TestInvoice(TestBase):
     def test_supplier_with_two_invoices_list_only_two_invoices(self):
         self.client.force_login(self.user2)
 
-        invoice1 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
-        invoice2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice1 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
 
         response = self.client.get(
             reverse('invoices-list')
@@ -239,10 +240,10 @@ class TestInvoice(TestBase):
     def test_AP_should_see_all_invoices(self):
         self.client.force_login(self.ap_user)
 
-        invoice1_user1 = InvoiceArgentinaFactory(user=self.user, taxpayer=self.taxpayer)
-        invoice2_user1 = InvoiceArgentinaFactory(user=self.user, taxpayer=self.taxpayer)
-        invoice1_user2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
-        invoice2_user2 = InvoiceArgentinaFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice1_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer)
+        invoice2_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer)        
+        invoice1_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice2_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
         response = self.client.get(
             reverse('invoices-list')
         )
@@ -280,7 +281,7 @@ class TestInvoice(TestBase):
     ])
     def test_invoice_change_status(self, url, invoice_id, expected):
         self.client.force_login(self.ap_user)
-        InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        Invoice.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
             reverse(url, kwargs={'pk': invoice_id}),
         )
@@ -292,7 +293,7 @@ class TestInvoice(TestBase):
     ])
     def test_invoice_change_status_changed(self, url, expected):
         self.client.force_login(self.ap_user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         self.client.get(
             reverse(url, kwargs={'pk': 1}),
         )
@@ -301,7 +302,7 @@ class TestInvoice(TestBase):
 
     def test_invoice_change_status_only_ap_fail(self):
         self.client.force_login(self.user)
-        InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        Invoice.objects.create(**self.invoice_creation_valid_data)
         request = self.client.get(
             reverse('invoice-approve', kwargs={'pk': 1}),
         )
@@ -309,7 +310,7 @@ class TestInvoice(TestBase):
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         invoice.status = 'CHANGES REQUEST'
         invoice.save()
         res = self.client.post(
@@ -322,7 +323,7 @@ class TestInvoice(TestBase):
 
     def test_supplier_invalid_invoice_edit_request(self):
         self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         invoice.status = 'CHANGES REQUEST'
         invoice.save()
         old_invoice_number = invoice.invoice_number
@@ -337,7 +338,7 @@ class TestInvoice(TestBase):
 
     def test_supplier_invoice_edit_permissions(self):
         self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         invoice.status = 'APPROVED'
         invoice.save()
         res = self.client.post(
@@ -353,7 +354,7 @@ class TestInvoice(TestBase):
 
     def test_ap_invoice_edit_permissions(self):
         self.client.force_login(self.ap_user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         invoice.status = 'APPROVED'
         invoice.save()
         res = self.client.post(
@@ -368,8 +369,8 @@ class TestInvoice(TestBase):
 class TestApViews(TestBase):
 
     def test_ap_invoices_list_view(self):
-        self.client.force_login(self.ap_user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        self.client.force_login(self.user)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
             reverse('invoices-list')
         )
@@ -378,7 +379,7 @@ class TestApViews(TestBase):
 
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.ap_user)
-        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice1 = Invoice.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
             name='Test Tax Payer',
             workday_id='12345',
@@ -386,7 +387,7 @@ class TestApViews(TestBase):
         )
         other_invoice_data = self.invoice_creation_valid_data
         other_invoice_data['taxpayer'] = other_tax_payer
-        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
+        invoice2 = Invoice.objects.create(**other_invoice_data)
         invoice2.status = INVOICE_STATUS_APPROVED
         invoice2.save()
 
@@ -402,7 +403,7 @@ class TestAP(TestBase):
 
     def test_ap_invoices_list_view(self):
         self.client.force_login(self.ap_user)
-        invoice = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
         response = self.client.get(
             reverse('invoices-list')
         )
@@ -411,7 +412,7 @@ class TestAP(TestBase):
 
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.ap_user)
-        invoice1 = InvoiceArg.objects.create(**self.invoice_creation_valid_data)
+        invoice1 = Invoice.objects.create(**self.invoice_creation_valid_data)
         other_tax_payer = TaxPayer.objects.create(
             name='Test Tax Payer',
             workday_id='12345',
@@ -419,7 +420,7 @@ class TestAP(TestBase):
         )
         other_invoice_data = self.invoice_creation_valid_data
         other_invoice_data['taxpayer'] = other_tax_payer
-        invoice2 = InvoiceArg.objects.create(**other_invoice_data)
+        invoice2 = Invoice.objects.create(**other_invoice_data)
         invoice2.status = INVOICE_STATUS_APPROVED
         invoice2.save()
 
@@ -430,11 +431,12 @@ class TestAP(TestBase):
         self.assertContains(response, invoice1.taxpayer.name)
         self.assertNotContains(response, invoice2.taxpayer.name)
 
+
 class DetailInvoiceTest(TestBase):
 
     def test_click_in_row_invoice_redirects_to_detail_invoice(self):
         self.client.force_login(self.user)
-        invoice = InvoiceArg.objects.create(
+        invoice = Invoice.objects.create(
             **self.invoice_creation_valid_data
         )
         response = self.client.get(
@@ -449,7 +451,7 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual("/?next=/invoices/taxpayer/1/detail/1/", response.url)
 
     def test_get_detail_invoice_without_login(self):
-        invoice = InvoiceArg.objects.create(
+        invoice = Invoice.objects.create(
             **self.invoice_creation_valid_data
         )
         response = self.client.get(
@@ -479,7 +481,7 @@ class DetailInvoiceTest(TestBase):
             user=self.user
         )
 
-        invoice_from_other_user = InvoiceArg.objects.create(
+        invoice_from_other_user = Invoice.objects.create(
             **self.invoice_creation(self.other_taxpayer, self.other_user)
         )
 
@@ -495,3 +497,44 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(type(response), HttpResponseRedirect)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(response.url, "/?next=/invoices/taxpayer/3/detail/1/")
+
+
+class TestInvoiceHistory(TestCase):
+    def setUp(self):
+        self.company = Company.objects.create(name='Company testing')
+        self.user = User.objects.create_user(email='ap@eventbrite.com')
+        self.taxpayer = TaxPayer.objects.create(
+            name='Eventbrite',
+            workday_id='12345',
+            company=self.company,
+        )
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+        self.invoice_creation_valid_data = {
+            'invoice_date': datetime(2007, 12, 5, 0, 0, 0, 0, UTC),
+            'invoice_type': 'A',
+            'invoice_number': '1234',
+            'po_number': '98876',
+            'currency': 'ARS',
+            'net_amount': '4000',
+            'vat': '1200',
+            'total_amount': '5200',
+            'taxpayer': self.taxpayer,
+            'user': self.user,
+            'invoice_file': self.file_mock.name
+        }
+
+    def tearDown(self):
+        if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
+            remove('file/{}'.format(self.file_mock.name))
+
+    def test_history_changes_diff(self):
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
+        invoice.po_number = '4321'
+        invoice.save()
+        history = Invoice.history.filter(id=invoice.id)
+        self.assertEqual(
+            invoice_history_changes(history.last()),
+            [{'field': 'po_number', 'old': '98876', 'new': '4321'}]
+        )
