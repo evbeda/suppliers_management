@@ -573,3 +573,15 @@ class TestInvoiceHistory(TestCase):
             invoice_history_changes(history.last()),
             [{'field': 'po_number', 'old': '98876', 'new': '4321'}]
         )
+
+    def test_history_invoices_view(self):
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
+        old_po_number = invoice.po_number
+        new_po_number = '4321'
+        invoice.po_number = new_po_number
+        invoice.save()
+        response = self.client.get(
+            reverse('invoice-history', kwargs={'pk': invoice.id}),
+        )
+        self.assertContains(response, old_po_number)
+        self.assertContains(response, new_po_number)
