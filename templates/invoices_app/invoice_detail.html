@@ -83,15 +83,18 @@
     <iframe src="http://docs.google.com/gview?url={{ invoice.invoice_file.url }}&embedded=true" style="width:100%; height:100%;" frameborder="0"></iframe>
   </div>
   <div class="col-md-12 text-center mt-4">
-    {% if invoice.status == 'CHANGES REQUEST' %}
-    <span><button type="button" class="btn btn-info">Edit info</button></span>
+    {% if invoice.status == 'CHANGES REQUEST' and not is_AP %}
+      <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="btn btn-info">Edit info</a></span>
     {% endif %}
     {% if is_AP %}
-    <span><a href="{% url 'invoice-approve' pk=invoice.id %}" ><button type="button" class="btn btn-success">Approve</button></a></span>
-    <span><a href="{% url 'invoice-reject' pk=invoice.id %}" ><button type="button" class="btn btn-danger">Reject</button></a></span>
-    <span><button type="button" class="btn btn-warning">Request Changes</button></span>
+    <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary">History</a></span>
+    <span><a href="{% url 'invoice-approve' pk=invoice.id %}" class="btn btn-success">Approve</a></span>
+    <span><a href="{% url 'invoice-reject' pk=invoice.id %}" class="btn btn-danger">Reject</a></span>
+    <span><a href="#" class="btn btn-warning">Request Changes</a></span>
+    <span><a href="{% url 'invoice-update' pk=invoice.id %}" class="btn btn-info">Edit info</a></span>
+
     {% endif %}
-    <span><a href="{{ invoice.invoice_file.url }}"><button type="button" class="btn btn-info">Download PDF</button></a></span>
+    <span><a href="{{ invoice.invoice_file.url }}" class="btn btn-info">Download PDF</a></span>
   </div>
 
 </div>

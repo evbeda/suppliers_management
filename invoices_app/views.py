@@ -48,9 +48,9 @@ class InvoiceListView(
     def get_queryset(self):
         user = self.request.user
         if user.is_AP:
-            queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).order_by('id')
+            queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).defer('invoice_file').order_by('id')
         else:
-            queryset = Invoice.objects.filter(user=user)
+            queryset = Invoice.objects.filter(user=user).defer('invoice_file')
         return queryset
 
 
@@ -61,7 +61,7 @@ class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
-        queryset = Invoice.objects.filter(taxpayer=tax_payer.id).order_by('id')
+        queryset = Invoice.objects.filter(taxpayer=tax_payer.id).defer('invoice_file').order_by('id')
         return queryset
 
     def get_context_data(self, **kwargs):

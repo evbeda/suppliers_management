@@ -22,6 +22,10 @@ from simple_history.models import HistoricalRecords
 
 
 class Invoice(models.Model):
+
+    class Meta:
+        unique_together = ('taxpayer', 'invoice_number',)
+
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.PROTECT)
     currency = models.CharField(max_length=200, choices=CURRENCIES)
     status = models.CharField(

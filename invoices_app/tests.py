@@ -170,6 +170,18 @@ class TestInvoice(TestBase):
         invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
         self.assertEqual(invoice.status, INVOICE_STATUS_NEW)
 
+    def test_invoice_create_existing_invoice_id(self):
+        self.client.force_login(self.user)
+        invoice = Invoice.objects.create(**self.invoice_creation_valid_data)
+        self.invoice_post_data['invoice_number'] = invoice.invoice_number
+        response = self.client.post(
+            reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.invoice_post_data,
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'The invoice {} already exists'.format(invoice.invoice_number))
+
     def test_supplier_invoices_list_view(self):
         self.client.force_login(self.user)
         invoice = Invoice.objects.create(
@@ -220,8 +232,8 @@ class TestInvoice(TestBase):
     def test_supplier_with_two_invoices_list_only_two_invoices(self):
         self.client.force_login(self.user2)
 
-        invoice1 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
-        invoice2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice1 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2, invoice_number=1234)
+        invoice2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2, invoice_number=1235)
 
         response = self.client.get(
             reverse('invoices-list')
@@ -240,10 +252,10 @@ class TestInvoice(TestBase):
     def test_AP_should_see_all_invoices(self):
         self.client.force_login(self.ap_user)
 
-        invoice1_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer)
-        invoice2_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer)        
-        invoice1_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
-        invoice2_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2)
+        invoice1_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer, invoice_number=1234)
+        invoice2_user1 = InvoiceFactory(user=self.user, taxpayer=self.taxpayer, invoice_number=1235)
+        invoice1_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2, invoice_number=1236)
+        invoice2_user2 = InvoiceFactory(user=self.user2, taxpayer=self.taxpayer1_user2, invoice_number=1237)
         response = self.client.get(
             reverse('invoices-list')
         )
