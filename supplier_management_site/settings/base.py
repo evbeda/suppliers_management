@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'invoices_app',
     'bootstrap_datepicker_plus',
     'pure_pagination',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -36,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 SOCIAL_AUTH_PIPELINE = (

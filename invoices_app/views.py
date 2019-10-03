@@ -1,6 +1,4 @@
-from django.views.generic import CreateView
-from django.views.generic.edit import UpdateView
-from django.views.generic.list import ListView
+
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -11,11 +9,15 @@ from django.urls import (
     reverse,
     reverse_lazy
 )
+from django.views.generic.list import ListView
+from django.views.generic import CreateView
+from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404, redirect
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.forms import InvoiceForm
-from invoices_app.models import Invoice, InvoiceArg
+from invoices_app.models import Invoice
+from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -89,8 +91,8 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = InvoiceArg
+class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+    model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
     redirect_field_name = None
@@ -112,7 +114,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         else:
             # Only allow supplier to edit the invoice if it's status is 'CHANGES REQUEST'
-            invoice = get_object_or_404(InvoiceArg, id=self.kwargs['pk'])
+            invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
             return invoice.status == 'CHANGES REQUEST'
 
     def get_test_func(self):
@@ -124,6 +126,26 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
         else:
             return reverse('invoices-list')
+
+
+class InvoiceHistory(ListView):
+    model = Invoice
+    template_name = 'AP_app/invoice-list.html'
+
+    def get_queryset(self):
+        queryset = Invoice.history.filter(id=self.kwargs['pk'])
+        return queryset
+
+
+def invoice_history_changes(record):
+    changes = []
+    while record.next_record:
+        next_record = record.next_record
+        delta = next_record.diff_against(record)
+        for change in delta.changes:
+            changes.append({'field': change.field, 'old': change.old, 'new': change.new})
+        record = next_record
+    return changes
 
 
 @is_ap_or_403()

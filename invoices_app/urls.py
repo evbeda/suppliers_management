@@ -7,11 +7,13 @@ from invoices_app.views import (
     SupplierInvoiceCreateView,
     approve_invoice,
     reject_invoice,
-    InvoiceDetailView
+    InvoiceDetailView,
+    InvoiceHistory,
 )
 
 urlpatterns = [
     url(r'^$', InvoiceListView.as_view(), name='invoices-list'),
+    url(r'^invoice/history/(?P<pk>[0-9]+)/$', InvoiceHistory.as_view(), name='invoice-history'),
     url(r'^invoice/approve/(?P<pk>[0-9]+)/$', approve_invoice, name='invoice-approve'),
     url(r'^invoice/reject/(?P<pk>[0-9]+)/$', reject_invoice, name='invoice-reject'),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/$', SupplierInvoiceListView.as_view(), name='supplier-invoice-list'),
