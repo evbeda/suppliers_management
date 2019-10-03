@@ -82,7 +82,6 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         form.instance.taxpayer = tax_payer
-        self.object = form.save()
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -130,7 +129,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class InvoiceHistory(ListView):
     model = Invoice
-    template_name = 'AP_app/invoice-list.html'
+    template_name = 'invoices_app/history-list.html'
 
     def get_queryset(self):
         queryset = Invoice.history.filter(id=self.kwargs['pk'])

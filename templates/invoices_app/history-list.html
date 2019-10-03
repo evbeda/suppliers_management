@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+{% if is_AP %}
+{% include 'AP_app/navbar.html' %}
+{% else %}
+{% include 'supplier_app/navbar.html' %}
+{% endif %}
+    <br/>
+    <h1 class="text-center"> {% trans "Invoice history "%}{{pk}}</h1>
+    <br/>
+    <div class="container">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "Invoice ID"%}</th>
+                    <th scope="col">{% trans "User"%}</th>
+                    <th scope="col">{% trans "Modified"%}</th>
+                    <th scope="col">{% trans "Currency"%}</th>
+                    <th scope="col">{% trans "Tax Payer"%}</th>
+                    <th scope="col">{% trans "Invoice Number"%}</th>
+                    <th scope="col">{% trans "PO Number"%}</th>
+                    <th scope="col">{% trans "Net Amount"%}</th>
+                    <th scope="col">{% trans "VAT"%}</th>
+                    <th scope="col">{% trans "Total Amount"%}</th>
+                    <th scope="col">{% trans "Status"%}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for invoice in object_list %}
+                <tr>
+                    <th scope="row">{{invoice.id}}</td>
+                    <td>{{invoice.history_user}}</td>
+                    <td>{{invoice.history_date}}</td>
+                    <td>{{invoice.currency}}</td>
+                    <td>{{invoice.taxpayer.name}}</td>
+                    <td>{{invoice.invoice_number}}</td>
+                    <td>{{invoice.po_number}}</td>
+                    <td>{{invoice.net_amount}}</td>
+                    <td>{{invoice.vat}}</td>
+                    <td>{{invoice.total_amount}}</td>
+                    <td><span class="badge badge-success">{{invoice.status}}</span></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "_pagination.html" %}
+    </div>
+{% endblock%}
