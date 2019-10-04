@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.views.generic import (
     TemplateView,
-    ListView,
 )
 from django.views.generic.edit import (
     CreateView,
@@ -23,7 +22,6 @@ from supplier_app.models import (
     Address,
     Company,
     CompanyUserPermission,
-    PDFFile,
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
@@ -31,7 +29,6 @@ from supplier_app.models import (
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
-    PDFFileForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
 )
@@ -114,28 +111,6 @@ class SupplierHome(
         taxpayer_list = TaxPayer.objects.filter(company__companyuserpermission__user=user)
         taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayer_list]
         return taxpayer_child
-
-
-class CreatePDFFileView(CreateView):
-    model = PDFFile
-    form_class = PDFFileForm
-
-    def get_success_url(self):
-        return reverse_lazy('supplier-home')
-
-    def form_valid(self, form):
-        form.instance.file = self.request.FILES['pdf_file']
-        self.object = form.save()
-        return super(CreatePDFFileView, self).form_valid(form)
-
-
-class PDFFileView(ListView):
-    model = PDFFile
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['files'] = PDFFile.objects.all()
-        return context
 
 
 class CreateTaxPayerView(SupplierWithoutCompanyMixin, TemplateView, FormView):

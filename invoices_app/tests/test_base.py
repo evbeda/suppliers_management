@@ -11,7 +11,7 @@ from django.test import (
 )
 from invoices_app.factory_boy import InvoiceFactory
 
-from supplier_app.factory_boy import (
+from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     CompanyFactory,
     CompanyUserPermissionFactory,

@@ -3,48 +3,15 @@ from django.forms.models import ModelForm
 from django.http import QueryDict
 from supplier_app import (
     TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE,
-    TAXPAYER_BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS
 )
 
 from supplier_app.models import (
     Address,
     BankAccount,
     TaxPayerArgentina,
-    PDFFile
 )
 
 from utils.file_validator import validate_file
-
-
-class PDFFileForm(forms.ModelForm):
-    class Meta:
-        model = PDFFile
-        fields = ['pdf_file']
-        widgets = {
-            'pdf_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
-        }
-
-    def is_valid(self):
-        valid = super(PDFFileForm, self).is_valid()
-        if not valid:
-            return valid
-        if self.cleaned_data['pdf_file'].size <= TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE:
-            valid_file_extensions = \
-                [i for i in TAXPAYER_BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS if i in self.cleaned_data['pdf_file'].name]
-            if len(valid_file_extensions) == 1:
-                return True
-            else:
-                self.add_error(
-                    'pdf_file',
-                    'Your file is not a pdf'
-                )
-                return False
-
-        self.add_error(
-            'pdf_file',
-            'Your file is greater than 3096KB.'
-        )
-        return False
 
 
 class BasePrefixCreateForm(ModelForm):
