@@ -3,6 +3,7 @@ from invoices_app.models import Invoice
 from bootstrap_datepicker_plus import DatePickerInput
 from invoices_app import (
     INVOICE_MAX_SIZE_FILE,
+    INVOICE_FILE_FIELDS,
 )
 from utils.file_validator import validate_file
 
@@ -21,6 +22,7 @@ class InvoiceForm(forms.ModelForm):
             'vat',
             'total_amount',
             'invoice_file',
+            'po_file',
         )
         exclude = ('user', 'tax_payer', 'status')
         widgets = {
@@ -34,6 +36,7 @@ class InvoiceForm(forms.ModelForm):
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Purchase Order'}),
             'invoice_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
+            'po_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
             'vat': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'VAT'}),
             'total_amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Total'}),
             'net_amount': forms.NumberInput(attrs={'class': 'form-control',  'placeholder': 'Net Amount'}),
@@ -44,14 +47,17 @@ class InvoiceForm(forms.ModelForm):
         valid = super().is_valid()
         if not valid:
             return valid
+        for file_field in INVOICE_FILE_FIELDS:
+            file_data = self.cleaned_data[file_field]
+            if file_data:
+                file_is_valid, msg = validate_file(
+                    file_data,
+                    INVOICE_MAX_SIZE_FILE,
+                )
+                if not file_is_valid:
+                    self.add_error(file_field, msg)
+                    return file_is_valid
 
-        file_is_valid, msg = validate_file(
-            self.cleaned_data['invoice_file'],
-            INVOICE_MAX_SIZE_FILE,
-        )
-        if not file_is_valid:
-            self.add_error('invoice_file', msg)
-            return file_is_valid
         invoice_number = self.cleaned_data['invoice_number']
         taxpayer = self.data.get('taxpayer')
         try:

@@ -95,6 +95,9 @@
 
     {% endif %}
     <span><a href="{{ invoice.invoice_file.url }}" class="btn btn-info">Download PDF</a></span>
+    {% if invoice.po_file %}
+    <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View PO</a></span>
+    {% endif %}
   </div>
 
 </div>
