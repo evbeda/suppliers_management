@@ -13,7 +13,10 @@ from django.contrib.auth.mixins import (
 )
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
+)
 from django.urls import (
     reverse_lazy,
     reverse,
@@ -49,6 +52,11 @@ class SupplierWithoutCompanyMixin(UserPassesTestMixin):
         if not user_test_result:
             self.login_url = reverse('company-selector')
             return self.handle_no_permission()
+        if request.get_full_path() in [
+            reverse('company-create'),
+            reverse('company-selector')
+        ]:
+            return redirect(reverse('supplier-home'))
         return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
@@ -56,7 +64,7 @@ class SupplierWithoutCompanyMixin(UserPassesTestMixin):
         return len(user_company) > 0
 
 
-class CompanySelectorView(LoginRequiredMixin, CreateView):
+class CompanySelectorView(SupplierWithoutCompanyMixin, CreateView):
     model = CompanyUserPermission
     fields = ['company']
     template_name = 'supplier_app/company_selector.html'
@@ -76,7 +84,7 @@ class CompanySelectorView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class CompanyCreatorView(LoginRequiredMixin, CreateView):
+class CompanyCreatorView(SupplierWithoutCompanyMixin, CreateView):
     model = Company
     fields = ['name', 'description']
     template_name = 'supplier_app/company_creation.html'
