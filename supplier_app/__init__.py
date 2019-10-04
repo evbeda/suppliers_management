@@ -7,6 +7,7 @@ TAXPAYER_STATUS = [
     ("ACTIVE", "Active"),
     ("CHANGE REQUIRED", "Change required"),
     ("PENDING", "Pending"),
+    ("REFUSED", "Refused"),
 ]
 TAXPAYER_STATUS_AP = [
     'CHANGE REQUIRED',

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block styles %}
+{% load static %}
+{% endblock %}
+
+{% block content %}
+{% include 'AP_app/navbar.html' %}
+<form method="post">
+    {% csrf_token %}
+    <div class="row m-3">
+        <div class="col-md-6 form-group">
+            <h4>Taxpayer info</h4>
+            {{taxpayer_form}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <input class="btn btn-primary d-inline-block w-50" type="submit" value="Update" />
+        </div>
+    </div>
+</form>
+{% endblock %}

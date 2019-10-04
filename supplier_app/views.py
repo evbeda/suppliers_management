@@ -7,30 +7,36 @@ from django.views.generic.edit import (
     CreateView,
     FormView,
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    UserPassesTestMixin,
+)
+
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import (
     reverse_lazy,
-    reverse
+    reverse,
 )
 from users_app.views import IsApUser
 from supplier_app.models import (
+    Address,
     Company,
     CompanyUserPermission,
     PDFFile,
     TaxPayer,
     TaxPayerArgentina,
+    BankAccount,
 )
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
     PDFFileForm,
     TaxPayerCreateForm,
+    TaxPayerEditForm,
 )
 
-from . import TAXPAYER_STATUS_AP
+from . import TAXPAYER_STATUS_AP, TAXPAYER_STATUS
 
 
 class SupplierWithoutCompanyMixin(UserPassesTestMixin):
@@ -213,3 +219,153 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
 
         return context
+
+
+class EditTaxpayerView(FormView):
+    template_name = 'AP_app/edit-taxpayer-information.html'
+
+    def get(self, request, *args, **kwargs):
+        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        edit_form = TaxPayerEditForm(instance=taxpayer)
+        context = {
+            'taxpayer_form': edit_form
+        }
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+
+        taxpayer_form = TaxPayerEditForm(data=request.POST, files=request.FILES)
+
+        if taxpayer_form.is_valid():
+            return self.form_valid(taxpayer_form)
+        else:
+            return self.form_invalid(taxpayer_form)
+
+    def get_success_url(self, **kwargs):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
+
+    def form_invalid(self, forms):
+        return HttpResponseRedirect(self.get_success_url())
+
+    @transaction.atomic
+    def form_valid(self, form):
+
+        taxpayer_form = form.save(commit=False)
+
+        taxpayer_db = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+
+        taxpayer_db.workday_id = taxpayer_form.workday_id
+        taxpayer_db.business_name = taxpayer_form.business_name
+        taxpayer_db.cuit = taxpayer_form.cuit
+        taxpayer_db.payment_type = taxpayer_form.payment_type
+        taxpayer_db.comments = taxpayer_form.comments
+
+        taxpayer_db.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class EditAddressView(FormView):
+    template_name = 'AP_app/edit-address-information.html'
+
+    def get(self, request, *args, **kwargs):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        taxpayer_address = get_object_or_404(Address, taxpayer__id=taxpayer_id)
+        edit_form = AddressCreateForm(instance=taxpayer_address)
+        context = {
+            'address_form': edit_form
+        }
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+
+        taxpayer_form = AddressCreateForm(self.request.POST)
+
+        if taxpayer_form.is_valid():
+            return self.form_valid(taxpayer_form)
+        else:
+            return self.form_invalid(taxpayer_form)
+
+    def get_success_url(self, **kwargs):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
+
+    def form_invalid(self, forms):
+        return HttpResponseRedirect(self.get_success_url())
+
+    @transaction.atomic
+    def form_valid(self, form):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        taxpayer_form = form.save(commit=False)
+
+        taxpayer_db = get_object_or_404(Address, taxpayer__id=taxpayer_id)
+
+        taxpayer_db.street = taxpayer_form.street
+        taxpayer_db.number = taxpayer_form.number
+        taxpayer_db.zip_code = taxpayer_form.zip_code
+        taxpayer_db.city = taxpayer_form.city
+        taxpayer_db.state = taxpayer_form.state
+        taxpayer_db.country = taxpayer_form.country
+
+        taxpayer_db.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class EditBankAccountView(FormView):
+    template_name = 'AP_app/edit-bank-account-information.html'
+
+    def get(self, request, *args, **kwargs):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        taxpayer_bank_account = get_object_or_404(BankAccount, taxpayer__id=taxpayer_id)
+        edit_form = BankAccountCreateForm(instance=taxpayer_bank_account)
+        context = {
+            'bank_account_form': edit_form
+        }
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+
+        taxpayer_form = BankAccountCreateForm(data=request.POST, files=request.FILES)
+
+        if taxpayer_form.is_valid():
+            return self.form_valid(taxpayer_form)
+        else:
+            return self.form_invalid(taxpayer_form)
+
+    def get_success_url(self, **kwargs):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
+
+    def form_invalid(self, forms):
+        return HttpResponseRedirect(self.get_success_url())
+
+    @transaction.atomic
+    def form_valid(self, form):
+        taxpayer_id = self.kwargs['taxpayer_id']
+        taxpayer_form = form.save(commit=False)
+
+        taxpayer_db = get_object_or_404(BankAccount, taxpayer__id=taxpayer_id)
+
+        taxpayer_db.bank_name = taxpayer_form.bank_name
+        taxpayer_db.bank_code = taxpayer_form.bank_code
+        taxpayer_db.bank_account_number = taxpayer_form.bank_account_number
+
+        taxpayer_db.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+def approve_taxpayer(request, taxpayer_id):
+    taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
+    taxpayer.taxpayer_state = TAXPAYER_STATUS[0][0]
+    taxpayer.save()
+    return redirect('ap-taxpayers')
+
+
+def refuse_taxpayer(request, taxpayer_id):
+    taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
+    taxpayer.taxpayer_state = TAXPAYER_STATUS[3][0]
+    taxpayer.save()
+    return redirect('ap-taxpayers')

@@ -19,6 +19,7 @@ from django.core.files import File as DjangoFile
 from django.core.urlresolvers import (
     resolve,
     reverse,
+    reverse_lazy,
 )
 
 from social_django.models import UserSocialAuth
@@ -51,6 +52,9 @@ from supplier_app.models import (
 from supplier_app.views import (
     ApTaxpayers,
     CreateTaxPayerView,
+    EditAddressView,
+    EditBankAccountView,
+    EditTaxpayerView,
     SupplierDetailsView,
     SupplierHome,
 )
@@ -644,3 +648,122 @@ class TestCreatePrefixForm(TestCase):
         self.assertEqual(6, len(address_form.data))
         self.assertEqual(8, len(taxpayer_form.data))
         self.assertEqual(4, len(bankaccount_form.data))
+
+
+class TestEditTaxPayerInfo(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.taxpayer = TaxPayerArgentinaFactory()
+        
+        self.TAXPAYER_POST = {
+            'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
+            'taxpayer_form-workday_id': '1',
+            'taxpayer_form-business_name': 'EB ARG',
+            'taxpayer_form-cuit': '20-3123214-0',
+            'taxpayer_form-country': 'AR',
+            'taxpayer_form-comments': 'dafsadsffasdf',
+            'taxpayer_form-payment_type': 'dafsadsffasdf',
+        }
+        self.POST = {
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'Argentina',
+            'bankaccount_form-bank_name': 'Galicia',
+            'bankaccount_form-bank_code': 'Cta Cte',
+            'bankaccount_form-bank_account_number': '123214',
+        }
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+        self.taxpayer_id = self.taxpayer.id
+
+    def test_get_success_url_should_redirect_to_details_view(self):
+        request = self.factory.get(
+            '/suppliersite/ap/taxpayer/{}/update/taxpayer_info/'.format(self.taxpayer_id),
+        )
+        response = EditTaxpayerView.as_view()(request, **self.kwargs)
+        self.assertEqual('AP_app/edit-taxpayer-information.html', response.template_name[0])
+
+    def test_post_edit_taxpayer_info(self):
+        request = self.factory.post(
+            '/suppliersite/ap/taxpayer/{}/update/taxpayer_info/'.format(self.taxpayer_id),
+            data=self.TAXPAYER_POST
+        )
+        response = EditTaxpayerView.as_view()(request, **self.kwargs)
+
+        self.assertEqual('/suppliersite/ap/taxpayer/{}/details/'.format(self.taxpayer_id), response.url)
+
+
+class TestEditAddressInfo(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.taxpayer = TaxPayerArgentinaFactory()
+        self.address = AddressFactory(taxpayer=self.taxpayer)
+        
+        self.ADDRESS_POST = {
+            'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'Argentina',
+        }
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+        self.taxpayer_id = self.taxpayer.id
+
+    def test_get_success_url_should_redirect_to(self):
+        request = self.factory.get(
+            '/suppliersite/ap/taxpayer/{}/update/address_info/'.format(self.taxpayer_id),
+        )
+        response = EditAddressView.as_view()(request, **self.kwargs)
+        self.assertEqual('AP_app/edit-address-information.html', response.template_name[0])
+
+    def test_post_edit_address_info(self):
+        request = self.factory.post(
+            '/suppliersite/ap/taxpayer/{}/update/address_info/'.format(self.taxpayer_id),
+            data=self.ADDRESS_POST
+        )
+        response = EditAddressView.as_view()(request, **self.kwargs)
+
+        self.assertEqual('/suppliersite/ap/taxpayer/{}/details/'.format(self.taxpayer_id), response.url)
+
+
+class TestEditBankAccountInfo(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.taxpayer = TaxPayerArgentinaFactory()
+        self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+
+        self.BANK_ACCOUNT_POST = {
+            'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
+            'bankaccount_form-bank_name': 'Galicia',
+            'bankaccount_form-bank_code': 'Cta Cte',
+            'bankaccount_form-bank_account_number': '123214',
+        }
+
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+        self.taxpayer_id = self.taxpayer.id
+
+    def test_get_success_url_should_redirect_to_details(self):
+        request = self.factory.get(
+            '/suppliersite/ap/taxpayer/{}/update/bank_account_info/'.format(self.taxpayer_id),
+        )
+        response = EditBankAccountView.as_view()(request, **self.kwargs)
+        self.assertEqual('AP_app/edit-bank-account-information.html', response.template_name[0])
+
+    def test_post_edit_bank_account_info(self):
+        request = self.factory.post(
+            '/suppliersite/ap/taxpayer/{}/update/bank_account_info/'.format(self.taxpayer_id),
+            data=self.BANK_ACCOUNT_POST
+        )
+        response = EditBankAccountView.as_view()(request, **self.kwargs)
+
+        self.assertEqual('/suppliersite/ap/taxpayer/{}/details/'.format(self.taxpayer_id), response.url)
