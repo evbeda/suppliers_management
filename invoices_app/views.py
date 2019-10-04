@@ -43,12 +43,17 @@ class InvoiceListView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_AP'] = self.request.user.is_AP
+        context['filter'] = self.request.GET.get('filter')
         return context
 
     def get_queryset(self):
         user = self.request.user
         if user.is_AP:
-            queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).defer('invoice_file').order_by('id')
+            if self.request.GET.get('filter'):
+                queryset = Invoice.objects.all().defer('invoice_file').order_by('id')
+            else:
+                queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).defer('invoice_file').order_by('id')
+
         else:
             queryset = Invoice.objects.filter(user=user).defer('invoice_file')
         return queryset

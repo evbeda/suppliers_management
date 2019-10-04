@@ -12,6 +12,8 @@
     <h1 class="text-center"> {% trans "Invoice List"%}</h1>
     <br/>
     <div class="container">
+       <a href="{% url 'invoices-list' %}"><span class="badge badge-success" >Show New</span> </a> 
+       <a href="{% url 'invoices-list' %}?filter=all"><span class="badge badge-success" >Show All</span> </a>
         <table class="table table-hover table-sm">
             <thead class="thead-eb-dark">
                 <tr>
