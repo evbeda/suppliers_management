@@ -35,7 +35,7 @@ class TaxPayerFactory(factory.django.DjangoModelFactory):
         model = TaxPayer
 
     workday_id = factory.Sequence(lambda n: "{}".format(n))
-    name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
+    business_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
     taxpayer_state = "PENDING"
     country = "AR"
     company = factory.SubFactory(CompanyFactory)
@@ -46,10 +46,9 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     class Meta:
         model = TaxPayerArgentina
 
-    razon_social = "Monotributista"
     cuit = "1234569"
-    justificacion = "Justificacion falsa"
-    forma_de_pago = "Banco"
+    comments = "Justificacion falsa"
+    payment_type = "Banco"
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
@@ -71,5 +70,5 @@ class BankAccountFactory(factory.django.DjangoModelFactory):
 
     bank_name = "Galicia"
     bank_code = factory.Sequence(lambda n: "{}".format(n))
-    account_number = "759267846132412"
+    bank_account_number = "759267846132412"
     taxpayer = factory.SubFactory(TaxPayerFactory)

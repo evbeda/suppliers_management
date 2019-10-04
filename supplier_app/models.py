@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from supplier_app import (
     TAXPAYER_STATUS
 )
-from django.core.validators import FileExtensionValidator
 
 
 class PDFFile(models.Model):
@@ -33,7 +33,7 @@ class CompanyUserPermission(models.Model):
 class TaxPayer(models.Model):
 
     workday_id = models.CharField(max_length=200)
-    name = models.CharField(max_length=200)
+    business_name = models.CharField(max_length=200)
     taxpayer_state = models.CharField(
         max_length=200,
         choices=TAXPAYER_STATUS,
@@ -43,17 +43,28 @@ class TaxPayer(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Name:{} Status:{}".format(self.name, self.taxpayer_state)
+        return "Name:{} Status:{}".format(self.business_name, self.taxpayer_state)
 
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
 
 class TaxPayerArgentina(TaxPayer):
-    razon_social = models.CharField(max_length=200)
     cuit = models.CharField(max_length=200)
-    justificacion = models.CharField(max_length=200)
-    forma_de_pago = models.CharField(max_length=200)
+    comments = models.CharField(max_length=200)
+    payment_type = models.CharField(max_length=200)
+    AFIP_registration_file = models.FileField(
+        upload_to='file',
+        blank=False,
+        verbose_name='AFIP registration certificate',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+        )
+    witholding_taxes_file = models.FileField(
+        upload_to='file',
+        blank=False,
+        verbose_name='Certificate of no tax withholding of IVA, income or SUSS',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+        )
 
 
 COUNTRIES = {
@@ -79,9 +90,22 @@ class Address(models.Model):
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length=200, default='')
     bank_code = models.CharField(max_length=200, default='')
-    account_number = models.CharField(max_length=200, default='')
+    bank_account_number = models.CharField(max_length=200, default='')
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
         default=None
     )
+    bank_cbu_file = models.FileField(
+        upload_to='file',
+        blank=False,
+        verbose_name='CBU bank certificate',
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+    )
+
+    def __str__(self):
+        return "Bank:{} bank_code:{} account_number:{}".format(
+            self.bank_name,
+            self.bank_code,
+            self.account_number,
+        )
