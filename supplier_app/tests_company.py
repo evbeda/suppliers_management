@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from django.test import (
     Client,
     TestCase,
@@ -81,7 +82,7 @@ class TestCompanySelectorView(TestCase):
             CompanyUserPermission.objects.last().user,
             self.user
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0][0],
             '/suppliersite/supplier'
@@ -97,7 +98,7 @@ class TestCompanySelectorView(TestCase):
         self.assertFalse(
             CompanyUserPermission.objects.filter(pk=-1).exists()
         )
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
 class TestCompanyCreateView(TestCase):
@@ -126,7 +127,7 @@ class TestCompanyCreateView(TestCase):
 
     def test_valid_redirection_after_company_creation(self):
         response = self._make_post()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.redirect_chain[0][0], '/suppliersite/supplier')
 
     def test_company_user_assigment(self):

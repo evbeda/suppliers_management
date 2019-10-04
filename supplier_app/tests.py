@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from os import (
     path,
     remove,
@@ -8,7 +9,10 @@ from unittest import mock
 from unittest.mock import patch
 from unittest.mock import MagicMock
 
-from django.http import HttpResponseRedirect, QueryDict
+from django.http import (
+    HttpResponseRedirect,
+    QueryDict
+)
 from django.core.files import File
 from django.test import (
     TestCase,
@@ -395,7 +399,7 @@ class ViewTest(TestBase):
             ),
             data
         )
-        self.assertEquals(response.status_code, 302)
+        self.assertEquals(response.status_code, HTTPStatus.FOUND)
 
 
 class ModelTest(TestBase):
@@ -561,7 +565,7 @@ class TestTaxpayerApList(TestCase):
         response = ApTaxpayers()
         response = ApTaxpayers.as_view()(request)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
 class TestTaxpayerApDetails(TestCase):
@@ -601,14 +605,14 @@ class TestTaxpayerApDetails(TestCase):
 
         response = SupplierDetailsView.as_view()(request, **self.kwargs)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_get_404_when_try_to_get_taxpayer_details_with_invalid_id(self):
         self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse('supplier-details', kwargs={'taxpayer_id': 999}),
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
 
 class TestCreatePrefixForm(TestCase):
@@ -654,7 +658,7 @@ class TestEditTaxPayerInfo(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.taxpayer = TaxPayerArgentinaFactory()
-        
+
         self.TAXPAYER_POST = {
             'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
             'taxpayer_form-workday_id': '1',
@@ -702,7 +706,7 @@ class TestEditAddressInfo(TestCase):
         self.factory = RequestFactory()
         self.taxpayer = TaxPayerArgentinaFactory()
         self.address = AddressFactory(taxpayer=self.taxpayer)
-        
+
         self.ADDRESS_POST = {
             'csrfmiddlewaretoken': '67lLxnP0Q0oDIYThiF0z7cEcuLrmJSvT1OJUH0J9RyByLxiMeghEHuGKowoq4bZa',
             'address_form-street': 'San Martin',
