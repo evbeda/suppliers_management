@@ -62,4 +62,10 @@ class Invoice(models.Model):
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
+    po_file = models.FileField(
+        upload_to='file',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
+
     history = HistoricalRecords()

@@ -25,3 +25,5 @@ ARS_INVOICE_TYPES = [
     ('A', 'A'),
     ('C', 'C'),
 ]
+
+INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
