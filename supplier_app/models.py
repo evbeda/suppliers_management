@@ -7,14 +7,6 @@ from supplier_app import (
 )
 
 
-class PDFFile(models.Model):
-    pdf_file_received = models.DateTimeField(auto_now=True)
-    pdf_file = models.FileField(
-       upload_to='file',
-       blank=True,
-       validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
-
-
 class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
@@ -46,7 +38,10 @@ class TaxPayer(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Name:{} Status:{}".format(self.business_name, self.taxpayer_state)
+        return "Name:{} Status:{}".format(
+            self.business_name,
+            self.taxpayer_state
+            )
 
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
@@ -84,11 +79,6 @@ class Address(models.Model):
     country = models.CharField(max_length=50)
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return "ADDRESS \n Street: {} Number: {} Zip_Code: {} City: {} State: {} Country: {}".format(
-                self.street, self.number, self.zip_code, self.city, self.state, self.country
-            )
-
 
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length=200, default='')
@@ -107,8 +97,7 @@ class BankAccount(models.Model):
     )
 
     def __str__(self):
-        return "Bank:{} bank_code:{} account_number:{}".format(
+        return "Bank:{} Account_number:{}".format(
             self.bank_name,
-            self.bank_code,
-            self.account_number,
+            self.bank_account_number,
         )
