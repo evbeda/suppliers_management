@@ -302,15 +302,22 @@ class TestTaxpayerApDetails(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
-
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
 
         self.company_user_permission = CompanyUserPermissionFactory()
         self.taxpayer = TaxPayerArgentinaFactory(
-            company=self.company_user_permission.company
+            company=self.company_user_permission.company,
+            AFIP_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
         )
         self.address = AddressFactory(taxpayer=self.taxpayer)
-        self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+        self.bank_account = BankAccountFactory(
+            taxpayer=self.taxpayer,
+            bank_cbu_file=self.file_mock
+            )
 
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id,
@@ -357,6 +364,25 @@ class TestTaxpayerApDetails(TestCase):
             reverse('supplier-details', kwargs={'taxpayer_id': 999}),
         )
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_taxpayer_detail_template(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('supplier-details', kwargs={'taxpayer_id': self.taxpayer.id}),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(
+            response,
+            "CBU"
+        )
+        self.assertContains(
+            response,
+            'AFIP certificate'
+        )
+        self.assertContains(
+            response,
+            'Withholding taxes'
+        )
 
 
 class TestEditTaxPayerInfo(TestCase):
