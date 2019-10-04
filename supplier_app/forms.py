@@ -158,3 +158,17 @@ class BankAccountCreateForm(BasePrefixCreateForm):
                 'class': 'form-control'
             }),
         }
+
+
+class TaxPayerEditForm(ModelForm):
+
+    class Meta:
+        model = TaxPayerArgentina
+        exclude = ['taxpayer_state', 'company', 'country', 'AFIP_registration_file', 'witholding_taxes_file']
+        widgets = {
+            'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'business_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'cuit': forms.TextInput(attrs={'class': 'form-control'}),
+            'payment_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'comments': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+        }
