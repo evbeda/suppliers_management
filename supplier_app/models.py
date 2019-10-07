@@ -3,7 +3,8 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 
 from supplier_app import (
-    TAXPAYER_STATUS
+    TAXPAYER_STATUS,
+    get_taxpayer_status_choices
 )
 
 
@@ -31,8 +32,8 @@ class TaxPayer(models.Model):
     business_name = models.CharField(max_length=200)
     taxpayer_state = models.CharField(
         max_length=200,
-        choices=TAXPAYER_STATUS,
-        default="PENDING",
+        choices=get_taxpayer_status_choices(),
+        default="Pending",
     )
     country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -47,10 +48,10 @@ class TaxPayer(models.Model):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
     def approve_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS[0][0]
+        self.taxpayer_state = TAXPAYER_STATUS['ACTIVE']
 
     def deny_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS[3][0]
+        self.taxpayer_state = TAXPAYER_STATUS['DENIED']
 
 
 class TaxPayerArgentina(TaxPayer):

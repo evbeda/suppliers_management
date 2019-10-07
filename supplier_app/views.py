@@ -33,7 +33,9 @@ from supplier_app.forms import (
     TaxPayerEditForm,
 )
 
-from . import TAXPAYER_STATUS_AP, TAXPAYER_STATUS
+from supplier_app import (
+    get_taxpayer_status_pending_and_change_required
+)
 
 
 class SupplierWithoutCompanyMixin(UserPassesTestMixin):
@@ -179,7 +181,9 @@ class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
         return context
 
     def get_queryset(self):
-        queryset = TaxPayerArgentina.objects.filter(taxpayer_state__in=TAXPAYER_STATUS_AP)
+        queryset = TaxPayerArgentina.objects.filter(
+            taxpayer_state__in=get_taxpayer_status_pending_and_change_required()
+        )
         return queryset
 
 
