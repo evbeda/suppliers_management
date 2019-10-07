@@ -8,6 +8,11 @@
 {% block content %}
 {% include 'AP_app/navbar.html' %}
 <div class="container h-100">
+    {% if not workday_id_is_setted %}
+    <div class="row justify-content-center">
+        <h3>You must set workday id to the taxpayer</h3>
+    </div>
+    {% endif %}
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="col-md-12">
@@ -126,8 +131,12 @@
         </div>
     </div>
     <div class="row justify-content-end">
-        <a class='btn btn-success m-2' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">{% trans "Approve" %}</a>
-        <a class='btn btn-danger m-2' href="{% url 'refuse-taxpayer'  taxpayer_id=taxpayer.id %}">{% trans "Refuse" %}</a>
+        {% if workday_id_is_setted %}
+        <a class='btn btn-success m-3' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">Approve</a>
+        <a class='btn btn-danger m-3' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
+        {% else %}
+        <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

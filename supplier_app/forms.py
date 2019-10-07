@@ -139,3 +139,16 @@ class TaxPayerEditForm(ModelForm):
             'payment_type': forms.TextInput(attrs={'class': 'form-control'}),
             'comments': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
         }
+
+
+class BankAccountEditForm(ModelForm):
+    prefix = 'bankaccount_form'
+
+    class Meta:
+        model = BankAccount
+        exclude = ['taxpayer', 'bank_cbu_file']
+        widgets = {
+            'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
