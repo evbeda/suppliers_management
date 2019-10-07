@@ -332,15 +332,15 @@ class EditBankAccountView(FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-def approve_taxpayer(request, taxpayer_id):
+def approve_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
-    taxpayer.taxpayer_state = TAXPAYER_STATUS[0][0]
+    taxpayer.approve_taxpayer()
     taxpayer.save()
     return redirect('ap-taxpayers')
 
 
-def refuse_taxpayer(request, taxpayer_id):
+def deny_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
-    taxpayer.taxpayer_state = TAXPAYER_STATUS[3][0]
+    taxpayer.deny_taxpayer()
     taxpayer.save()
     return redirect('ap-taxpayers')
