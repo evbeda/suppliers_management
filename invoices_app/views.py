@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import (
     UserPassesTestMixin
 )
 from django.core.validators import ValidationError
+from django.http import HttpResponseBadRequest
 
 from django.urls import (
     reverse,
@@ -21,6 +22,7 @@ from invoices_app.models import Invoice
 from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
 from invoices_app import (
+    INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_REJECTED
@@ -154,17 +156,14 @@ def invoice_history_changes(record):
 
 
 @is_ap_or_403()
-def approve_invoice(request, pk):
-    invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status = INVOICE_STATUS_APPROVED
-    invoice.save()
-    return redirect('invoices-list')
+def change_invoice_status(request, pk):
+    status = request.POST.get('status')
+    available_statuses = [i[1] for i in INVOICE_STATUS]
+    if status not in available_statuses:
+        return HttpResponseBadRequest()
 
-
-@is_ap_or_403()
-def reject_invoice(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status = INVOICE_STATUS_REJECTED
+    invoice.status = status
     invoice.save()
     return redirect('invoices-list')
 

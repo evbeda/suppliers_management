@@ -10,8 +10,16 @@
   <div class="col-md-8">
     <div class="card">
       <div class="card-header">
-        Invoice
+        Invoice #
+        <strong>{{invoice.invoice_number}}</strong>
+        Date
         <strong>{{invoice.invoice_date}}</strong>
+        <span><a href="{% url 'invoice-update' pk=invoice.id %}" title="Edit Invoice" class="fa fa-edit"></a></span>
+        {% if invoice.status == 'CHANGES REQUEST' and not is_AP %}
+        <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}"
+            class="fa fa-edit">Edit
+            info</a></span>
+        {% endif %}
         <span class="float-right">
           <strong>Status:</strong>
           {% if invoice.status == 'NEW' or  invoice.status == 'PAID' or invoice.status == 'APPROVED' %}
@@ -77,28 +85,43 @@
           </div>
         </div>
       </div>
+      {% if is_AP %}
+      <div class="card-footer">
+        <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}'
+          enctype="multipart/form-data">
+          {% csrf_token %}
+          <button type="submit" name='status' class="btn btn-success" value='APPROVED'>Approve</button>
+          <button type="submit" name='status' class="ml-2 btn btn-warning" value='CHANGES REQUEST'>Request
+            Changes</button>
+          <button type="submit" name='status' class="ml-2 btn btn-danger" value='REJECTED'>Reject</button>
+        </form>
+        <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">History</a></span>
+
+      </div>
+      {% endif %}
     </div>
   </div>
   <div class="col-md-4">
-    <iframe src="http://docs.google.com/gview?url={{ invoice.invoice_file.url }}&embedded=true" style="width:100%; height:100%;" frameborder="0"></iframe>
+    <iframe src="http://docs.google.com/gview?url={{ invoice.invoice_file.url }}&embedded=true"
+      style="width:100%; height:100%;" frameborder="0"></iframe>
+    <div class="row">
+      <div class="col text-center">
+        <a href="{{ invoice.invoice_file.url }}" class="fa fa-download fa-2x"></a>
+      </div>
+    </div>
+
   </div>
   <div class="col-md-12 text-center mt-4">
-    {% if invoice.status == 'CHANGES REQUEST' and not is_AP %}
-      <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="btn btn-info">Edit info</a></span>
-    {% endif %}
-    {% if is_AP %}
-    <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary">History</a></span>
-    <span><a href="{% url 'invoice-approve' pk=invoice.id %}" class="btn btn-success">Approve</a></span>
-    <span><a href="{% url 'invoice-reject' pk=invoice.id %}" class="btn btn-danger">Reject</a></span>
-    <span><a href="#" class="btn btn-warning">Request Changes</a></span>
-    <span><a href="{% url 'invoice-update' pk=invoice.id %}" class="btn btn-info">Edit info</a></span>
 
-    {% endif %}
-    <span><a href="{{ invoice.invoice_file.url }}" class="btn btn-info">Download PDF</a></span>
+
+
+
+
+
     {% if invoice.po_file %}
-    <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View PO</a></span>
+    <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View
+        PO</a></span>
     {% endif %}
   </div>
-
 </div>
 {% endblock%}
