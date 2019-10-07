@@ -40,7 +40,7 @@
                     <td>{{invoice.invoice_number}}</td>
                     <td>{{invoice.po_number}}</td>
                     <td>{{invoice.total_amount}}</td>
-                    <td><span class="badge badge-success">{{invoice.status}}</span></td>
+                    <td><span class="badge badge-success">{{invoice.get_status_display}}</span></td>
                     <td>
                         <a href="{% url 'invoices-detail' taxpayer_id=invoice.taxpayer.id pk=invoice.id %}"><i class="fa fa-eye ml-2"></i></a>                        
                     </td>

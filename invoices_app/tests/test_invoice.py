@@ -1,3 +1,4 @@
+from datetime import date
 from http import HTTPStatus
 from parameterized import parameterized
 
@@ -73,7 +74,7 @@ class TestInvoice(TestBase):
     def test_invoice_create_db(self):
         self.assertEqual(
             Invoice.objects.get(invoice_number='1234'),
-            self.invoice_creation_valid_data
+            self.invoice
         )
 
     def test_invoice_create_view(self):
@@ -88,7 +89,7 @@ class TestInvoice(TestBase):
 
     def test_invoice_create_existing_invoice_id(self):
         self.client.force_login(self.user)
-        self.invoice_post_data['invoice_number'] = self.invoice_creation_valid_data.invoice_number
+        self.invoice_post_data['invoice_number'] = self.invoice.invoice_number
         response = self.client.post(
             reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}),
             self.invoice_post_data,
@@ -97,7 +98,7 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(
             response,
-            'The invoice {} already exists'.format(self.invoice_creation_valid_data.invoice_number)
+            'The invoice {} already exists'.format(self.invoice.invoice_number)
         )
 
     def test_supplier_invoices_list_view(self):
@@ -105,8 +106,8 @@ class TestInvoice(TestBase):
         response = self.client.get(
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
         )
-        self.assertContains(response, self.invoice_creation_valid_data.po_number)
-        self.assertContains(response, self.invoice_creation_valid_data.status)
+        self.assertContains(response, self.invoice.po_number)
+        self.assertContains(response, self.invoice.status)
 
     def test_supplier_invoices_list_only_taxpayer_invoices(self):
         self.client.force_login(self.user)
@@ -116,7 +117,7 @@ class TestInvoice(TestBase):
         )
         # Only the invoice with from the tax payer should be listed.
         self.assertIn(
-            self.invoice_creation_valid_data.taxpayer.id,
+            self.invoice.taxpayer.id,
             [self.taxpayer.id for taxpayer in response.context['object_list']]
         )
         self.assertNotIn(
@@ -164,7 +165,7 @@ class TestInvoice(TestBase):
         )
         # Only the invoice with from the tax payer should be listed.
         self.assertIn(
-            self.invoice_creation_valid_data.taxpayer.id,
+            self.invoice.taxpayer.id,
             [taxpayer.id for taxpayer in response.context['object_list']]
         )
         self.assertIn(
@@ -200,14 +201,14 @@ class TestInvoice(TestBase):
             reverse(
                 'change-invoice-status',
                 kwargs={
-                    'pk': self.invoice_creation_valid_data.id,
+                    'pk': self.invoice.id,
                 }
             ),
             {
             'status': status,
             }
         )
-        invoice = get_object_or_404(Invoice, pk=self.invoice_creation_valid_data.id)
+        invoice = get_object_or_404(Invoice, pk=self.invoice.id)
         self.assertEqual(invoice.status, status)
 
     def test_invoice_change_status_not_in_available_status(self):
@@ -216,7 +217,7 @@ class TestInvoice(TestBase):
             reverse(
                 'change-invoice-status',
                 kwargs={
-                    'pk': self.invoice_creation_valid_data.id,
+                    'pk': self.invoice.id,
                 }
             ),
             {
@@ -231,7 +232,7 @@ class TestInvoice(TestBase):
             reverse(
                 'change-invoice-status', 
                 kwargs={
-                    'pk': self.invoice_creation_valid_data.id,
+                    'pk': self.invoice.id,
                 }
             ),
             {
@@ -263,45 +264,45 @@ class TestInvoice(TestBase):
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)
-        self.invoice_creation_valid_data.status = INVOICE_STATUS_CHANGES_REQUEST
-        self.invoice_creation_valid_data.save()
+        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.save()
         res = self.client.post(
             reverse(
                 'taxpayer-invoice-update',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             ),
             self.invoice_post_data
         )
         self.assertEqual(res.status_code, HTTPStatus.FOUND)
-        self.invoice_creation_valid_data.refresh_from_db()
+        self.invoice.refresh_from_db()
         self.assertEqual(
-            self.invoice_creation_valid_data.invoice_number,
+            self.invoice.invoice_number,
             self.invoice_post_data['invoice_number']
         )
 
     def test_supplier_invalid_invoice_edit_request(self):
         self.client.force_login(self.user)
-        self.invoice_creation_valid_data.status = INVOICE_STATUS_CHANGES_REQUEST
-        self.invoice_creation_valid_data.save()
+        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.save()
 
-        old_invoice_number = self.invoice_creation_valid_data.invoice_number
+        old_invoice_number = self.invoice.invoice_number
         res = self.client.post(
             reverse(
                 'taxpayer-invoice-update',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             ),
             {}
         )
         self.assertEqual(res.status_code, HTTPStatus.OK)
-        self.invoice_creation_valid_data.refresh_from_db()
+        self.invoice.refresh_from_db()
         self.assertEqual(
-            self.invoice_creation_valid_data.invoice_number,
+            self.invoice.invoice_number,
             old_invoice_number
         )
         self.assertContains(res, 'This field is required.')
@@ -309,14 +310,14 @@ class TestInvoice(TestBase):
     def test_supplier_invoice_edit_permissions(self):
         self.client.force_login(self.user)
 
-        self.invoice_creation_valid_data.status = INVOICE_STATUS_CHANGES_REQUEST
-        self.invoice_creation_valid_data.save()
+        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.save()
         res = self.client.post(
             reverse(
                 'taxpayer-invoice-update',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             ),
             self.invoice_post_data,
@@ -330,22 +331,22 @@ class TestInvoice(TestBase):
 
     def test_ap_invoice_edit_permissions(self):
         self.client.force_login(self.ap_user)
-        self.invoice_creation_valid_data.status = INVOICE_STATUS_APPROVED
-        self.invoice_creation_valid_data.save()
+        self.invoice.status = INVOICE_STATUS_APPROVED
+        self.invoice.save()
         res = self.client.post(
             reverse(
                 'taxpayer-invoice-update',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             ),
             self.invoice_post_data,
         )
         self.assertEqual(res.status_code, HTTPStatus.FOUND)
-        self.invoice_creation_valid_data.refresh_from_db()
+        self.invoice.refresh_from_db()
         self.assertEqual(
-            self.invoice_creation_valid_data.invoice_number,
+            self.invoice.invoice_number,
             self.invoice_post_data['invoice_number']
         )
 
@@ -357,7 +358,7 @@ class TestInvoice(TestBase):
                 'invoices-detail',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             )
         )
@@ -374,8 +375,50 @@ class TestInvoice(TestBase):
                 'invoices-detail',
                 kwargs={
                     'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice_creation_valid_data.id
+                    'pk': self.invoice.id
                 }
             )
         )
         self.assertEqual(response.context['address'], self.address)
+
+    def test_invoices_list_filter_status(self):
+        self.client.force_login(self.ap_user)
+        invoice_approved = InvoiceFactory(
+            user=self.user,
+            taxpayer=self.taxpayer,
+            invoice_number='4321'
+        )
+        invoice_approved.status = INVOICE_STATUS_APPROVED
+        invoice_approved.save()
+
+        response = self.client.get(
+            '{}?{}'.format(reverse('invoices-list'), 'status=1')
+        )
+        self.assertContains(
+            response,
+            invoice_approved.invoice_number
+        )
+        self.assertNotContains(
+            response,
+            self.invoice.invoice_number
+        )
+
+    def test_invoices_list_filter_invoice_date(self):
+        self.client.force_login(self.ap_user)
+        invoice_old = InvoiceFactory(
+            user=self.user,
+            taxpayer=self.taxpayer,
+            invoice_number='4321',
+            invoice_date=date(2019, 1, 1)
+        )
+        response = self.client.get(
+            '{}?{}'.format(reverse('invoices-list'), 'invoice_date_min=02/02/2019')
+        )
+        self.assertNotContains(
+            response,
+            invoice_old.invoice_number
+        )
+        self.assertContains(
+            response,
+            self.invoice.invoice_number
+        )

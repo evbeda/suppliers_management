@@ -6,20 +6,17 @@ html, body{
     background-color: #1E0A3C
 }
 
-a:hover{
-    text-decoration: none
-}
-
 .background-orange-eb{
-    background-color: #F05537
+    background-color: #D1410C
 }
 
 .text-orange-eb{
-    color : #F05537
+    color : #D1410C
 }
 
-.btn-eb:hover{
-    background-color: rgb(223, 79, 51)
+.a:hover{
+    background-color: rgb(223, 79, 51);
+    text-decoration: none;
 }
 
 .btn-google{
@@ -59,4 +56,8 @@ a:hover{
 
 .inline {
   display: inline-block;
+}
+
+.min-height {
+    min-height: 30vw;
 }

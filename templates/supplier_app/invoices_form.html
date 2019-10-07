@@ -34,7 +34,8 @@
                                 {{ form.invoice_number }}
                                 <small class="text-danger">
                                     {{ form.invoice_number.errors }}
-                                </small>                                {% if form.invoice_number.help_text %}
+                                </small>
+                                {% if form.invoice_number.help_text %}
                                 <p class="help">{{ form.invoice_number.help_text|safe }}</p>
                                 {% endif %}
                             </div>
@@ -53,7 +54,8 @@
                                 {{ form.po_number.label_tag }} {{ form.po_number }}
                                 <small class="text-danger">
                                     {{ form.po_number.errors }}
-                                </small>                                {% if form.po_number.help_text %}
+                                </small>
+                                {% if form.po_number.help_text %}
                                 <small class="text-muted">{{ form.po_number.help_text|safe }}</small>
                                 {% endif %}
                             </div>
@@ -63,7 +65,8 @@
                                 {{ form.currency.label_tag }} {{ form.currency }}
                                 <small class="text-danger">
                                     {{ form.currency.errors }}
-                                </small>                                {% if form.currency.help_text %}
+                                </small>
+                                {% if form.currency.help_text %}
                                 <p class="help">{{ form.currency.help_text|safe }}</p>
                                 {% endif %}
                             </div>

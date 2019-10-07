@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load static %}
+
+{% block extrahead %}
+{{ filter.form.media }}
+{% endblock %}
+
+<form id="filter-form" method="get" class="form-inline">
+    <div class="row">
+        <div class="form-group mr-2">
+            {% trans "invoice date range: "%}
+            {{ filter.form.invoice_date }}
+            <small class="text-danger">
+                {{ filter.form.invoice_date.errors }}
+            </small>
+            {% if filter.form.invoice_date.help_text %}
+            <p class="help">{{ filter.form.invoice_date.help_text|safe }}</p>
+            {% endif %}
+            {{ filter.form.select_example }}
+        </div>
+        <div class="form-group mr-2">
+            {{ filter.form.status.label_tag }}
+            {{ filter.form.status }}
+            <small class="text-danger">
+                {{ filter.form.status.errors }}
+            </small>
+            {% if filter.form.status.help_text %}
+            <p class="help">{{ filter.form.status.help_text|safe }}</p>
+            {% endif %}
+        </div>
+        <div class="text-right">
+            <button id="submit-btn" type="submit" class="btn btn-success">
+                    Apply
+            </button>
+        </div>
+    </div>
+    {% csrf_token %}
+</form>
+

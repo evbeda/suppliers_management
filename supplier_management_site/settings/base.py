@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     'pure_pagination',
     'simple_history',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

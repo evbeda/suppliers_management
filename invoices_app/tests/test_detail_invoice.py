@@ -21,8 +21,8 @@ class DetailInvoiceTest(TestBase):
         response = self.client.get(
             reverse('invoices-detail',
                     kwargs={
-                        'taxpayer_id': self.invoice_creation_valid_data.taxpayer.id,
-                        'pk': self.invoice_creation_valid_data.id,
+                        'taxpayer_id': self.invoice.taxpayer.id,
+                        'pk': self.invoice.id,
                         }
                     ),
         )
@@ -32,8 +32,8 @@ class DetailInvoiceTest(TestBase):
         response = self.client.get(
             reverse('invoices-detail',
                     kwargs={
-                        'taxpayer_id': self.invoice_creation_valid_data.taxpayer.id,
-                        'pk': self.invoice_creation_valid_data.id,
+                        'taxpayer_id': self.invoice.taxpayer.id,
+                        'pk': self.invoice.id,
                         }
                     ),
         )
@@ -74,16 +74,17 @@ class DetailInvoiceTest(TestBase):
 
         # When AP changes its state
         response = self.client.post(
-            reverse('change-invoice-status',
+            reverse(
+                'change-invoice-status',
                 kwargs={
-                    'pk': self.invoice_creation_valid_data.id,
+                    'pk': self.invoice.id,
                 }
             ),
             {'status': new_status}
         )
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice_creation_valid_data
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(
