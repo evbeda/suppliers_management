@@ -110,3 +110,5 @@ setup_env.sh
 
 .vscode
 .DS_Store
+
+htmlcov

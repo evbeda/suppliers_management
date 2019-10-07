@@ -21,4 +21,3 @@ class IsApUser(UserPassesTestMixin):
 
     def test_func(self):
         return self.request.user.email in ALLOWED_AP_ACCOUNTS
-        # return self.request.user.email.endswith('@eventbrite.com')

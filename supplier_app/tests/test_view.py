@@ -11,7 +11,6 @@ from unittest.mock import (
 from django.core.files import File
 from django.core.urlresolvers import (
     reverse,
-    reverse_lazy
 )
 from django.http import (
     QueryDict
@@ -33,7 +32,6 @@ from supplier_app.models import (
     Address,
     BankAccount,
     Company,
-    CompanyUserPermission,
     TaxPayer,
     TaxPayerArgentina,
 )
@@ -626,49 +624,6 @@ class TestEditBankAccountInfo(TestCase):
         )
 
 
-class TestCompanySelectorView(TestCase):
-
-    def setUp(self):
-        self.company = CompanyFactory()
-        self.user = UserFactory()
-        self.client = Client()
-        self.client.force_login(self.user)
-
-    def test_valid_company_selection_and_redirection(self):
-        response = self.client.post(
-            reverse_lazy('company-selector'),
-            {
-                'company': '1',
-            },
-            follow=True
-        )
-        self.assertEqual(
-            CompanyUserPermission.objects.last().company,
-            self.company
-        )
-        self.assertEqual(
-            CompanyUserPermission.objects.last().user,
-            self.user
-        )
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(
-            response.redirect_chain[0][0],
-            '/suppliersite/supplier'
-        )
-
-    def test_invalid_company_selection(self):
-        response = self.client.post(
-            reverse_lazy('company-selector'),
-            {
-                'company': '-1',
-            },
-        )
-        self.assertFalse(
-            CompanyUserPermission.objects.filter(pk=-1).exists()
-        )
-        self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
-
-
 class TestCompanyCreateView(TestCase):
     def setUp(self):
         self.company_constants = {
@@ -676,15 +631,23 @@ class TestCompanyCreateView(TestCase):
             'description':
                 'Bringing the world together through live experiences',
         }
-        self.user = UserFactory()
+        self.user = UserFactory(email="ap@eventbrite.com")
         self.client = Client()
         self.client.force_login(self.user)
 
     def _make_post(self):
         return self.client.post(
-            '/suppliersite/supplier/company/create',
+            '/suppliersite/ap/company/create',
             self.company_constants,
             follow=True,
+        )
+
+    def test_get_template(self):
+        response = self.client.get('/suppliersite/ap/company/create')
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertEqual(
+            'AP_app/company_creation.html',
+            response.template_name[0]
         )
 
     def test_valid_company_creation(self):
@@ -699,17 +662,7 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0][0],
-            '/suppliersite/supplier'
-        )
-
-    def test_company_user_assigment(self):
-        self._make_post()
-        self.assertEqual(
-            CompanyUserPermission.objects.last().user, self.user
-        )
-        self.assertEqual(
-            CompanyUserPermission.objects.last().company.name,
-            self.company_constants['name']
+            '/suppliersite/ap'
         )
 
 
