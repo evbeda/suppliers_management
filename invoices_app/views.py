@@ -18,7 +18,11 @@ from django.shortcuts import get_object_or_404, redirect
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app.forms import InvoiceForm
-from invoices_app.models import Invoice
+from invoices_app.models import (
+    Invoice,
+    Comment
+)
+
 from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
 from invoices_app import (
@@ -120,7 +124,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.is_AP:
             return True
         else:
-            # Only allow supplier to edit the invoice if it's status is 'CHANGES REQUEST'
+            # Only allow supplier to edit the invoice if status is 'CHANGES REQUEST'
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
             return invoice.status == 'CHANGES REQUEST'
 
@@ -154,7 +158,6 @@ def invoice_history_changes(record):
         record = next_record
     return changes
 
-
 @is_ap_or_403()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
@@ -165,6 +168,17 @@ def change_invoice_status(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     invoice.status = status
     invoice.save()
+
+    # Make a comment
+    Comment.objects.create(
+        invoice = invoice,
+        user = request.user,
+        message = '{} has changed the invoice status to {}'.format(
+            request.user.email,
+            status
+        )
+    )
+
     return redirect('invoices-list')
 
 
@@ -200,4 +214,7 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
+        context['comments'] = Comment.objects.filter(
+            invoice=context['invoice']
+        )
         return context

@@ -69,3 +69,19 @@ class Invoice(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
     history = HistoricalRecords()
+
+class Comment(models.Model):
+    user = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      on_delete=models.PROTECT
+    )
+    invoice = models.ForeignKey(
+        Invoice,
+        on_delete=models.PROTECT
+    )
+
+    message = models.CharField(max_length=200)
+    comment_date_received = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message
