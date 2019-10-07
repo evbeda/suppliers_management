@@ -11,6 +11,7 @@ from django.urls import (
     reverse,
     reverse_lazy
 )
+from django_filters.views import FilterView
 from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
@@ -25,27 +26,32 @@ from invoices_app.models import (
 
 from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
+from invoices_app import INVOICE_STATUS
 from invoices_app import (
     INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
-    INVOICE_STATUS_REJECTED
+    INVOICE_STATUS_REJECTED,
+    INVOICE_STATUS_CHANGES_REQUEST
 )
-
+from invoices_app.filters import InvoiceFilter
 from supplier_app.models import (
     TaxPayer,
-    Address
+    Address,
+    COUNTRIES,
 )
 
 
 class InvoiceListView(
     LoginRequiredMixin,
     PaginationMixin,
-    ListView
+    FilterView
 ):
-    template_name = 'AP_app/invoice-list.html'
+    # queryset = Invoice.objects.filter()
+    template_name = 'invoices_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
+    filterset_class = InvoiceFilter
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,7 +61,7 @@ class InvoiceListView(
     def get_queryset(self):
         user = self.request.user
         if user.is_AP:
-            queryset = Invoice.objects.filter(status=INVOICE_STATUS_NEW).defer('invoice_file').order_by('id')
+            queryset = Invoice.objects.filter().defer('invoice_file').order_by('id')
         else:
             queryset = Invoice.objects.filter(user=user).defer('invoice_file')
         return queryset
@@ -126,7 +132,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             # Only allow supplier to edit the invoice if status is 'CHANGES REQUEST'
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-            return invoice.status == 'CHANGES REQUEST'
+            return invoice.status == INVOICE_STATUS_CHANGES_REQUEST
 
     def get_test_func(self):
         return self.user_has_permission
@@ -161,7 +167,7 @@ def invoice_history_changes(record):
 @is_ap_or_403()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
-    available_statuses = [i[1] for i in INVOICE_STATUS]
+    available_statuses = [status for status, _ in INVOICE_STATUS]
     if status not in available_statuses:
         return HttpResponseBadRequest()
 

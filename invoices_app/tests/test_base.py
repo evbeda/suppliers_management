@@ -34,7 +34,7 @@ class TestBase(TestCase):
             company=self.company,
             user=self.user
         )
-        self.invoice_creation_valid_data = InvoiceFactory(
+        self.invoice = InvoiceFactory(
             user=self.user,
             taxpayer=self.taxpayer,
             invoice_number='1234'
