@@ -9,7 +9,6 @@ from django.views.generic.edit import (
 )
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
-    UserPassesTestMixin,
 )
 
 from django.http import HttpResponseRedirect
@@ -22,7 +21,6 @@ from users_app.views import IsApUser
 from supplier_app.models import (
     Address,
     Company,
-    CompanyUserPermission,
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
@@ -40,66 +38,15 @@ from supplier_app import (
 )
 
 
-class SupplierWithoutCompanyMixin(UserPassesTestMixin):
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            self.login_url = '/'
-            return self.handle_no_permission()
-        user_test_result = self.get_test_func()()
-        if not user_test_result:
-            self.login_url = reverse('company-selector')
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
-
-    def test_func(self):
-        user_company = self.request.user.companyuserpermission_set.all()
-        return len(user_company) > 0
-
-
-class CompanySelectorView(LoginRequiredMixin, CreateView):
-    model = CompanyUserPermission
-    fields = ['company']
-    template_name = 'supplier_app/company_selector.html'
-
-    def get_success_url(self):
-        return reverse('supplier-home')
-
-    def form_invalid(self, form):
-        return HttpResponseRedirect(reverse_lazy('company-selector'), status=422)
-
-    def form_valid(self, form):
-        """
-        If the form is valid, redirect to the supplied URL.
-        """
-        form.instance.user = self.request.user
-        form.save()
-        return HttpResponseRedirect(self.get_success_url())
-
-
-class CompanyCreatorView(LoginRequiredMixin, CreateView):
+class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
     model = Company
-    fields = ['name', 'description']
-    template_name = 'supplier_app/company_creation.html'
-
-    def get_success_url(self):
-        return reverse('supplier-home')
-
-    @transaction.atomic
-    def form_valid(self, form):
-        """
-        If the form is valid, redirect to the supplied URL.
-        """
-        company = form.save()
-        companyuserpermission = CompanyUserPermission()
-        companyuserpermission.user = self.request.user
-        companyuserpermission.company = company
-        companyuserpermission.save()
-        return HttpResponseRedirect(self.get_success_url())
+    fields = '__all__'
+    template_name = 'AP_app/company_creation.html'
+    success_url = reverse_lazy('ap-taxpayers')
 
 
 class SupplierHome(
-    SupplierWithoutCompanyMixin,
+    LoginRequiredMixin,
     TemplateView
 ):
     model = TaxPayer
@@ -112,18 +59,17 @@ class SupplierHome(
 
     def get_taxpayers(self):
         user = self.request.user
-        taxpayer_list = TaxPayer.objects.filter(company__companyuserpermission__user=user)
+        taxpayer_list = TaxPayer.objects.filter(
+            company__companyuserpermission__user=user
+        )
         taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayer_list]
         return taxpayer_child
 
 
-class CreateTaxPayerView(SupplierWithoutCompanyMixin, TemplateView, FormView):
+class CreateTaxPayerView(LoginRequiredMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
 
     def get_context_data(self, **kwargs):
-        """
-        Insert the form into the context dict.
-        """
         kwargs.update({
             'address_form': AddressCreateForm(),
             'taxpayer_form': TaxPayerCreateForm(),
