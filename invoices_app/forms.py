@@ -57,15 +57,4 @@ class InvoiceForm(forms.ModelForm):
                 if not file_is_valid:
                     self.add_error(file_field, msg)
                     return file_is_valid
-
-        invoice_number = self.cleaned_data['invoice_number']
-        taxpayer = self.data.get('taxpayer')
-        try:
-            Invoice.objects.get(taxpayer=taxpayer, invoice_number=invoice_number)
-            self.add_error(
-                'invoice_number',
-                'The invoice {} already exists'.format(invoice_number)
-            )
-            return False
-        except Invoice.DoesNotExist:
-            return True
+        return valid

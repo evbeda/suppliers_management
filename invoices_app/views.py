@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
 )
+from django.core.validators import ValidationError
 
 from django.urls import (
     reverse,
@@ -80,8 +81,13 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
-        form.instance.taxpayer = tax_payer
+        taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        form.instance.taxpayer = taxpayer
+        invoice_number = form.cleaned_data['invoice_number']
+        if Invoice.objects.filter(taxpayer=taxpayer.id, invoice_number=invoice_number).exists():
+            form.errors['invoice_number'] = 'The invoice {} already exists'.format(invoice_number)
+            return super().form_invalid(form)
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

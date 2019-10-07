@@ -21,7 +21,9 @@
                             <div class="form-group col-md-3">
                                 {{ form.invoice_type.label_tag }}
                                 {{ form.invoice_type }}
-                                {{ form.invoice_type.errors }}
+                                <small class="text-danger">
+                                    {{ form.invoice_type.errors }}
+                                </small>
                                 {% if form.invoice_type.help_text %}
                                 <p class="help">{{ form.invoice_type.help_text|safe }}</p>
                                 {% endif %}
@@ -30,8 +32,9 @@
                             <div class="form-group col-md-4">
                                 {{ form.invoice_number.label_tag }}
                                 {{ form.invoice_number }}
-                                {{ form.invoice_number.errors }}
-                                {% if form.invoice_number.help_text %}
+                                <small class="text-danger">
+                                    {{ form.invoice_number.errors }}
+                                </small>                                {% if form.invoice_number.help_text %}
                                 <p class="help">{{ form.invoice_number.help_text|safe }}</p>
                                 {% endif %}
                             </div>
@@ -48,8 +51,9 @@
                         <div class="row">
                             <div class="form-group col-md-5">
                                 {{ form.po_number.label_tag }} {{ form.po_number }}
-                                {{ form.po_number.errors }}
-                                {% if form.po_number.help_text %}
+                                <small class="text-danger">
+                                    {{ form.po_number.errors }}
+                                </small>                                {% if form.po_number.help_text %}
                                 <small class="text-muted">{{ form.po_number.help_text|safe }}</small>
                                 {% endif %}
                             </div>
@@ -57,29 +61,36 @@
                         <div class="row">
                             <div class="form-group col-md-2">
                                 {{ form.currency.label_tag }} {{ form.currency }}
-                                {{ form.currency.errors }}
-                                {% if form.currency.help_text %}
+                                <small class="text-danger">
+                                    {{ form.currency.errors }}
+                                </small>                                {% if form.currency.help_text %}
                                 <p class="help">{{ form.currency.help_text|safe }}</p>
                                 {% endif %}
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="id_net_amount">Net Amount</label>
                                 {{ form.net_amount }}
-                                {{ form.net_amount.errors }}
+                                <small class="text-danger">
+                                    {{ form.net_amount.errors }}
+                                </small>
                                 {% if form.net_amount.help_text %}
                                 <p class="help">{{ form.net_amount.help_text|safe }}</p>
                                 {% endif %}
                             </div>
                             <div class="form-group col-md-3">
                                 {{ form.vat.label_tag }} {{ form.vat }}
-                                {{ form.vat.errors }}
+                                <small class="text-danger">
+                                    {{ form.vat.errors }}
+                                </small>
                                 {% if form.vat.help_text %}
                                 <p class="help">{{ form.vat.help_text|safe }}</p>
                                 {% endif %}
                             </div>
                             <div class="form-group col-md-4">
                                 {{ form.total_amount.label_tag }} {{ form.total_amount }}
-                                {{ form.total_amount.errors }}
+                                <small class="text-danger">
+                                    {{ form.total_amount.errors }}
+                                </small>
                                 {% if form.total_amount.help_text %}
                                 <p class="help">{{ form.total_amount.help_text|safe }}</p>
                                 {% endif %}
@@ -88,7 +99,9 @@
                         <div class="row">
                             <div class="form-group col-md-2">
                                 {{ form.invoice_file.label_tag }} {{ form.invoice_file }}
-                                {{ form.invoice_file.errors }}
+                                <small class="text-danger">
+                                    {{ form.invoice_file.errors }}
+                                </small>
                                 {% if form.invoice_file.help_text %}
                                 <p class="help">{{ form.invoice_file.help_text|safe }}</p>
                                 {% endif %}
@@ -97,7 +110,9 @@
                         <div class="row">
                             <div class="form-group col-md-2">
                                 {{ form.po_file.label_tag }} {{ form.po_file }}
-                                {{ form.po_file.errors }}
+                                <small class="text-danger">
+                                    {{ form.po_file.errors }}
+                                </small>
                                 {% if form.po_file.help_text %}
                                 <p class="help">{{ form.po_file.help_text|safe }}</p>
                                 {% endif %}
