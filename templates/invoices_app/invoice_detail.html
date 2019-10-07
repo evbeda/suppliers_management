@@ -122,6 +122,34 @@
     <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View
         PO</a></span>
     {% endif %}
+
+  </div>
+  <div class="col-md-8">
+    <div class="card my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
+        <div class="text-muted">
+        {% if not comments %}
+          <div class="row media-body pt-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
+            <div class="cols">
+              <p>
+                <strong class="d-block text-gray-dark">No updates yet!</strong>
+              </p>
+            </div>
+          </div>
+        {% else %}
+          {% for comment in comments %}
+          <div class="row media-body pt-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
+            <div class="cols">
+              <p>
+                <strong class="d-block text-gray-dark">{{ comment.comment_date_received }}</strong>
+                {{ comment.message }}
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+        {% endif %}
+        </div>
+      </div>
   </div>
 </div>
-{% endblock%}
+{% endblock %}

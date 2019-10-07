@@ -1,10 +1,17 @@
-from invoices_app.tests.test_base import TestBase
-
 from http import HTTPStatus
+from parameterized import parameterized
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_REJECTED,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+)
+from invoices_app.models import Comment
+from invoices_app.tests.test_base import TestBase
 
 class DetailInvoiceTest(TestBase):
 
@@ -49,3 +56,66 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(type(response), HttpResponseRedirect)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(response.url, '/?next=/invoices/taxpayer/2/detail/2/')
+
+    # Feature: Generates comments when invoice state changes
+    @parameterized.expand([
+        (INVOICE_STATUS_APPROVED,),
+        (INVOICE_STATUS_REJECTED,),
+        (INVOICE_STATUS_CHANGES_REQUEST,),
+        (INVOICE_STATUS_PAID,),
+    ])
+    def test_generate_a_comment_when_invoice_changes_his_state(
+        self,
+        new_status,
+    ):
+        # Given an invoice and a logged AP
+        # invoice : self.invoice
+        self.client.force_login(self.ap_user)
+
+        # When AP changes its state
+        response = self.client.post(
+            reverse('change-invoice-status',
+                kwargs={
+                    'pk': self.invoice_creation_valid_data.id,
+                }
+            ),
+            {'status': new_status}
+        )
+        # Then the invoice should have a comment associated to it with its message
+        comment = Comment.objects.filter(
+            invoice = self.invoice_creation_valid_data
+        ).latest('comment_date_received')
+
+        self.assertEqual(
+            str(comment),
+            '{} has changed the invoice status to {}'.format(
+                self.ap_user.email,
+                new_status
+            )
+        )
+        self.assertEqual(comment.user, self.ap_user)
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+
+    def test_ap_can_add_a_comment_in_an_invoice(self, message, expected_status_code):
+        pass
+
+    def test_a_valid_supplier_can_add_a_comment_in_an_invoice(self):
+        pass
+
+    def test_ap_can_add_a_comment_in_an_invoice(self):
+        pass
+
+    def test_a_no_valid_supplier_cannot_add_a_comment(self):
+        pass
+
+    def test_comments_are_chronologically_ordered(self):
+        pass
+
+    def test_ap_can_see_comments(self):
+        pass
+
+    def test_supplier_can_see_comments_of_his_invoices(self):
+        pass
+
+    def test_supplier_cannot_see_comments_of_other_invoices(self):
+        pass
