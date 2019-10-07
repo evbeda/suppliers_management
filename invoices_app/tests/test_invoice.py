@@ -2,6 +2,7 @@ from http import HTTPStatus
 from parameterized import parameterized
 
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -188,36 +189,77 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     @parameterized.expand([
-        ('invoice-approve', 1, 302),
-        ('invoice-approve', 31, 404),
-        ('invoice-reject', 1, 302),
-        ('invoice-reject', 31, 404),
+        (INVOICE_STATUS_APPROVED),
+        (INVOICE_STATUS_NEW),
+        (INVOICE_STATUS_REJECTED),
+        (INVOICE_STATUS_CHANGES_REQUEST),
     ])
-    def test_invoice_change_status(self, url, invoice_id, expected):
+    def test_invoice_change_status_in_db(self, status):
         self.client.force_login(self.ap_user)
-        response = self.client.get(
-            reverse(url, kwargs={'pk': invoice_id}),
+        self.client.post(
+            reverse(
+                'change-invoice-status',
+                kwargs={
+                    'pk': self.invoice_creation_valid_data.id,
+                }
+            ),
+            {
+            'status': status,
+            }
         )
-        self.assertEqual(response.status_code, expected)
+        invoice = get_object_or_404(Invoice, pk=self.invoice_creation_valid_data.id)
+        self.assertEqual(invoice.status, status)
 
-    @parameterized.expand([
-        ('invoice-approve', INVOICE_STATUS_APPROVED),
-        ('invoice-reject', INVOICE_STATUS_REJECTED),
-    ])
-    def test_invoice_change_status_changed(self, url, expected):
+    def test_invoice_change_status_not_in_available_status(self):
         self.client.force_login(self.ap_user)
-        self.client.get(
-            reverse(url, kwargs={'pk': self.taxpayer.id}),
+        request = self.client.post(
+            reverse(
+                'change-invoice-status',
+                kwargs={
+                    'pk': self.invoice_creation_valid_data.id,
+                }
+            ),
+            {
+            'status': 'NOT_STATUS',
+            }
         )
-        self.invoice_creation_valid_data.refresh_from_db()
-        self.assertEqual(self.invoice_creation_valid_data.status, expected)
+        self.assertEqual(request.status_code, 400)
 
     def test_invoice_change_status_only_ap_fail(self):
         self.client.force_login(self.user)
-        request = self.client.get(
-            reverse('invoice-approve', kwargs={'pk': 1}),
+        request = self.client.post(
+            reverse(
+                'change-invoice-status', 
+                kwargs={
+                    'pk': self.invoice_creation_valid_data.id,
+                }
+            ),
+            {
+            'status': INVOICE_STATUS_APPROVED,
+            }
         )
         self.assertEqual(request.status_code, HTTPStatus.FORBIDDEN)
+        
+    @parameterized.expand([
+        (1, 302),
+        (31, 404),
+        (1, 302),
+        (31, 404),
+    ])
+    def test_invoice_change_status_code(self, id, expected):
+        self.client.force_login(self.ap_user)
+        request = self.client.post(
+            reverse(
+                'change-invoice-status',
+                kwargs={
+                    'pk': id,
+                }
+            ),
+            {
+                'status': INVOICE_STATUS_APPROVED,
+            }
+        )
+        self.assertEqual(request.status_code, expected)
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)
