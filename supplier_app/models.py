@@ -46,6 +46,12 @@ class TaxPayer(models.Model):
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
+    def approve_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS[0][0]
+
+    def deny_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS[3][0]
+
 
 class TaxPayerArgentina(TaxPayer):
     cuit = models.CharField(max_length=200)

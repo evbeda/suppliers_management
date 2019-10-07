@@ -594,3 +594,42 @@ class TestCompanyCreateView(TestCase):
             CompanyUserPermission.objects.last().company.name,
             self.company_constants['name']
         )
+
+
+class TestApprovalRefuse(TestCase):
+    def setUp(self):
+        self.taxpayer = TaxPayerArgentinaFactory()
+        self.client = Client()
+        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+        self.client.force_login(self.ap_user)
+
+    def test_redirect_to_ap_home_when_approve_a_supplier(self):
+        response = self.client.post(
+            '/suppliersite/ap/taxpayer/{}/details/approve'.format(self.taxpayer.id)
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/suppliersite/ap')
+
+    def test_change_taxpayer_status_to_ACTIVE_when_clicking_aprove_button(self):
+        self.client.post(
+            '/suppliersite/ap/taxpayer/{}/details/approve'.format(self.taxpayer.id)
+        )
+
+        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'ACTIVE')
+
+    def test_redirect_to_ap_home_when_deny_a_supplier(self):
+        response = self.client.post(
+            '/suppliersite/ap/taxpayer/{}/details/deny'.format(self.taxpayer.id)
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/suppliersite/ap')
+
+    def test_change_taxpayer_status_to_DENIED_when_clicking_deny_button(self):
+        self.client.post(
+            '/suppliersite/ap/taxpayer/{}/details/deny'.format(self.taxpayer.id)
+        )
+
+        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'DENIED')
+
