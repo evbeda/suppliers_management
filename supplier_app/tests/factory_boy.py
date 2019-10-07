@@ -36,7 +36,7 @@ class TaxPayerFactory(factory.django.DjangoModelFactory):
 
     workday_id = factory.Sequence(lambda n: "{}".format(n))
     business_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
-    taxpayer_state = "PENDING"
+    taxpayer_state = "Pending"
     country = "AR"
     company = factory.SubFactory(CompanyFactory)
 

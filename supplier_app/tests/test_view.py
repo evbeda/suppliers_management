@@ -205,7 +205,7 @@ class TestTaxpayerList(TestCase):
         self.taxpayer_ar = TaxPayerArgentinaFactory(
             business_name='Eventbrite',
             workday_id='12345',
-            taxpayer_state='PENDING',
+            taxpayer_state='Pending',
             cuit='20-31789965-3',
             company=self.company,
         )
@@ -249,14 +249,14 @@ class TestTaxpayerApList(TestCase):
         self.taxpayer_ar1 = TaxPayerArgentinaFactory(
             business_name='Pyme 1',
             workday_id='1',
-            taxpayer_state='PENDING',
+            taxpayer_state='Pending',
             cuit='20-31789965-3',
             company=self.company1,
         )
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
             business_name='Pyme 2',
             workday_id='2',
-            taxpayer_state='CHANGE REQUIRED',
+            taxpayer_state='Change required',
             cuit='20-39237968-5',
             company=self.company2,
         )
@@ -616,7 +616,7 @@ class TestApprovalRefuse(TestCase):
             '/suppliersite/ap/taxpayer/{}/details/approve'.format(self.taxpayer.id)
         )
 
-        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'ACTIVE')
+        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'Active')
 
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
         response = self.client.post(
@@ -631,5 +631,4 @@ class TestApprovalRefuse(TestCase):
             '/suppliersite/ap/taxpayer/{}/details/deny'.format(self.taxpayer.id)
         )
 
-        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'DENIED')
-
+        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'Denied')
