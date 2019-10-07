@@ -29,6 +29,7 @@ from supplier_app.models import (
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
+    BankAccountEditForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
 )
@@ -193,9 +194,9 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
-
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
+        context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
 
         return context
 
@@ -231,7 +232,6 @@ class EditTaxpayerView(FormView):
     def form_valid(self, form):
 
         taxpayer_form = form.save(commit=False)
-
         taxpayer_db = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
 
         taxpayer_db.workday_id = taxpayer_form.workday_id
@@ -298,7 +298,7 @@ class EditBankAccountView(FormView):
     def get(self, request, *args, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         taxpayer_bank_account = get_object_or_404(BankAccount, taxpayer__id=taxpayer_id)
-        edit_form = BankAccountCreateForm(instance=taxpayer_bank_account)
+        edit_form = BankAccountEditForm(instance=taxpayer_bank_account)
         context = {
             'bank_account_form': edit_form
         }
@@ -306,7 +306,7 @@ class EditBankAccountView(FormView):
 
     def post(self, request, *args, **kwargs):
 
-        taxpayer_form = BankAccountCreateForm(data=request.POST, files=request.FILES)
+        taxpayer_form = BankAccountEditForm(data=request.POST, files=request.FILES)
 
         if taxpayer_form.is_valid():
             return self.form_valid(taxpayer_form)

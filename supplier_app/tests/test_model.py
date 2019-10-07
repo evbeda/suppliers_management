@@ -52,6 +52,13 @@ class TestTaxpayerModel(TestCase):
             taxpayer_arg
         )
 
+    def test_taxpayer_has_workday_id(self):
+        self.assertTrue(self.taxpayer.has_workday_id())
+
+    def test_taxpayer_doesnt_have_workday_id(self):
+        taxpayer = TaxPayerArgentinaFactory(workday_id="")
+        self.assertFalse(taxpayer.has_workday_id())
+
 
 class TestAddressModel(TestCase):
     def test_address(self):

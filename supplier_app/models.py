@@ -53,6 +53,9 @@ class TaxPayer(models.Model):
     def deny_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['DENIED']
 
+    def has_workday_id(self):
+        return True if self.workday_id else False
+
 
 class TaxPayerArgentina(TaxPayer):
     cuit = models.CharField(max_length=200)
