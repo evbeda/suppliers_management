@@ -1,12 +1,22 @@
-from django.test import SimpleTestCase, RequestFactory
-from django.utils.translation import activate, ugettext_lazy as _
 from parameterized import parameterized
-from .views import home
+
+from django.core import mail
+from django.test import TestCase, RequestFactory
+from django.utils.translation import activate, ugettext_lazy as _
+
+from supplier_management_site.tests.views import (
+    home,
+)
+
+from utils.send_email import send_email_notification
 
 
-class HomePageTests(SimpleTestCase):
+class TestTranslationConfiguration(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+
+    def tearDown(self):
+        activate('en')
 
     def test_plain_translation(self):
         activate('es')
@@ -22,3 +32,18 @@ class HomePageTests(SimpleTestCase):
         request = self.factory.get("/{}/".format(lang))
         response = home(request)
         self.assertContains(response, text)
+
+
+class EmailUtilsTest(TestCase):
+    def tearDown(self):
+        mail.outbox = []
+
+    def test_send_email_notification(self):
+        subject = 'Testing title'
+        message = 'Testing message'
+        recipient_list = ['someone@somemail.com']
+
+        send_email_notification(subject, message, recipient_list)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Testing title')
