@@ -124,10 +124,12 @@ SOCIAL_AUTH_EVENTBRITE_LOGIN_REDIRECT_URL = '/suppliersite/supplier'
 SOCIAL_AUTH_GOOGLE_OAUTH2_LOGIN_REDIRECT_URL = '/suppliersite/ap'
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'approval_prompt': 'force', 'hd': 'eventbrite.com'}
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['eventbrite.com']
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error'
 

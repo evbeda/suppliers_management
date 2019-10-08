@@ -14,6 +14,8 @@ DATABASES = {
     }
 }
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_prod')
+
 SOCIAL_AUTH_EVENTBRITE_KEY = get_env_variable('SOCIAL_AUTH_EVENTBRITE_KEY')
 SOCIAL_AUTH_EVENTBRITE_SECRET = get_env_variable(
    'SOCIAL_AUTH_EVENTBRITE_SECRET'
