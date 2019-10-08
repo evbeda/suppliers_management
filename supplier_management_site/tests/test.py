@@ -2,7 +2,10 @@ from parameterized import parameterized
 
 from django.core import mail
 from django.test import TestCase, RequestFactory
-from django.utils.translation import activate, ugettext_lazy as _
+from django.utils.translation import (
+    activate,
+    ugettext_lazy as _
+)
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -12,34 +15,26 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED
 )
 
-from supplier_management_site.tests.views import (
-    home,
-)
-
-from supplier_app.models import (
-    Company,
-    TaxPayer,
-    TaxPayerArgentina,
-    CompanyUserPermission,
-)
-
-
+from supplier_app.models import TaxPayerArgentina
 from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
     TaxPayerFactory,
-    TaxPayerArgentinaFactory,
     CompanyFactory,
 )
+
+from supplier_management_site.tests.views import home
+
 from users_app.factory_boy import (
     UserFactory
 )
+
+from utils.invoice_lookup import invoice_status_lookup
 
 from utils.send_email import (
     send_email_notification,
     get_user_emails_from_tax_payer,
 )
 
-from utils.invoice_lookup import invoice_status_lookup
 
 class TestTranslationConfiguration(TestCase):
     def setUp(self):
@@ -115,6 +110,7 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(len(mail.outbox[0].to), 3)
         self.assertEqual(mail.outbox[0].to, recipient_list)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
 
 class TestInvoiceStatusLookup(TestCase):
 

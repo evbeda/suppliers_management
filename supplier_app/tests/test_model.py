@@ -6,6 +6,7 @@ from supplier_app.models import (
     Address,
     BankAccount,
     Company,
+    CompanyUniqueToken,
     TaxPayer,
 )
 from supplier_app.tests.factory_boy import (
@@ -134,3 +135,19 @@ class TestCompanyUserPermissionModel(TestCase):
             company_user_permissions.company,
             company
         )
+
+
+class TestCompanyUniqueToken(TestCase):
+    def setUp(self):
+        self.company = CompanyFactory()
+        self.companyuniquetoken = CompanyUniqueToken(company=self.company)
+
+    def test_company_unique_token_relationship(self):
+        self.assertEqual(
+            self.company,
+            self.companyuniquetoken.company
+        )
+
+    def test_company_unique_token_assing_company_token(self):
+        self.companyuniquetoken.assing_company_token()
+        self.assertTrue(len(self.companyuniquetoken.token) == 64)
