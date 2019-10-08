@@ -59,5 +59,9 @@ html, body{
 }
 
 .min-height {
-    min-height: 30vw;
+    min-height: 30vh;
+}
+
+#filter-form {
+    display: none;
 }

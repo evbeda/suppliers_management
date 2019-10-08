@@ -420,7 +420,7 @@ class TestInvoice(TestBase):
             invoice_date=date(2019, 1, 1)
         )
         response = self.client.get(
-            '{}?{}'.format(reverse('invoices-list'), 'invoice_date_min=02/02/2019')
+            '{}?{}'.format(reverse('invoices-list'), 'invoice_date_after=02/02/2019')
         )
         self.assertNotContains(
             response,
@@ -429,4 +429,56 @@ class TestInvoice(TestBase):
         self.assertContains(
             response,
             self.invoice.invoice_number
+        )
+
+    def test_invoices_list_filter_invoice_total_amount(self):
+        self.client.force_login(self.ap_user)
+        invoice_low_total_amount = InvoiceFactory(
+            user=self.user,
+            taxpayer=self.taxpayer,
+            invoice_number='4321',
+            total_amount=1,
+        )
+        invoice_high_total_amount = InvoiceFactory(
+            user=self.user,
+            taxpayer=self.taxpayer,
+            invoice_number='98764',
+            total_amount=100,
+        )
+        self.invoice.total_amount = 10
+        self.invoice.save()
+
+        response = self.client.get(
+            '{}?{}&{}'.format(
+                reverse('invoices-list'),
+                'total_amount_min={}'.format(invoice_low_total_amount.total_amount+1),
+                'total_amount_max={}'.format(invoice_high_total_amount.total_amount-1),
+            ),
+        )
+        self.assertNotContains(
+            response,
+            invoice_low_total_amount.invoice_number
+        )
+        self.assertNotContains(
+            response,
+            invoice_high_total_amount.invoice_number
+        )
+        self.assertContains(
+            response,
+            self.invoice.invoice_number
+        )
+
+    def test_invoices_list_filter_taxpayer(self):
+        self.client.force_login(self.ap_user)
+
+        response = self.client.get(
+            '{}?{}'.format(reverse('invoices-list'), 'taxpayer={}'.format(self.taxpayer.id))
+        )
+        self.assertContains(
+            response,
+            self.invoice.invoice_number
+        )
+        self.assertNotContains(
+            response,
+            self.invoice_from_other_user.invoice_number
         )
