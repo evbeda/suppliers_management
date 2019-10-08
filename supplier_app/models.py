@@ -9,6 +9,11 @@ from supplier_app import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
+from supplier_app.bank_info import get_bank_info_choices
+from supplier_app import (
+    PAYMENT_TERMS,
+    PAYMENT_TYPES
+)
 
 
 class Company(models.Model):
@@ -54,6 +59,11 @@ class TaxPayer(models.Model):
     )
     country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    taxpayer_comments = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True
+        )
 
     def __str__(self):
         return self.business_name
@@ -72,10 +82,17 @@ class TaxPayer(models.Model):
 
 
 class TaxPayerArgentina(TaxPayer):
-    cuit = models.CharField(max_length=200)
-    comments = models.CharField(max_length=200)
-    payment_type = models.CharField(max_length=200)
-    AFIP_registration_file = models.FileField(
+    cuit = models.CharField(max_length=20)
+    payment_type = models.CharField(
+        max_length=20,
+        choices=PAYMENT_TYPES,
+        default="BANK"
+    )
+    payment_term = models.IntegerField(
+        choices=PAYMENT_TERMS,
+        default=15
+    )
+    afip_registration_file = models.FileField(
         upload_to='file',
         blank=False,
         verbose_name='AFIP registration certificate',
@@ -105,9 +122,11 @@ class Address(models.Model):
 
 
 class BankAccount(models.Model):
-    bank_name = models.CharField(max_length=200, default='')
-    bank_code = models.CharField(max_length=200, default='')
-    bank_account_number = models.CharField(max_length=200, default='')
+    bank_account_number = models.CharField(max_length=60, unique=True)
+    bank_info = models.IntegerField(
+        choices=get_bank_info_choices(),
+        verbose_name='Bank name'
+    )
     taxpayer = models.ForeignKey(
         TaxPayer,
         on_delete=models.CASCADE,
@@ -121,7 +140,6 @@ class BankAccount(models.Model):
     )
 
     def __str__(self):
-        return "Bank:{} Account_number:{}".format(
-            self.bank_name,
+        return "Account_number:{}".format(
             self.bank_account_number,
         )

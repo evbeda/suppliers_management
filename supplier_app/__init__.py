@@ -1,3 +1,7 @@
+from collections import namedtuple
+
+DBTuple = namedtuple('DBTuple', 'value verbose_name')
+
 # 25 * 1014 * 1024
 TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE = 26214400
 
@@ -9,6 +13,15 @@ TAXPAYER_STATUS = {
     "PENDING": "Pending",
     "DENIED": "Denied",
 }
+
+PAYMENT_TERMS = [
+    DBTuple(15, "15 days"),
+    DBTuple(30, "30 days"),
+]
+
+PAYMENT_TYPES = [
+    DBTuple("BANK", "Bank"),
+]
 
 
 def get_taxpayer_status_choices():
