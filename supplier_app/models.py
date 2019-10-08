@@ -1,11 +1,14 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
+from django.utils import timezone
 
 from supplier_app import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
+
+from utils.token_generator import company_token
 
 
 class Company(models.Model):
@@ -24,6 +27,15 @@ class CompanyUserPermission(models.Model):
         default=None
     )
     permission = None
+
+
+class CompanyUniqueToken(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    token = models.CharField(max_length=64)
+    datetime = models.DateTimeField(default=timezone.now)
+
+    def assing_company_token(self):
+        self.token = company_token(str(self.company.id))
 
 
 class TaxPayer(models.Model):
