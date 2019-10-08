@@ -14,21 +14,23 @@
         <strong>{{invoice.invoice_number}}</strong>
         Date
         <strong>{{invoice.invoice_date}}</strong>
+        {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and is_AP %}
         <span><a href="{% url 'invoice-update' pk=invoice.id %}" title="Edit Invoice" class="fa fa-edit"></a></span>
-        {% if invoice.status == 'CHANGES REQUEST' and not is_AP %}
+        {% endif %}
+        {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and not is_AP %}
         <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}"
             class="fa fa-edit">Edit
             info</a></span>
         {% endif %}
         <span class="float-right">
           <strong>Status:</strong>
-          {% if invoice.status == 'NEW' or  invoice.status == 'PAID' or invoice.status == 'APPROVED' %}
+          {% if invoice.status == INVOICE_STATUS_NEW or  invoice.status == INVOICE_STATUS_PAID or invoice.status == INVOICE_STATUS_APPROVED %}
           <span class="badge badge-success">{{invoice.status}}</span>
           {% endif %}
-          {% if invoice.status == 'REJECTED' %}
+          {% if invoice.status == INVOICE_STATUS_REJECTED %}
           <span class="badge badge-danger">{{invoice.status}}</span>
           {% endif %}
-          {% if invoice.status == 'CHANGES REQUEST' %}
+          {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
           <span class="badge badge-warning">{{invoice.status}}</span>
           {% endif %}
         </span>
@@ -112,12 +114,6 @@
 
   </div>
   <div class="col-md-12 text-center mt-4">
-
-
-
-
-
-
     {% if invoice.po_file %}
     <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View
         PO</a></span>

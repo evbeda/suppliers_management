@@ -230,7 +230,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.user)
         request = self.client.post(
             reverse(
-                'change-invoice-status', 
+                'change-invoice-status',
                 kwargs={
                     'pk': self.invoice.id,
                 }
@@ -240,7 +240,7 @@ class TestInvoice(TestBase):
             }
         )
         self.assertEqual(request.status_code, HTTPStatus.FORBIDDEN)
-        
+
     @parameterized.expand([
         (1, 302),
         (31, 404),
@@ -281,6 +281,10 @@ class TestInvoice(TestBase):
         self.assertEqual(
             self.invoice.invoice_number,
             self.invoice_post_data['invoice_number']
+        )
+        self.assertEqual(
+            self.invoice.status,
+            INVOICE_STATUS_NEW
         )
 
     def test_supplier_invalid_invoice_edit_request(self):

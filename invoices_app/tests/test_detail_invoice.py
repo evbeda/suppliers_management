@@ -97,6 +97,39 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(comment.user, self.ap_user)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
 
+    def test_supplier_invoice_edit_and_it_exists_a_new_comment(self):
+        # Given an invoice and a logged Supplier
+        # invoice : self.invoice
+        self.client.force_login(self.user)
+        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.save()
+
+        # When a supplier edits the invoice
+        response = self.client.post(
+            reverse(
+                'taxpayer-invoice-update',
+                kwargs={
+                    'taxpayer_id': self.taxpayer.id,
+                    'pk': self.invoice.id
+                }
+            ),
+            self.invoice_post_data
+        )
+
+        # Then the invoice should have a comment associated to it with its message
+        comment = Comment.objects.filter(
+            invoice = self.invoice
+        ).latest('comment_date_received')
+
+        self.assertEqual(
+            str(comment),
+            '{} has changed the invoice'.format(
+                self.user.email,
+            )
+        )
+        self.assertEqual(comment.user, self.user)
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+
     def test_ap_can_add_a_comment_in_an_invoice(self, message, expected_status_code):
         pass
 
