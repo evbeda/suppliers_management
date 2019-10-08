@@ -94,18 +94,19 @@ class TaxPayerCreateForm(BasePrefixCreateForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'payment_type': forms.TextInput(attrs={'class': 'form-control'}),
-            'comments': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': '3'
-            }),
-            'AFIP_registration_file': forms.FileInput(attrs={
+            'payment_type': forms.Select(attrs={'class': 'form-control'}),
+            'payment_term': forms.Select(attrs={'class': 'form-control'}),
+            'afip_registration_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': 'form-control'
             }),
             'witholding_taxes_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': 'form-control'
+            }),
+            'taxpayer_comments': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': '3'
             }),
         }
 
@@ -117,8 +118,7 @@ class BankAccountCreateForm(BasePrefixCreateForm):
         model = BankAccount
         exclude = ['taxpayer']
         widgets = {
-            'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'bank_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_info': forms.Select(attrs={'class': 'form-control'}),
             'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_cbu_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
@@ -131,24 +131,29 @@ class TaxPayerEditForm(ModelForm):
 
     class Meta:
         model = TaxPayerArgentina
-        exclude = ['taxpayer_state', 'company', 'country', 'AFIP_registration_file', 'witholding_taxes_file']
+        exclude = [
+            'taxpayer_state',
+            'company',
+            'country',
+            'afip_registration_file',
+            'witholding_taxes_file',
+            'taxpayer_comments'
+            ]
         widgets = {
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'payment_type': forms.TextInput(attrs={'class': 'form-control'}),
-            'comments': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+            'payment_type': forms.Select(attrs={'class': 'form-control'}),
+            'payment_term': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
 class BankAccountEditForm(ModelForm):
-    prefix = 'bankaccount_form'
 
     class Meta:
         model = BankAccount
         exclude = ['taxpayer', 'bank_cbu_file']
         widgets = {
-            'bank_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'bank_code': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_info': forms.Select(attrs={'class': 'form-control'}),
         }

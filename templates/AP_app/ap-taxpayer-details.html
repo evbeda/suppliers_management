@@ -24,6 +24,7 @@
                             <th scope="col">{% trans "Business name" %}</th>
                             <th scope="col">{% trans "CUIT" %}</th>
                             <th scope="col">{% trans "Payment Type" %}</th>
+                            <th scope="col">{% trans "Payment Term" %}</th>
                             <th scope="col">{% trans "Comments" %}</th>
                             <th scope="col">{% trans "Country" %}</th>
                             <th scope="col">{% trans "Files" %} </th>
@@ -35,6 +36,7 @@
                             <td>{{taxpayer.business_name}}</td>
                             <td>{{taxpayer.cuit}}</td>
                             <td>{{taxpayer.payment_type}}</td>
+                            <td>{{taxpayer.payment_term}}</td>
                             <td>{{taxpayer.comments}}</td>
                             <td>{{taxpayer.country}}</td>
                             <td>
@@ -84,7 +86,7 @@
                             <td>{{taxpayer_address.country}}</td>
                             <td>
                                 <a class='btn btn-info'
-                                    href="{% url 'address-update' taxpayer_id=taxpayer.id%}">{% trans "Edit" %}</a>
+                                    href="{% url 'address-update' address_id=taxpayer_address.id %}">{% trans "Edit" %}</a>
                             </td>
                         </tr>
                     </tbody>
@@ -109,8 +111,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{taxpayer_bank_account.bank_name}}</td>
-                            <td>{{taxpayer_bank_account.bank_code}}</td>
+                            <td>{{taxpayer_bank_account.get_bank_info_display}}</td>
+                            <td>{{taxpayer_bank_account.bank_info}}</td>
                             <td>{{taxpayer_bank_account.bank_account_number}}</td>
                             <td>
                                 <ul class="list-group">
@@ -122,7 +124,7 @@
                             </td>
                             <td>
                                 <a class='btn btn-info'
-                                    href="{% url 'bank-account-update' taxpayer_id=taxpayer.id%}">{% trans "Edit" %}</a>
+                                    href="{% url 'bank-account-update'  bank_id=taxpayer_bank_account.id%}">{% trans "Edit" %}</a>
                             </td>
                         </tr>
                     </tbody>

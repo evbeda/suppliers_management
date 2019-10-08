@@ -20,11 +20,11 @@ urlpatterns = [
     url(r'^supplier/company$', CompanySelectorView.as_view(), name='company-selector'),
     url(r'^supplier/company/create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^supplier/taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/details/$', SupplierDetailsView.as_view(), name='supplier-details'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/details/approve$', approve_taxpayer, name='approve-taxpayer'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/details/deny$', deny_taxpayer, name='deny-taxpayer'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/update/taxpayer_info$', EditTaxpayerView.as_view(), name='taxpayer-update'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/update/address_info$', EditAddressView.as_view(), name='address-update'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/update/bank_account_info$', EditBankAccountView.as_view(), name='bank-account-update'),
+    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/$', SupplierDetailsView.as_view(), name='supplier-details'),
+    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/approve$', approve_taxpayer, name='approve-taxpayer'),
+    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/deny$', deny_taxpayer, name='deny-taxpayer'),
+    url(r'^ap/taxpayer/update/taxpayer_info/(?P<taxpayer_id>[0-9]+)$', EditTaxpayerView.as_view(), name='taxpayer-update'),
+    url(r'^ap/taxpayer/address_info/(?P<address_id>[0-9]+)/update$', EditAddressView.as_view(), name='address-update'),
+    url(r'^ap/taxpayer/bank_account_info/(?P<bank_id>[0-9]+)/update$', EditBankAccountView.as_view(), name='bank-account-update'),
 
 ]

@@ -7,6 +7,12 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
 )
+
+from supplier_app.bank_info import BANK_INFO
+from supplier_app import (
+    PAYMENT_TERMS,
+    PAYMENT_TYPES
+)
 from users_app.factory_boy import (
     UserFactory,
 )
@@ -47,8 +53,9 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
         model = TaxPayerArgentina
 
     cuit = "1234569"
-    comments = "Justificacion falsa"
-    payment_type = "Banco"
+    taxpayer_comments = "Justificacion falsa"
+    payment_type = PAYMENT_TYPES[0][0]
+    payment_term = PAYMENT_TERMS[0][0]
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
@@ -68,7 +75,6 @@ class BankAccountFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BankAccount
 
-    bank_name = "Galicia"
-    bank_code = factory.Sequence(lambda n: "{}".format(n))
-    bank_account_number = "759267846132412"
+    bank_account_number = factory.Sequence(lambda n: "{}".format(n))
     taxpayer = factory.SubFactory(TaxPayerFactory)
+    bank_info = BANK_INFO["BANCO DE LA NACION ARGENTINA"]

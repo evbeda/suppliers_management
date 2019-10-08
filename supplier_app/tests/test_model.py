@@ -2,6 +2,7 @@ from django.test import (
     TestCase,
 )
 
+from supplier_app.bank_info import get_bank_info_choices
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -72,6 +73,15 @@ class TestAddressModel(TestCase):
         self.assertEqual(address.taxpayer, taxpayer)
 
 
+class TestBankInfoModel(TestCase):
+    def test_bank_info_choices_function(self):
+        bank_info_choices = get_bank_info_choices()
+        self.assertEqual(type(bank_info_choices), list)
+        self.assertEqual(type(bank_info_choices[0]), tuple)
+        self.assertEqual(type(bank_info_choices[2][0]), int)
+        self.assertEqual(type(bank_info_choices[2][1]), str)
+
+
 class TestBankAccountModel(TestCase):
     def test_bank_account_creation(self):
         taxpayer = TaxPayerFactory()
@@ -87,13 +97,12 @@ class TestBankAccountModel(TestCase):
 
     def test_data_bank_account(self):
         bank_account = BankAccountFactory(
-            bank_name='Galicia',
             bank_account_number='1234567890',
         )
 
         self.assertEqual(
             str(bank_account),
-            "Bank:Galicia Account_number:1234567890"
+            "Account_number:1234567890"
         )
 
 

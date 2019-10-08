@@ -20,7 +20,10 @@ from django.test import (
 )
 from django.utils.datastructures import MultiValueDict
 
-
+from supplier_app.tests import (
+    taxpayer_creation_POST_factory,
+    get_bank_info_example
+)
 from supplier_app.tests.factory_boy import (
     CompanyFactory,
     CompanyUserPermissionFactory,
@@ -42,26 +45,9 @@ from users_app.factory_boy import UserFactory
 class TestCreatePrefixForm(TestCase):
 
     def setUp(self):
-        self.POST = {
-            'taxpayer_form-workday_id': '1',
-            'taxpayer_form-business_name': 'EB ARG',
-            'taxpayer_form-cuit': '20-3123214-0',
-            'taxpayer_form-country': 'AR',
-            'taxpayer_form-comments': 'dafsadsffasdf',
-            'taxpayer_form-payment_type': 'dafsadsffasdf',
-            'taxpayer_form-AFIP_registration_file': '',
-            'taxpayer_form-witholding_taxes_file': '',
-            'address_form-street': 'San Martin',
-            'address_form-number': '21312',
-            'address_form-zip_code': '123',
-            'address_form-city': 'Mendoza',
-            'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
-            'bankaccount_form-bank_cbu_file': '',
-            'bankaccount_form-bank_name': 'Ganicia',
-            'bankaccount_form-bank_code': 'Cta Cte',
-            'bankaccount_form-account_number': '123214',
-        }
+        self.POST = taxpayer_creation_POST_factory(
+            bank_info=get_bank_info_example()
+        )
 
     def test_form_without_prefix_should_throw_exception(self):
         with self.assertRaises(ValueError):
@@ -74,8 +60,8 @@ class TestCreatePrefixForm(TestCase):
         taxpayer_form = TaxPayerCreateForm(data=data)
         bankaccount_form = BankAccountCreateForm(data=data)
         self.assertEqual(6, len(address_form.data))
-        self.assertEqual(8, len(taxpayer_form.data))
-        self.assertEqual(4, len(bankaccount_form.data))
+        self.assertEqual(9, len(taxpayer_form.data))
+        self.assertEqual(3, len(bankaccount_form.data))
 
 
 class TestTaxPayerFormValidation(TestCase):
@@ -88,32 +74,14 @@ class TestTaxPayerFormValidation(TestCase):
         self.file_mock.size = 50
         self.create_taxpayer_view = CreateTaxPayerView()
         self.company = CompanyFactory()
+        self.bank_info = get_bank_info_example("BBVA BANCO FRANCES S.A.")
         self.user_with_eb_social = UserFactory()
         self.client.force_login(self.user_with_eb_social)
         self.companyuserpermission = CompanyUserPermissionFactory(
             company=self.company,
             user=self.user_with_eb_social
         )
-        self.POST = {
-            'taxpayer_form-workday_id': '1',
-            'taxpayer_form-business_name': 'EB ARG',
-            'taxpayer_form-cuit': '20-3123214-0',
-            'taxpayer_form-country': 'AR',
-            'taxpayer_form-comments': 'dafsadsffasdf',
-            'taxpayer_form-payment_type': 'dafsadsffasdf',
-            'taxpayer_form-AFIP_registration_file': self.file_mock.name,
-            'taxpayer_form-witholding_taxes_file': self.file_mock.name,
-            'address_form-street': 'San Martin',
-            'address_form-number': '21312',
-            'address_form-zip_code': '123',
-            'address_form-city': 'Mendoza',
-            'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
-            'bankaccount_form-bank_bank_cbu_file': self.file_mock.name,
-            'bankaccount_form-bank_name': 'Ganicia',
-            'bankaccount_form-bank_code': 'Cta Cte',
-            'bankaccount_form-bank_account_number': '123214',
-        }
+        self.POST = taxpayer_creation_POST_factory(self.file_mock, self.bank_info)
 
     def tearDown(self):
         if self.file_mock and path.exists(
@@ -139,13 +107,13 @@ class TestTaxPayerFormValidation(TestCase):
 
     def _get_request_FILES(
         self,
-        AFIP_file=None,
+        afip_file=None,
         witholding_taxes_file=None,
         bank_cbu_file=None
     ):
         return MultiValueDict({
-            'taxpayer_form-AFIP_registration_file': [
-                AFIP_file or self.file_mock
+            'taxpayer_form-afip_registration_file': [
+                afip_file or self.file_mock
             ],
             'taxpayer_form-witholding_taxes_file': [
                 witholding_taxes_file or self.file_mock
@@ -171,7 +139,7 @@ class TestTaxPayerFormValidation(TestCase):
     @parameterized.expand([
         (5000000000000000, 'bank_cbu_file'),
         (26214500, 'bank_cbu_file'),
-        (27214400, 'AFIP_file'),
+        (27214400, 'afip_file'),
         (26214401, 'witholding_taxes_file')
     ])
     def test_form_with_a_file_greater_than_25MB_should_be_invalid(
@@ -198,7 +166,7 @@ class TestTaxPayerFormValidation(TestCase):
     @parameterized.expand([
         ('test.xml', 'bank_cbu_file'),
         ('test.txt', 'bank_cbu_file'),
-        ('test.exe', 'AFIP_file'),
+        ('test.exe', 'afip_file'),
         ('test.excel', 'witholding_taxes_file'),
     ])
     def test_form_with_a_non_PDF_type_file_should_be_invalid(

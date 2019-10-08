@@ -7,18 +7,23 @@
 
 {% block content %}
 {% include 'AP_app/navbar.html' %}
-<form method="post">
-    {% csrf_token %}
-    <div class="row m-3">
-        <div class="col-md-6 form-group">
-            <h4>Address info</h4>
-            {{address_form}}
-        </div>
+<div class="container p-3">
+    <div class="row justify-content-center">
+        <h4>Address info</h4>
     </div>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <input class="btn btn-primary d-inline-block w-50" type="submit" value="Update" />
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <div class="row justify-content-end mt-3">
+                    <input class="btn btn-success" type="submit" value="Save">
+                </div>
+            </form>
         </div>
+
     </div>
-</form>
+</div>
+
+
 {% endblock %}

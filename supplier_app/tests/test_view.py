@@ -2,6 +2,7 @@ from http import HTTPStatus
 from os import (
     path,
 )
+from parameterized import parameterized
 from shutil import rmtree
 from unittest.mock import (
     MagicMock,
@@ -25,7 +26,6 @@ from django.utils.datastructures import MultiValueDict
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
-    BankAccountEditForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
 )
@@ -36,6 +36,11 @@ from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
     TaxPayerArgentina,
+)
+from supplier_app.tests import (
+    taxpayer_creation_POST_factory,
+    taxpayer_edit_POST_factory,
+    get_bank_info_example,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -64,6 +69,7 @@ class TestCreateTaxPayer(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
+        self.bank_info = get_bank_info_example("CITIBANK N.A.")
         self.create_taxpayer_view = CreateTaxPayerView()
         self.company = CompanyFactory(
             name='FakeCompany',
@@ -75,26 +81,10 @@ class TestCreateTaxPayer(TestCase):
             company=self.company,
             user=self.user_with_eb_social
         )
-        self.POST = {
-            'taxpayer_form-workday_id': '1',
-            'taxpayer_form-business_name': 'EB ARG',
-            'taxpayer_form-cuit': '20-3123214-0',
-            'taxpayer_form-country': 'AR',
-            'taxpayer_form-comments': '.',
-            'taxpayer_form-payment_type': 'bank',
-            'taxpayer_form-AFIP_registration_file': self.file_mock.name,
-            'taxpayer_form-witholding_taxes_file': self.file_mock.name,
-            'address_form-street': 'San Martin',
-            'address_form-number': '21312',
-            'address_form-zip_code': '123',
-            'address_form-city': 'Mendoza',
-            'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
-            'bankaccount_form-bank_bank_cbu_file': self.file_mock.name,
-            'bankaccount_form-bank_name': 'Ganicia',
-            'bankaccount_form-bank_code': 'Cta Cte',
-            'bankaccount_form-bank_account_number': '123214',
-        }
+        self.POST = taxpayer_creation_POST_factory(
+            self.file_mock,
+            self.bank_info
+        )
 
     def tearDown(self):
         if self.file_mock and path.exists(
@@ -120,13 +110,13 @@ class TestCreateTaxPayer(TestCase):
 
     def _get_request_FILES(
         self,
-        AFIP_file=None,
+        afip_file=None,
         witholding_taxes_file=None,
         bank_cbu_file=None
     ):
         return MultiValueDict({
-            'taxpayer_form-AFIP_registration_file': [
-                AFIP_file or self.file_mock
+            'taxpayer_form-afip_registration_file': [
+                afip_file or self.file_mock
             ],
             'taxpayer_form-witholding_taxes_file': [
                 witholding_taxes_file or self.file_mock
@@ -312,7 +302,7 @@ class TestTaxpayerApDetails(TestCase):
         self.company_user_permission = CompanyUserPermissionFactory()
         self.taxpayer = TaxPayerArgentinaFactory(
             company=self.company_user_permission.company,
-            AFIP_registration_file=self.file_mock,
+            afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
         )
         self.address = AddressFactory(taxpayer=self.taxpayer)
@@ -402,7 +392,7 @@ class TestTaxpayerApDetails(TestCase):
     def test_details_view_doesnt_have_approve_button_when_AP_hasnt_set_workday_id(self):
         taxpayer = TaxPayerArgentinaFactory(
             workday_id="",
-            AFIP_registration_file=self.file_mock,
+            afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
         )
         AddressFactory(taxpayer=taxpayer)
@@ -428,16 +418,10 @@ class TestEditTaxPayerInfo(TestCase):
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.taxpayer_detail_url = 'supplier-details'
         self.edit_taxpayer_view = EditTaxpayerView()
 
-        self.TAXPAYER_POST = {
-            'taxpayer_form-workday_id': '1',
-            'taxpayer_form-business_name': 'EB ARG',
-            'taxpayer_form-cuit': '20-3123214-0',
-            'taxpayer_form-country': 'AR',
-            'taxpayer_form-comments': 'dafsadsffasdf',
-            'taxpayer_form-payment_type': 'dafsadsffasdf',
-        }
+        self.TAXPAYER_POST = taxpayer_edit_POST_factory()
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id,
         }
@@ -465,21 +449,47 @@ class TestEditTaxPayerInfo(TestCase):
         response = EditTaxpayerView.as_view()(request, **self.kwargs)
 
         self.assertEqual(
-            '/suppliersite/ap/taxpayer/{}/details/'.format(self.taxpayer_id),
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs
+            ),
             response.url
         )
 
-    def test_form_valid_method_should_update_taxpayer_info(self):
+    @parameterized.expand([
+        (
+            taxpayer_edit_POST_factory(
+                workday_id="1",
+                business_name="EB USA",
+                cuit="20-3123214-1",
+            ),
+            ["workday_id", "business_name", "cuit"],
+            ["1", "EB USA", "20-3123214-1"]
+        ),
+        (
+            taxpayer_edit_POST_factory(
+                cuit="20-3123214-1",
+            ),
+            ["cuit", "business_name"],
+            ["20-3123214-1", "EB ARG"]
+        ),
+        (
+            taxpayer_edit_POST_factory(
+                payment_term=1,
+            ),
+            ["payment_term"],
+            [30]
+        )
+    ])
+    def test_form_valid_method_should_update_taxpayer_info(
+        self,
+        taxpayer_post_update,
+        fields_changed,
+        value_expected
+    ):
         before_update = len(TaxPayer.objects.all())
 
-        TAXPAYER_POST_UPDATE = {
-            'workday_id': '1',
-            'business_name': 'EB ARG',
-            'cuit': '20-3123214-1',
-            'comments': 'Todo bien',
-            'payment_type': 'Efectivo',
-        }
-
+        TAXPAYER_POST_UPDATE = taxpayer_post_update
         QUERY_FORM_TAXPAYER_POST_UPDATE = QueryDict('', mutable=True)
         QUERY_FORM_TAXPAYER_POST_UPDATE.update(
             TAXPAYER_POST_UPDATE
@@ -491,19 +501,18 @@ class TestEditTaxPayerInfo(TestCase):
         }
 
         form_taxpayer = TaxPayerEditForm(data=QUERY_FORM_TAXPAYER_POST_UPDATE)
+        self.assertTrue(form_taxpayer.is_valid())
 
         edit_taxpayer_view.form_valid(form_taxpayer)
 
         after_update = len(TaxPayer.objects.all())
 
         taxpayer = TaxPayerArgentina.objects.get(pk=self.taxpayer_id)
-
-        self.assertEqual(taxpayer.workday_id, "1")
-        self.assertEqual(taxpayer.business_name, "EB ARG")
-        self.assertEqual(taxpayer.cuit, "20-3123214-1")
-        self.assertEqual(taxpayer.comments, "Todo bien")
-        self.assertEqual(taxpayer.payment_type, "Efectivo")
         self.assertEqual(before_update, after_update)
+        for index, attribute in enumerate(fields_changed):
+            self.assertEqual(
+                getattr(taxpayer, attribute), value_expected[index]
+            )
 
 
 class TestEditAddressInfo(TestCase):
@@ -511,7 +520,8 @@ class TestEditAddressInfo(TestCase):
         self.factory = RequestFactory()
         self.taxpayer = TaxPayerArgentinaFactory()
         self.address = AddressFactory(taxpayer=self.taxpayer)
-
+        self.address_edit_url = 'address-update'
+        self.taxpayer_detail_url = 'supplier-details'
         self.ADDRESS_POST = {
             'address_form-street': 'San Martin',
             'address_form-number': '21312',
@@ -520,18 +530,22 @@ class TestEditAddressInfo(TestCase):
             'address_form-state': 'Mendoza',
             'address_form-country': 'Argentina',
         }
-        self.kwargs = {
+        self.kwargs_taxpayer = {
             'taxpayer_id': self.taxpayer.id,
+        }
+        self.kwargs_address = {
+            'address_id': self.address.id
         }
         self.taxpayer_id = self.taxpayer.id
 
-    def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
+    def test_GET_edit_address_view(self):
         request = self.factory.get(
-            '/suppliersite/ap/taxpayer/{}/update/address_info/'.format(
-                self.taxpayer_id
-            ),
+            reverse(
+                self.address_edit_url,
+                kwargs=self.kwargs_address
+            )
         )
-        response = EditAddressView.as_view()(request, **self.kwargs)
+        response = EditAddressView.as_view()(request, **self.kwargs_address)
         self.assertEqual(
             'AP_app/edit-address-information.html',
             response.template_name[0]
@@ -539,135 +553,77 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_address_info(self):
         request = self.factory.post(
-            '/suppliersite/ap/taxpayer/{}/update/address_info/'.format(
-                self.taxpayer_id
+            reverse(
+                self.address_edit_url,
+                kwargs=self.kwargs_address
             ),
             data=self.ADDRESS_POST
         )
-        response = EditAddressView.as_view()(request, **self.kwargs)
-
+        response = EditAddressView.as_view()(request, **self.kwargs_address)
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
-            '/suppliersite/ap/taxpayer/{}/details/'.format(
-                self.taxpayer_id
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer
             ),
             response.url
         )
-
-    def test_form_valid_method_should_update_address_info(self):
-        before_update = len(Address.objects.all())
-
-        ADDRESS_POST_UPDATE = {
-            'address_form-street': 'San Martin',
-            'address_form-number': '21312',
-            'address_form-zip_code': '123',
-            'address_form-city': 'Las Heras',
-            'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
-        }
-
-        QUERY_FORM_ADDRESS_POST_UPDATE = QueryDict('', mutable=True)
-        QUERY_FORM_ADDRESS_POST_UPDATE.update(
-            ADDRESS_POST_UPDATE
-        )
-
-        edit_address_view = EditAddressView()
-        edit_address_view.kwargs = {
-            'taxpayer_id': self.taxpayer.id
-        }
-
-        form_address = AddressCreateForm(data=QUERY_FORM_ADDRESS_POST_UPDATE)
-
-        edit_address_view.form_valid(form_address)
-
-        after_update = len(Address.objects.all())
-
-        address = Address.objects.get(taxpayer=self.taxpayer)
-
-        self.assertEqual(address.street, "San Martin")
-        self.assertEqual(address.number, "21312")
-        self.assertEqual(address.zip_code, "123")
-        self.assertEqual(address.city, "Las Heras")
-        self.assertEqual(address.state, "Mendoza")
-        self.assertEqual(address.country, "Argentina")
-        self.assertEqual(before_update, after_update)
 
 
 class TestEditBankAccountInfo(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+        self.client = Client()
         self.taxpayer = TaxPayerArgentinaFactory()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+        self.bank_update_url = 'bank-account-update'
 
         self.BANK_ACCOUNT_POST = {
-            'bankaccount_form-bank_name': 'Galicia',
-            'bankaccount_form-bank_code': 'Cta Cte',
-            'bankaccount_form-bank_account_number': '123214',
+            'bank_info': get_bank_info_example("CITIBANK N.A."),
+            'bank_account_number': '123214',
         }
 
-        self.kwargs = {
+        self.taxpayer_detail_url = 'supplier-details'
+        self.kwargs_taxpayer = {
             'taxpayer_id': self.taxpayer.id,
         }
+        self.kwargs_bank = {
+            'bank_id': self.bank_account.id,
+        }
+
         self.taxpayer_id = self.taxpayer.id
 
-    def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
+    def test_GET_bank_account_edit_view(self):
         request = self.factory.get(
-            '/suppliersite/ap/taxpayer/{}/update/bank_account_info/'.format(
-                self.taxpayer_id
-            ),
+            reverse(self.bank_update_url, kwargs=self.kwargs_bank)
         )
-        response = EditBankAccountView.as_view()(request, **self.kwargs)
+        response = EditBankAccountView.as_view()(request, **self.kwargs_bank)
+
+        self.assertEqual(
+            HTTPStatus.OK,
+            response.status_code
+        )
         self.assertEqual(
             'AP_app/edit-bank-account-information.html',
             response.template_name[0]
         )
 
     def test_post_edit_bank_account_info(self):
-        request = self.factory.post(
-            '/suppliersite/ap/taxpayer/{}/update/bank_account_info/'.format(
-                self.taxpayer_id
+        response = self.client.post(
+            reverse(
+                self.bank_update_url,
+                kwargs=self.kwargs_bank
             ),
-            data=self.BANK_ACCOUNT_POST
+            self.BANK_ACCOUNT_POST
         )
-        response = EditBankAccountView.as_view()(request, **self.kwargs)
-
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
-            '/suppliersite/ap/taxpayer/{}/details/'.format(
-                self.taxpayer_id
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer
             ),
             response.url
         )
-
-    def test_form_valid_method_should_update_bank_account_info(self):
-        before_update = len(BankAccount.objects.all())
-
-        BANK_ACCOUNT_POST_UPDATE = {
-            'bankaccount_form-bank_name': 'Banco Nacion',
-            'bankaccount_form-bank_code': 'Cta Cte',
-            'bankaccount_form-bank_account_number': '0987654321',
-        }
-
-        QUERY_FORM_BANK_ACCOUNT_POST_UPDATE = QueryDict('', mutable=True)
-        QUERY_FORM_BANK_ACCOUNT_POST_UPDATE.update(
-            BANK_ACCOUNT_POST_UPDATE
-        )
-
-        edit_bank_account_view = EditBankAccountView()
-        edit_bank_account_view.kwargs = {
-            'taxpayer_id': self.taxpayer.id
-        }
-
-        form_bank_account = BankAccountEditForm(data=QUERY_FORM_BANK_ACCOUNT_POST_UPDATE)
-
-        edit_bank_account_view.form_valid(form_bank_account)
-
-        after_update = len(BankAccount.objects.all())
-
-        bank_account = BankAccount.objects.get(taxpayer=self.taxpayer)
-
-        self.assertEqual(bank_account.bank_name, "Banco Nacion")
-        self.assertEqual(bank_account.bank_code, "Cta Cte")
-        self.assertEqual(bank_account.bank_account_number, "0987654321")
-        self.assertEqual(before_update, after_update)
 
 
 class TestCompanySelectorView(TestCase):
@@ -763,10 +719,18 @@ class TestApprovalRefuse(TestCase):
         self.client = Client()
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
         self.client.force_login(self.ap_user)
+        self.approve_url = 'approve-taxpayer'
+        self.deny_url = 'deny-taxpayer'
+        self.kwargs = {
+            'taxpayer_id' : self.taxpayer.id
+        }
 
     def test_redirect_to_ap_home_when_approve_a_supplier(self):
         response = self.client.post(
-            '/suppliersite/ap/taxpayer/{}/details/approve'.format(self.taxpayer.id)
+            reverse(
+                self.approve_url,
+                kwargs=self.kwargs
+            )
         )
 
         self.assertEqual(response.status_code, 302)
@@ -774,14 +738,23 @@ class TestApprovalRefuse(TestCase):
 
     def test_change_taxpayer_status_to_ACTIVE_when_clicking_aprove_button(self):
         self.client.post(
-            '/suppliersite/ap/taxpayer/{}/details/approve'.format(self.taxpayer.id)
+            reverse(
+                self.approve_url,
+                kwargs=self.kwargs
+            )
         )
 
-        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'Active')
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
+            'Active'
+        )
 
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
         response = self.client.post(
-            '/suppliersite/ap/taxpayer/{}/details/deny'.format(self.taxpayer.id)
+            reverse(
+                self.deny_url,
+                kwargs=self.kwargs
+            )
         )
 
         self.assertEqual(response.status_code, 302)
@@ -789,7 +762,13 @@ class TestApprovalRefuse(TestCase):
 
     def test_change_taxpayer_status_to_DENIED_when_clicking_deny_button(self):
         self.client.post(
-            '/suppliersite/ap/taxpayer/{}/details/deny'.format(self.taxpayer.id)
+            reverse(
+                self.deny_url,
+                kwargs=self.kwargs
+            )
         )
 
-        self.assertEqual(TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state, 'Denied')
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
+            'Denied'
+        )
