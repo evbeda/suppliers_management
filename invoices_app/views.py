@@ -4,7 +4,6 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
 )
-from django.core.validators import ValidationError
 from django.http import HttpResponseBadRequest
 
 from django.urls import (
@@ -23,8 +22,6 @@ from invoices_app.models import (
     Invoice,
     Comment
 )
-
-from supplier_app.models import TaxPayer
 from users_app.decorators import is_ap_or_403
 from invoices_app import INVOICE_STATUS
 from invoices_app import (
@@ -39,7 +36,6 @@ from invoices_app.filters import InvoiceFilter
 from supplier_app.models import (
     TaxPayer,
     Address,
-    COUNTRIES,
 )
 from utils import send_email
 from utils.invoice_lookup import invoice_status_lookup
@@ -138,9 +134,9 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
         # Creating a comment
         Comment.objects.create(
-            user = request.user,
-            invoice = invoice,
-            message = '{} has changed the invoice'.format(
+            user=request.user,
+            invoice=invoice,
+            message='{} has changed the invoice'.format(
               request.user.email,
             )
         )
@@ -148,8 +144,6 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # Change the invoices values
         self.object = self.get_object()
         return super(InvoiceUpdateView, self).post(request, *args, **kwargs)
-
-
 
     def user_has_permission(self):
         if not self.request.user.is_AP:
@@ -168,7 +162,6 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
         else:
             return reverse('invoices-list')
-
 
 
 class InvoiceHistory(ListView):
@@ -190,6 +183,7 @@ def invoice_history_changes(record):
         record = next_record
     return changes
 
+
 @is_ap_or_403()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
@@ -206,9 +200,9 @@ def change_invoice_status(request, pk):
     # Make a comment
     status_message = available_status_values[available_status_keys.index(invoice.status)]
     Comment.objects.create(
-        invoice = invoice,
-        user = request.user,
-        message = '{} has changed the invoice status to {}'.format(
+        invoice=invoice,
+        user=request.user,
+        message='{} has changed the invoice status to {}'.format(
             request.user.email,
             status_message
         )

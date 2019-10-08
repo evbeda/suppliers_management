@@ -56,10 +56,7 @@ class TaxPayer(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "Name:{} Status:{}".format(
-            self.business_name,
-            self.taxpayer_state
-            )
+        return self.business_name
 
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)

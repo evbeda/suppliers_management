@@ -33,7 +33,7 @@ class TestTaxpayerModel(TestCase):
         )
         self.assertEqual(taxpayer.business_name, 'Eventbrite')
         self.assertEqual(taxpayer.workday_id, '12345')
-        self.assertEqual('Name:Eventbrite Status:Pending', str(taxpayer))
+        self.assertEqual('Eventbrite', str(taxpayer))
         self.assertEqual(TaxPayer.objects.last(), taxpayer)
 
     def test_taxpayer_creation_first_time_should_have_PENDING_status(self):

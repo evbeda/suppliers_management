@@ -70,6 +70,7 @@ class Invoice(models.Model):
 
     history = HistoricalRecords()
 
+
 class Comment(models.Model):
     user = models.ForeignKey(
       settings.AUTH_USER_MODEL,
