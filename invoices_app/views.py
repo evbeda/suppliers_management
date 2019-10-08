@@ -32,7 +32,8 @@ from invoices_app import (
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_REJECTED,
-    INVOICE_STATUS_CHANGES_REQUEST
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
 )
 from invoices_app.filters import InvoiceFilter
 from supplier_app.models import (
@@ -126,13 +127,34 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 'invoices-list',
             )
 
+    def post(self, request, *args, **kwargs):
+        # Changing the status
+        invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        invoice.status = INVOICE_STATUS_NEW
+        invoice.save()
+
+        # Creating a comment
+        Comment.objects.create(
+            user = request.user,
+            invoice = invoice,
+            message = '{} has changed the invoice'.format(
+              request.user.email,
+            )
+        )
+
+        # Change the invoices values
+        self.object = self.get_object()
+        return super(InvoiceUpdateView, self).post(request, *args, **kwargs)
+
+
+
     def user_has_permission(self):
-        if self.request.user.is_AP:
-            return True
-        else:
+        if not self.request.user.is_AP:
             # Only allow supplier to edit the invoice if status is 'CHANGES REQUEST'
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
             return invoice.status == INVOICE_STATUS_CHANGES_REQUEST
+
+        return True
 
     def get_test_func(self):
         return self.user_has_permission
@@ -143,6 +165,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
         else:
             return reverse('invoices-list')
+
 
 
 class InvoiceHistory(ListView):
@@ -220,6 +243,11 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
+        context['INVOICE_STATUS_APPROVED'] = INVOICE_STATUS_APPROVED
+        context['INVOICE_STATUS_NEW'] = INVOICE_STATUS_NEW
+        context['INVOICE_STATUS_REJECTED'] = INVOICE_STATUS_REJECTED
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = INVOICE_STATUS_CHANGES_REQUEST
+        context['INVOICE_STATUS_PAID'] = INVOICE_STATUS_PAID
         context['comments'] = Comment.objects.filter(
             invoice=context['invoice']
         )
