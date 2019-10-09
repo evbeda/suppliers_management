@@ -24,16 +24,15 @@
         {% endif %}
         <span class="float-right">
           <strong>Status:</strong>
-          {% if invoice.status == INVOICE_STATUS_NEW or  invoice.status == INVOICE_STATUS_PAID or invoice.status == INVOICE_STATUS_APPROVED %}
-          <span class="badge badge-success">{{invoice.status}}</span>
+          {% if invoice.status == INVOICE_STATUS_NEW or invoice.status == INVOICE_STATUS_PAID or invoice.status == INVOICE_STATUS_APPROVED %}
+          <span class="badge badge-success">{{invoice.get_status_display}}</span>
           {% endif %}
           {% if invoice.status == INVOICE_STATUS_REJECTED %}
-          <span class="badge badge-danger">{{invoice.status}}</span>
+          <span class="badge badge-danger">{{invoice.get_status_display}}</span>
           {% endif %}
           {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
-          <span class="badge badge-warning">{{invoice.status}}</span>
+          <span class="badge badge-warning">{{invoice.get_status_display}}</span>
           {% endif %}
-        </span>
       </div>
       <div class="card-body">
         <div class="row mb-4">
@@ -92,10 +91,9 @@
         <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}'
           enctype="multipart/form-data">
           {% csrf_token %}
-          <button type="submit" name='status' class="btn btn-success" value='APPROVED'>Approve</button>
-          <button type="submit" name='status' class="ml-2 btn btn-warning" value='CHANGES REQUEST'>Request
-            Changes</button>
-          <button type="submit" name='status' class="ml-2 btn btn-danger" value='REJECTED'>Reject</button>
+          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">Approve</button>
+          <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
+          <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
         </form>
         <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">History</a></span>
 

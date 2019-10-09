@@ -60,8 +60,8 @@ class DetailInvoiceTest(TestBase):
     # Feature: Generates comments when invoice state changes
     @parameterized.expand([
         (INVOICE_STATUS_APPROVED,),
-        (INVOICE_STATUS_REJECTED,),
         (INVOICE_STATUS_CHANGES_REQUEST,),
+        (INVOICE_STATUS_REJECTED),
         (INVOICE_STATUS_PAID,),
     ])
     def test_generate_a_comment_when_invoice_changes_his_state(

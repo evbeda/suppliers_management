@@ -131,7 +131,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         # Changing the status
         invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-        invoice.status = INVOICE_STATUS_NEW
+        invoice.status = '2'
         invoice.save()
 
         # Creating a comment
@@ -191,21 +191,24 @@ def invoice_history_changes(record):
 @is_ap_or_403()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
-    available_statuses = [status for status, _ in INVOICE_STATUS]
-    if status not in available_statuses:
+    available_status_values = [value for (_, value) in INVOICE_STATUS]
+    available_status_keys = [key for (key, _) in INVOICE_STATUS]
+
+    if status not in available_status_keys and status not in available_status_values:
         return HttpResponseBadRequest()
 
-    invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status = status
-    invoice.save()
 
+    invoice = get_object_or_404(Invoice, pk=pk)
+    invoice.status =  status if status in available_status_keys else available_status_keys[available_status_values.index(status)]
+    invoice.save()
+    status_message = available_status_values[available_status_keys.index(invoice.status)]
     # Make a comment
     Comment.objects.create(
         invoice = invoice,
         user = request.user,
         message = '{} has changed the invoice status to {}'.format(
             request.user.email,
-            status
+            status_message
         )
     )
 
@@ -244,11 +247,11 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
-        context['INVOICE_STATUS_APPROVED'] = INVOICE_STATUS_APPROVED
-        context['INVOICE_STATUS_NEW'] = INVOICE_STATUS_NEW
-        context['INVOICE_STATUS_REJECTED'] = INVOICE_STATUS_REJECTED
-        context['INVOICE_STATUS_CHANGES_REQUEST'] = INVOICE_STATUS_CHANGES_REQUEST
-        context['INVOICE_STATUS_PAID'] = INVOICE_STATUS_PAID
+        context['INVOICE_STATUS_APPROVED'] = INVOICE_STATUS[0][0]
+        context['INVOICE_STATUS_NEW'] = INVOICE_STATUS[1][0]
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = INVOICE_STATUS[2][0]
+        context['INVOICE_STATUS_REJECTED'] = INVOICE_STATUS[3][0]
+        context['INVOICE_STATUS_PAID'] = INVOICE_STATUS[4][0]
         context['comments'] = Comment.objects.filter(
             invoice=context['invoice']
         )

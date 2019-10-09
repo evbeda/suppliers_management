@@ -9,7 +9,8 @@ from invoices_app import (
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_REJECTED,
-    INVOICE_STATUS_CHANGES_REQUEST
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
 )
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
@@ -190,10 +191,10 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     @parameterized.expand([
-        (INVOICE_STATUS_APPROVED),
-        (INVOICE_STATUS_NEW),
-        (INVOICE_STATUS_REJECTED),
-        (INVOICE_STATUS_CHANGES_REQUEST),
+        ('1',),
+        ('3',),
+        ('4',),
+        ('5',),
     ])
     def test_invoice_change_status_in_db(self, status):
         self.client.force_login(self.ap_user)
@@ -204,10 +205,9 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {
-            'status': status,
-            }
+            {'status': status,}
         )
+
         invoice = get_object_or_404(Invoice, pk=self.invoice.id)
         self.assertEqual(invoice.status, status)
 
@@ -284,7 +284,7 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(
             self.invoice.status,
-            INVOICE_STATUS_NEW
+            '2'
         )
 
     def test_supplier_invalid_invoice_edit_request(self):
@@ -392,7 +392,7 @@ class TestInvoice(TestBase):
             taxpayer=self.taxpayer,
             invoice_number='4321'
         )
-        invoice_approved.status = INVOICE_STATUS_APPROVED
+        invoice_approved.status = '1'
         invoice_approved.save()
 
         response = self.client.get(

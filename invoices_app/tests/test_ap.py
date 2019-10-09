@@ -21,18 +21,18 @@ class TestAP(TestBase):
     def test_ap_invoices_list_are_in_new_status(self):
         self.client.force_login(self.ap_user)
 
-        self.invoice_from_other_user.status = INVOICE_STATUS_APPROVED
+        self.invoice_from_other_user.status = '2'
         self.invoice_from_other_user.save()
 
         response = self.client.get(
             '{}?{}'.format(reverse('invoices-list'), 'status=2')
         )
-        # Only the invoice with NEW status should be listed.
+        # Only the invoice with NEW status should be listed
         self.assertContains(
             response,
-            self.invoice.taxpayer.business_name
+            self.invoice_from_other_user.invoice_number
         )
         self.assertNotContains(
             response,
-            self.invoice_from_other_user.taxpayer.business_name
+            self.invoice.invoice_number
         )
