@@ -4,6 +4,14 @@ from django.core import mail
 from django.test import TestCase, RequestFactory
 from django.utils.translation import activate, ugettext_lazy as _
 
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED
+)
+
 from supplier_management_site.tests.views import (
     home,
 )
@@ -30,6 +38,8 @@ from utils.send_email import (
     send_email_notification,
     get_user_emails_from_tax_payer,
 )
+
+from utils.invoice_lookup import invoice_status_lookup
 
 class TestTranslationConfiguration(TestCase):
     def setUp(self):
@@ -105,3 +115,15 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(len(mail.outbox[0].to), 3)
         self.assertEqual(mail.outbox[0].to, recipient_list)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
+class TestInvoiceStatusLookup(TestCase):
+
+    @parameterized.expand([
+        ('1', INVOICE_STATUS_APPROVED,),
+        ('2', INVOICE_STATUS_NEW,),
+        ('3', INVOICE_STATUS_CHANGES_REQUEST,),
+        ('4', INVOICE_STATUS_REJECTED),
+        ('5', INVOICE_STATUS_PAID,),
+    ])
+    def test_invoice_status_lookup(self, expected_value, tag):
+        self.assertEqual(invoice_status_lookup(tag), expected_value)

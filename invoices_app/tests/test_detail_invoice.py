@@ -13,6 +13,8 @@ from invoices_app import (
 from invoices_app.models import Comment
 from invoices_app.tests.test_base import TestBase
 
+from utils.invoice_lookup import invoice_status_lookup
+
 class DetailInvoiceTest(TestBase):
 
     def test_click_in_row_invoice_redirects_to_detail_invoice(self):
@@ -80,7 +82,7 @@ class DetailInvoiceTest(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {'status': new_status}
+            {'status': invoice_status_lookup(new_status)}
         )
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
@@ -101,7 +103,7 @@ class DetailInvoiceTest(TestBase):
         # Given an invoice and a logged Supplier
         # invoice : self.invoice
         self.client.force_login(self.user)
-        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         self.invoice.save()
 
         # When a supplier edits the invoice
@@ -115,7 +117,6 @@ class DetailInvoiceTest(TestBase):
             ),
             self.invoice_post_data
         )
-
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
             invoice = self.invoice

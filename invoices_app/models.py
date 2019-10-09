@@ -19,7 +19,7 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED
 )
 from simple_history.models import HistoricalRecords
-
+from utils.invoice_lookup import invoice_status_lookup
 
 class Invoice(models.Model):
 
@@ -31,7 +31,7 @@ class Invoice(models.Model):
     status = models.CharField(
         max_length=40,
         choices=INVOICE_STATUS,
-        default=INVOICE_STATUS_NEW
+        default=invoice_status_lookup(INVOICE_STATUS_NEW)
     )
     po_number = models.CharField(max_length=200, help_text="ex: 12341234")
     invoice_date = models.DateField()
