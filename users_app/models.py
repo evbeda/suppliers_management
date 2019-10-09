@@ -42,7 +42,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(
+        _('email address'),
+        unique=True,
+        db_index=True,
+    )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -54,3 +58,6 @@ class User(AbstractUser):
     @property
     def is_AP(self):
         return self.email in ALLOWED_AP_ACCOUNTS
+
+    class Meta:
+        index_together = ["email"]

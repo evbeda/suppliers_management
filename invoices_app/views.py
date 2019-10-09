@@ -41,6 +41,7 @@ from supplier_app.models import (
     Address,
     COUNTRIES,
 )
+from utils import send_email
 
 
 class InvoiceListView(
