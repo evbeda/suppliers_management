@@ -8,8 +8,28 @@ from supplier_management_site.tests.views import (
     home,
 )
 
-from utils.send_email import send_email_notification
+from supplier_app.models import (
+    Company,
+    TaxPayer,
+    TaxPayerArgentina,
+    CompanyUserPermission,
+)
 
+
+from supplier_app.tests.factory_boy import (
+    CompanyUserPermissionFactory,
+    TaxPayerFactory,
+    TaxPayerArgentinaFactory,
+    CompanyFactory,
+)
+from users_app.factory_boy import (
+    UserFactory
+)
+
+from utils.send_email import (
+    send_email_notification,
+    get_user_emails_from_tax_payer,
+)
 
 class TestTranslationConfiguration(TestCase):
     def setUp(self):
@@ -35,6 +55,29 @@ class TestTranslationConfiguration(TestCase):
 
 
 class EmailUtilsTest(TestCase):
+    def setUp(self):
+        self.company = CompanyFactory(
+            name='Test',
+            description='Test description',
+        )
+        self.user1 = UserFactory()
+        self.user2 = UserFactory()
+        self.user3 = UserFactory()
+        self.permission1 = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user1
+        )
+        self.permission2 = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user2
+        )
+        self.permission3 = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user3
+        )
+        self.tax_payer = TaxPayerFactory(company=self.company)
+        self.tax_payer_argentina = TaxPayerArgentina()
+
     def tearDown(self):
         mail.outbox = []
 
@@ -46,4 +89,19 @@ class EmailUtilsTest(TestCase):
         send_email_notification(subject, message, recipient_list)
 
         self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
+    def test_get_users_email_from_company(self):
+        mails = [self.user1.email, self.user2.email, self.user3.email]
+        self.assertEqual(mails, get_user_emails_from_tax_payer(self.tax_payer))
+
+    def test_send_email_notification_to_emails_from_same_company(self):
+        subject = 'Testing title'
+        message = 'Testing message'
+        recipient_list = get_user_emails_from_tax_payer(self.tax_payer)
+        send_email_notification(subject, message, recipient_list)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox[0].to), 3)
+        self.assertEqual(mail.outbox[0].to, recipient_list)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
