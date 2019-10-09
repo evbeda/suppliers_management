@@ -23,4 +23,4 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env_variable(
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 
-DEBUG = False
+DEBUG = True
