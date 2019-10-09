@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('invoices_app', '0001_initial'),
         ('supplier_app', '0001_initial'),
+        ('invoices_app', '0001_initial'),
     ]
 
     operations = [
