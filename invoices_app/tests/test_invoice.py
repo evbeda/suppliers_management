@@ -17,6 +17,8 @@ from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
 from invoices_app.tests.test_base import TestBase
 
+from utils.invoice_lookup import invoice_status_lookup
+
 
 class TestInvoice(TestBase):
 
@@ -86,7 +88,7 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
-        self.assertEqual(invoice.status, INVOICE_STATUS_NEW)
+        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_NEW))
 
     def test_invoice_create_existing_invoice_id(self):
         self.client.force_login(self.user)
@@ -191,10 +193,10 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     @parameterized.expand([
-        ('1',),
-        ('3',),
-        ('4',),
-        ('5',),
+        (INVOICE_STATUS_APPROVED,),
+        (INVOICE_STATUS_CHANGES_REQUEST,),
+        (INVOICE_STATUS_REJECTED),
+        (INVOICE_STATUS_PAID,),
     ])
     def test_invoice_change_status_in_db(self, status):
         self.client.force_login(self.ap_user)
@@ -205,11 +207,11 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {'status': status,}
+            {'status': invoice_status_lookup(status),}
         )
 
         invoice = get_object_or_404(Invoice, pk=self.invoice.id)
-        self.assertEqual(invoice.status, status)
+        self.assertEqual(invoice.status, invoice_status_lookup(status))
 
     def test_invoice_change_status_not_in_available_status(self):
         self.client.force_login(self.ap_user)
@@ -236,7 +238,7 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-            'status': INVOICE_STATUS_APPROVED,
+            'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
             }
         )
         self.assertEqual(request.status_code, HTTPStatus.FORBIDDEN)
@@ -257,14 +259,14 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': INVOICE_STATUS_APPROVED,
+                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
             }
         )
         self.assertEqual(request.status_code, expected)
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)
-        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         self.invoice.save()
         res = self.client.post(
             reverse(
@@ -284,12 +286,12 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(
             self.invoice.status,
-            '2'
+            invoice_status_lookup(INVOICE_STATUS_NEW)
         )
 
     def test_supplier_invalid_invoice_edit_request(self):
         self.client.force_login(self.user)
-        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         self.invoice.save()
 
         old_invoice_number = self.invoice.invoice_number
@@ -314,7 +316,7 @@ class TestInvoice(TestBase):
     def test_supplier_invoice_edit_permissions(self):
         self.client.force_login(self.user)
 
-        self.invoice.status = INVOICE_STATUS_CHANGES_REQUEST
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         self.invoice.save()
         res = self.client.post(
             reverse(
@@ -335,7 +337,7 @@ class TestInvoice(TestBase):
 
     def test_ap_invoice_edit_permissions(self):
         self.client.force_login(self.ap_user)
-        self.invoice.status = INVOICE_STATUS_APPROVED
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         self.invoice.save()
         res = self.client.post(
             reverse(
@@ -392,11 +394,13 @@ class TestInvoice(TestBase):
             taxpayer=self.taxpayer,
             invoice_number='4321'
         )
-        invoice_approved.status = '1'
+        invoice_approved.status = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         invoice_approved.save()
 
         response = self.client.get(
-            '{}?{}'.format(reverse('invoices-list'), 'status=1')
+            '{}?{}'.format(
+                reverse('invoices-list'),
+                'status={}'.format(invoice_status_lookup(INVOICE_STATUS_APPROVED)))
         )
         self.assertContains(
             response,

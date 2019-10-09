@@ -42,6 +42,8 @@ from supplier_app.models import (
     COUNTRIES,
 )
 from utils import send_email
+from utils.invoice_lookup import invoice_status_lookup
+
 
 
 class InvoiceListView(
@@ -131,7 +133,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         # Changing the status
         invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-        invoice.status = '2'
+        invoice.status = invoice_status_lookup(INVOICE_STATUS_NEW)
         invoice.save()
 
         # Creating a comment
@@ -153,7 +155,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if not self.request.user.is_AP:
             # Only allow supplier to edit the invoice if status is 'CHANGES REQUEST'
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-            return invoice.status == INVOICE_STATUS_CHANGES_REQUEST
+            return invoice.status == invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
 
         return True
 
@@ -194,15 +196,15 @@ def change_invoice_status(request, pk):
     available_status_values = [value for (_, value) in INVOICE_STATUS]
     available_status_keys = [key for (key, _) in INVOICE_STATUS]
 
-    if status not in available_status_keys and status not in available_status_values:
+    if status not in available_status_keys:
         return HttpResponseBadRequest()
 
-
     invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status =  status if status in available_status_keys else available_status_keys[available_status_values.index(status)]
+    invoice.status =  status
     invoice.save()
-    status_message = available_status_values[available_status_keys.index(invoice.status)]
+
     # Make a comment
+    status_message = available_status_values[available_status_keys.index(invoice.status)]
     Comment.objects.create(
         invoice = invoice,
         user = request.user,
@@ -247,11 +249,11 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
-        context['INVOICE_STATUS_APPROVED'] = INVOICE_STATUS[0][0]
-        context['INVOICE_STATUS_NEW'] = INVOICE_STATUS[1][0]
-        context['INVOICE_STATUS_CHANGES_REQUEST'] = INVOICE_STATUS[2][0]
-        context['INVOICE_STATUS_REJECTED'] = INVOICE_STATUS[3][0]
-        context['INVOICE_STATUS_PAID'] = INVOICE_STATUS[4][0]
+        context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
+        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
+        context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
+        context['INVOICE_STATUS_PAID'] =invoice_status_lookup(INVOICE_STATUS_PAID)
         context['comments'] = Comment.objects.filter(
             invoice=context['invoice']
         )
