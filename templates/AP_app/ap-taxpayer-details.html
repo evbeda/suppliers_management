@@ -9,7 +9,7 @@
 {% include 'AP_app/navbar.html' %}
 <div class="container h-100">
     {% if not workday_id_is_setted %}
-    <div class="row justify-content-center">
+    <div class="row justify-content-center alert alert-danger" role="alert">
         <h3>You must set workday id to the taxpayer</h3>
     </div>
     {% endif %}
@@ -28,7 +28,9 @@
                             <th scope="col">{% trans "Comments" %}</th>
                             <th scope="col">{% trans "Country" %}</th>
                             <th scope="col">{% trans "Files" %} </th>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <th scope="col">{% trans "Action" %} </th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -49,10 +51,12 @@
                                     </li>
                                 </ul>
                             </td>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <td>
                                 <a class='btn btn-info'
                                     href="{% url 'taxpayer-update' taxpayer_id=taxpayer.id %}">{% trans "Edit" %}</a>
                             </td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
@@ -73,7 +77,9 @@
                             <th scope="col">{% trans "City"%}</th>
                             <th scope="col">{% trans "State"%}</th>
                             <th scope="col">{% trans "Country"%}</th>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <th scope="col">{% trans "Action"%}</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -84,10 +90,12 @@
                             <td>{{taxpayer_address.city}}</td>
                             <td>{{taxpayer_address.state}}</td>
                             <td>{{taxpayer_address.country}}</td>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <td>
                                 <a class='btn btn-info'
                                     href="{% url 'address-update' address_id=taxpayer_address.id %}">{% trans "Edit" %}</a>
                             </td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
@@ -106,7 +114,9 @@
                             <th scope="col">{% trans "Bank Code" %}</th>
                             <th scope="col">{% trans "Account Number" %}</th>
                             <th scope="col">{% trans "Files" %}</th>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <th scope="col">{% trans "Action" %}</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -122,10 +132,12 @@
                                     </li>
                                 </ul>
                             </td>
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <td>
                                 <a class='btn btn-info'
                                     href="{% url 'bank-account-update'  bank_id=taxpayer_bank_account.id%}">{% trans "Edit" %}</a>
                             </td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
@@ -133,11 +145,11 @@
         </div>
     </div>
     <div class="row justify-content-end">
-        {% if workday_id_is_setted %}
+        {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+        <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
+        {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
         <a class='btn btn-success m-3' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">Approve</a>
         <a class='btn btn-danger m-3' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
-        {% else %}
-        <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
         {% endif %}
     </div>
 </div>

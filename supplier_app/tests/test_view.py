@@ -195,7 +195,7 @@ class TestTaxpayerList(TestCase):
         self.taxpayer_ar = TaxPayerArgentinaFactory(
             business_name='Eventbrite',
             workday_id='12345',
-            taxpayer_state='Pending',
+            taxpayer_state='PENDING',
             cuit='20-31789965-3',
             company=self.company,
         )
@@ -239,14 +239,14 @@ class TestTaxpayerApList(TestCase):
         self.taxpayer_ar1 = TaxPayerArgentinaFactory(
             business_name='Pyme 1',
             workday_id='1',
-            taxpayer_state='Pending',
+            taxpayer_state='PENDING',
             cuit='20-31789965-3',
             company=self.company1,
         )
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
             business_name='Pyme 2',
             workday_id='2',
-            taxpayer_state='Change required',
+            taxpayer_state='CHANGE REQUIRED',
             cuit='20-39237968-5',
             company=self.company2,
         )
@@ -406,6 +406,58 @@ class TestTaxpayerApDetails(TestCase):
 
         self.assertNotContains(
             response, 'Approve',
+        )
+
+    def test_taxpayer_details_view_doesnt_show_edit_button_when_the_taxpayer_has_status_denied(self):
+        taxpayer = TaxPayerArgentinaFactory(
+            taxpayer_state="DENIED",
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+        )
+        AddressFactory(taxpayer=taxpayer)
+        BankAccountFactory(
+            taxpayer=taxpayer,
+            bank_cbu_file=self.file_mock
+        )
+        self.client.force_login(self.ap_user)
+
+        response = self.client.get(
+            reverse("supplier-details", kwargs={'taxpayer_id': taxpayer.id})
+        )
+
+        self.assertNotContains(
+            response, 'Edit',
+        )
+
+    @parameterized.expand([
+        ("APPROVE", "1"),
+        ("DENIED", "2"),
+        ("DENIED", ""),
+    ])
+    def test_taxpayer_details_view_doesnt_show_approve_and_deny_button_if_the_taxpayer_is_already_approved_or_denied(self, status, workday_id):
+        taxpayer = TaxPayerArgentinaFactory(
+            taxpayer_state=status,
+            workday_id=workday_id,
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+        )
+        AddressFactory(taxpayer=taxpayer)
+        BankAccountFactory(
+            taxpayer=taxpayer,
+            bank_cbu_file=self.file_mock
+        )
+
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse("supplier-details", kwargs={'taxpayer_id': taxpayer.id})
+        )
+
+        self.assertNotContains(
+            response, 'Approve'
+        )
+
+        self.assertNotContains(
+            response, 'Deny'
         )
 
 
@@ -699,7 +751,7 @@ class TestApprovalRefuse(TestCase):
 
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
-            'Active'
+            'ACTIVE'
         )
 
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
@@ -723,5 +775,5 @@ class TestApprovalRefuse(TestCase):
 
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
-            'Denied'
+            'DENIED'
         )

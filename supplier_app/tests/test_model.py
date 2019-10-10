@@ -38,7 +38,7 @@ class TestTaxpayerModel(TestCase):
         self.assertEqual(TaxPayer.objects.last(), taxpayer)
 
     def test_taxpayer_creation_first_time_should_have_PENDING_status(self):
-        self.assertEqual(self.taxpayer.taxpayer_state, "Pending")
+        self.assertEqual(self.taxpayer.taxpayer_state, "PENDING")
 
     def test_create_child_of_tax_payer_should_also_create_taxpayer_father(self):
         taxpayer_arg = TaxPayerArgentinaFactory(business_name='Eventbrite')
