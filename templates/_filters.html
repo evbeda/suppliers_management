@@ -51,6 +51,28 @@
                         {% endif %}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.invoice_due_date.label_tag }}
+                        {{ filter.form.invoice_due_date }}
+                        <small class="text-danger">
+                            {{ filter.form.invoice_due_date.errors }}
+                        </small>
+                        {% if filter.form.invoice_due_date.help_text %}
+                        <p class="help">{{ filter.form.invoice_due_date.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.taxpayer__country.label_tag }}
+                        {{ filter.form.taxpayer__country }}
+                        <small class="text-danger">
+                            {{ filter.form.taxpayer__country.errors }}
+                        </small>
+                        {% if filter.form.taxpayer__country.help_text %}
+                        <p class="help">{{ filter.form.taxpayer__country.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                </div>
                 
                 <div class="row pr-5">
                     <div class="col-sm-12 text-right">

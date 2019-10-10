@@ -6,9 +6,13 @@
 {% include 'supplier_app/navbar.html' %}
 
 <div class="row">
-    <div class="col-md-12 ">
-        <h1 class="text-center"> {% trans "My Invoices"%}</h1>
+    <div class="col-md-12">
+        <div class="pb-3 pt-3">
+            <h1 class="text-center"> {% trans "My Invoices"%}</h1>
+        </div>
     </div>
+</div>
+<div class="row">
     <div class="col-md-2">
         <ul class="nav flex-column text-center">
             <li class="nav-item">
@@ -16,7 +20,7 @@
             </li>
         </ul>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9  min-height">
         <table class="table table-sm table-hover">
             <thead class="thead-eb-dark">
                 <tr>
@@ -48,8 +52,12 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
         {% include "_pagination.html" %}
     </div>
-
 </div>
+
 {% endblock%}

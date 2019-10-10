@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
@@ -7,7 +10,6 @@ from django.urls import (
     reverse,
     reverse_lazy
 )
-from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
@@ -101,6 +103,8 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         form.instance.taxpayer = taxpayer
+        payment_term = taxpayer.get_taxpayer_child().payment_term
+        form.instance.invoice_due_date = form.cleaned_data['invoice_date'] + timedelta(days=payment_term)
         invoice_number = form.cleaned_data['invoice_number']
         if Invoice.objects.filter(taxpayer=taxpayer.id, invoice_number=invoice_number).exists():
             form.errors['invoice_number'] = 'The invoice {} already exists'.format(invoice_number)
@@ -205,7 +209,7 @@ def change_invoice_status(request, pk):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status =  status
+    invoice.status = status
     invoice.save()
 
     # Make a comment
@@ -257,11 +261,12 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
-        context['INVOICE_STATUS_PAID'] =invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         context['comments'] = Comment.objects.filter(
             invoice=context['invoice']
         )
         return context
+
 
 @is_invoice_for_user()
 def post_a_comment(request, pk):
@@ -273,9 +278,9 @@ def post_a_comment(request, pk):
 
     # Make a comment
     Comment.objects.create(
-        invoice = invoice,
-        user = request.user,
-        message = request.POST['message']
+        invoice=invoice,
+        user=request.user,
+        message=request.POST['message']
     )
 
     return redirect(

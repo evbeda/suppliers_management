@@ -35,6 +35,7 @@ class Invoice(models.Model):
     )
     po_number = models.CharField(max_length=200, help_text="ex: 12341234")
     invoice_date = models.DateField()
+    invoice_due_date = models.DateField()
     invoice_date_received = models.DateTimeField(auto_now_add=True)
     invoice_number = models.CharField(max_length=20)
     invoice_type = models.CharField(max_length=200, choices=ARS_INVOICE_TYPES)
