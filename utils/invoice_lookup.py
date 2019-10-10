@@ -3,8 +3,6 @@ from unittest import TestCase
 from parameterized import parameterized
 
 def invoice_status_lookup(status_value):
-    value_to_return = ''
     for (key, value) in INVOICE_STATUS:
-        if status_value == value:
-            value_to_return = key
-    return value_to_return
+            if status_value == value:
+                return key
