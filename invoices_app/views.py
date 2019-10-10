@@ -1,29 +1,21 @@
-
-from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin
 )
 from django.http import HttpResponseBadRequest
-
 from django.urls import (
     reverse,
     reverse_lazy
 )
-from django_filters.views import FilterView
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from django.views.generic.edit import UpdateView
+from django_filters.views import FilterView
+
 from django.shortcuts import get_object_or_404, redirect
 from pure_pagination.mixins import PaginationMixin
 
-from invoices_app.forms import InvoiceForm
-from invoices_app.models import (
-    Invoice,
-    Comment
-)
-from users_app.decorators import is_ap_or_403
-from invoices_app import INVOICE_STATUS
 from invoices_app import (
     INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
@@ -33,12 +25,23 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
 )
 from invoices_app.filters import InvoiceFilter
+from invoices_app.forms import InvoiceForm
+from invoices_app.models import (
+    Invoice,
+    Comment
+)
+
 from supplier_app.models import (
     TaxPayer,
     Address,
 )
-from utils.invoice_lookup import invoice_status_lookup
 
+from users_app.decorators import (
+    is_ap_or_403,
+    is_invoice_for_user,
+)
+
+from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
     send_email_notification,
     get_user_emails_by_tax_payer_id,
@@ -233,7 +236,6 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             return True
         for taxpayer_from_url in taxpayers_from_url:
             company_from_taxpayer_in_url = taxpayer_from_url.company
-            company_id = company_from_taxpayer_in_url.id
 
             # Is there a CompanyUserPermission that has that User and Company?
             companyuserpermission = \
@@ -260,3 +262,28 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
             invoice=context['invoice']
         )
         return context
+
+@is_invoice_for_user()
+def post_a_comment(request, pk):
+    # Check if message is empty (Validate also in template)
+    if not request.POST['message']:
+        return HttpResponseBadRequest()
+
+    invoice = get_object_or_404(Invoice, pk=pk)
+
+    # Make a comment
+    Comment.objects.create(
+        invoice = invoice,
+        user = request.user,
+        message = request.POST['message']
+    )
+
+    return redirect(
+        reverse(
+            'invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice.taxpayer.id,
+                'pk': pk,
+            }
+        )
+    )
