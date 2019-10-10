@@ -1,9 +1,11 @@
+
 from datetime import date
 from http import HTTPStatus
 from parameterized import parameterized
 
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.core import mail
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -482,3 +484,36 @@ class TestInvoice(TestBase):
             response,
             self.invoice_from_other_user.invoice_number
         )
+
+
+def test_send_email_when_ap_edits_invoice(self):
+    self.client.force_login(self.user_ap)
+    self.client.post(
+        reverse(
+            'taxpayer-invoice-update',
+            kwargs={
+                'taxpayer_id': self.tax_payer.id,
+                'pk': self.invoice.id
+            }
+        ),
+        self.invoice_post_data
+    )
+
+    self.assertEqual(len(mail.outbox), 1)
+    self.assertEqual(len(mail.outbox[0].to), 3)
+
+
+def test_do_not_send_email_when_user_edits_invoice(self):
+    self.client.force_login(self.user_ap)
+    self.client.post(
+        reverse(
+            'taxpayer-invoice-update',
+            kwargs={
+                'taxpayer_id': self.tax_payer.id,
+                'pk': self.invoice.id
+            }
+        ),
+        self.invoice_post_data
+    )
+
+    self.assertEqual(len(mail.outbox), 0)
