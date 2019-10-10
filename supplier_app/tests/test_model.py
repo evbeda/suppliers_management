@@ -148,15 +148,10 @@ class TestCompanyUniqueToken(TestCase):
             self.companyuniquetoken.company
         )
 
-    def test_company_token_does_not_repeat(self):
-        tokens = [
-            self.companyuniquetoken._token_generator() for i in range(100)
-        ]
-        self.assertTrue(len(tokens) == len(set(tokens)))
-
     def test_token_length(self):
         token = self.companyuniquetoken._token_generator()
         self.assertEqual(len(token), 64)
 
     def test_company_unique_token_assing_company_token(self):
         self.companyuniquetoken.assing_company_token
+        self.assertTrue(self.companyuniquetoken.token)
