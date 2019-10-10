@@ -9,6 +9,7 @@ from django.test import (
     Client,
     TestCase
 )
+from django.core import mail
 from invoices_app.factory_boy import InvoiceFactory
 
 from supplier_app.tests.factory_boy import (
@@ -83,5 +84,6 @@ class TestBase(TestCase):
         self.client = Client()
 
     def tearDown(self):
+        mail.outbox = []
         if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
             remove('file/{}'.format(self.file_mock.name))

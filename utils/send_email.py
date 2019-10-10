@@ -8,13 +8,14 @@ def send_email_notification(subject, message, recipient_list):
     send_mail(
         subject,
         message,
-        email_from,
+        'Suppliers Management Eventbrite <jx3.team@gmail.com>',
         recipient_list,
         fail_silently=False,
     )
 
 
-def get_user_emails_from_tax_payer(tax_payer):
-    company = Company.objects.get(pk=tax_payer.id)
+def get_user_emails_by_tax_payer_id(tax_payer_id):
+    company = Company.objects.get(pk=tax_payer_id)
     emails = CompanyUserPermission.objects.values_list('user__email', flat=True).filter(company=company)
     return list(emails)
+

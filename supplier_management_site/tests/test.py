@@ -14,8 +14,6 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED
 )
-
-from supplier_app.models import TaxPayerArgentina
 from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
     TaxPayerFactory,
@@ -27,12 +25,10 @@ from supplier_management_site.tests.views import home
 from users_app.factory_boy import (
     UserFactory
 )
-
 from utils.invoice_lookup import invoice_status_lookup
-
 from utils.send_email import (
     send_email_notification,
-    get_user_emails_from_tax_payer,
+    get_user_emails_by_tax_payer_id,
 )
 
 
@@ -81,7 +77,6 @@ class EmailUtilsTest(TestCase):
             user=self.user3
         )
         self.tax_payer = TaxPayerFactory(company=self.company)
-        self.tax_payer_argentina = TaxPayerArgentina()
 
     def tearDown(self):
         mail.outbox = []
@@ -98,12 +93,12 @@ class EmailUtilsTest(TestCase):
 
     def test_get_users_email_from_company(self):
         mails = [self.user1.email, self.user2.email, self.user3.email]
-        self.assertEqual(mails, get_user_emails_from_tax_payer(self.tax_payer))
+        self.assertEqual(mails, get_user_emails_by_tax_payer_id(self.tax_payer.id))
 
     def test_send_email_notification_to_emails_from_same_company(self):
         subject = 'Testing title'
         message = 'Testing message'
-        recipient_list = get_user_emails_from_tax_payer(self.tax_payer)
+        recipient_list = get_user_emails_by_tax_payer_id(self.tax_payer.id)
         send_email_notification(subject, message, recipient_list)
 
         self.assertEqual(len(mail.outbox), 1)

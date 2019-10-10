@@ -37,9 +37,12 @@ from supplier_app.models import (
     TaxPayer,
     Address,
 )
-from utils import send_email
 from utils.invoice_lookup import invoice_status_lookup
 
+from utils.send_email import (
+    send_email_notification,
+    get_user_emails_by_tax_payer_id,
+)
 
 
 class InvoiceListView(
@@ -140,6 +143,11 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
               request.user.email,
             )
         )
+        if request.user.is_AP:
+            send_email_notification(
+                'Eventbrite Invoice Edited',
+                'Your Invoice {} was edited by an administrator. Please check your invoice'.format(invoice.invoice_number),
+                get_user_emails_by_tax_payer_id(invoice.taxpayer_id))
 
         # Change the invoices values
         self.object = self.get_object()
