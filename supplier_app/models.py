@@ -1,3 +1,5 @@
+import uuid, hashlib
+
 from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
@@ -7,8 +9,6 @@ from supplier_app import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
-
-from utils.token_generator import company_token
 
 
 class Company(models.Model):
@@ -34,8 +34,13 @@ class CompanyUniqueToken(models.Model):
     token = models.CharField(max_length=64)
     datetime = models.DateTimeField(default=timezone.now)
 
+    @property
     def assing_company_token(self):
-        self.token = company_token(str(self.company.id))
+        self.token = self._token_generator()
+
+    def _token_generator(self):
+        salt = uuid.uuid4().hex + str(self.company.id)
+        return hashlib.sha256(salt.encode('utf-8')).hexdigest()
 
 
 class TaxPayer(models.Model):
