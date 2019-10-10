@@ -1,5 +1,6 @@
 from django.forms import NumberInput, Select, CheckboxSelectMultiple
 from django_filters import (
+    CharFilter,
     DateFromToRangeFilter,
     FilterSet,
     ModelChoiceFilter,
@@ -66,13 +67,22 @@ class InvoiceFilter(FilterSet):
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
     )
     invoice_date = DateFromToRangeFilter(widget=DateRangeWidget())
+    invoice_due_date = DateFromToRangeFilter(widget=DateRangeWidget())
+
     total_amount = RangeFilter(widget=NumericRangeWidget())
     taxpayer = ModelChoiceFilter(
         queryset=taxpayer_qs,
-        empty_label="All",
+        empty_label='All',
         widget=Select(attrs={'class': 'custom-select'}),
+    )
+
+    taxpayer__country = CharFilter(
+        widget=Select(
+            choices=[('AR', 'Argentina'), ['BR', 'Brasil']],
+            attrs={'class': 'custom-select'}
+        ),
     )
 
     class Meta:
         model = Invoice
-        fields = ('invoice_date', 'status', 'total_amount', 'taxpayer', )
+        fields = ('invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer', 'taxpayer__country')

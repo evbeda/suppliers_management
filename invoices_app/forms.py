@@ -24,7 +24,6 @@ class InvoiceForm(forms.ModelForm):
             'invoice_file',
             'po_file',
         )
-        exclude = ('user', 'tax_payer', 'status')
         widgets = {
             'invoice_date': DatePickerInput(options={
                     "format": "MM/DD/YYYY",

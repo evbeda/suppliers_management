@@ -1,11 +1,13 @@
-
-from datetime import date
+from datetime import date, timedelta
 from http import HTTPStatus
 from parameterized import parameterized
 
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core import mail
+
+from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
+from users_app.factory_boy import UserFactory
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
@@ -485,35 +487,70 @@ class TestInvoice(TestBase):
             self.invoice_from_other_user.invoice_number
         )
 
+    def test_invoices_list_filter_taxpayer_country(self):
+        self.client.force_login(self.ap_user)
 
-def test_send_email_when_ap_edits_invoice(self):
-    self.client.force_login(self.user_ap)
-    self.client.post(
-        reverse(
-            'taxpayer-invoice-update',
-            kwargs={
-                'taxpayer_id': self.tax_payer.id,
-                'pk': self.invoice.id
-            }
-        ),
-        self.invoice_post_data
-    )
+        self.taxpayer_for_other_user.country = 'BR'
+        self.taxpayer_for_other_user.save()
 
-    self.assertEqual(len(mail.outbox), 1)
-    self.assertEqual(len(mail.outbox[0].to), 3)
+        response = self.client.get(
+            '{}?{}'.format(reverse('invoices-list'), 'taxpayer__country={}'.format(self.taxpayer.country))
+        )
+        self.assertContains(
+            response,
+            self.invoice.invoice_number
+        )
+        self.assertNotContains(
+            response,
+            self.invoice_from_other_user.invoice_number
+        )
 
+    def test_invoice_create_calculate_due_date(self):
+        self.client.force_login(self.user)
+        self.client.post(
+            reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.invoice_post_data,
+        )
+        time_to_due = self.taxpayer.get_taxpayer_child().payment_term
+        invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
+        self.assertEqual(invoice.invoice_due_date, invoice.invoice_date + timedelta(days=time_to_due))
 
-def test_do_not_send_email_when_user_edits_invoice(self):
-    self.client.force_login(self.user_ap)
-    self.client.post(
-        reverse(
-            'taxpayer-invoice-update',
-            kwargs={
-                'taxpayer_id': self.tax_payer.id,
-                'pk': self.invoice.id
-            }
-        ),
-        self.invoice_post_data
-    )
+    def test_send_email_when_ap_edits_invoice(self):
+        self.client.force_login(self.ap_user)
+        user2 = UserFactory()
+        CompanyUserPermissionFactory(
+            company=self.company,
+            user=user2
+        )
+        user3 = UserFactory()
+        CompanyUserPermissionFactory(
+            company=self.company,
+            user=user3
+        )
+        self.client.post(
+            reverse(
+                'taxpayer-invoice-update',
+                kwargs={
+                    'taxpayer_id': self.taxpayer.id,
+                    'pk': self.invoice.id
+                }
+            ),
+            self.invoice_post_data
+        )
 
-    self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox[0].to), 3)
+
+    def test_do_not_send_email_when_user_edits_invoice(self):
+        self.client.force_login(self.user)
+        self.client.post(
+            reverse(
+                'taxpayer-invoice-update',
+                kwargs={
+                    'taxpayer_id': self.taxpayer.id,
+                    'pk': self.invoice.id
+                }
+            ),
+            self.invoice_post_data
+        )
+        self.assertEqual(len(mail.outbox), 0)

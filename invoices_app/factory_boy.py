@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+
 import factory
 
 from invoices_app.models import (
@@ -6,8 +7,13 @@ from invoices_app.models import (
 )
 
 
+def get_due_date():
+    return datetime.now() + timedelta(days=15)
+
+
 class InvoiceFactory(factory.django.DjangoModelFactory):
     invoice_date = factory.LazyFunction(datetime.now)
+    invoice_due_date = factory.LazyFunction(get_due_date)
     po_number = '98876'
     invoice_file = 'test.pdf'
     currency = 'ARS'
@@ -19,4 +25,3 @@ class InvoiceFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Invoice
-
