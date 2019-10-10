@@ -55,7 +55,7 @@ class TaxPayer(models.Model):
     taxpayer_state = models.CharField(
         max_length=200,
         choices=get_taxpayer_status_choices(),
-        default="Pending",
+        default="PENDING",
     )
     country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
@@ -72,10 +72,10 @@ class TaxPayer(models.Model):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
     def approve_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['ACTIVE']
+        self.taxpayer_state = TAXPAYER_STATUS['Active']
 
     def deny_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['DENIED']
+        self.taxpayer_state = TAXPAYER_STATUS['Denied']
 
     def has_workday_id(self):
         return True if self.workday_id else False
