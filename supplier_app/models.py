@@ -1,9 +1,9 @@
 import uuid, hashlib
+from datetime import datetime
 
 from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
-from django.utils import timezone
 
 from supplier_app import (
     TAXPAYER_STATUS,
@@ -37,7 +37,7 @@ class CompanyUserPermission(models.Model):
 class CompanyUniqueToken(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     token = models.CharField(max_length=64)
-    datetime = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def assing_company_token(self):
@@ -46,6 +46,12 @@ class CompanyUniqueToken(models.Model):
     def _token_generator(self):
         salt = uuid.uuid4().hex + str(self.company.id)
         return hashlib.sha256(salt.encode('utf-8')).hexdigest()
+
+    @property
+    def is_token_expired(self):
+        minutes = 5*60
+        time_delta = (datetime.now() - self.created_at).total_seconds()/60
+        return time_delta > minutes
 
 
 class TaxPayer(models.Model):

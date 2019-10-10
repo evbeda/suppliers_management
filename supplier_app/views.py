@@ -1,26 +1,34 @@
 from django.db import transaction
-from django.views.generic import (
-    TemplateView,
-)
+from django.views.generic import TemplateView
 from django.views.generic.edit import (
     CreateView,
     FormView,
     UpdateView
 )
-from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.http import (
+    HttpResponseRedirect,
+    Http404,
+)
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
+)
+from django.urls import (
+    reverse,
+    reverse_lazy,
 )
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import (
-    reverse_lazy,
-    reverse,
+from supplier_app import (
+    email_notifications,
+    get_taxpayer_status_pending_and_change_required,
 )
-from users_app.views import IsApUser
 from supplier_app.models import (
     Address,
     Company,
+    CompanyUniqueToken,
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
@@ -32,10 +40,8 @@ from supplier_app.forms import (
     TaxPayerCreateForm,
     TaxPayerEditForm,
 )
-
-from supplier_app import (
-    get_taxpayer_status_pending_and_change_required
-)
+from users_app.views import IsApUser
+from utils.send_email import send_email_notification
 
 
 class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
@@ -43,6 +49,37 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
     fields = '__all__'
     template_name = 'AP_app/company_creation.html'
     success_url = reverse_lazy('ap-taxpayers')
+
+
+class CompanyJoinView(LoginRequiredMixin, TemplateView):
+    # change to CompanyUniqueToken once that PR is merged to master
+    # and this branch is rebased with respect to master
+    model = CompanyUniqueToken
+    template_name = 'supplier_app/company_selector.html'
+
+    def get(self, request, *args, **kwargs):
+        company = self._get_company_from_token(self.token)
+        if self._token_is_valid(company):
+            return self.render_to_response(self.get_context_data)
+        return Http404
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # replace company_id with company_token
+        context['token'] = self.token
+        context['company_name'] = self._get_company_from_token().name
+        return context
+
+    def _token_is_valid(self, company):
+        if company and not self._token_is_expired():
+            return True
+
+    def _get_company_from_token(token):
+        get_object_or_404(Company, pk=token)
+
+
+class CompanyListView(LoginRequiredMixin, ListView):
+    model = Company
 
 
 class SupplierHome(
@@ -220,6 +257,23 @@ def approve_taxpayer(self, taxpayer_id, request=None):
     taxpayer.approve_taxpayer()
     taxpayer.save()
     return redirect('ap-taxpayers')
+
+
+def company_invite(self):
+    email = [self.POST['email']]
+    company_id = self.POST['company_id']
+    company = Company.objects.get(pk=company_id)
+    companyuniquetoken = CompanyUniqueToken(company=company)
+    companyuniquetoken.assing_company_token
+    token = companyuniquetoken.token
+    subject = email_notifications['company_invitation']['subject']
+    body = "{}{}".format(
+        email_notifications['company_invitation']['body'],
+        token,
+    )
+
+    send_email_notification(subject, body, email)
+    return redirect('company-list')
 
 
 def deny_taxpayer(self, taxpayer_id, request=None):

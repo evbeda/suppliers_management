@@ -6,11 +6,14 @@ from parameterized import parameterized
 from shutil import rmtree
 from unittest.mock import (
     MagicMock,
+    patch,
 )
 
+from django.core import mail
 from django.core.files import File
 from django.core.urlresolvers import (
     reverse,
+    reverse_lazy,
 )
 from django.http import (
     QueryDict
@@ -22,6 +25,7 @@ from django.test import (
 )
 from django.utils.datastructures import MultiValueDict
 
+from supplier_app import email_notifications
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
@@ -715,6 +719,76 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(
             response.redirect_chain[0][0],
             '/suppliersite/ap'
+        )
+
+    class TestCompanyListView(TestCase):
+        def setUp(self):
+            self.company_list = [
+                CompanyFactory(),
+                CompanyFactory(),
+                CompanyFactory(),
+            ]
+            self.client = Client()
+            self.user = UserFactory()
+            self.client.force_login(self.user)
+
+        def test_company_list(self):
+            response = self.client.get('/suppliersite/companies')
+            company1 = response.context[0]['company_list'][0]
+            self.assertIn(company1, self.company_list)
+            self.assertTrue(
+                len(response.context[0]['company_list']) >= 3
+            )
+
+        def test_company_list_template(self):
+            response = self.client.get('/suppliersite/companies')
+            self.assertTemplateUsed(response, 'supplier_app/company_list.html')
+
+
+class TestCompanyInvite(TestCase):
+    def setUp(self):
+        CompanyFactory()
+        self.company_constants = {
+            'email': 'something@eventbrite.com',
+            'company_id': '1',
+        }
+        
+        self.user = UserFactory()
+        self.client = Client()
+    
+    def _make_post(self):
+        return self.client.post(
+            '/suppliersite/company/invite',
+            self.company_constants,
+        )
+
+    def test_company_invite_sends_email_notification(self):
+        self._make_post()
+        self.assertEqual(
+            mail.outbox[0].subject,
+            email_notifications['company_invitation']['subject'],
+        )
+
+    @patch(
+        'supplier_app.models.CompanyUniqueToken._token_generator',
+        return_value='f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
+    )
+    def test_company_invite_sends_token_in_body(self, mocked_token):
+        self._make_post()
+        body = "{}{}".format(
+            email_notifications['company_invitation']['body'],
+            mocked_token.return_value,
+        )
+        self.assertEqual(
+            mail.outbox[0].body,
+            body
+        )
+
+    def test_company_invite_redirect_to_companies_upon_email_invitation(self):
+        response = self._make_post()
+        self.assertEqual(
+            response.url,
+            reverse_lazy('company-list')
         )
 
 

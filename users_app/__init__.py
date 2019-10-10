@@ -5,6 +5,7 @@ ALLOWED_AP_ACCOUNTS = [
     'julian.rofrano@eventbrite.com',
     'julian.andres@eventbrite.com',
     'nahuel.valencia@eventbrite.com',
+    'ricardo.caif@eventbrite.com',
     'kgerez@eventbrite.com',
     'analaura@eventbrite.com',
 ]

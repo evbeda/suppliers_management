@@ -23,6 +23,14 @@ PAYMENT_TYPES = [
     DBTuple("BANK", "Bank"),
 ]
 
+email_notifications = {
+    'company_invitation': {
+        'subject': 'You have been invited to BrightSu',
+        'body': 'Welcome to BrightSu!' + '\n' +
+        'Please click on on the following link to register' + '\n' +
+        'http://127.0.0.1:8000/suppliersite/company/'
+    },
+}
 
 def get_taxpayer_status_choices():
     return [(v, k) for k, v in TAXPAYER_STATUS.items()]
