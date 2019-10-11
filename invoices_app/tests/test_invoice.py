@@ -19,7 +19,7 @@ from invoices_app import (
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
-from invoices_app.tests.test_base import TestBase
+from supplier_management_site.tests.test_base import TestBase
 
 from utils.invoice_lookup import invoice_status_lookup
 

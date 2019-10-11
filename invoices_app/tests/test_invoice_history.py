@@ -1,9 +1,9 @@
 from django.urls import reverse
 
 from invoices_app.models import Invoice
-from invoices_app.tests.test_base import TestBase
 from invoices_app.views import invoice_history_changes
 
+from supplier_management_site.tests.test_base import TestBase
 
 class TestInvoiceHistory(TestBase):
 

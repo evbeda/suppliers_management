@@ -233,7 +233,8 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def test_func(self):
         taxpayer_id_in_url = self.kwargs['taxpayer_id']
-        taxpayers_from_url = TaxPayer.objects.filter(pk=taxpayer_id_in_url)
+        taxpayers_from_url = get_object_or_404(TaxPayer, pk=taxpayer_id_in_url)
+
         if not taxpayers_from_url:
             return False
         if self.request.user.is_AP:

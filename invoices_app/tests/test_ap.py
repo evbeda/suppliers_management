@@ -6,7 +6,7 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED
 )
 
-from invoices_app.tests.test_base import TestBase
+from supplier_management_site.tests.test_base import TestBase
 
 from utils.invoice_lookup import invoice_status_lookup
 

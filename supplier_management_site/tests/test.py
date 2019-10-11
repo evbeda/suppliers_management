@@ -25,6 +25,9 @@ from supplier_management_site.tests.views import home
 from users_app.factory_boy import (
     UserFactory
 )
+
+from supplier_management_site.tests.test_base import TestBase
+
 from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
     send_email_notification,
@@ -32,11 +35,13 @@ from utils.send_email import (
 )
 
 
-class TestTranslationConfiguration(TestCase):
+class TestTranslationConfiguration(TestBase):
     def setUp(self):
+        super(TestTranslationConfiguration, self).setUp()
         self.factory = RequestFactory()
 
     def tearDown(self):
+        super(TestTranslationConfiguration, self).tearDown()
         activate('en')
 
     def test_plain_translation(self):
@@ -55,30 +60,23 @@ class TestTranslationConfiguration(TestCase):
         self.assertContains(response, text)
 
 
-class EmailUtilsTest(TestCase):
+class EmailUtilsTest(TestBase):
     def setUp(self):
-        self.company = CompanyFactory(
-            name='Test',
-            description='Test description',
-        )
-        self.user1 = UserFactory()
+        super(EmailUtilsTest, self).setUp()
         self.user2 = UserFactory()
         self.user3 = UserFactory()
-        self.permission1 = CompanyUserPermissionFactory(
-            company=self.company,
-            user=self.user1
-        )
-        self.permission2 = CompanyUserPermissionFactory(
+
+        self.companyuserpermission2 = CompanyUserPermissionFactory(
             company=self.company,
             user=self.user2
         )
-        self.permission3 = CompanyUserPermissionFactory(
+        self.companyuserpermission3 = CompanyUserPermissionFactory(
             company=self.company,
             user=self.user3
         )
-        self.tax_payer = TaxPayerFactory(company=self.company)
 
     def tearDown(self):
+        super(EmailUtilsTest, self).tearDown()
         mail.outbox = []
 
     def test_send_email_notification(self):
@@ -92,13 +90,13 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
 
     def test_get_users_email_from_company(self):
-        mails = [self.user1.email, self.user2.email, self.user3.email]
-        self.assertEqual(mails, get_user_emails_by_tax_payer_id(self.tax_payer.id))
+        mails = [self.user.email, self.user2.email, self.user3.email]
+        self.assertEqual(mails, get_user_emails_by_tax_payer_id(self.taxpayer.id))
 
     def test_send_email_notification_to_emails_from_same_company(self):
         subject = 'Testing title'
         message = 'Testing message'
-        recipient_list = get_user_emails_by_tax_payer_id(self.tax_payer.id)
+        recipient_list = get_user_emails_by_tax_payer_id(self.taxpayer.id)
         send_email_notification(subject, message, recipient_list)
 
         self.assertEqual(len(mail.outbox), 1)
@@ -107,7 +105,7 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
 
 
-class TestInvoiceStatusLookup(TestCase):
+class TestInvoiceStatusLookup(TestBase):
 
     @parameterized.expand([
         ('1', INVOICE_STATUS_APPROVED,),
