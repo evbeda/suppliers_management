@@ -1,19 +1,24 @@
 from http import HTTPStatus
+from parameterized import parameterized
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from parameterized import parameterized
 
-from invoices_app import (INVOICE_STATUS_APPROVED,
-                          INVOICE_STATUS_CHANGES_REQUEST, INVOICE_STATUS_PAID,
-                          INVOICE_STATUS_REJECTED)
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_REJECTED,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+)
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.models import Comment
-from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from supplier_management_site.tests.test_base import TestBase
-from users_app.factory_boy import UserFactory
-from utils.invoice_lookup import invoice_status_lookup
 
+from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
+
+from users_app.factory_boy import UserFactory
+
+from utils.invoice_lookup import invoice_status_lookup
 
 class DetailInvoiceTest(TestBase):
 

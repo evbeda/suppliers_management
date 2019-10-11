@@ -1,21 +1,38 @@
-from django.core import mail
-from django.test import RequestFactory, TestCase
-from django.utils.translation import activate
-from django.utils.translation import ugettext_lazy as _
 from parameterized import parameterized
 
-from invoices_app import (INVOICE_STATUS_APPROVED,
-                          INVOICE_STATUS_CHANGES_REQUEST, INVOICE_STATUS_NEW,
-                          INVOICE_STATUS_PAID, INVOICE_STATUS_REJECTED)
-from supplier_app.tests.factory_boy import (CompanyFactory,
-                                            CompanyUserPermissionFactory,
-                                            TaxPayerFactory)
-from supplier_management_site.tests.test_base import TestBase
+from django.core import mail
+from django.test import TestCase, RequestFactory
+from django.utils.translation import (
+    activate,
+    ugettext_lazy as _
+)
+
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED
+)
+from supplier_app.tests.factory_boy import (
+    CompanyUserPermissionFactory,
+    TaxPayerFactory,
+    CompanyFactory,
+)
+
 from supplier_management_site.tests.views import home
-from users_app.factory_boy import UserFactory
+
+from users_app.factory_boy import (
+    UserFactory
+)
+
+from supplier_management_site.tests.test_base import TestBase
+
 from utils.invoice_lookup import invoice_status_lookup
-from utils.send_email import (get_user_emails_by_tax_payer_id,
-                              send_email_notification)
+from utils.send_email import (
+    send_email_notification,
+    get_user_emails_by_tax_payer_id,
+)
 
 
 class TestTranslationConfiguration(TestBase):

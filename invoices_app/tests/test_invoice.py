@@ -1,20 +1,26 @@
 from datetime import date, timedelta
 from http import HTTPStatus
-
-from django.core import mail
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from parameterized import parameterized
 
-from invoices_app import (INVOICE_STATUS_APPROVED,
-                          INVOICE_STATUS_CHANGES_REQUEST, INVOICE_STATUS_NEW,
-                          INVOICE_STATUS_PAID, INVOICE_STATUS_REJECTED)
+from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from django.core import mail
+
+from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
+from users_app.factory_boy import UserFactory
+
+from invoices_app import (
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_REJECTED,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PAID,
+)
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
-from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from supplier_management_site.tests.test_base import TestBase
-from users_app.factory_boy import UserFactory
+
 from utils.invoice_lookup import invoice_status_lookup
 
 

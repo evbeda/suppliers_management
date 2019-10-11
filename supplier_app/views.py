@@ -1,18 +1,41 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
+from django.views.generic import (
+    TemplateView,
+)
+from django.views.generic.edit import (
+    CreateView,
+    FormView,
+    UpdateView
+)
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+)
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, FormView, UpdateView
-
-from supplier_app import get_taxpayer_status_pending_and_change_required
-from supplier_app.forms import (AddressCreateForm, BankAccountCreateForm,
-                                BankAccountEditForm, TaxPayerCreateForm,
-                                TaxPayerEditForm)
-from supplier_app.models import (Address, BankAccount, Company, TaxPayer,
-                                 TaxPayerArgentina)
+from django.urls import (
+    reverse_lazy,
+    reverse,
+)
 from users_app.views import IsApUser
+from supplier_app.models import (
+    Address,
+    Company,
+    TaxPayer,
+    TaxPayerArgentina,
+    BankAccount,
+)
+from supplier_app.forms import (
+    AddressCreateForm,
+    BankAccountCreateForm,
+    BankAccountEditForm,
+    TaxPayerCreateForm,
+    TaxPayerEditForm,
+)
+
+from supplier_app import (
+    get_taxpayer_status_pending_and_change_required
+)
 
 
 class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):

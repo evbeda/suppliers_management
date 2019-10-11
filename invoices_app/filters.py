@@ -1,13 +1,19 @@
-from bootstrap_datepicker_plus import DatePickerInput
-from django.forms import CheckboxSelectMultiple, NumberInput, Select
-from django_filters import (CharFilter, DateFromToRangeFilter, FilterSet,
-                            ModelChoiceFilter, MultipleChoiceFilter,
-                            RangeFilter)
+from django.forms import NumberInput, Select, CheckboxSelectMultiple
+from django_filters import (
+    CharFilter,
+    DateFromToRangeFilter,
+    FilterSet,
+    ModelChoiceFilter,
+    MultipleChoiceFilter,
+    RangeFilter,
+)
 from django_filters.widgets import RangeWidget, SuffixedMultiWidget
 
+from bootstrap_datepicker_plus import DatePickerInput
+
+from supplier_app.models import TaxPayer
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Invoice
-from supplier_app.models import TaxPayer
 
 
 class NumericRangeWidget(RangeWidget):
