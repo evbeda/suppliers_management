@@ -47,6 +47,7 @@ from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
     send_email_notification,
     get_user_emails_by_tax_payer_id,
+    build_mail_html,
 )
 
 
@@ -151,10 +152,17 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             )
         )
         if request.user.is_AP:
+            subject = 'Eventbrite Invoice Edited'
+            upper_text = 'Your Invoice # {} was edited by an administrator. Please check your invoice'.format(invoice.invoice_number)
             send_email_notification(
-                'Eventbrite Invoice Edited',
-                'Your Invoice {} was edited by an administrator. Please check your invoice'.format(invoice.invoice_number),
-                get_user_emails_by_tax_payer_id(invoice.taxpayer_id))
+                subject,
+                build_mail_html(
+                    invoice.taxpayer.business_name,
+                    upper_text,
+                    'Thank you'
+                ),
+                get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+            )
 
         # Change the invoices values
         self.object = self.get_object()
@@ -186,6 +194,16 @@ class InvoiceHistory(ListView):
     def get_queryset(self):
         queryset = Invoice.history.filter(id=self.kwargs['pk'])
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_AP'] = self.request.user.is_AP
+        context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
+        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
+        context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
+        context['INVOICE_STATUS_PAID'] =invoice_status_lookup(INVOICE_STATUS_PAID)
+        return context
 
 
 def invoice_history_changes(record):
@@ -219,8 +237,25 @@ def change_invoice_status(request, pk):
         user=request.user,
         message='{} has changed the invoice status to {}'.format(
             request.user.email,
-            status_message
+            status_message,
         )
+    )
+    subject = 'Invoice {} changed status to {}'.format(
+            invoice.invoice_number,
+            invoice.get_status_display(),
+        )
+    upper_text = 'Invoice {} changed status to {}'.format(
+                invoice.invoice_number,
+                invoice.get_status_display(),
+            )
+    send_email_notification(
+        subject,
+        build_mail_html(
+            invoice.taxpayer.business_name,
+            upper_text,
+            'Thank you'
+        ),
+        get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
     )
 
     return redirect('invoices-list')
@@ -282,6 +317,22 @@ def post_a_comment(request, pk):
         user=request.user,
         message=request.POST['message']
     )
+
+    if request.user.is_AP:
+        subject = 'Eventbrite Invoice {} commented'.format(invoice.invoice_number)
+        upper_text = 'You have a new comment on Invoice # {}. Please check your invoice. COMENT:{}'.format(
+            invoice.invoice_number,
+            request.POST['message']
+        )
+        send_email_notification(
+            subject,
+            build_mail_html(
+                invoice.taxpayer.business_name,
+                upper_text,
+                'Thank you'
+            ),
+            get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+        )
 
     return redirect(
         reverse(

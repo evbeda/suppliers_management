@@ -8,6 +8,7 @@ from invoices_app.views import invoice_history_changes
 class TestInvoiceHistory(TestBase):
 
     def test_history_changes_diff(self):
+        self.client.force_login(self.ap_user)
         self.invoice.po_number = '4321'
         self.invoice.save()
         history = Invoice.history.filter(id=self.invoice.id)
@@ -17,7 +18,7 @@ class TestInvoiceHistory(TestBase):
         )
 
     def test_history_invoices_view(self):
-
+        self.client.force_login(self.ap_user)
         old_po_number = self.invoice.po_number
         self.invoice.po_number = '4321'
         new_po_number = self.invoice.po_number
