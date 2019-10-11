@@ -1,3 +1,4 @@
+from datetime import timedelta
 from http import HTTPStatus
 from os import (
     path,
@@ -23,8 +24,10 @@ from django.test import (
     RequestFactory,
     TestCase,
 )
+from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
+from freezegun import freeze_time
 from supplier_app import email_notifications
 from supplier_app.forms import (
     AddressCreateForm,
@@ -36,6 +39,7 @@ from supplier_app.models import (
     Address,
     BankAccount,
     Company,
+    CompanyUniqueToken,
     TaxPayer,
     TaxPayerArgentina,
 )
@@ -48,12 +52,14 @@ from supplier_app.tests.factory_boy import (
     AddressFactory,
     BankAccountFactory,
     CompanyFactory,
+    CompanyUniqueTokenFactory,
     CompanyUserPermissionFactory,
     TaxPayerArgentinaFactory,
 )
 from supplier_app.views import (
     ApTaxpayers,
     CreateTaxPayerView,
+    CompanyUserPermission,
     EditAddressView,
     EditBankAccountView,
     EditTaxpayerView,
@@ -752,10 +758,10 @@ class TestCompanyInvite(TestCase):
             'email': 'something@eventbrite.com',
             'company_id': '1',
         }
-        
-        self.user = UserFactory()
+
+        # self.user = UserFactory()
         self.client = Client()
-    
+
     def _make_post(self):
         return self.client.post(
             '/suppliersite/company/invite',
@@ -773,7 +779,7 @@ class TestCompanyInvite(TestCase):
         'supplier_app.models.CompanyUniqueToken._token_generator',
         return_value='f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
     )
-    def test_company_invite_sends_token_in_body(self, mocked_token):
+    def test_company_invite_sends_token_in_body_and_is_persisted(self, mocked_token):
         self._make_post()
         body = "{}{}".format(
             email_notifications['company_invitation']['body'],
@@ -783,12 +789,76 @@ class TestCompanyInvite(TestCase):
             mail.outbox[0].body,
             body
         )
+        self.assertEqual(
+            CompanyUniqueToken.objects.last().token,
+            'f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
+        )
 
     def test_company_invite_redirect_to_companies_upon_email_invitation(self):
         response = self._make_post()
         self.assertEqual(
             response.url,
             reverse_lazy('company-list')
+        )
+
+
+class TestCompanyJoinView(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = UserFactory()
+        self.client.force_login(self.user)
+
+    def test_valid_token(self):
+        companyuniquetoken = CompanyUniqueTokenFactory()
+        url = '/suppliersite/company/{}'.format(companyuniquetoken.token)
+        response = self.client.get(url)
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertEqual(
+            response.template_name,
+            ['supplier_app/company_selector.html']
+        )
+
+    def test_invalid_token(self):
+        minutes = 7*60
+        with freeze_time(timezone.now() - timedelta(minutes=minutes)):
+            companyuniquetoken = CompanyUniqueTokenFactory()
+
+        url = '/suppliersite/company/{}'.format(companyuniquetoken.token)
+        response = self.client.get(url, follow=True)
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.NOT_FOUND
+        )
+
+
+class TestCompanyJoin(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = UserFactory()
+        self.client.force_login(self.user)
+
+    def test_user_has_company(self):
+        companyuniquetoken = CompanyUniqueTokenFactory()
+        url = '/suppliersite/company/join/{}'.format(companyuniquetoken.token)
+        response = self.client.get(url)
+        self.assertEqual(
+            CompanyUserPermission.objects.last().user,
+            self.user
+        )
+        self.assertEqual(
+            CompanyUserPermission.objects.last().company,
+            companyuniquetoken.company
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.FOUND
+        )
+        self.assertEqual(
+            response.url,
+            '/suppliersite/supplier'
         )
 
 

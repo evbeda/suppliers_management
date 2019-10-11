@@ -1,8 +1,12 @@
 import factory
+
+from django.utils import timezone
+
 from supplier_app.models import (
     Address,
     BankAccount,
     Company,
+    CompanyUniqueToken,
     CompanyUserPermission,
     TaxPayer,
     TaxPayerArgentina,
@@ -33,6 +37,16 @@ class CompanyUserPermissionFactory(factory.django.DjangoModelFactory):
 
     company = factory.SubFactory(CompanyFactory)
     user = factory.SubFactory(UserFactory)
+
+
+class CompanyUniqueTokenFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = CompanyUniqueToken
+
+    company = factory.SubFactory(CompanyFactory)
+    token = 'f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
+    created_at = timezone.now()
 
 
 class TaxPayerFactory(factory.django.DjangoModelFactory):

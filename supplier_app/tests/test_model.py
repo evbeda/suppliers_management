@@ -1,10 +1,7 @@
-from datetime import (
-    datetime,
-    timedelta
-)
-from django.test import (
-    TestCase,
-)
+from datetime import timedelta
+
+from django.test import TestCase
+from django.utils import timezone
 
 from supplier_app.bank_info import get_bank_info_choices
 from supplier_app.models import (
@@ -173,7 +170,7 @@ class TestCompanyUniqueToken(TestCase):
         minutes = 6*60
         companyuniquetoken = CompanyUniqueToken(
             company=self.company,
-            created_at=(datetime.now() - timedelta(minutes=minutes))
+            created_at=(timezone.now() - timedelta(minutes=minutes))
         )
         self.assertTrue(
             companyuniquetoken.is_token_expired
@@ -183,7 +180,7 @@ class TestCompanyUniqueToken(TestCase):
         minutes = 4*60
         companyuniquetoken = CompanyUniqueToken(
             company=self.company,
-            created_at=(datetime.now() - timedelta(minutes=minutes))
+            created_at=(timezone.now() - timedelta(minutes=minutes))
         )
         self.assertFalse(
             companyuniquetoken.is_token_expired

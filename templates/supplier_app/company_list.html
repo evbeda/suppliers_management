@@ -6,46 +6,49 @@
 {% endblock %}
 
 {% block content %}
-{% include 'AP_app/navbar.html' %}
+{% include 'supplier_app/navbar.html' %}
 <div class="container h-100 m-0 p-0">
     <div class="row h-100">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-10 col-md-offset-2">
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <h1 class='text-center'> {% trans "Welcome AP" %}</h1>
-                        <br><br><br>
-                        <table class="table table-hover table-striped">
-                            <thead class="thead-eb-dark">
-                                <tr>
-                                    <th scope="col">{% trans "Company name"%}</th>
-                                    <th scope="col">{% trans "Description"%}</th>
-                                    <th scope="col">{% trans "Email invitation"%}</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for taxpayer in taxpayers %}
-                                <tr>
-                                    <td>{{taxpayer.business_name}}</td>
-                                    <td>{{taxpayer.cuit}}</td>
-                                    <td>{{taxpayer.taxpayer_state}}</td>
-                                    <td>
-                                        <a class='btn btn-info'
-                                            href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">More Details</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            <div class="col-md-2">
+                </div>
+                <div class="col-md-10 col-md-offset-2">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <h1 class='text-center'> {% trans "Company List" %}</h1>
+                                <br><br><br>
+                                <table class="table table-hover">
+                                    <thead class="thead-eb-dark">
+                                        <tr>
+                                            <th scope="col">{% trans "name"%}</th>
+                                            <th scope="col">{% trans "Description"%}</th>
+                                            <th scope="col">{% trans "Email Invitation"%}</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for company in object_list %}
+                                        <tr>
+                                            <td>{{company.name}}</td>
+                                            <td>{{company.description}}</td>
+                                            <td>
+                                                <form action="{% url 'company-invite' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="email" name="email" placeholder="Email">
+                                                    <input type="hidden" name="company_id" value="{{ company.id }}">
+                                                    <input type="submit" value="Invite">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 {% endblock %}

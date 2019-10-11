@@ -13,6 +13,7 @@ from supplier_app.views import (
     SupplierHome,
     approve_taxpayer,
     company_invite,
+    company_join,
     deny_taxpayer,
 )
 
@@ -22,7 +23,8 @@ urlpatterns = [
     url(r'^ap/company/create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^companies$', CompanyListView.as_view(), name='company-list'),
     url(r'^company/invite$', company_invite, name='company-invite'),
-    url(r'^company/(?P<token>[0-9]+)$', CompanyJoinView.as_view(), name='company-selection'),
+    url(r'^company/(?P<token>[a-f0-9]{64})$', CompanyJoinView.as_view(), name='company-selection'),
+    url(r'^company/join/(?P<token>[a-f0-9]{64})$', company_join, name='company-join'),
     url(r'^supplier/taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/$', SupplierDetailsView.as_view(), name='supplier-details'),
     url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/approve$', approve_taxpayer, name='approve-taxpayer'),

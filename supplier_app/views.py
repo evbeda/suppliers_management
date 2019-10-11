@@ -29,6 +29,7 @@ from supplier_app.models import (
     Address,
     Company,
     CompanyUniqueToken,
+    CompanyUserPermission,
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
@@ -52,30 +53,27 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
 
 
 class CompanyJoinView(LoginRequiredMixin, TemplateView):
-    # change to CompanyUniqueToken once that PR is merged to master
-    # and this branch is rebased with respect to master
     model = CompanyUniqueToken
     template_name = 'supplier_app/company_selector.html'
 
     def get(self, request, *args, **kwargs):
-        company = self._get_company_from_token(self.token)
-        if self._token_is_valid(company):
-            return self.render_to_response(self.get_context_data)
-        return Http404
+        companyuniquetoken = self._get_companyuniquetoken_from_token(kwargs['token'])
+        if self._token_is_valid(companyuniquetoken):
+            return self.render_to_response(self.get_context_data(**kwargs))
+        return HttpResponseRedirect(Http404)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # replace company_id with company_token
-        context['token'] = self.token
-        context['company_name'] = self._get_company_from_token().name
+        context['token'] = kwargs['token']
+        context['company_name'] = self._get_companyuniquetoken_from_token(kwargs['token']).company.name
         return context
 
-    def _token_is_valid(self, company):
-        if company and not self._token_is_expired():
+    def _token_is_valid(self, companyuniquetoken):
+        if companyuniquetoken and not companyuniquetoken.is_token_expired:
             return True
 
-    def _get_company_from_token(token):
-        get_object_or_404(Company, pk=token)
+    def _get_companyuniquetoken_from_token(self, token):
+        return get_object_or_404(CompanyUniqueToken, token=token)
 
 
 class CompanyListView(LoginRequiredMixin, ListView):
@@ -259,12 +257,14 @@ def approve_taxpayer(self, taxpayer_id, request=None):
     return redirect('ap-taxpayers')
 
 
+# testear que se persiste instancia en bd
 def company_invite(self):
     email = [self.POST['email']]
     company_id = self.POST['company_id']
     company = Company.objects.get(pk=company_id)
     companyuniquetoken = CompanyUniqueToken(company=company)
     companyuniquetoken.assing_company_token
+    companyuniquetoken.save()
     token = companyuniquetoken.token
     subject = email_notifications['company_invitation']['subject']
     body = "{}{}".format(
@@ -274,6 +274,15 @@ def company_invite(self):
 
     send_email_notification(subject, body, email)
     return redirect('company-list')
+
+
+def company_join(request, token):
+    user = request.user
+    companyuniquetoken = get_object_or_404(CompanyUniqueToken, token=token)
+    company = companyuniquetoken.company
+    CompanyUserPermission.objects.create(user=user, company=company)
+    companyuniquetoken.delete()
+    return redirect('supplier-home')
 
 
 def deny_taxpayer(self, taxpayer_id, request=None):
