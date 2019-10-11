@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block styles %}
+{% load static %}
+{% endblock %}
+{% block content %}
+ {% include 'supplier_app/navbar.html' %}
+    <h1 class='text-center mb-5'>
+    {% trans "Welcome to " %}{{company_name}}
+    </h1>
+    <div class="col-sm-4 offset-sm-4 text-center">
+        <a class='btn btn-success' href="{% url 'company-join' token=token %}">Join Company</a>
+        </div>
+    </div>
+{% endblock %}

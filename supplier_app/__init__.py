@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+from django.conf import settings
+
 DBTuple = namedtuple('DBTuple', 'value verbose_name')
 
 # 25 * 1014 * 1024
@@ -22,6 +24,15 @@ PAYMENT_TERMS = [
 PAYMENT_TYPES = [
     DBTuple("BANK", "Bank"),
 ]
+
+email_notifications = {
+    'company_invitation': {
+        'subject': 'You have been invited to BriteSu',
+        'body': 'Welcome to BriteSu!' + '\n' +
+        'Please click on on the following link to register' + '\n' +
+        settings.COMPANY_INVITATION_URL
+    },
+}
 
 
 def get_taxpayer_status_choices():

@@ -29,6 +29,9 @@ factory-boy==2.12.0
 Faker==2.0.2
 flake8==3.7.8
 formatstring==1.1
+freezegun==0.3.12
+gitdb2==2.0.5
+GitPython==3.0.2
 gunicorn==19.9.0
 idna==2.8
 ipdb==0.12.2
@@ -63,6 +66,7 @@ requests==2.22.0
 requests-oauthlib==1.2.0
 requests-toolbelt==0.9.1
 six==1.12.0
+smmap2==2.0.5
 social-auth-app-django==3.1.0
 social-auth-core==3.2.0
 text-unidecode==1.3

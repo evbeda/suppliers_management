@@ -1,6 +1,7 @@
-from django.test import (
-    TestCase,
-)
+from datetime import timedelta
+
+from django.test import TestCase
+from django.utils import timezone
 
 from supplier_app.bank_info import get_bank_info_choices
 from supplier_app.models import (
@@ -164,3 +165,23 @@ class TestCompanyUniqueToken(TestCase):
     def test_company_unique_token_assing_company_token(self):
         self.companyuniquetoken.assing_company_token
         self.assertTrue(self.companyuniquetoken.token)
+
+    def test_is_token_expired_true(self):
+        minutes = 6*60
+        companyuniquetoken = CompanyUniqueToken(
+            company=self.company,
+            created_at=(timezone.now() - timedelta(minutes=minutes))
+        )
+        self.assertTrue(
+            companyuniquetoken.is_token_expired
+        )
+
+    def test_is_token_expired_false(self):
+        minutes = 4*60
+        companyuniquetoken = CompanyUniqueToken(
+            company=self.company,
+            created_at=(timezone.now() - timedelta(minutes=minutes))
+        )
+        self.assertFalse(
+            companyuniquetoken.is_token_expired
+        )

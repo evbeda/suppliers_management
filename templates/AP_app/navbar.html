@@ -24,7 +24,7 @@
                     {% trans "Companies" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#"><i
+                    <a class="dropdown-item" href="{% url 'company-list' %}"><i
                         class="fa fa-building mr-2"></i>{% trans "See all" %}</a>
                     <a class="dropdown-item" href="{% url 'company-create' %}"><i
                             class="fa fa-plus mr-2"></i>{% trans "Create one" %}</a>
