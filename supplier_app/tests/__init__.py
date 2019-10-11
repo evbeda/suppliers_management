@@ -1,7 +1,4 @@
-from supplier_app import (
-    PAYMENT_TERMS,
-    PAYMENT_TYPES,
-)
+from supplier_app import PAYMENT_TERMS, PAYMENT_TYPES
 from supplier_app.bank_info import BANK_INFO
 
 

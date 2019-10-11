@@ -1,24 +1,14 @@
-from os import (
-    path,
-    remove
-)
+from os import path, remove
 from unittest.mock import MagicMock
 
-from django.core.files import File
-from django.test import (
-    Client,
-    TestCase
-)
 from django.core import mail
+from django.core.files import File
+from django.test import Client, TestCase
+
 from invoices_app.factory_boy import InvoiceFactory
-
-from supplier_app.tests.factory_boy import (
-    TaxPayerArgentinaFactory,
-    CompanyFactory,
-    CompanyUserPermissionFactory,
-    AddressFactory
-)
-
+from supplier_app.tests.factory_boy import (AddressFactory, CompanyFactory,
+                                            CompanyUserPermissionFactory,
+                                            TaxPayerArgentinaFactory)
 from users_app.factory_boy import UserFactory
 from users_app.models import User
 

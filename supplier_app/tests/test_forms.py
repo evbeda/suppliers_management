@@ -1,44 +1,20 @@
-from os import (
-    path,
-)
-from parameterized import parameterized
+from os import path
 from shutil import rmtree
-from unittest.mock import (
-    MagicMock,
-    patch,
-)
+from unittest.mock import MagicMock, patch
 
 from django.core.files import File
-from django.http import (
-    HttpResponseRedirect,
-    QueryDict
-)
-from django.test import (
-    Client,
-    RequestFactory,
-    TestCase,
-)
+from django.http import HttpResponseRedirect, QueryDict
+from django.test import Client, RequestFactory, TestCase
 from django.utils.datastructures import MultiValueDict
+from parameterized import parameterized
 
-from supplier_app.tests import (
-    taxpayer_creation_POST_factory,
-    get_bank_info_example
-)
-from supplier_app.tests.factory_boy import (
-    CompanyFactory,
-    CompanyUserPermissionFactory,
-)
-from supplier_app.forms import (
-    AddressCreateForm,
-    BankAccountCreateForm,
-    BasePrefixCreateForm,
-    TaxPayerCreateForm,
-)
-
-from supplier_app.views import (
-    CreateTaxPayerView,
-)
-
+from supplier_app.forms import (AddressCreateForm, BankAccountCreateForm,
+                                BasePrefixCreateForm, TaxPayerCreateForm)
+from supplier_app.tests import (get_bank_info_example,
+                                taxpayer_creation_POST_factory)
+from supplier_app.tests.factory_boy import (CompanyFactory,
+                                            CompanyUserPermissionFactory)
+from supplier_app.views import CreateTaxPayerView
 from users_app.factory_boy import UserFactory
 
 

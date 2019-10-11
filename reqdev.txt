@@ -19,6 +19,7 @@ django-filter==2.2.0
 django-pure-pagination==0.3.0
 django-rest-auth==0.9.5
 django-saml2-auth==2.2.1
+django-seed==0.1.9
 django-simple-history==2.7.3
 django-storages==1.7.2
 djangorestframework==3.10.3
@@ -27,6 +28,7 @@ dropbox==9.4.0
 entrypoints==0.3
 factory-boy==2.12.0
 Faker==2.0.2
+filemagic==1.6
 flake8==3.7.8
 formatstring==1.1
 gunicorn==19.9.0
@@ -35,6 +37,7 @@ ipdb==0.12.2
 ipython==7.8.0
 ipython-genutils==0.2.0
 isodate==0.6.0
+isort==4.3.21
 jedi==0.15.1
 lxml==4.4.1
 mccabe==0.6.1
@@ -62,6 +65,7 @@ PyYAML==5.1.2
 requests==2.22.0
 requests-oauthlib==1.2.0
 requests-toolbelt==0.9.1
+simple-history==1.1
 six==1.12.0
 social-auth-app-django==3.1.0
 social-auth-core==3.2.0

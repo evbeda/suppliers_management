@@ -1,15 +1,10 @@
 from django.conf.urls import url
 
-from invoices_app.views import (
-    InvoiceListView,
-    InvoiceUpdateView,
-    SupplierInvoiceListView,
-    SupplierInvoiceCreateView,
-    InvoiceDetailView,
-    InvoiceHistory,
-    change_invoice_status,
-    post_a_comment,
-)
+from invoices_app.views import (InvoiceDetailView, InvoiceHistory,
+                                InvoiceListView, InvoiceUpdateView,
+                                SupplierInvoiceCreateView,
+                                SupplierInvoiceListView, change_invoice_status,
+                                post_a_comment)
 
 urlpatterns = [
     url(r'^$', InvoiceListView.as_view(), name='invoices-list'),

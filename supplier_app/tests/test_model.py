@@ -1,23 +1,13 @@
-from django.test import (
-    TestCase,
-)
+from django.test import TestCase
 
 from supplier_app.bank_info import get_bank_info_choices
-from supplier_app.models import (
-    Address,
-    BankAccount,
-    Company,
-    CompanyUniqueToken,
-    TaxPayer,
-)
-from supplier_app.tests.factory_boy import (
-    AddressFactory,
-    BankAccountFactory,
-    CompanyFactory,
-    CompanyUserPermissionFactory,
-    TaxPayerFactory,
-    TaxPayerArgentinaFactory,
-)
+from supplier_app.models import (Address, BankAccount, Company,
+                                 CompanyUniqueToken, TaxPayer)
+from supplier_app.tests.factory_boy import (AddressFactory, BankAccountFactory,
+                                            CompanyFactory,
+                                            CompanyUserPermissionFactory,
+                                            TaxPayerArgentinaFactory,
+                                            TaxPayerFactory)
 from users_app.factory_boy import UserFactory
 
 

@@ -1,6 +1,7 @@
-from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.views import LogoutView
+from django.views.generic import TemplateView
+
 from users_app import ALLOWED_AP_ACCOUNTS
 
 

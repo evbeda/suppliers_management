@@ -1,5 +1,6 @@
-from .base import *  # noqa
 from supplier_management_site import get_env_variable
+
+from .base import *  # noqa
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 

@@ -1,17 +1,12 @@
 from http import HTTPStatus
-from parameterized import parameterized
 
 from django.contrib.auth import get_user_model
-from django.test import (
-    Client,
-    TestCase,
-)
+from django.test import Client, TestCase
 from django.urls import reverse
+from parameterized import parameterized
 
-from supplier_app.tests.factory_boy import (
-    CompanyFactory,
-    CompanyUserPermissionFactory
-)
+from supplier_app.tests.factory_boy import (CompanyFactory,
+                                            CompanyUserPermissionFactory)
 from users_app.factory_boy import UserFactory
 
 SUPPLIER_HOME = '/suppliersite/supplier'

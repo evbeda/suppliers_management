@@ -1,14 +1,10 @@
 from django.urls import reverse
 
-from invoices_app import (
-    INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
-    INVOICE_STATUS_REJECTED
-)
-
+from invoices_app import (INVOICE_STATUS_APPROVED, INVOICE_STATUS_NEW,
+                          INVOICE_STATUS_REJECTED)
 from supplier_management_site.tests.test_base import TestBase
-
 from utils.invoice_lookup import invoice_status_lookup
+
 
 class TestAP(TestBase):
 

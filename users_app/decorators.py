@@ -4,7 +4,6 @@ from django.http import HttpResponseForbidden
 from django.utils.decorators import available_attrs
 
 from invoices_app.models import Invoice
-
 from users_app import ALLOWED_AP_ACCOUNTS
 
 

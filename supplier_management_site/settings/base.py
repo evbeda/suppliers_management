@@ -1,5 +1,7 @@
 import os
+
 from django.utils.translation import ugettext_lazy as _
+
 from supplier_management_site import get_env_variable
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

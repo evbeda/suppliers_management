@@ -1,16 +1,9 @@
 from django import forms
 from django.forms.models import ModelForm
 from django.http import QueryDict
-from supplier_app import (
-    TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE,
-)
 
-from supplier_app.models import (
-    Address,
-    BankAccount,
-    TaxPayerArgentina,
-)
-
+from supplier_app import TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE
+from supplier_app.models import Address, BankAccount, TaxPayerArgentina
 from utils.file_validator import validate_file
 
 

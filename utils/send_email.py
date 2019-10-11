@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.mail import send_mail
+
 from supplier_app.models import Company, CompanyUserPermission
 
 
@@ -18,4 +19,3 @@ def get_user_emails_by_tax_payer_id(tax_payer_id):
     company = Company.objects.get(pk=tax_payer_id)
     emails = CompanyUserPermission.objects.values_list('user__email', flat=True).filter(company=company)
     return list(emails)
-

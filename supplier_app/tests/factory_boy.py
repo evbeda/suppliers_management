@@ -1,21 +1,11 @@
 import factory
-from supplier_app.models import (
-    Address,
-    BankAccount,
-    Company,
-    CompanyUserPermission,
-    TaxPayer,
-    TaxPayerArgentina,
-)
 
+from supplier_app import PAYMENT_TERMS, PAYMENT_TYPES
 from supplier_app.bank_info import BANK_INFO
-from supplier_app import (
-    PAYMENT_TERMS,
-    PAYMENT_TYPES
-)
-from users_app.factory_boy import (
-    UserFactory,
-)
+from supplier_app.models import (Address, BankAccount, Company,
+                                 CompanyUserPermission, TaxPayer,
+                                 TaxPayerArgentina)
+from users_app.factory_boy import UserFactory
 
 
 class CompanyFactory(factory.django.DjangoModelFactory):

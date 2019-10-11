@@ -1,17 +1,10 @@
 from django.conf.urls import url
 
-from supplier_app.views import (
-    ApTaxpayers,
-    CompanyCreatorView,
-    CreateTaxPayerView,
-    EditAddressView,
-    EditBankAccountView,
-    EditTaxpayerView,
-    SupplierDetailsView,
-    SupplierHome,
-    approve_taxpayer,
-    deny_taxpayer,
-)
+from supplier_app.views import (ApTaxpayers, CompanyCreatorView,
+                                CreateTaxPayerView, EditAddressView,
+                                EditBankAccountView, EditTaxpayerView,
+                                SupplierDetailsView, SupplierHome,
+                                approve_taxpayer, deny_taxpayer)
 
 urlpatterns = [
     url(r'^ap$', ApTaxpayers.as_view(), name='ap-taxpayers'),
