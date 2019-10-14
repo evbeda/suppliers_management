@@ -19,7 +19,6 @@ from django.core.urlresolvers import (
 from django.http import (
     QueryDict
 )
-from social_django.models import UserSocialAuth
 from django.test import (
     Client,
     RequestFactory,
@@ -806,12 +805,19 @@ class TestCompanyJoinView(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = UserFactory()
+        self.url_company_select = 'company-selection'
+        self.url_company_join = 'company-join'
+        self.client.force_login(self.user)
 
     def test_valid_token(self):
-        self.client.force_login(self.user)
         companyuniquetoken = CompanyUniqueTokenFactory()
-        url = '/suppliersite/company/{}'.format(companyuniquetoken.token)
-        response = self.client.get(url)
+        kwargs = {'token': companyuniquetoken.token}
+        response = self.client.get(
+            reverse(
+                self.url_company_select,
+                kwargs=kwargs
+            )
+        )
         self.assertEqual(
             response.status_code,
             HTTPStatus.OK
@@ -821,24 +827,34 @@ class TestCompanyJoinView(TestCase):
             ['supplier_app/company_selector.html']
         )
 
-    def test_invalid_token_time(self):
+    def test_invalid_token_is_expired(self):
         minutes = 7*60
-        self.client.force_login(self.user)
         with freeze_time(timezone.now() - timedelta(minutes=minutes)):
             companyuniquetoken = CompanyUniqueTokenFactory()
-        url = '/suppliersite/company/{}'.format(companyuniquetoken.token)
-        response = self.client.get(url, follow=True)
+        kwargs = {'token': companyuniquetoken.token}
+        response = self.client.get(
+            reverse(
+                self.url_company_select,
+                kwargs=kwargs
+            ),
+            follow=True
+        )
         self.assertEqual(
             response.status_code,
             HTTPStatus.NOT_FOUND
         )
 
-    def test_invalid_token_wrong_token(self):
+    def test_wrong_token_should_redirect_404(self):
         CompanyUniqueTokenFactory()
-        url = '/suppliersite/company/{}'.format(
-            'thisisaninvalidtoken'
+        kwargs = {
+            'token': 'a230da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193a'
+        }
+        response = self.client.get(
+            reverse(
+                self.url_company_select,
+                kwargs=kwargs,
+            )
         )
-        response = self.client.get(url)
         self.assertEqual(
             response.status_code,
             HTTPStatus.NOT_FOUND
@@ -846,15 +862,20 @@ class TestCompanyJoinView(TestCase):
 
     def test_join_is_invalid_once_toke_is_used_by_user(self):
         companyuniquetoken = CompanyUniqueTokenFactory()
-        self.client.force_login(self.user)
-        url_company_join = '/suppliersite/company/join/{}'.format(
-            companyuniquetoken.token
+        kwargs = {'token': companyuniquetoken.token}
+        self.client.post(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs
+            )
         )
-        self.client.get(url_company_join)
-        url_company_select = '/suppliersite/company/{}'.format(
-            companyuniquetoken.token
+        kwargs = {'token': companyuniquetoken.token}
+        response = self.client.get(
+            reverse(
+                self.url_company_select,
+                kwargs=kwargs
+            )
         )
-        response = self.client.get(url_company_select)
         self.assertEqual(
             response.status_code,
             HTTPStatus.NOT_FOUND
@@ -866,11 +887,17 @@ class TestCompanyJoin(TestCase):
         self.client = Client()
         self.user = UserFactory()
         self.client.force_login(self.user)
+        self.url_company_join = 'company-join'
 
     def test_user_has_company_once_he_click_join(self):
         companyuniquetoken = CompanyUniqueTokenFactory()
-        url = '/suppliersite/company/join/{}'.format(companyuniquetoken.token)
-        response = self.client.post(url)
+        kwargs = {'token': companyuniquetoken.token}
+        response = self.client.post(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs
+            )
+        )
         self.assertEqual(
             CompanyUserPermission.objects.last().user,
             self.user
@@ -890,8 +917,13 @@ class TestCompanyJoin(TestCase):
 
     def test_compnayuniquetoken_is_deleted_once_user_joins_company(self):
         companyuniquetoken = CompanyUniqueTokenFactory()
-        url = '/suppliersite/company/join/{}'.format(companyuniquetoken.token)
-        self.client.post(url)
+        kwargs = {'token': companyuniquetoken.token}
+        self.client.post(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs
+            )
+        )
         with self.assertRaises(CompanyUniqueToken.DoesNotExist):
             CompanyUniqueToken.objects.get(token=companyuniquetoken.token)
 
