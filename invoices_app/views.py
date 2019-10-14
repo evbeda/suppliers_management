@@ -65,6 +65,11 @@ class InvoiceListView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_AP'] = self.request.user.is_AP
+        context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
+        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
+        context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
+        context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         return context
 
     def get_queryset(self):
@@ -89,6 +94,11 @@ class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
+        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
+        context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
+        context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         return context
 
 

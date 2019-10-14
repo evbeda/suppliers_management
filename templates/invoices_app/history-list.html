@@ -31,7 +31,7 @@
             <tbody>
             {% for invoice in object_list %}
                 <tr>
-                    <th scope="row">{{invoice.id}}</td>
+                    <th scope="row">{{invoice.id}}</th>
                     <td>{{invoice.history_user}}</td>
                     <td>{{invoice.history_date}}</td>
                     <td>{{invoice.currency}}</td>
@@ -41,14 +41,20 @@
                     <td>{{invoice.net_amount}}</td>
                     <td>{{invoice.vat}}</td>
                     <td>{{invoice.total_amount}}</td>
-                    <td>{% if invoice.status == INVOICE_STATUS_NEW or invoice.status == INVOICE_STATUS_PAID or invoice.status == INVOICE_STATUS_APPROVED %}
-                        <span class="badge badge-success">{{invoice.get_status_display}}</span>
+                    <td>{% if invoice.status == INVOICE_STATUS_NEW %}
+                        <span class="badge badge-primary">{{invoice.get_status_display}}</span>
                         {% endif %}
                         {% if invoice.status == INVOICE_STATUS_REJECTED %}
                         <span class="badge badge-danger">{{invoice.get_status_display}}</span>
                         {% endif %}
                         {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
                         <span class="badge badge-warning">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_PAID %}
+                        <span class="badge badge-dark">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_APPROVED %}
+                        <span class="badge badge-success">{{invoice.get_status_display}}</span>
                         {% endif %}
                     </td>
                 </tr>
