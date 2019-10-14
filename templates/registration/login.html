@@ -19,14 +19,14 @@
                 <hr class="my-4">
                 <div>
                   <h5> If you are a supplier please:</h5>
-                  <a class="btn btn-eb btn-block text-white text-uppercase" href="{% url 'social:begin' 'eventbrite' %}">
+                  <a class="btn btn-eb btn-block text-white text-uppercase" href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
                       Login with Eventbrite
                   </a>
                 </div>
                 <hr>
                 <div>
                   <h5> If you are a EB employee please:</h5>
-                  <a class="btn btn-google text-white btn-block text-uppercase" href="{% url 'social:begin' 'google-oauth2' %}">
+                  <a class="btn btn-google text-white btn-block text-uppercase" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
                       Login with Google              
                   </a>
                 </div>

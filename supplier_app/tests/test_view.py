@@ -19,6 +19,7 @@ from django.core.urlresolvers import (
 from django.http import (
     QueryDict
 )
+from social_django.models import UserSocialAuth
 from django.test import (
     Client,
     RequestFactory,
@@ -806,9 +807,9 @@ class TestCompanyJoinView(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = UserFactory()
-        self.client.force_login(self.user)
 
     def test_valid_token(self):
+        self.client.force_login(self.user)
         companyuniquetoken = CompanyUniqueTokenFactory()
         url = '/suppliersite/company/{}'.format(companyuniquetoken.token)
         response = self.client.get(url)
@@ -823,6 +824,7 @@ class TestCompanyJoinView(TestCase):
 
     def test_invalid_token(self):
         minutes = 7*60
+        self.client.force_login(self.user)
         with freeze_time(timezone.now() - timedelta(minutes=minutes)):
             companyuniquetoken = CompanyUniqueTokenFactory()
 
