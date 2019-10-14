@@ -45,7 +45,10 @@ from supplier_app.models import (
     BankAccount,
 )
 from users_app.views import IsApUser
-from utils.send_email import send_email_notification
+from utils.send_email import (
+    send_email_notification,
+    get_user_emails_by_tax_payer_id,
+)
 
 
 class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
@@ -255,6 +258,10 @@ def approve_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.approve_taxpayer()
     taxpayer.save()
+    subject = email_notifications['taxpayer_approval']['subject']
+    body = email_notifications['taxpayer_approval']['body']
+    emails = get_user_emails_by_tax_payer_id(taxpayer_id)
+    send_email_notification(subject, body, emails)
     return redirect('ap-taxpayers')
 
 
@@ -289,4 +296,8 @@ def deny_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.deny_taxpayer()
     taxpayer.save()
+    subject = email_notifications['taxpayer_denial']['subject']
+    body = email_notifications['taxpayer_denial']['body']
+    emails = get_user_emails_by_tax_payer_id(taxpayer_id)
+    send_email_notification(subject, body, emails)
     return redirect('ap-taxpayers')

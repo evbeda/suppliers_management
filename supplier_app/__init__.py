@@ -32,6 +32,17 @@ email_notifications = {
         'Please click on on the following link to register' + '\n' +
         settings.COMPANY_INVITATION_URL
     },
+    'taxpayer_approval': {
+        'subject': 'Your taxpayer has been approved',
+        'body': 'You are ready to start using BriteSu' + '\n' +
+        'you can access the platform now and upload your invoices' +
+        settings.SUPPLIER_HOME_URL
+    },
+    'taxpayer_denial': {
+        'subject': 'Your taxpayer has been rejected',
+        'body': 'We are affraid that the taxpayer you were trying to submit is invalid' + '\n' +
+        'Plese contact the eventbrite eployee that hired you'
+    },
 }
 
 

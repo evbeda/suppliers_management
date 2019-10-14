@@ -159,5 +159,6 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-# COMPANY INVITATION URL
+# EMAIL NOTIFICATION URLS
 COMPANY_INVITATION_URL = 'http://127.0.0.1:8000/suppliersite/company/'
+SUPPLIER_HOME_URL = 'http://127.0.0.1:8000/suppliersite/supplier/'

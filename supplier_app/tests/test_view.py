@@ -13,6 +13,7 @@ from unittest.mock import (
     patch,
 )
 
+from django.conf import settings
 from django.core import mail
 from django.core.files import File
 from django.core.urlresolvers import (
@@ -1019,6 +1020,27 @@ class TestApprovalRefuse(TestCase):
             'ACTIVE'
         )
 
+    def test_change_taxpayer_status_to_active_sends_email_notification(self):
+        CompanyUserPermissionFactory(
+            user=UserFactory(),
+            company=self.taxpayer.company
+        )
+        self.client.post(
+            reverse(
+                self.approve_url,
+                kwargs=self.kwargs
+            )
+        )
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            email_notifications['taxpayer_approval']['subject']
+        )
+        self.assertIn(
+            settings.SUPPLIER_HOME_URL,
+            mail.outbox[0].body
+        )
+
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
         response = self.client.post(
             reverse(
@@ -1041,4 +1063,20 @@ class TestApprovalRefuse(TestCase):
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
             'DENIED'
+        )
+
+    def test_change_taxpayer_status_to_denied_sends_email_notification(self):
+        CompanyUserPermissionFactory(
+            user=UserFactory(),
+            company=self.taxpayer.company
+        )
+        self.client.post(
+            reverse(
+                self.deny_url,
+                kwargs=self.kwargs
+            )
+        )
+        self.assertEqual(
+            mail.outbox[0].subject,
+            email_notifications['taxpayer_denial']['subject']
         )
