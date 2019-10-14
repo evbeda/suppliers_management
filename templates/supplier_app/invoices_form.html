@@ -126,6 +126,7 @@
                     <button id="submit-btn" type="submit" class="btn btn-primary">
                             Submit
                     </button>
+                    <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">Cancel</a>
                 </div>
                 {% csrf_token %}
             </form>

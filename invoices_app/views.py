@@ -85,6 +85,7 @@ class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
     template_name = 'supplier_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
+    fields = ['id', 'invoice_date', 'invoice_number', 'po_number', 'currency', 'total_amount', 'status']
 
     def get_queryset(self):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
@@ -134,6 +135,11 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
     redirect_field_name = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        return context
 
     def get_success_url(self):
         taxpayer_id = self.kwargs.get('taxpayer_id')
@@ -309,9 +315,8 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         context['comments'] = Comment.objects.filter(
             invoice=context['invoice']
-        )
+        ).order_by('-comment_date_received')
         return context
-
 
 @is_invoice_for_user()
 def post_a_comment(request, pk):
@@ -320,12 +325,14 @@ def post_a_comment(request, pk):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
-
     # Make a comment
     Comment.objects.create(
         invoice=invoice,
         user=request.user,
-        message=request.POST['message']
+        message='{} {}'.format(
+            request.user.email,
+            request.POST['message'],
+        )
     )
 
     if request.user.is_AP:

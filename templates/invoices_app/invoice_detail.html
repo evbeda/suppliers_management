@@ -65,7 +65,7 @@
                   <td class="left">
                     <strong>Net Amount: </strong>
                   </td>
-                  <td class="right">
+                  <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.net_amount}}
                   </td>
                 </tr>
@@ -73,7 +73,7 @@
                   <td class="left">
                     <strong>VAT</strong>
                   </td>
-                  <td class="right">
+                  <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.vat}}
                   </td>
                 </tr>
@@ -81,7 +81,7 @@
                   <td class="left">
                     <strong>Total</strong>
                   </td>
-                  <td class="right">
+                  <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.total_amount}}
                   </td>
                 </tr>
@@ -124,18 +124,8 @@
     <div class="card my-3 p-3 bg-white rounded shadow-sm">
       <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
       <div>
-        {% for comment in comments %}
-        <div class="row text-muted media-body pt-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
-          <div class="col">
-            <p>
-              <strong class="d-block text-gray-dark">{{ comment.comment_date_received }}</strong>
-              {{ comment.message }}
-            </p>
-          </div>
-        </div>
-        {% endfor %}
         <div class="container">
-          <div class="row mt-2">
+          <div class="row mt-2 pb-2 border-bottom border-gray ">
             <div class="col">
               <h6>Make a comment</h6>
               <form method='POST' action='{% url 'post-comment' pk=invoice.id %}' enctype="multipart/form-data">
@@ -148,6 +138,16 @@
             </div>
           </div>
         </div>
+        {% for comment in comments %}
+        <div class="row text-muted media-body pt-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
+          <div class="col">
+            <p>
+              <strong class="d-block text-gray-dark">{{ comment.comment_date_received }}</strong>
+              {{ comment.message }}
+            </p>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
