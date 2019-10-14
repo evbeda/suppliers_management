@@ -46,7 +46,13 @@ class DetailInvoiceTest(TestBase):
         )
         self.assertEqual(type(response), HttpResponseRedirect)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
-        self.assertEqual(response.url, '/?next=/invoices/taxpayer/1/detail/1/')
+        self.assertEqual(
+            response.url,
+            '/?next=/invoices/taxpayer/{}/detail/{}/'.format(
+                self.invoice.taxpayer.id,
+                self.invoice.id
+            ),
+        )
 
     def test_get_detail_invoice_with_no_corresponding_supplier(self):
         self.client.force_login(self.user)
@@ -62,7 +68,13 @@ class DetailInvoiceTest(TestBase):
 
         self.assertEqual(type(response), HttpResponseRedirect)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
-        self.assertEqual(response.url, '/?next=/invoices/taxpayer/2/detail/2/')
+        self.assertEqual(
+            response.url,
+            '/?next=/invoices/taxpayer/{}/detail/{}/'.format(
+                self.invoice_from_other_user.taxpayer.id,
+                self.invoice_from_other_user.id
+            ),
+        )
 
     # Feature: Generates comments when invoice state changes
     @parameterized.expand([
@@ -160,7 +172,7 @@ class DetailInvoiceTest(TestBase):
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
-        self.assertEqual(message, comment.message)
+        self.assertEqual('{} {}'.format(self.ap_user.email, message), comment.message)
         self.assertEqual(comment.user, self.ap_user)
 
     @parameterized.expand([
@@ -191,7 +203,7 @@ class DetailInvoiceTest(TestBase):
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
-        self.assertEqual(message, comment.message)
+        self.assertEqual('{} {}'.format(self.user.email, message), comment.message)
         self.assertEqual(comment.user, self.user)
 
     def test_post_an_empty_comment(self):
@@ -251,7 +263,7 @@ class DetailInvoiceTest(TestBase):
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
-        self.assertEqual(message, comment.message)
+        self.assertEqual('{} {}'.format(self.user.email, message), comment.message)
         self.assertEqual(comment.user, self.user)
 
     def test_comment_to_an_invoice_not_of_the_company(self):
