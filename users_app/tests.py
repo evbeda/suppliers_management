@@ -141,7 +141,7 @@ class TestLoginRedirect(TestCase):
             response.redirect_chain
             )
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(
+        self.assertIn(
+            'supplier_app/supplier-home.html',
             response.template_name,
-            ['supplier_app/supplier-home.html']
         )

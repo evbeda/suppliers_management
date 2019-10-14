@@ -7,45 +7,33 @@
 
 {% block content %}
 {% include 'AP_app/navbar.html' %}
-<div class="container h-100 m-0 p-0">
-    <div class="row h-100">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-10 col-md-offset-2">
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <h1 class='text-center'> {% trans "Welcome AP" %}</h1>
-                        <br><br><br>
-                        <table class="table table-hover table-striped">
-                            <thead class="thead-eb-dark">
-                                <tr>
-                                    <th scope="col">{% trans "Business name"%}</th>
-                                    <th scope="col">{% trans "CUIT"%}</th>
-                                    <th scope="col">{% trans "Status"%}</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for taxpayer in taxpayers %}
-                                <tr>
-                                    <td>{{taxpayer.business_name}}</td>
-                                    <td>{{taxpayer.cuit}}</td>
-                                    <td>{{taxpayer.taxpayer_state}}</td>
-                                    <td>
-                                        <a class='btn btn-info'
-                                            href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">More Details</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container h-100 w-100 mt-3">
+    {% include 'AP_app/taxpayer_filter.html' %}
+    <div class="row justify-content-center">
+        <table class="table table-hover table-striped table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "Business name"%}</th>
+                    <th scope="col">{% trans "CUIT"%}</th>
+                    <th scope="col">{% trans "Status"%}</th>
+                    <th scope="col">{% trans "Action" %}</th>
+                </tr>
+            </thead>
+            <tbody class="text-right">
+                {% for taxpayer in taxpayer_list %}
+                <tr>
+                    <td>{{taxpayer.business_name}}</td>
+                    <td>{{taxpayer.cuit}}</td>
+                    <td>{{taxpayer.taxpayer_state}}</td>
+                    <td>
+                        <a class='btn btn-info' href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">More
+                            Details
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-</div>
-</div>
 </div>
 {% endblock %}

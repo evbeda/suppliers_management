@@ -1,4 +1,4 @@
-from django.forms import NumberInput, Select, CheckboxSelectMultiple
+from django.forms import Select, CheckboxSelectMultiple
 from django_filters import (
     CharFilter,
     DateFromToRangeFilter,
@@ -7,47 +7,14 @@ from django_filters import (
     MultipleChoiceFilter,
     RangeFilter,
 )
-from django_filters.widgets import RangeWidget, SuffixedMultiWidget
-
-from bootstrap_datepicker_plus import DatePickerInput
 
 from supplier_app.models import TaxPayer
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Invoice
-
-
-class NumericRangeWidget(RangeWidget):
-    template_name = 'django_filters/widgets/multiwidget.html'
-    suffixes = ['min', 'max']
-
-    def __init__(self, attrs=None):
-        widgets = (
-            NumberInput(attrs={'class': 'form-control', 'placeholder': 'Min'}),
-            NumberInput(attrs={'class': 'form-control', 'placeholder': 'Max'})
-        )
-        super(SuffixedMultiWidget, self).__init__(widgets, attrs)
-
-
-class DateRangeWidget(RangeWidget):
-    template_name = 'django_filters/widgets/multiwidget.html'
-    suffixes = ['after', 'before']
-
-    def __init__(self, attrs=None):
-        widgets = (
-            DatePickerInput(options={
-                    "format": "MM/DD/YYYY",
-                    # "locale": "en",
-                },
-                attrs={'class': 'form-control', 'placeholder': 'From Date', }
-            ),
-            DatePickerInput(options={
-                    "format": "MM/DD/YYYY",
-                    # "locale": "en",
-                },
-                attrs={'class': 'form-control', 'placeholder': 'To Date', }
-            )
-        )
-        super(SuffixedMultiWidget, self).__init__(widgets, attrs)
+from utils.custom_filters import (
+    NumericRangeWidget,
+    DateRangeWidget
+)
 
 
 def taxpayer_qs(request):

@@ -5,6 +5,15 @@ from supplier_app import (
 from supplier_app.bank_info import BANK_INFO
 
 
+STATUS_PENDING = "PENDING"
+STATUS_ACTIVE = "ACTIVE"
+STATUS_CHANGE_REQUIRED = "CHANGE REQUIRED"
+STATUS_DENIED = "DENIED"
+
+BUSINESS_EXAMPLE_NAME_1 = 'Pyme 1'
+BUSINESS_EXAMPLE_NAME_2 = 'Pyme 2'
+
+
 def get_bank_info_example(key=None):
     return BANK_INFO[key or "BANCO DE LA NACION ARGENTINA"]
 

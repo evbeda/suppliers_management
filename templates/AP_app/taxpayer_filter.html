@@ -1,0 +1,68 @@
+{% load i18n %}
+{% load static %}
+
+{% block extrahead %}
+{{ filter.form.media }}
+{% endblock %}
+
+<div class="row">
+    <div class="col-md-11">
+
+        <form method="get" id="filter-form" class="form-check w-100">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ filter.form.taxpayer_date.label_tag }}
+                            {{ filter.form.taxpayer_date }}
+                            <small class="text-danger">
+                                {{ filter.form.taxpayer_date.errors }}
+                            </small>
+                            {% if filter.form.taxpayer_date.help_text %}
+                            <p class="help">{{ filter.form.taxpayer_date.help_text|safe }}</p>
+                            {% endif %}
+                            {{ filter.form.select_example }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ filter.form.taxpayer_state.label_tag }}
+                            {{ filter.form.taxpayer_state }}
+                            <small class="text-danger">
+                                {{ filter.form.taxpayer_state.errors }}
+                            </small>
+                            {% if filter.form.taxpayer_state.help_text %}
+                            <p class="help">{{ filter.form.taxpayer_state.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            {{ filter.form.country.label_tag }}
+                            {{ filter.form.country }}
+                            <small class="text-danger">
+                                {{ filter.form.country.errors }}
+                            </small>
+                            {% if filter.form.country.help_text %}
+                            <p class="help">{{ filter.form.country.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-2">
+                    <button id="submit-btn" type="submit" class="btn btn-success">
+                        Apply
+                    </button>
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+    <div class="col-md-1">
+        <div class="row justify-content-end">
+            <button id="toggleFilter" class="btn btn-outline-info mb-3">Filters</button>
+        </div>
+    </div>
+</div>
+<script>
+    $("#toggleFilter").click(function () {
+        $("#filter-form").slideToggle();
+    });
+</script>
