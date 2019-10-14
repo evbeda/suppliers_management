@@ -53,19 +53,19 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
 
 
 class CompanyJoinView(LoginRequiredMixin, TemplateView):
-    model = CompanyUniqueToken
     template_name = 'supplier_app/company_selector.html'
 
     def get(self, request, *args, **kwargs):
         companyuniquetoken = self._get_companyuniquetoken_from_token(kwargs['token'])
         if self._token_is_valid(companyuniquetoken):
-            return self.render_to_response(self.get_context_data(**kwargs))
+            return self.render_to_response(
+                self.get_context_data(companyuniquetoken, **kwargs)
+            )
         return HttpResponseRedirect(Http404)
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, companyuniquetoken, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['token'] = kwargs['token']
-        context['company_name'] = self._get_companyuniquetoken_from_token(kwargs['token']).company.name
+        context['company_name'] = companyuniquetoken.company.name
         return context
 
     def _token_is_valid(self, companyuniquetoken):
@@ -257,7 +257,7 @@ def approve_taxpayer(self, taxpayer_id, request=None):
     return redirect('ap-taxpayers')
 
 
-# testear que se persiste instancia en bd
+@transaction.atomic
 def company_invite(self):
     email = [self.POST['email']]
     company_id = self.POST['company_id']
@@ -271,7 +271,6 @@ def company_invite(self):
         email_notifications['company_invitation']['body'],
         token,
     )
-
     send_email_notification(subject, body, email)
     return redirect('company-list')
 
