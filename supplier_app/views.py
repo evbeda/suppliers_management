@@ -1,13 +1,6 @@
-from django.db import transaction
-from django.views.generic import TemplateView
-from django.views.generic.edit import (
-    CreateView,
-    FormView,
-    UpdateView
-)
-from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db import transaction
+from django_filters.views import FilterView
 from django.http import (
     HttpResponseRedirect,
     Http404,
@@ -20,10 +13,27 @@ from django.urls import (
     reverse,
     reverse_lazy,
 )
+from django.views.generic.list import ListView
+from django.views.generic import TemplateView
+from django.views.generic.edit import (
+    CreateView,
+    FormView,
+    UpdateView
+)
+
 
 from supplier_app import (
     email_notifications,
     get_taxpayer_status_pending_and_change_required,
+
+)
+from supplier_app.filters import TaxPayerFilter
+from supplier_app.forms import (
+    AddressCreateForm,
+    BankAccountCreateForm,
+    BankAccountEditForm,
+    TaxPayerCreateForm,
+    TaxPayerEditForm,
 )
 from supplier_app.models import (
     Address,
@@ -33,13 +43,6 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
     BankAccount,
-)
-from supplier_app.forms import (
-    AddressCreateForm,
-    BankAccountCreateForm,
-    BankAccountEditForm,
-    TaxPayerCreateForm,
-    TaxPayerEditForm,
 )
 from users_app.views import IsApUser
 from utils.send_email import send_email_notification
@@ -154,19 +157,17 @@ class CreateTaxPayerView(LoginRequiredMixin, TemplateView, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ApTaxpayers(LoginRequiredMixin, IsApUser, TemplateView):
+class ApTaxpayers(LoginRequiredMixin, IsApUser, FilterView):
     model = TaxPayerArgentina
     template_name = 'AP_app/ap-taxpayers.html'
+    filterset_class = TaxPayerFilter
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayers'] = self.get_queryset()
         return context
 
     def get_queryset(self):
-        queryset = TaxPayerArgentina.objects.filter(
-            taxpayer_state__in=get_taxpayer_status_pending_and_change_required()
-        )
+        queryset = TaxPayer.objects.filter()
         return queryset
 
 

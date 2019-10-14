@@ -65,6 +65,7 @@ class TaxPayer(models.Model):
     )
     country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    taxpayer_date = models.DateField(auto_now_add=True)
     taxpayer_comments = models.CharField(
         max_length=200,
         blank=True,

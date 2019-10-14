@@ -1,4 +1,7 @@
-from datetime import timedelta
+from datetime import (
+    date,
+    timedelta,
+)
 from http import HTTPStatus
 from os import (
     path,
@@ -47,6 +50,12 @@ from supplier_app.tests import (
     taxpayer_creation_POST_factory,
     taxpayer_edit_POST_factory,
     get_bank_info_example,
+    STATUS_ACTIVE,
+    STATUS_CHANGE_REQUIRED,
+    STATUS_DENIED,
+    STATUS_PENDING,
+    BUSINESS_EXAMPLE_NAME_1,
+    BUSINESS_EXAMPLE_NAME_2
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -237,6 +246,7 @@ class TestTaxpayerApList(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
+        self.ap_home_url = 'ap-taxpayers'
         self.company1 = CompanyFactory(
             name='Empresa 1',
             description='Descripcion de la empresa 1'
@@ -247,16 +257,18 @@ class TestTaxpayerApList(TestCase):
         )
 
         self.taxpayer_ar1 = TaxPayerArgentinaFactory(
-            business_name='Pyme 1',
+            business_name=BUSINESS_EXAMPLE_NAME_1,
             workday_id='1',
-            taxpayer_state='PENDING',
+            country='ARG',
+            taxpayer_state=STATUS_PENDING,
             cuit='20-31789965-3',
             company=self.company1,
         )
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
-            business_name='Pyme 2',
+            business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
-            taxpayer_state='CHANGE REQUIRED',
+            country='USA',
+            taxpayer_state=STATUS_CHANGE_REQUIRED,
             cuit='20-39237968-5',
             company=self.company2,
         )
@@ -274,17 +286,60 @@ class TestTaxpayerApList(TestCase):
             user=self.user_with_social_evb2
         )
 
-    def test_get_taxpayers_with_status_PENDING_or_REQUESTCHANGE_in_ap_site(self):
-        request = self.factory.get('/suppliersite/ap')
-        request.user = self.user_ap
+    @parameterized.expand([
+        (
+            'taxpayer_state={}&taxpayer_state={}'.format(STATUS_PENDING, STATUS_CHANGE_REQUIRED),
+            [BUSINESS_EXAMPLE_NAME_1, BUSINESS_EXAMPLE_NAME_2],
+            [],
+        ),
+        (
+           'taxpayer_state={}'.format(STATUS_PENDING),
+           [BUSINESS_EXAMPLE_NAME_1],
+           [BUSINESS_EXAMPLE_NAME_2],
+        ),
+        (
+            'taxpayer_state={}'.format(STATUS_CHANGE_REQUIRED),
+            [BUSINESS_EXAMPLE_NAME_2],
+            [BUSINESS_EXAMPLE_NAME_1],
+        ),
+        (
+            'country=ARG',
+            [BUSINESS_EXAMPLE_NAME_1],
+            [BUSINESS_EXAMPLE_NAME_2],
+        ),
+        (
+            'country=USA',
+            [BUSINESS_EXAMPLE_NAME_2],
+            [BUSINESS_EXAMPLE_NAME_1]
+        ),
+    ])
+    def test_get_taxpayers_with_filters(
+        self,
+        query_param,
+        contain_business_name,
+        not_contain_business_name,
+    ):
+        self.client.force_login(self.user_ap)
+        response = self.client.get(
+            "{}?{}".format(reverse(self.ap_home_url), query_param)
+        )
+        for contain_bn in contain_business_name:
+            self.assertContains(response, contain_bn)
+        for not_contain_bn in not_contain_business_name:
+            self.assertNotContains(response, not_contain_bn)
 
-        ap_home = ApTaxpayers()
-        ap_home.request = request
-
-        response_queryset = ap_home.get_queryset()
-
-        self.assertIn(self.taxpayer_ar1, response_queryset)
-        self.assertIn(self.taxpayer_ar2, response_queryset)
+    def test_get_taxpayers_between_2_dates_in_ap_site(self):
+        self.client.force_login(self.user_ap)
+        with freeze_time(time_to_freeze=date(2019, 10, 21)):
+            taxpayer_21_october = TaxPayerArgentinaFactory()
+            taxpayer_21_october2 = TaxPayerArgentinaFactory()
+        response = self.client.get(
+            '{}?taxpayer_date_after=10/20/2019&taxpayer_date_before=10/22/2019'.format(
+                reverse(self.ap_home_url)
+            )
+        )
+        self.assertContains(response, taxpayer_21_october.business_name)
+        self.assertContains(response, taxpayer_21_october2.business_name)
 
     def test_get_taxpayers_list_success(self):
         request = self.factory.get('/suppliersite/ap')
