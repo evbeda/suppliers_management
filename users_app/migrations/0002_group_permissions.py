@@ -18,6 +18,7 @@ def add_group_permissions(*args, **kwargs):
             ('can_create_taxpayer', 'Can create taxpayer', content_type),
             ('can_create_invoice', 'Can create invoice', content_type),
             ('can_edit_invoice', 'Can edit invoice', content_type),
+            ('supplier_role', 'Is supplier', content_type),
         ],
         'ap_admin': [
             ('can_view_invoices', 'Can view invoices', content_type),
@@ -31,15 +32,18 @@ def add_group_permissions(*args, **kwargs):
             ('can_approve', 'Can approve', content_type),
             ('can_reject', 'Can reject', content_type),
             ('can_request_change', 'Can request changes', content_type),
+            ('ap_role', 'Is ap', content_type),
         ],
         'ap_reporter': [
             ('can_view_invoices', 'Can view invoices', content_type),
             ('can_view_all_invoices', 'Can view all invoices', content_type),
             ('can_view_all_taxpayer', 'Can view all taxpayers', content_type),
             ('can_view_reports', 'Can view reports', content_type),
+            ('ap_role', 'Is ap', content_type),
         ],
         'ap_manager': [
             ('can_manage_aps', 'Can manage ap permissions', content_type),
+            ('ap_role', 'Is ap', content_type),
         ],
     }
 

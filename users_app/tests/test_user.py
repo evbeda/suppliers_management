@@ -83,7 +83,11 @@ class TestLoginErrorTemplate(TestCase):
 class TestLoginRedirect(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user_with_eb_social = UserFactory(email='nicolas')
+
+        self.supplier_group = Group.objects.get(name='supplier')
+
+        self.user_with_eb_social = UserFactory(email='nicolas@gmail.com')
+        self.user_with_eb_social.groups.add(self.supplier_group)
         self.user_with_google_social = UserFactory(email='ap@eventbrite.com')
 
     def test_login_fail_should_redirect_to_loginfailview(self):
@@ -133,6 +137,7 @@ class TestLoginRedirect(TestCase):
 
     def test_ap_site_access_denied(self):
         user = UserFactory(email='not_allowed@user.com')
+        user.groups.add(self.supplier_group)
         self.client.force_login(user)
         response = self.client.get(
             reverse('ap-taxpayers'),

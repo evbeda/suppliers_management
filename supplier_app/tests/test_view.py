@@ -14,6 +14,7 @@ from unittest.mock import (
 )
 
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.files import File
 from django.core.urlresolvers import (
@@ -100,7 +101,9 @@ class TestCreateTaxPayer(TestCase):
             name='FakeCompany',
             description='Best catering worldwide'
         )
+        self.supplier_group = Group.objects.get(name='supplier')
         self.user_with_eb_social = UserFactory(email='nicolas')
+        self.user_with_eb_social.groups.add(self.supplier_group)
         self.client.force_login(self.user_with_eb_social)
         self.companyuserpermission = CompanyUserPermissionFactory(
             company=self.company,
@@ -212,8 +215,70 @@ class TestCreateTaxPayer(TestCase):
             bankaccount.taxpayer
         )
 
+    def test_logged_in_supplier_can_create_taxpayer(self):
 
-class TestTaxpayerList(TestCase):
+        response = self.client.get(
+            reverse('taxpayer-create'),
+        )
+
+        self.assertIn(
+            'supplier_app/taxpayer-creation.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            self.user_with_eb_social.groups.filter(name='supplier').exists()
+        )
+
+    def test_not_logged_in_supplier_cant_create_taxpayer(self):
+        client = Client()
+        supplier_user = UserFactory()
+        supplier_user.groups.add(self.supplier_group)
+
+        response = client.get(
+            reverse('taxpayer-create'),
+            follow=True
+        )
+        self.assertIn(
+            'registration/login.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            supplier_user.groups.filter(name='supplier').exists()
+        )
+
+    def test_users_without_required_permission_cant_create(self):
+        client = Client()
+        user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
+        ap_group = Group.objects.get(name='ap_admin')
+        user_without_supplier_permission.groups.add(ap_group)
+
+        client.force_login(user_without_supplier_permission)
+        response = client.get(
+            reverse('taxpayer-create'),
+            follow=True,
+        )
+        self.assertIn(
+            'AP_app/ap-taxpayers.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertFalse(
+            user_without_supplier_permission.groups.filter(name='supplier').exists()
+        )
+
+
+class TestSupplierHome(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
@@ -237,6 +302,11 @@ class TestTaxpayerList(TestCase):
             user=self.user_with_social_evb
         )
 
+        self.client = Client()
+        self.supplier_user = UserFactory(email='nahuel.valencia21@gmail.com')
+        self.supplier_group = Group.objects.get(name='supplier')
+        self.supplier_user.groups.add(self.supplier_group)
+
     def test_get_taxpayers_child(self):
         request = self.factory.get('/suppliersite/home')
         request.user = self.user_with_social_evb
@@ -250,6 +320,65 @@ class TestTaxpayerList(TestCase):
             TaxPayerArgentina
         )
         self.assertGreaterEqual(len(taxpayer_list), 1)
+
+    def test_logged_in_supplier_can_access_supplier_home(self):
+
+        self.client.force_login(self.supplier_user)
+        response = self.client.get(
+            reverse('supplier-home'),
+        )
+
+        self.assertIn(
+            'supplier_app/supplier-home.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            self.supplier_user.groups.filter(name='supplier').exists()
+        )
+
+    def test_not_logged_in_supplier_cant_access_supplier_home(self):
+
+        response = self.client.get(
+            reverse('supplier-home'),
+            follow=True
+        )
+        self.assertIn(
+            'registration/login.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            self.supplier_user.groups.filter(name='supplier').exists()
+        )
+
+    def test_users_without_required_permission_cant_access_supplier_home(self):
+        user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
+        ap_group = Group.objects.get(name='ap_admin')
+        user_without_supplier_permission.groups.add(ap_group)
+
+        self.client.force_login(user_without_supplier_permission)
+        response = self.client.get(
+            reverse('supplier-home'),
+            follow=True,
+        )
+        self.assertIn(
+            'AP_app/ap-taxpayers.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertFalse(
+            user_without_supplier_permission.groups.filter(name='supplier').exists()
+        )
 
 
 class TestTaxpayerApList(TestCase):
@@ -913,7 +1042,10 @@ class TestCompanyInvite(TestCase):
 class TestCompanyJoinView(TestCase):
     def setUp(self):
         self.client = Client()
+        self.supplier_group = Group.objects.get(name='supplier')
         self.user = UserFactory()
+        self.user.groups.add(self.supplier_group)
+
         self.url_company_select = 'company-selection'
         self.url_company_join = 'company-join'
         self.client.force_login(self.user)
@@ -994,11 +1126,79 @@ class TestCompanyJoinView(TestCase):
             HTTPStatus.NOT_FOUND
         )
 
+    def test_logged_in_supplier_can_join_a_company(self):
+        companyuniquetoken = CompanyUniqueTokenFactory()
+        kwargs = {'token': companyuniquetoken.token}
+
+        response = self.client.get(
+            reverse(
+                'company-selection',
+                kwargs=kwargs,
+            )
+        )
+        self.assertIn(
+            'supplier_app/company_selector.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            self.user.groups.filter(name='supplier').exists()
+        )
+
+    def test_not_logged_in_supplier_cant_join_a_company(self):
+        client = Client()
+        supplier_user = UserFactory()
+        supplier_user.groups.add(self.supplier_group)
+
+        response = client.get(
+            reverse('taxpayer-create'),
+            follow=True
+        )
+        self.assertIn(
+            'registration/login.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertTrue(
+            supplier_user.groups.filter(name='supplier').exists()
+        )
+
+    def test_users_without_required_permission_cant_join_a_company(self):
+        client = Client()
+        user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
+        ap_group = Group.objects.get(name='ap_admin')
+        user_without_supplier_permission.groups.add(ap_group)
+
+        client.force_login(user_without_supplier_permission)
+        response = client.get(
+            reverse('taxpayer-create'),
+            follow=True,
+        )
+        self.assertIn(
+            'AP_app/ap-taxpayers.html',
+            response.template_name,
+        )
+        self.assertEqual(
+            response.status_code,
+            HTTPStatus.OK
+        )
+        self.assertFalse(
+            user_without_supplier_permission.groups.filter(name='supplier').exists()
+        )
+
 
 class TestCompanyJoin(TestCase):
     def setUp(self):
         self.client = Client()
+        self.supplier_group = Group.objects.get(name="supplier")
         self.user = UserFactory()
+        self.user.groups.add(self.supplier_group)
         self.client.force_login(self.user)
         self.url_company_join = 'company-join'
 
@@ -1147,8 +1347,11 @@ class TestNotifyMessages(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
+        self.supplier_group = Group.objects.get(name='supplier')
         self.supplier_user = UserFactory()
+        self.supplier_user.groups.add(self.supplier_group)
         self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
         CompanyUserPermissionFactory(user=self.supplier_user)
         self.client.force_login(self.supplier_user)
         self.taxpayer_creation_url = 'taxpayer-create'
@@ -1205,6 +1408,7 @@ class TestNotifyMessages(TestCase):
         self.assertContains(response, TAXPAYER_CREATION_ERROR_MESSAGE)
 
     def test_taxpayer_creation_success_should_display_success_message(self):
+        self.client.force_login(self.supplier_user)
         response = self.client.post(
             reverse(self.taxpayer_creation_url),
             self.POST,
