@@ -1,14 +1,14 @@
 from django.conf.urls import url
 
 from invoices_app.views import (
-    InvoiceListView,
-    InvoiceUpdateView,
-    SupplierInvoiceListView,
-    SupplierInvoiceCreateView,
     InvoiceDetailView,
     InvoiceHistory,
+    InvoiceListView,
+    InvoiceUpdateView,
+    SupplierInvoiceCreateView,
+    SupplierInvoiceListView,
     change_invoice_status,
-    post_a_comment,
+    post_a_comment
 )
 
 urlpatterns = [

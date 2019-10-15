@@ -1,16 +1,9 @@
 from django import forms
 from django.forms.models import ModelForm
 from django.http import QueryDict
-from supplier_app import (
-    TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE,
-)
 
-from supplier_app.models import (
-    Address,
-    BankAccount,
-    TaxPayerArgentina,
-)
-
+from supplier_app import TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE
+from supplier_app.models import Address, BankAccount, TaxPayerArgentina
 from utils.file_validator import validate_file
 
 
@@ -89,7 +82,7 @@ class TaxPayerCreateForm(BasePrefixCreateForm):
 
     class Meta:
         model = TaxPayerArgentina
-        exclude = ['taxpayer_state', 'workday_id', 'company', 'country']
+        exclude = ['taxpayer_state', 'workday_id', 'company', 'country', 'taxpayer_date']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -137,7 +130,8 @@ class TaxPayerEditForm(ModelForm):
             'country',
             'afip_registration_file',
             'witholding_taxes_file',
-            'taxpayer_comments'
+            'taxpayer_comments',
+            'taxpayer_date',
             ]
         widgets = {
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),

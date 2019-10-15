@@ -13,6 +13,7 @@ from django.http import (
     HttpResponseRedirect,
     QueryDict
 )
+from django.urls import reverse
 from django.test import (
     Client,
     RequestFactory,
@@ -22,7 +23,7 @@ from django.utils.datastructures import MultiValueDict
 
 from supplier_app.tests import (
     taxpayer_creation_POST_factory,
-    get_bank_info_example
+    get_bank_info_example,
 )
 from supplier_app.tests.factory_boy import (
     CompanyFactory,
@@ -77,6 +78,7 @@ class TestTaxPayerFormValidation(TestCase):
         self.bank_info = get_bank_info_example("BBVA BANCO FRANCES S.A.")
         self.user_with_eb_social = UserFactory()
         self.client.force_login(self.user_with_eb_social)
+        self.taxpayer_creation_url = 'taxpayer-create'
         self.companyuserpermission = CompanyUserPermissionFactory(
             company=self.company,
             user=self.user_with_eb_social
@@ -124,7 +126,7 @@ class TestTaxPayerFormValidation(TestCase):
         })
 
     def test_GET_taxpayer_view_should_render_3_forms(self):
-        response = self.client.get('/suppliersite/supplier/taxpayer/create')
+        response = self.client.get(reverse(self.taxpayer_creation_url))
         taxpayer_form = response.context_data['taxpayer_form']
         address_form = response.context_data['address_form']
         bankaccount_form = response.context_data['bank_account_form']
@@ -153,7 +155,7 @@ class TestTaxPayerFormValidation(TestCase):
         )
         request.user = self.user_with_eb_social
         file_mock = MagicMock(spec=File)
-        file_mock.name = 'test.pdf'
+        file_mock.name = 'other.pdf'
         file_mock.size = param_size
         request.FILES.update(self._get_request_FILES(**{attr: file_mock}))
         with patch(
@@ -200,7 +202,7 @@ class TestTaxPayerFormValidation(TestCase):
     ):
         request = self.factory.post(
             '/suppliersite/supplier/taxpayer/create',
-            data=self.POST
+            data=self.POST,
         )
         request.user = self.user_with_eb_social
         request.FILES.update(self._get_request_FILES())

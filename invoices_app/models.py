@@ -1,24 +1,21 @@
-from django.db import models
 from decimal import Decimal
+
 from django.conf import settings
-from django.core.validators import MinValueValidator
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
+from django.db import models
+from simple_history.models import HistoricalRecords
+
 from invoices_app import (
+    ARS_INVOICE_TYPES,
     CURRENCIES,
     INVOICE_STATUS,
-    ARS_INVOICE_TYPES
-)
-from supplier_app.models import (
-    TaxPayer
-)
-from invoices_app import (
     INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
     INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_NEW,
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED
 )
-from simple_history.models import HistoricalRecords
+from supplier_app.models import TaxPayer
 from utils.invoice_lookup import invoice_status_lookup
 
 

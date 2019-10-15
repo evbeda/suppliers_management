@@ -1,10 +1,8 @@
-from django import forms
-from invoices_app.models import Invoice
 from bootstrap_datepicker_plus import DatePickerInput
-from invoices_app import (
-    INVOICE_MAX_SIZE_FILE,
-    INVOICE_FILE_FIELDS,
-)
+from django import forms
+
+from invoices_app import INVOICE_FILE_FIELDS, INVOICE_MAX_SIZE_FILE
+from invoices_app.models import Invoice
 from utils.file_validator import validate_file
 
 

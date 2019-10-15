@@ -5,6 +5,15 @@ from django.utils.translation import ugettext_lazy as _
 
 DBTuple = namedtuple('DBTuple', 'value verbose_name')
 
+EMAIL_SUCCESS_MESSAGE = "Your invitation was sent successfully"
+EMAIL_ERROR_MESSAGE = "There was an error sending your email"
+
+TAXPAYER_CREATION_SUCCESS_MESSAGE = "Your taxpayer was created successfully"
+TAXPAYER_CREATION_ERROR_MESSAGE = "There was an error on creating your taxpayer please try again"
+TAXPAYER_FORM_INVALID_MESSAGE = "Your form is invalid"
+COMPANY_ERROR_MESSAGE = "You dont have a company yet please contact with us mail@mail.com"
+
+
 # 25 * 1014 * 1024
 TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE = 26214400
 

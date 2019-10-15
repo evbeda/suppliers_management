@@ -1,19 +1,18 @@
-import uuid, hashlib
+import hashlib
+import uuid
 
-from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
+from django.db import models
 from django.utils import timezone
 
 from supplier_app import (
+    PAYMENT_TERMS,
+    PAYMENT_TYPES,
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
 from supplier_app.bank_info import get_bank_info_choices
-from supplier_app import (
-    PAYMENT_TERMS,
-    PAYMENT_TYPES
-)
 
 
 class Company(models.Model):
@@ -78,6 +77,10 @@ class TaxPayer(models.Model):
     def __str__(self):
         return self.business_name
 
+    @property
+    def taxpayer_identifier(self):
+        return self.get_taxpayer_child().get_taxpayer_identifier()
+
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
@@ -114,6 +117,9 @@ class TaxPayerArgentina(TaxPayer):
         verbose_name='Certificate of no tax withholding of IVA, income or SUSS',
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         )
+
+    def get_taxpayer_identifier(self):
+        return self.cuit
 
 
 COUNTRIES = {

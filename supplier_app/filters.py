@@ -1,16 +1,14 @@
-from django.forms import Select, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, Select
 from django_filters import (
     CharFilter,
     DateFromToRangeFilter,
     FilterSet,
-    MultipleChoiceFilter,
+    MultipleChoiceFilter
 )
 
-from supplier_app.models import TaxPayer
 from supplier_app import get_taxpayer_status_choices
-from utils.custom_filters import (
-    DateRangeWidget
-)
+from supplier_app.models import TaxPayer
+from utils.custom_filters import DateRangeWidget
 
 
 class TaxPayerFilter(FilterSet):

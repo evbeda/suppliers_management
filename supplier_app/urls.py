@@ -14,7 +14,7 @@ from supplier_app.views import (
     approve_taxpayer,
     company_invite,
     company_join,
-    deny_taxpayer,
+    deny_taxpayer
 )
 
 urlpatterns = [
