@@ -3,68 +3,38 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from utils.permissions import create_groups_and_apply_permisssions
 
 
 def add_group_permissions(*args, **kwargs):
     content_type, _ = ContentType.objects.get_or_create(app_label='users_app', model='user')
-    # supplier
-    permissions = [
-        Permission.objects.get_or_create(
-            codename='can_view_supplier',
-            name='Can access supplier views',
-            content_type=content_type,
-        ),
-        Permission.objects.get_or_create(
-            codename='can_create_taxpayer',
-            name='Can create taxpayer',
-            content_type=content_type,
-        ),
-        Permission.objects.get_or_create(
-            codename='can_create_invoice',
-            name='Can create invoice',
-            content_type=content_type,
-        ),
-    ]
-    group, created = Group.objects.get_or_create(name='supplier')
-    if created:
-        for permission, _ in permissions:
-            group.permissions.add(permission)
 
-    # AP admin
-    permissions = [
-        Permission.objects.get_or_create(codename='can_view_ap', name='Can view', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_edit_taxpayer', name='Can edit taxpayer', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_edit_invoice', name='Can edit invoice', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_approve', name='Can approve', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_reject', name='Can reject', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_request_change', name='Can request changes', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_pay_invoice', name='Can pay invoices', content_type=content_type),
-    ]
-    group, created = Group.objects.get_or_create(name='ap_admin')
-    if created:
-        for permission, _ in permissions:
-            group.permissions.add(permission)
+    groups = {
+        'supplier': [
+            ('can_view_supplier', 'Can access supplier views', content_type),
+            ('can_create_taxpayer', 'Can create taxpayer', content_type),
+            ('can_create_invoice', 'Can create invoice', content_type),
+        ],
+        'ap_admin': [
+            ('can_view_ap', 'Can view', content_type),
+            ('can_edit_taxpayer', 'Can edit taxpayer', content_type),
+            ('can_edit_invoice', 'Can edit invoice', content_type),
+            ('can_approve', 'Can approve', content_type),
+            ('can_reject', 'Can reject', content_type),
+            ('can_request_change', 'Can request changes', content_type),
+            ('can_pay_invoice', 'Can pay invoices', content_type),
+        ],
+        'ap_reporter': [
+            ('can_view_ap', 'Can view', content_type),
+            ('can_view_reports', 'Can view reports', content_type),
+        ],
+        'ap_manager': [
+            ('can_manage_aps', 'Can manage ap permissions', content_type),
+        ],
+    }
 
-    # AP reporter
-    permissions = [
-        Permission.objects.get_or_create(codename='can_view_ap', name='Can view', content_type=content_type),
-        Permission.objects.get_or_create(codename='can_view_reports', name='Can view reports', content_type=content_type),
-    ]
-    group, created = Group.objects.get_or_create(name='ap_reporter')
-    if created:
-        for permission, _ in permissions:
-            group.permissions.add(permission)
-
-    # AP Manager
-    permissions = [
-        Permission.objects.get_or_create(codename='can_manage_aps', name='Can manage ap permissions', content_type=content_type),
-    ]
-    group, created = Group.objects.get_or_create(name='ap_manager')
-    if created:
-        for permission, _ in permissions:
-            group.permissions.add(permission)
+    create_groups_and_apply_permisssions(groups)
 
 
 class Migration(migrations.Migration):
