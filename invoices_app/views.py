@@ -2,6 +2,7 @@ import urllib
 from datetime import timedelta
 
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
+from django.contrib import messages
 from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
@@ -34,8 +35,9 @@ from invoices_app import (
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_PAID,
-    INVOICE_STATUS_REJECTED,
+INVOICE_STATUS_REJECTED,
     EXPORT_TO_XLS_FULL,
+    INVOICE_MAX_SIZE_FILE,
 )
 from invoices_app.filters import InvoiceFilter
 from invoices_app.forms import InvoiceForm
@@ -66,6 +68,7 @@ from utils.reports import (
     generate_response_xls,
 )
 
+from utils.file_validator import validate_file
 
 class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
     template_name = 'invoices_app/invoice-list.html'
@@ -330,19 +333,40 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
 
 @is_invoice_for_user()
 def post_a_comment(request, pk):
-    # Check if message is empty (Validate also in template)
+    # Check if message is empty
     if not request.POST.get('message'):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
-    # Make a comment
+
+    if request.FILES:
+        is_valid, msgs = validate_file(
+            request.FILES['myFile'],
+            INVOICE_MAX_SIZE_FILE
+        )
+
+        if not is_valid:
+            for message in msgs:
+                messages.error(request, message)
+
+            return redirect(
+                reverse(
+                    'invoices-detail',
+                    kwargs={
+                        'taxpayer_id': invoice.taxpayer.id,
+                        'pk': pk,
+                    }
+                )
+            )
+
     Comment.objects.create(
         invoice=invoice,
         user=request.user,
         message='{} {}'.format(
             request.user.email,
             request.POST['message'],
-        )
+        ),
+        comment_file=request.FILES.get('myFile'),
     )
 
     if request.user.is_AP:

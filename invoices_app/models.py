@@ -9,13 +9,12 @@ from invoices_app import (
     ARS_INVOICE_TYPES,
     CURRENCIES,
     INVOICE_STATUS,
-    INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_NEW,
-    INVOICE_STATUS_PAID,
-    INVOICE_STATUS_REJECTED
 )
-from supplier_app.models import TaxPayer
+from supplier_app.models import (
+    TaxPayer
+)
+
 from utils.invoice_lookup import invoice_status_lookup
 
 
@@ -86,6 +85,10 @@ class Comment(models.Model):
 
     message = models.CharField(max_length=200)
     comment_date_received = models.DateTimeField(auto_now_add=True)
+    comment_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
 
     def __str__(self):
         return self.message

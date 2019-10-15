@@ -1,9 +1,8 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from django import forms
 
-from invoices_app import INVOICE_FILE_FIELDS, INVOICE_MAX_SIZE_FILE
 from invoices_app.models import Invoice
-from utils.file_validator import validate_file
+from utils.file_validator import is_file_valid
 
 
 class InvoiceForm(forms.ModelForm):
@@ -41,17 +40,13 @@ class InvoiceForm(forms.ModelForm):
         }
 
     def is_valid(self):
-        valid = super().is_valid()
-        if not valid:
-            return valid
-        for file_field in INVOICE_FILE_FIELDS:
-            file_data = self.cleaned_data[file_field]
-            if file_data:
-                file_is_valid, msg = validate_file(
-                    file_data,
-                    INVOICE_MAX_SIZE_FILE,
-                )
-                if not file_is_valid:
-                    self.add_error(file_field, msg)
-                    return file_is_valid
-        return valid
+        valid_from_super = super().is_valid()
+
+        if not self.fields.get('invoice_file'):
+            return False
+
+        return is_file_valid(
+            self,
+            valid_from_super,
+            self.fields['invoice_file']
+        )

@@ -2,7 +2,11 @@
 {% load i18n %}
 
 {% block content %}
+{% if is_AP %}
 {% include 'AP_app/navbar.html' %}
+{% else %}
+{% include 'supplier_app/navbar.html' %}
+{% endif %}
 {{ block.super }}
 {% csrf_token %}
 
@@ -24,27 +28,27 @@
         <span class="float-right">
           <strong>Status:</strong>
           {% if invoice.status == INVOICE_STATUS_NEW %}
-              <span class="badge badge-primary">{{invoice.get_status_display}}</span>
-              {% endif %}
-              {% if invoice.status == INVOICE_STATUS_REJECTED %}
-              <span class="badge badge-danger">{{invoice.get_status_display}}</span>
-              {% endif %}
-              {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
-              <span class="badge badge-warning">{{invoice.get_status_display}}</span>
-              {% endif %}
-              {% if invoice.status == INVOICE_STATUS_PAID %}
-              <span class="badge badge-dark">{{invoice.get_status_display}}</span>
-              {% endif %}
-              {% if invoice.status == INVOICE_STATUS_APPROVED %}
-              <span class="badge badge-success">{{invoice.get_status_display}}</span>
-              {% endif %}
+          <span class="badge badge-primary">{{invoice.get_status_display}}</span>
+          {% endif %}
+          {% if invoice.status == INVOICE_STATUS_REJECTED %}
+          <span class="badge badge-danger">{{invoice.get_status_display}}</span>
+          {% endif %}
+          {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
+          <span class="badge badge-warning">{{invoice.get_status_display}}</span>
+          {% endif %}
+          {% if invoice.status == INVOICE_STATUS_PAID %}
+          <span class="badge badge-dark">{{invoice.get_status_display}}</span>
+          {% endif %}
+          {% if invoice.status == INVOICE_STATUS_APPROVED %}
+          <span class="badge badge-success">{{invoice.get_status_display}}</span>
+          {% endif %}
       </div>
       <div class="card-body">
         <div class="row mb-4">
           <div class="col-sm-4">
             <h6 class="mb-3">From:</h6>
             <div>
-              <strong>{{taxpayer.razon_social}}</strong>
+              <strong>{{taxpayer.business_name}}</strong>
             </div>
             <div>{{address.street}} {{address.number}}</div>
             <div>{{address.zip_code}} {{address.city}}</div>
@@ -127,25 +131,56 @@
       <div>
         <div class="container">
           <div class="row mt-2 pb-2 border-bottom border-gray ">
-            <div class="col">
+            <div class="col mb-2">
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor %}
+
+              {% endif %}
               <h6>Make a comment</h6>
               <form method='POST' action='{% url 'post-comment' pk=invoice.id %}' enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
-                  <textarea class="form-control" name="message" rows="3"></textarea>
+                  <textarea class="form-control" name="message" required rows="3"></textarea>
                 </div>
-                <button type="submit" name='status' class="btn btn-success">Post a comment</button>
+                <div class="row pl-3">
+                <div class="pl-0 pr-0 col-md-3">
+                  <button type="submit" name="status" class="btn btn-success">Post a comment</button>
+                </div>
+                <div class="col-md-9">
+                  <div>
+                    <div class="input-group">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" name="myFile" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
+                      <label class="custom-file-label" for="inputGroupFile01">Choose a file</label>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
               </form>
             </div>
           </div>
         </div>
         {% for comment in comments %}
-        <div class="row text-muted media-body pt-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
+        <div class="row media-body pt-3 pb-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
           <div class="col">
-            <p>
-              <strong class="d-block text-gray-dark">{{ comment.comment_date_received }}</strong>
-              {{ comment.message }}
-            </p>
+            <strong class="d-block text-gray-dark">{{ comment.comment_date_received }}</strong>
+            {{ comment.message }}
+            {% if comment.comment_file %}
+            <div class="row ml-0 mb-0">
+              <p class="mb-0">Attachment: </p>
+              <a target="_blank" href="http://docs.google.com/gview?url={{ comment.comment_file.url }}">
+                <i class="fas fa-paperclip"></i>
+              </a>
+            </div>
+            {% endif %}
           </div>
         </div>
         {% endfor %}
@@ -153,4 +188,11 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+
+    $('.custom-file input').change(function (e) {
+        $(this).next('.custom-file-label').html(e.target.files[0].name);
+    });
+
+</script>
 {% endblock %}
