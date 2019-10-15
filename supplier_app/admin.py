@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 from supplier_app.models import (
-    Company,
     Address,
     BankAccount,
-    TaxPayerArgentina,
+    Company,
     CompanyUserPermission,
+    TaxPayerArgentina
 )
 
 admin.site.register(Company)

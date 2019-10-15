@@ -15,7 +15,6 @@ from django.views.generic import CreateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
-
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
@@ -29,10 +28,10 @@ from invoices_app import (
     CAN_VIEW_SUPPLIER_INVOICES_PERM,
     INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
-    INVOICE_STATUS_REJECTED,
     INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_NEW,
     INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED
 )
 from invoices_app.filters import InvoiceFilter
 from invoices_app.forms import InvoiceForm
@@ -53,9 +52,9 @@ from users_app.mixins import IsUserCompanyInvoice, HasTaxPayerPermissionMixin
 
 from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
-    send_email_notification,
-    get_user_emails_by_tax_payer_id,
     build_mail_html,
+    get_user_emails_by_tax_payer_id,
+    send_email_notification
 )
 
 

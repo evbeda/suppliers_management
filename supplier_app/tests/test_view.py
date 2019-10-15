@@ -32,7 +32,15 @@ from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
 from freezegun import freeze_time
-from supplier_app import email_notifications
+from supplier_app import (
+    email_notifications,
+    EMAIL_SUCCESS_MESSAGE,
+    EMAIL_ERROR_MESSAGE,
+    TAXPAYER_CREATION_SUCCESS_MESSAGE,
+    TAXPAYER_CREATION_ERROR_MESSAGE,
+    COMPANY_ERROR_MESSAGE,
+    TAXPAYER_FORM_INVALID_MESSAGE,
+)
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
@@ -54,7 +62,8 @@ from supplier_app.tests import (
     STATUS_CHANGE_REQUIRED,
     STATUS_PENDING,
     BUSINESS_EXAMPLE_NAME_1,
-    BUSINESS_EXAMPLE_NAME_2
+    BUSINESS_EXAMPLE_NAME_2,
+    TOKEN_COMPANY
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -148,21 +157,23 @@ class TestCreateTaxPayer(TestCase):
             self.create_taxpayer_view.get_success_url()
             )
 
-    def _get_taxpayer_creation_request(self):
-        request = self.factory.get(
+    def _taxpayer_creation_request(self):
+        request = self.factory.post(
             '/suppliersite/supplier/taxpayer/create',
+            data=taxpayer_creation_POST_factory(),
             )
         request.user = self.user_with_eb_social
         return request
 
-    def test_form_valid_method_should_save_taxpayer_address_bankaccount(self):
+    @patch('supplier_app.views.messages.add_message')
+    def test_form_valid_method_should_save_taxpayer_address_bankaccount(self, msg_mocked):
         taxpayer_qty_before_creation = len(TaxPayer.objects.all())
         bank_account_qty_before_creation = len(BankAccount.objects.all())
         address_qty_before_creation = len(Address.objects.all())
         taxpayer_creation_forms = self._get_example_forms()
 
         self.create_taxpayer_view.request = \
-            self._get_taxpayer_creation_request()
+            self._taxpayer_creation_request()
         self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
 
         taxpayer_qty_after_creation = len(TaxPayer.objects.all())
@@ -182,11 +193,12 @@ class TestCreateTaxPayer(TestCase):
             address_qty_before_creation
         )
 
-    def test_address_bankaccount_should_be_related_with_taxpayer(self):
+    @patch('supplier_app.views.messages.add_message')
+    def test_address_bankaccount_should_be_related_with_taxpayer(self, msg_mocked):
         taxpayer_creation_forms = self._get_example_forms()
 
         self.create_taxpayer_view.request = \
-            self._get_taxpayer_creation_request()
+            self._taxpayer_creation_request()
         self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
         address = Address.objects.last()
         bankaccount = BankAccount.objects.last()
@@ -244,7 +256,6 @@ class TestTaxpayerApList(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
-
         self.ap_home_url = 'ap-taxpayers'
         self.company1 = CompanyFactory(
             name='Empresa 1',
@@ -258,7 +269,6 @@ class TestTaxpayerApList(TestCase):
         self.taxpayer_ar1 = TaxPayerArgentinaFactory(
             business_name=BUSINESS_EXAMPLE_NAME_1,
             workday_id='1',
-            country='ARG',
             taxpayer_state=STATUS_PENDING,
             cuit='20-31789965-3',
             company=self.company1,
@@ -266,7 +276,6 @@ class TestTaxpayerApList(TestCase):
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
             business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
-            country='USA',
             taxpayer_state=STATUS_CHANGE_REQUIRED,
             cuit='20-39237968-5',
             company=self.company2,
@@ -302,14 +311,9 @@ class TestTaxpayerApList(TestCase):
             [BUSINESS_EXAMPLE_NAME_1],
         ),
         (
-            'country=ARG',
-            [BUSINESS_EXAMPLE_NAME_1],
-            [BUSINESS_EXAMPLE_NAME_2],
-        ),
-        (
-            'country=USA',
-            [BUSINESS_EXAMPLE_NAME_2],
-            [BUSINESS_EXAMPLE_NAME_1]
+            'country=AR',
+            [BUSINESS_EXAMPLE_NAME_1, BUSINESS_EXAMPLE_NAME_2],
+            [],
         ),
     ])
     def test_get_taxpayers_with_filters(
@@ -339,6 +343,16 @@ class TestTaxpayerApList(TestCase):
         )
         self.assertContains(response, taxpayer_21_october.business_name)
         self.assertContains(response, taxpayer_21_october2.business_name)
+
+    def test_taxpayer_list_show_CUIT_status_and_business_name(self):
+        self.client.force_login(self.user_ap)
+        response = self.client.get(reverse(self.ap_home_url))
+        self.assertContains(response, self.taxpayer_ar1.business_name)
+        self.assertContains(response, self.taxpayer_ar2.business_name)
+        self.assertContains(response, self.taxpayer_ar1.cuit)
+        self.assertContains(response, self.taxpayer_ar2.cuit)
+        self.assertContains(response, self.taxpayer_ar1.taxpayer_state)
+        self.assertContains(response, self.taxpayer_ar2.taxpayer_state)
 
     def test_get_taxpayers_list_success(self):
         request = self.factory.get('/suppliersite/ap')
@@ -835,7 +849,7 @@ class TestCompanyInvite(TestCase):
 
     @patch(
         'supplier_app.models.CompanyUniqueToken._token_generator',
-        return_value='f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
+        return_value=TOKEN_COMPANY
     )
     def test_company_invite_sends_token_in_body_and_is_persisted(self, mocked_token):
         self._make_post()
@@ -845,7 +859,7 @@ class TestCompanyInvite(TestCase):
         )
         self.assertEqual(
             CompanyUniqueToken.objects.last().token,
-            mocked_token.return_value
+            TOKEN_COMPANY
         )
 
     def test_company_invite_redirect_to_companies_upon_email_invitation(self):
@@ -1086,3 +1100,84 @@ class TestApprovalRefuse(TestCase):
             settings.SUPPLIER_HOME_URL,
             mail.outbox[0].alternatives[0][0]
         )
+
+
+class TestNotifyMessages(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.factory = RequestFactory()
+        self.supplier_user = UserFactory()
+        self.supplier_without_company = UserFactory()
+        CompanyUserPermissionFactory(user=self.supplier_user)
+        self.client.force_login(self.supplier_user)
+        self.taxpayer_creation_url = 'taxpayer-create'
+        self.email_invitation_url = 'company-invite'
+        self.supplier_home_url = 'supplier-home'
+        self.company_constants = {
+            'email': 'something@eventbrite.com',
+            'company_id': '1',
+        }
+        self.POST = taxpayer_creation_POST_factory()
+
+    def _make_email_invitation_post(self):
+        return self.client.post(
+            reverse(self.email_invitation_url),
+            self.company_constants,
+            follow=True
+        )
+
+    @patch(
+        'supplier_app.models.CompanyUniqueToken._token_generator',
+        return_value=TOKEN_COMPANY
+    )
+    def test_send_mail_correctly_should_show_success_message(self, token_mocked):
+        response = self._make_email_invitation_post()
+        self.assertContains(response, EMAIL_SUCCESS_MESSAGE)
+
+    @patch(
+        'utils.send_email.send_mail',
+        side_effect=Exception
+    )
+    @patch(
+        'supplier_app.models.CompanyUniqueToken._token_generator',
+        return_value=TOKEN_COMPANY
+    )
+    def test_send_mail_failure_should_show_error_message(self, email_notif_mocked, token_mocked):
+
+        response = self._make_email_invitation_post()
+        self.assertContains(response, EMAIL_ERROR_MESSAGE)
+
+    def test_supplier_without_company_should_see_notification_message_in_home(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self.client.get(
+            reverse(self.supplier_home_url),
+        )
+        self.assertContains(response, COMPANY_ERROR_MESSAGE)
+
+    def test_supplier_without_company_cant_create_a_taxpayer_message(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self.client.post(
+            reverse(self.taxpayer_creation_url),
+            self.POST,
+            follow=True,
+        )
+        self.assertContains(response, TAXPAYER_CREATION_ERROR_MESSAGE)
+
+    def test_taxpayer_creation_success_should_display_success_message(self):
+        response = self.client.post(
+            reverse(self.taxpayer_creation_url),
+            self.POST,
+            follow=True
+        )
+        self.assertContains(response, TAXPAYER_CREATION_SUCCESS_MESSAGE)
+
+    def test_taxpayer_creation_error_should_display_error_message(self):
+        response = self.client.post(
+            reverse(self.taxpayer_creation_url),
+            {
+                'asd': 'asd',
+            },
+            follow=True,
+        )
+        self.assertContains(response, TAXPAYER_FORM_INVALID_MESSAGE)

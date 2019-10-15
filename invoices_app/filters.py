@@ -1,20 +1,17 @@
-from django.forms import Select, CheckboxSelectMultiple
+from django.forms import CheckboxSelectMultiple, Select
 from django_filters import (
     CharFilter,
     DateFromToRangeFilter,
     FilterSet,
     ModelChoiceFilter,
     MultipleChoiceFilter,
-    RangeFilter,
+    RangeFilter
 )
 
-from supplier_app.models import TaxPayer
 from invoices_app import INVOICE_STATUS, CAN_VIEW_ALL_TAXPAYERS_PERM
 from invoices_app.models import Invoice
-from utils.custom_filters import (
-    NumericRangeWidget,
-    DateRangeWidget
-)
+from supplier_app.models import TaxPayer
+from utils.custom_filters import DateRangeWidget, NumericRangeWidget
 
 
 def taxpayer_qs(request):

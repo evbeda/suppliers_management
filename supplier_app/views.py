@@ -1,44 +1,44 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django_filters.views import FilterView
-from django.http import (
-    HttpResponseRedirect,
-    Http404,
-)
-from django.shortcuts import (
-    get_object_or_404,
-    redirect,
-)
-from django.urls import (
-    reverse,
-    reverse_lazy,
-)
-from django.views.generic.list import ListView
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
-from django.views.generic.edit import (
-    CreateView,
-    FormView,
-    UpdateView
-)
+from django.views.generic.edit import CreateView, FormView, UpdateView
+from django.views.generic.list import ListView
+from django_filters.views import FilterView
 
+from supplier_app import (
+    COMPANY_ERROR_MESSAGE,
+    EMAIL_ERROR_MESSAGE,
+    email_notifications,
+    EMAIL_SUCCESS_MESSAGE,
+    TAXPAYER_CREATION_ERROR_MESSAGE,
+    TAXPAYER_CREATION_SUCCESS_MESSAGE,
+    TAXPAYER_FORM_INVALID_MESSAGE,
+)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
     BankAccountEditForm,
     TaxPayerCreateForm,
-    TaxPayerEditForm,
+    TaxPayerEditForm
 )
 from supplier_app.models import (
     Address,
+    BankAccount,
     Company,
     CompanyUniqueToken,
     CompanyUserPermission,
     TaxPayer,
-    TaxPayerArgentina,
-    BankAccount,
+    TaxPayerArgentina
 )
 from users_app.views import IsApUser
+from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
     taxpayer_notification,
@@ -90,6 +90,7 @@ class SupplierHome(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayers'] = self.get_taxpayers()
+        context['user_has_company'] = self._user_has_company()
         return context
 
     def get_taxpayers(self):
@@ -98,7 +99,16 @@ class SupplierHome(
             company__companyuserpermission__user=user
         )
         taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayer_list]
+
         return taxpayer_child
+
+    def _user_has_company(self):
+        user = self.request.user
+        if not user.companyuserpermission_set.all():
+            messages.error(self.request, _(COMPANY_ERROR_MESSAGE))
+            return False
+        else:
+            return True
 
 
 class CreateTaxPayerView(LoginRequiredMixin, TemplateView, FormView):
@@ -134,24 +144,39 @@ class CreateTaxPayerView(LoginRequiredMixin, TemplateView, FormView):
         return reverse('supplier-home')
 
     def form_invalid(self, forms):
-        return HttpResponseRedirect(self.get_success_url())
+        messages.error(
+            self.request,
+            _(TAXPAYER_FORM_INVALID_MESSAGE),
+        )
+        return HttpResponseRedirect(reverse('taxpayer-create'))
 
     @transaction.atomic
     def form_valid(self, forms):
         """
         If the form is valid, redirect to the supplied URL.
         """
-        taxpayer = forms['taxpayer_form'].save(commit=False)
-        company = Company.objects.filter(companyuserpermission__user=self.request.user)[0]
-        taxpayer.company = company
-        taxpayer.save()
-        address = forms['address_form'].save(commit=False)
-        address.taxpayer = taxpayer
-        address.save()
-        bankaccount = forms['bankaccount_form'].save(commit=False)
-        bankaccount.taxpayer = taxpayer
-        bankaccount.save()
-        return HttpResponseRedirect(self.get_success_url())
+        try:
+            taxpayer = forms['taxpayer_form'].save(commit=False)
+            company = Company.objects.get(companyuserpermission__user=self.request.user)
+            taxpayer.company = company
+            taxpayer.save()
+            address = forms['address_form'].save(commit=False)
+            address.taxpayer = taxpayer
+            address.save()
+            bankaccount = forms['bankaccount_form'].save(commit=False)
+            bankaccount.taxpayer = taxpayer
+            bankaccount.save()
+            messages.success(
+                self.request,
+                _(TAXPAYER_CREATION_SUCCESS_MESSAGE)
+            )
+        except ObjectDoesNotExist:
+            messages.error(
+                self.request,
+                _(TAXPAYER_CREATION_ERROR_MESSAGE)
+            )
+        finally:
+            return HttpResponseRedirect(self.get_success_url())
 
 
 class ApTaxpayers(LoginRequiredMixin, IsApUser, FilterView):
@@ -257,16 +282,21 @@ def approve_taxpayer(self, taxpayer_id, request=None):
 
 
 @transaction.atomic
-def company_invite(self):
-    email = [self.POST['email']]
-    company_id = self.POST['company_id']
-    company = Company.objects.get(pk=company_id)
-    companyuniquetoken = CompanyUniqueToken(company=company)
-    companyuniquetoken.assing_company_token
-    companyuniquetoken.save()
-    token = companyuniquetoken.token
-    company_invitation_notification(company, token, email)
-    return redirect('company-list')
+def company_invite(request):
+    try:
+        email = [request.POST['email']]
+        company_id = request.POST['company_id']
+        company = Company.objects.get(pk=company_id)
+        companyuniquetoken = CompanyUniqueToken(company=company)
+        companyuniquetoken.assing_company_token
+        companyuniquetoken.save()
+        token = companyuniquetoken.token
+        company_invitation_notification(company, token, email)
+        messages.success(request, _(EMAIL_SUCCESS_MESSAGE))
+    except CouldNotSendEmailError:
+        messages.error(request, _(EMAIL_ERROR_MESSAGE))
+    finally:
+        return redirect('company-list')
 
 
 def company_join(request, token):

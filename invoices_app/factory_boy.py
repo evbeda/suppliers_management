@@ -2,9 +2,7 @@ from datetime import datetime, timedelta
 
 import factory
 
-from invoices_app.models import (
-    Invoice,
-)
+from invoices_app.models import Invoice
 
 
 def get_due_date():
