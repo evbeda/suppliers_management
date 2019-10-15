@@ -9,7 +9,7 @@ from django_filters import (
 )
 
 from supplier_app.models import TaxPayer
-from invoices_app import INVOICE_STATUS
+from invoices_app import INVOICE_STATUS, CAN_VIEW_ALL_TAXPAYERS_PERM
 from invoices_app.models import Invoice
 from utils.custom_filters import (
     NumericRangeWidget,
@@ -21,11 +21,12 @@ def taxpayer_qs(request):
     user = getattr(request, 'user', None)
     if not user:
         return TaxPayer.objects.none()
-    elif user.is_AP:
+    elif user.has_perm(CAN_VIEW_ALL_TAXPAYERS_PERM):
         return TaxPayer.objects.all()
     else:
         return TaxPayer.objects.filter(
-            company__companyuserpermission__user=user)
+            company__companyuserpermission__user=user
+        )
 
 
 class InvoiceFilter(FilterSet):

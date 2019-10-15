@@ -4,6 +4,7 @@ from os import (
 )
 from unittest.mock import MagicMock
 
+from django.contrib.auth.models import Group
 from django.core.files import File
 from django.test import (
     Client,
@@ -27,8 +28,12 @@ class TestBase(TestCase):
 
     def setUp(self):
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+        ap_group = Group.objects.get(name='ap_admin')
+        self.ap_user.groups.add(ap_group)
 
         self.user = UserFactory()
+        supplier_group = Group.objects.get(name='supplier')
+        self.user.groups.add(supplier_group)
         self.company = CompanyFactory()
         self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
         self.companyuserpermission = CompanyUserPermissionFactory(
@@ -43,6 +48,7 @@ class TestBase(TestCase):
         self.address = AddressFactory(taxpayer=self.taxpayer)
 
         self.other_user = UserFactory()
+        self.other_user.groups.add(supplier_group)
         self.company_for_other_user = CompanyFactory()
         self.cup_for_other_user = CompanyUserPermissionFactory(
             company=self.company_for_other_user,

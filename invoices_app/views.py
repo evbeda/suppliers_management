@@ -1,24 +1,32 @@
 from datetime import timedelta
 
-from django.views.generic.detail import DetailView
+from django.contrib.auth.decorators import permission_required as permission_required_decorator
 from django.contrib.auth.mixins import (
-    LoginRequiredMixin,
-    UserPassesTestMixin
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
 )
 from django.http import HttpResponseBadRequest
 from django.urls import (
     reverse,
     reverse_lazy
 )
-from django.views.generic.list import ListView
-from django.views.generic import CreateView
-from django.views.generic.edit import UpdateView
-from django_filters.views import FilterView
-
 from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import CreateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
+from django.views.generic.list import ListView
+
+from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app import (
+    CAN_EDIT_INVOICES_PERM,
+    CAN_CHANGE_INVOICE_STATUS_PERM,
+    CAN_CREATE_INVOICES_PERM,
+    CAN_VIEW_ALL_INVOICES_PERM,
+    CAN_VIEW_INVOICES_PERM,
+    CAN_VIEW_INVOICES_HISTORY_PERM,
+    CAN_VIEW_SUPPLIER_INVOICES_PERM,
     INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_NEW,
@@ -39,9 +47,9 @@ from supplier_app.models import (
 )
 
 from users_app.decorators import (
-    is_ap_or_403,
     is_invoice_for_user,
 )
+from users_app.mixins import IsUserCompanyInvoice, HasTaxPayerPermissionMixin
 
 from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
@@ -51,16 +59,12 @@ from utils.send_email import (
 )
 
 
-class InvoiceListView(
-    LoginRequiredMixin,
-    PaginationMixin,
-    FilterView
-):
-    # queryset = Invoice.objects.filter()
+class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
     template_name = 'invoices_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
     filterset_class = InvoiceFilter
+    permission_required = CAN_VIEW_INVOICES_PERM
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -74,18 +78,27 @@ class InvoiceListView(
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_AP:
+        if user.has_perm(CAN_VIEW_ALL_INVOICES_PERM):
             queryset = Invoice.objects.filter().defer('invoice_file').order_by('id')
         else:
-            queryset = Invoice.objects.filter(user=user).defer('invoice_file')
+            queryset = Invoice.objects.filter(
+                taxpayer__company__companyuserpermission__user=user
+            ).defer('invoice_file')
         return queryset
 
 
-class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
+class SupplierInvoiceListView(
+    PermissionRequiredMixin,
+    HasTaxPayerPermissionMixin,
+    PaginationMixin,
+    ListView
+):
+
     template_name = 'supplier_app/invoice-list.html'
     model = Invoice
     paginate_by = 10
     fields = ['id', 'invoice_date', 'invoice_number', 'po_number', 'currency', 'total_amount', 'status']
+    permission_required = CAN_VIEW_SUPPLIER_INVOICES_PERM
 
     def get_queryset(self):
         tax_payer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
@@ -103,10 +116,12 @@ class SupplierInvoiceListView(LoginRequiredMixin, PaginationMixin, ListView):
         return context
 
 
-class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
+class SupplierInvoiceCreateView(PermissionRequiredMixin, HasTaxPayerPermissionMixin, CreateView):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
+    permission_required = CAN_CREATE_INVOICES_PERM
+    raise_exception = True
 
     def get_success_url(self):
         return reverse_lazy('supplier-invoice-list', kwargs={'taxpayer_id': self.kwargs['taxpayer_id']})
@@ -130,11 +145,12 @@ class SupplierInvoiceCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPassesTestMixin, UpdateView):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
     redirect_field_name = None
+    permission_required = CAN_EDIT_INVOICES_PERM
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -169,7 +185,8 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         )
         if request.user.is_AP:
             subject = 'Eventbrite Invoice Edited'
-            upper_text = 'Your Invoice # {} was edited by an administrator. Please check your invoice'.format(invoice.invoice_number)
+            upper_text = 'Your Invoice # {} was edited by an administrator. \
+                Please check your invoice'.format(invoice.invoice_number)
             send_email_notification(
                 subject,
                 build_mail_html(
@@ -185,7 +202,7 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super(InvoiceUpdateView, self).post(request, *args, **kwargs)
 
     def user_has_permission(self):
-        if not self.request.user.is_AP:
+        if not self.request.user.has_perm(CAN_CHANGE_INVOICE_STATUS_PERM):
             # Only allow supplier to edit the invoice if status is 'CHANGES REQUEST'
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
             return invoice.status == invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
@@ -203,9 +220,10 @@ class InvoiceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return reverse('invoices-list')
 
 
-class InvoiceHistory(ListView):
+class InvoiceHistory(PermissionRequiredMixin, ListView):
     model = Invoice
     template_name = 'invoices_app/history-list.html'
+    permission_required = CAN_VIEW_INVOICES_HISTORY_PERM
 
     def get_queryset(self):
         queryset = Invoice.history.filter(id=self.kwargs['pk'])
@@ -213,12 +231,11 @@ class InvoiceHistory(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_AP'] = self.request.user.is_AP
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
-        context['INVOICE_STATUS_PAID'] =invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         return context
 
 
@@ -233,7 +250,8 @@ def invoice_history_changes(record):
     return changes
 
 
-@is_ap_or_403()
+@permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
+@is_invoice_for_user()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
     available_status_values = [value for (_, value) in INVOICE_STATUS]
@@ -277,29 +295,11 @@ def change_invoice_status(request, pk):
     return redirect('invoices-list')
 
 
-class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailView):
     model = Invoice
     template_name = 'invoices_app/invoice_detail.html'
     login_url = '/'
-
-    def test_func(self):
-        taxpayer_id_in_url = self.kwargs['taxpayer_id']
-        taxpayers_from_url = TaxPayer.objects.filter(pk=taxpayer_id_in_url)
-        if not taxpayers_from_url:
-            return False
-        if self.request.user.is_AP:
-            return True
-        for taxpayer_from_url in taxpayers_from_url:
-            company_from_taxpayer_in_url = taxpayer_from_url.company
-
-            # Is there a CompanyUserPermission that has that User and Company?
-            companyuserpermission = \
-                self.request.user.companyuserpermission_set.filter(
-                    company=company_from_taxpayer_in_url
-                )
-            return True if companyuserpermission else False
-
-        return False
+    permission_required = CAN_VIEW_INVOICES_PERM
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -318,10 +318,11 @@ class InvoiceDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         ).order_by('-comment_date_received')
         return context
 
+
 @is_invoice_for_user()
 def post_a_comment(request, pk):
     # Check if message is empty (Validate also in template)
-    if not request.POST['message']:
+    if not request.POST.get('message'):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)

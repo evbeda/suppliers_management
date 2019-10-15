@@ -4,21 +4,7 @@ from django.http import HttpResponseForbidden
 from django.utils.decorators import available_attrs
 
 from invoices_app.models import Invoice
-
-from users_app import ALLOWED_AP_ACCOUNTS
-
-
-def is_ap_or_403():
-
-    def decorator(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
-        def _wrapped_view(request, *args, **kwargs):
-            if request.user.email in ALLOWED_AP_ACCOUNTS:
-                return view_func(request, *args, **kwargs)
-            else:
-                return HttpResponseForbidden('Forbidden')
-        return _wrapped_view
-    return decorator
+from invoices_app import CAN_VIEW_ALL_INVOICES_PERM
 
 
 def is_invoice_for_user():
@@ -29,7 +15,7 @@ def is_invoice_for_user():
             if not request.user.is_active:
                 return HttpResponseForbidden('Forbidden')
 
-            if request.user.is_AP:
+            if request.user.has_perm(CAN_VIEW_ALL_INVOICES_PERM):
                 return view_func(request, *args, **kwargs)
 
             invoice = Invoice.objects.filter(id=kwargs['pk'])[0]
@@ -43,7 +29,6 @@ def is_invoice_for_user():
                 return view_func(request, *args, **kwargs)
             else:
                 return HttpResponseForbidden('Forbidden')
-
 
         return _wrapped_view
     return decorator

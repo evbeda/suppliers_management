@@ -21,6 +21,7 @@ from invoices_app import (
 from simple_history.models import HistoricalRecords
 from utils.invoice_lookup import invoice_status_lookup
 
+
 class Invoice(models.Model):
 
     class Meta:

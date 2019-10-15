@@ -1,11 +1,8 @@
-from django.conf import settings
 from django.db import models
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
-
-from users_app import ALLOWED_AP_ACCOUNTS
 
 
 class UserManager(BaseUserManager):
@@ -57,7 +54,7 @@ class User(AbstractUser):
 
     @property
     def is_AP(self):
-        return self.email in ALLOWED_AP_ACCOUNTS
+        return self.groups.filter(name='ap_admin').exists()
 
     class Meta:
         index_together = ["email"]
