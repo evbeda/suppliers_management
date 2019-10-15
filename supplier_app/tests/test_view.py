@@ -51,9 +51,7 @@ from supplier_app.tests import (
     taxpayer_creation_POST_factory,
     taxpayer_edit_POST_factory,
     get_bank_info_example,
-    STATUS_ACTIVE,
     STATUS_CHANGE_REQUIRED,
-    STATUS_DENIED,
     STATUS_PENDING,
     BUSINESS_EXAMPLE_NAME_1,
     BUSINESS_EXAMPLE_NAME_2
@@ -500,7 +498,11 @@ class TestTaxpayerApDetails(TestCase):
         ("DENIED", "2"),
         ("DENIED", ""),
     ])
-    def test_taxpayer_details_view_doesnt_show_approve_and_deny_button_if_the_taxpayer_is_already_approved_or_denied(self, status, workday_id):
+    def test_taxpayer_details_view_doesnt_show_approve_and_deny_btn_if_taxpayer_is_already_approved_or_denied(
+        self,
+        status,
+        workday_id
+    ):
         taxpayer = TaxPayerArgentinaFactory(
             taxpayer_state=status,
             workday_id=workday_id,
@@ -783,28 +785,29 @@ class TestCompanyCreateView(TestCase):
             '/suppliersite/ap'
         )
 
-    class TestCompanyListView(TestCase):
-        def setUp(self):
-            self.company_list = [
-                CompanyFactory(),
-                CompanyFactory(),
-                CompanyFactory(),
-            ]
-            self.client = Client()
-            self.user = UserFactory()
-            self.client.force_login(self.user)
 
-        def test_company_list(self):
-            response = self.client.get('/suppliersite/companies')
-            company1 = response.context[0]['company_list'][0]
-            self.assertIn(company1, self.company_list)
-            self.assertTrue(
-                len(response.context[0]['company_list']) >= 3
-            )
+class TestCompanyListView(TestCase):
+    def setUp(self):
+        self.company_list = [
+            CompanyFactory(),
+            CompanyFactory(),
+            CompanyFactory(),
+        ]
+        self.client = Client()
+        self.user = UserFactory()
+        self.client.force_login(self.user)
 
-        def test_company_list_template(self):
-            response = self.client.get('/suppliersite/companies')
-            self.assertTemplateUsed(response, 'supplier_app/company_list.html')
+    def test_company_list(self):
+        response = self.client.get('/suppliersite/companies')
+        company1 = response.context[0]['company_list'][0]
+        self.assertIn(company1, self.company_list)
+        self.assertTrue(
+            len(response.context[0]['company_list']) >= 3
+        )
+
+    def test_company_list_template(self):
+        response = self.client.get('/suppliersite/companies')
+        self.assertTemplateUsed(response, 'supplier_app/company_list.html')
 
 
 class TestCompanyInvite(TestCase):
@@ -836,17 +839,13 @@ class TestCompanyInvite(TestCase):
     )
     def test_company_invite_sends_token_in_body_and_is_persisted(self, mocked_token):
         self._make_post()
-        body = "{}{}".format(
-            email_notifications['company_invitation']['body'],
+        self.assertIn(
             mocked_token.return_value,
-        )
-        self.assertEqual(
-            mail.outbox[0].body,
-            body
+            mail.outbox[0].alternatives[0][0],
         )
         self.assertEqual(
             CompanyUniqueToken.objects.last().token,
-            'f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
+            mocked_token.return_value
         )
 
     def test_company_invite_redirect_to_companies_upon_email_invitation(self):
@@ -1031,14 +1030,13 @@ class TestApprovalRefuse(TestCase):
                 kwargs=self.kwargs
             )
         )
-
         self.assertEqual(
             mail.outbox[0].subject,
             email_notifications['taxpayer_approval']['subject']
         )
         self.assertIn(
             settings.SUPPLIER_HOME_URL,
-            mail.outbox[0].body
+            mail.outbox[0].alternatives[0][0]
         )
 
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
@@ -1079,4 +1077,8 @@ class TestApprovalRefuse(TestCase):
         self.assertEqual(
             mail.outbox[0].subject,
             email_notifications['taxpayer_denial']['subject']
+        )
+        self.assertIn(
+            settings.SUPPLIER_HOME_URL,
+            mail.outbox[0].alternatives[0][0]
         )

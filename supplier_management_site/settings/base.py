@@ -65,7 +65,7 @@ AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account', 'hd':'eventbrite.com'}
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account', 'hd': 'eventbrite.com'}
 ROOT_URLCONF = 'supplier_management_site.urls'
 
 TEMPLATES = [
@@ -161,5 +161,5 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL NOTIFICATION URLS
-COMPANY_INVITATION_URL = 'http://127.0.0.1:8000/suppliersite/company/'
-SUPPLIER_HOME_URL = 'http://127.0.0.1:8000/suppliersite/supplier/'
+COMPANY_INVITATION_URL = 'http://127.0.0.1:8000/suppliersite/company'
+SUPPLIER_HOME_URL = 'http://127.0.0.1:8000/suppliersite/supplier'

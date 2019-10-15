@@ -21,12 +21,6 @@ from django.views.generic.edit import (
     UpdateView
 )
 
-
-from supplier_app import (
-    email_notifications,
-    get_taxpayer_status_pending_and_change_required,
-
-)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
@@ -46,8 +40,8 @@ from supplier_app.models import (
 )
 from users_app.views import IsApUser
 from utils.send_email import (
-    send_email_notification,
-    get_user_emails_by_tax_payer_id,
+    company_invitation_notification,
+    taxpayer_notification,
 )
 
 
@@ -258,10 +252,7 @@ def approve_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.approve_taxpayer()
     taxpayer.save()
-    subject = email_notifications['taxpayer_approval']['subject']
-    body = email_notifications['taxpayer_approval']['body']
-    emails = get_user_emails_by_tax_payer_id(taxpayer_id)
-    send_email_notification(subject, body, emails)
+    taxpayer_notification(taxpayer, 'taxpayer_approval')
     return redirect('ap-taxpayers')
 
 
@@ -274,12 +265,7 @@ def company_invite(self):
     companyuniquetoken.assing_company_token
     companyuniquetoken.save()
     token = companyuniquetoken.token
-    subject = email_notifications['company_invitation']['subject']
-    body = "{}{}".format(
-        email_notifications['company_invitation']['body'],
-        token,
-    )
-    send_email_notification(subject, body, email)
+    company_invitation_notification(company, token, email)
     return redirect('company-list')
 
 
@@ -296,8 +282,5 @@ def deny_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.deny_taxpayer()
     taxpayer.save()
-    subject = email_notifications['taxpayer_denial']['subject']
-    body = email_notifications['taxpayer_denial']['body']
-    emails = get_user_emails_by_tax_payer_id(taxpayer_id)
-    send_email_notification(subject, body, emails)
+    taxpayer_notification(taxpayer, 'taxpayer_denial')
     return redirect('ap-taxpayers')
