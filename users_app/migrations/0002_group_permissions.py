@@ -12,21 +12,29 @@ def add_group_permissions(*args, **kwargs):
 
     groups = {
         'supplier': [
-            ('can_view_supplier', 'Can access supplier views', content_type),
+            ('can_view_invoices', 'Can view invoices', content_type),
+            ('can_view_supplier_invoices', 'Can view supplier invoices', content_type),
+            ('can_view_taxpayer', 'Can view taxpayers', content_type),
             ('can_create_taxpayer', 'Can create taxpayer', content_type),
             ('can_create_invoice', 'Can create invoice', content_type),
+            ('can_edit_invoice', 'Can edit invoice', content_type),
         ],
         'ap_admin': [
-            ('can_view_ap', 'Can view', content_type),
+            ('can_view_invoices', 'Can view invoices', content_type),
+            ('can_view_all_invoices', 'Can view all invoices', content_type),
+            ('can_view_invoices_history', 'Can view invoice history', content_type),
+            ('can_view_taxpayer', 'Can view taxpayers', content_type),
+            ('can_view_all_taxpayers', 'Can view all taxpayers', content_type),
             ('can_edit_taxpayer', 'Can edit taxpayer', content_type),
             ('can_edit_invoice', 'Can edit invoice', content_type),
+            ('can_change_invoice_status', 'Can edit invoice', content_type),
             ('can_approve', 'Can approve', content_type),
             ('can_reject', 'Can reject', content_type),
             ('can_request_change', 'Can request changes', content_type),
-            ('can_pay_invoice', 'Can pay invoices', content_type),
         ],
         'ap_reporter': [
-            ('can_view_ap', 'Can view', content_type),
+            ('can_view_all_invoices', 'Can view all invoices', content_type),
+            ('can_view_all_taxpayer', 'Can view all taxpayers', content_type),
             ('can_view_reports', 'Can view reports', content_type),
         ],
         'ap_manager': [

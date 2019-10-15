@@ -170,7 +170,6 @@ class TestInvoice(TestBase):
         response = self.client.get(
             reverse('invoices-list')
         )
-        # Only the invoice with from the tax payer should be listed.
         self.assertIn(
             self.invoice.taxpayer.id,
             [taxpayer.id for taxpayer in response.context['object_list']]
@@ -226,9 +225,7 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {
-            'status': 'NOT_STATUS',
-            }
+            {'status': 'NOT_STATUS', }
         )
         self.assertEqual(request.status_code, 400)
 
@@ -241,9 +238,7 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {
-            'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
-            }
+            {'status': invoice_status_lookup(INVOICE_STATUS_APPROVED), }
         )
         self.assertEqual(request.status_code, HTTPStatus.FORBIDDEN)
 

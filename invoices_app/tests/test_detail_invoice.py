@@ -168,7 +168,7 @@ class DetailInvoiceTest(TestBase):
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
