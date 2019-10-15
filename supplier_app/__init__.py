@@ -28,9 +28,28 @@ PAYMENT_TYPES = [
 email_notifications = {
     'company_invitation': {
         'subject': 'You have been invited to BriteSu',
-        'body': 'Welcome to BriteSu!' + '\n' +
-        'Please click on on the following link to register' + '\n' +
-        settings.COMPANY_INVITATION_URL
+        'body': (
+            "Welcome to BriteSu!\n"
+            "Please click on on the following link to register.\n{}".format(
+                settings.COMPANY_INVITATION_URL
+            )
+        )
+    },
+    'taxpayer_approval': {
+        'subject': 'Your taxpayer has been approved',
+        'body': (
+            "You are ready to start using BriteSu.\n"
+            "You can access the platform now and upload your invoices.\n{}".format(
+                settings.SUPPLIER_HOME_URL
+            )
+        )
+    },
+    'taxpayer_denial': {
+        'subject': 'Your taxpayer has been rejected',
+        'body': (
+            "We are afraid that the taxpayer you were trying to submit is invalid\n"
+            "Please contact the eventbrite employee that hired you."
+        )
     },
 }
 
