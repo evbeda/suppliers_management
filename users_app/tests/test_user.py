@@ -12,7 +12,9 @@ from supplier_app.tests.factory_boy import (
     CompanyFactory,
     CompanyUserPermissionFactory
 )
-from users_app.factory_boy import UserFactory
+from users_app.factory_boy import (
+    UserFactory,
+)
 
 SUPPLIER_HOME = '/suppliersite/supplier'
 AP_HOME = reverse('ap-taxpayers')
