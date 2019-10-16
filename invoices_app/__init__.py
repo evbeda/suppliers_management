@@ -37,3 +37,17 @@ CAN_VIEW_ALL_TAXPAYERS_PERM = 'users_app.can_view_all_taxpayers'
 CAN_VIEW_ALL_INVOICES_PERM = 'users_app.can_view_all_invoices'
 CAN_CREATE_INVOICES_PERM = 'users_app.can_create_invoice'
 CAN_CHANGE_INVOICE_STATUS_PERM = 'users_app.can_change_invoice_status'
+
+EXPORT_TO_XLS_FULL = {
+    'ID': 'pk',
+    'Invoice Number': 'invoice_number',
+    'Invoice Date': 'invoice_date',
+    'Status': 'get_status_display',
+    'Tax Payer': 'taxpayer_name',
+    'Due Date': 'invoice_due_date',
+    'Date Received': 'invoice_date_received',
+    'Currency': 'currency',
+    'Net Amount': 'net_amount',
+    'VAT': 'vat',
+    'Total Amount': 'total_amount',
+}

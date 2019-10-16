@@ -69,6 +69,10 @@ class Invoice(models.Model):
 
     history = HistoricalRecords()
 
+    @property
+    def taxpayer_name(self):
+        return self.taxpayer.business_name
+
 
 class Comment(models.Model):
     user = models.ForeignKey(

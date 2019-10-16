@@ -16,7 +16,12 @@
         </div>
     </div>
     <div class="container">
-        {% include '_filters.html' %}
+        {% include '_filters.html' %}  
+        <div class="row">
+            <div class="col">
+                <a class='float-right text-success' href="{% url 'invoice-to-xls' %}?{{ filter_to_xls }}"><i class="far fa-2x fa-file-excel"></i></a>          
+            </div>
+        </div>     
         <div class="min-height">
             <table class="table table-hover table-sm">
                 <thead class="thead-eb-dark">
