@@ -1,7 +1,5 @@
 import factory
 
-from django.contrib.auth.models import Group
-
 from users_app.models import (
     User
 )
