@@ -798,7 +798,7 @@ class TestCompanyListView(TestCase):
         self.client.force_login(self.user)
 
     def test_company_list(self):
-        response = self.client.get('/suppliersite/companies')
+        response = self.client.get(reverse('company-list'))
         company1 = response.context[0]['company_list'][0]
         self.assertIn(company1, self.company_list)
         self.assertTrue(
@@ -806,7 +806,7 @@ class TestCompanyListView(TestCase):
         )
 
     def test_company_list_template(self):
-        response = self.client.get('/suppliersite/companies')
+        response = self.client.get(reverse('company-list'))
         self.assertTemplateUsed(response, 'supplier_app/company_list.html')
 
 
@@ -822,7 +822,7 @@ class TestCompanyInvite(TestCase):
 
     def _make_post(self):
         return self.client.post(
-            '/suppliersite/company/invite',
+            reverse('company-invite'),
             self.company_constants,
         )
 

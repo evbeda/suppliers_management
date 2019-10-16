@@ -30,8 +30,8 @@ email_notifications = {
         'subject': 'You have been invited to BriteSu',
         'body': {
             'upper_text': (
-                "Welcome to BriteSu!\n"
-                "Please click on on the following link to register.\n"
+                'Welcome to BriteSu!\n'
+                'Please click on the following link to register.\n'
             ),
             'lower_text': 'Thank you!',
             'btn_text': 'Join',
@@ -42,8 +42,8 @@ email_notifications = {
         'subject': 'Your taxpayer has been approved',
         'body': {
             'upper_text': (
-                "You are ready to start using BriteSu.\n"
-                "You can access the platform now and upload your invoices.\n"
+                'You are ready to start using BriteSu.\n'
+                'You can access the platform now and upload your invoices.\n'
             ),
             'lower_text': 'Thank you!',
             'btn_text': 'Go to BriteSu',
@@ -54,9 +54,9 @@ email_notifications = {
         'subject': 'Your taxpayer has some pending modifications',
         'body': {
             'upper_text': (
-                "Please visit your taxpayer and read comments.\n"
-                "Onece changes are done and approved by eventbrite,\n"
-                "we will send you an email.\n"
+                'Please visit your taxpayer and read comments.\n'
+                'Once changes are done and approved by eventbrite,\n'
+                'we will send you an email.\n'
             ),
             'lower_text': 'Thank you!',
             'btn_text': 'Go to BriteSu',
@@ -67,10 +67,10 @@ email_notifications = {
         'subject': 'Your taxpayer has been rejected',
         'body': {
             'upper_text': (
-                "We are afraid that the taxpayer you were trying to submit is invalid\n"
-                "Please contact the eventbrite employee that hired you.\n"
+                'We are afraid that the taxpayer you were trying to submit is invalid\n'
+                'Please contact the eventbrite employee that hired you.\n'
             ),
-            'lower_text': 'Plese contact the eventbrite eployee that hired you, Thank you!',
+            'lower_text': 'Please contact the eventbrite employee that hired you, Thank you!',
             'btn_text': 'Go to BriteSu',
             'btn_url': settings.SUPPLIER_HOME_URL,
         },
