@@ -8,11 +8,13 @@ from invoices_app.views import (
     SupplierInvoiceCreateView,
     SupplierInvoiceListView,
     change_invoice_status,
-    post_a_comment
+    post_a_comment,
+    export_to_xlsx_invoice,
 )
 
 urlpatterns = [
     url(r'^$', InvoiceListView.as_view(), name='invoices-list'),
+    url(r'^xls/$', export_to_xlsx_invoice, name='invoice-to-xls'),
     url(r'^invoice/history/(?P<pk>[0-9]+)/$', InvoiceHistory.as_view(), name='invoice-history'),
     url(r'^invoice/change-status/(?P<pk>[0-9]+)/$', change_invoice_status, name='change-invoice-status'),
     url(r'^invoice/post-comment/(?P<pk>[0-9]+)/$', post_a_comment, name='post-comment'),

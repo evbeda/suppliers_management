@@ -23,7 +23,6 @@ from invoices_app.tests.test_base import TestBase
 
 from utils.invoice_lookup import invoice_status_lookup
 
-
 class TestInvoice(TestBase):
 
     def test_invoice_create(self):
@@ -549,3 +548,10 @@ class TestInvoice(TestBase):
             self.invoice_post_data
         )
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_invoice_export_to_xls(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('invoice-to-xls'),
+        )
+        self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))

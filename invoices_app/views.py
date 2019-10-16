@@ -1,3 +1,4 @@
+import urllib
 from datetime import timedelta
 
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
@@ -5,7 +6,9 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
-from django.http import HttpResponseBadRequest
+from django.http import (
+    HttpResponseBadRequest,
+)
 from django.urls import (
     reverse,
     reverse_lazy
@@ -31,7 +34,8 @@ from invoices_app import (
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_PAID,
-    INVOICE_STATUS_REJECTED
+    INVOICE_STATUS_REJECTED,
+    EXPORT_TO_XLS_FULL,
 )
 from invoices_app.filters import InvoiceFilter
 from invoices_app.forms import InvoiceForm
@@ -56,6 +60,11 @@ from utils.send_email import (
     get_user_emails_by_tax_payer_id,
     send_email_notification
 )
+from utils.reports import (
+    generate_xls,
+    ExcelReportInputParams,
+    generate_response_xls,
+)
 
 
 class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
@@ -67,6 +76,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['filter_to_xls'] = urllib.parse.urlparse(self.request.get_raw_uri()).query
         context['is_AP'] = self.request.user.is_AP
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
@@ -337,7 +347,7 @@ def post_a_comment(request, pk):
 
     if request.user.is_AP:
         subject = 'Eventbrite Invoice {} commented'.format(invoice.invoice_number)
-        upper_text = 'You have a new comment on Invoice # {}. Please check your invoice. COMENT:{}'.format(
+        upper_text = 'You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}'.format(
             invoice.invoice_number,
             request.POST['message']
         )
@@ -360,3 +370,17 @@ def post_a_comment(request, pk):
             }
         )
     )
+
+
+@permission_required_decorator(CAN_VIEW_INVOICES_PERM)
+def export_to_xlsx_invoice(request):
+
+    queryset = InvoiceFilter(request.GET, queryset=Invoice.objects.all()).qs
+    params = ExcelReportInputParams(
+        model=queryset,
+        tab_name='Invoices',
+        headers_attrs=EXPORT_TO_XLS_FULL,
+    )
+    xls_file = generate_xls(params)
+
+    return generate_response_xls(xls_file, 'Invoices')

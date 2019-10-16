@@ -98,6 +98,7 @@
           <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">Approve</button>
           <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
           <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
+          <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">Pay</button>
         </form>
         <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">History</a></span>
       </div>
