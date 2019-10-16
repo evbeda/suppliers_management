@@ -1,3 +1,5 @@
+from parameterized import parameterized
+
 from django.test import TestCase
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
