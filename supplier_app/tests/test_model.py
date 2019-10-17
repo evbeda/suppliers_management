@@ -1,4 +1,5 @@
 from datetime import timedelta
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.utils import timezone
@@ -166,8 +167,12 @@ class TestCompanyUniqueToken(TestCase):
         self.companyuniquetoken.assing_company_token
         self.assertTrue(self.companyuniquetoken.token)
 
-    def test_is_token_expired_true(self):
-        minutes = 6*60
+    @patch(
+        'supplier_app.models.CompanyUniqueToken._get_token_expiration_time',
+        return_value=1*60
+    )
+    def test_is_token_expired_true(self, mocked_token_expiration_time):
+        minutes = 2*60
         companyuniquetoken = CompanyUniqueToken(
             company=self.company,
             created_at=(timezone.now() - timedelta(minutes=minutes))

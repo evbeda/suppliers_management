@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils.translation import ugettext_lazy as _
 
 from supplier_app.models import (
     Company,
@@ -9,25 +10,31 @@ from supplier_app.models import (
 )
 from supplier_app import email_notifications
 
+from utils.exceptions import CouldNotSendEmailError
+
 
 def send_email_notification(subject, message, recipient_list):
     plain_message = strip_tags(message)
-    send_mail(
-        subject,
-        plain_message,
-        'Suppliers Management Eventbrite <{}>'.format(
-            settings.EMAIL_HOST_USER
-        ),
-        recipient_list,
-        html_message=message,
-    )
+    try:
+        send_mail(
+            subject,
+            plain_message,
+            'Suppliers Management Eventbrite <{}>'.format(
+                settings.EMAIL_HOST_USER
+            ),
+            recipient_list,
+            html_message=message,
+            fail_silently=False,
+        )
+    except Exception:
+        raise CouldNotSendEmailError()
 
 
 def company_invitation_notification(company, token, email):
-    subject = email_notifications['company_invitation']['subject']
-    upper_text = email_notifications['company_invitation']['body']['upper_text']
-    lower_text = email_notifications['company_invitation']['body']['lower_text']
-    btn_text = email_notifications['company_invitation']['body']['btn_text']
+    subject = _(email_notifications['company_invitation']['subject'])
+    upper_text = _(email_notifications['company_invitation']['body']['upper_text'])
+    lower_text = _(email_notifications['company_invitation']['body']['lower_text'])
+    btn_text = _(email_notifications['company_invitation']['body']['btn_text'])
     btn_url = email_notifications['company_invitation']['body']['btn_url']
     send_email_notification(
         subject,
@@ -43,10 +50,10 @@ def company_invitation_notification(company, token, email):
 
 
 def taxpayer_notification(taxpayer, change_type):
-    subject = email_notifications[change_type]['subject']
-    upper_text = email_notifications[change_type]['body']['upper_text']
-    lower_text = email_notifications[change_type]['body']['lower_text']
-    btn_text = email_notifications[change_type]['body']['btn_text']
+    subject = _(email_notifications[change_type]['subject'])
+    upper_text = _(email_notifications[change_type]['body']['upper_text'])
+    lower_text = _(email_notifications[change_type]['body']['lower_text'])
+    btn_text = _(email_notifications[change_type]['body']['btn_text'])
     btn_url = email_notifications[change_type]['body']['btn_url']
     send_email_notification(
         subject,

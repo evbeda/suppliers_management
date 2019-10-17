@@ -1,4 +1,5 @@
 from parameterized import parameterized
+from unittest.mock import patch
 
 from django.core import mail
 from django.test import TestCase, RequestFactory
@@ -28,6 +29,7 @@ from supplier_management_site.tests.views import home
 from users_app.factory_boy import (
     UserFactory
 )
+from utils.exceptions import CouldNotSendEmailError
 from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
     get_user_emails_by_tax_payer_id,
@@ -94,6 +96,24 @@ class EmailUtilsTest(TestCase):
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
+    def test_send_email_notification_raises_exception_with_wrong_recipient_list_format(self):
+        subject = 'Testing title'
+        message = 'Testing message'
+        recipient_list = 'not_a_list_of_mail@test.com'
+        with self.assertRaises(CouldNotSendEmailError):
+            send_email_notification(subject, message, recipient_list)
+
+    @patch(
+        'utils.send_email.send_mail',
+        side_effect=Exception
+    )
+    def test_send_email_notification_raises_exception(self, mocked_email_host):
+        subject = 'Testing title'
+        message = 'Testing message'
+        recipient_list = ['someone@somemail.com']
+        with self.assertRaises(CouldNotSendEmailError):
+            send_email_notification(subject, message, recipient_list)
 
     def test_get_users_email_from_company(self):
         mails = [self.user1.email, self.user2.email, self.user3.email]

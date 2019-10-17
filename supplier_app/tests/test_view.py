@@ -882,8 +882,12 @@ class TestCompanyJoinView(TestCase):
             ['supplier_app/company_selector.html']
         )
 
-    def test_invalid_token_is_expired(self):
-        minutes = 7*60
+    @patch(
+        'supplier_app.models.CompanyUniqueToken._get_token_expiration_time',
+        return_value=1*60
+    )
+    def test_invalid_token_is_expired(self, mocked_token_expiration_time):
+        minutes = 2*60
         with freeze_time(timezone.now() - timedelta(minutes=minutes)):
             companyuniquetoken = CompanyUniqueTokenFactory()
         kwargs = {'token': companyuniquetoken.token}

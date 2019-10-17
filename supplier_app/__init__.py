@@ -1,6 +1,7 @@
 from collections import namedtuple
 
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 DBTuple = namedtuple('DBTuple', 'value verbose_name')
 
@@ -17,12 +18,12 @@ TAXPAYER_STATUS = {
 }
 
 PAYMENT_TERMS = [
-    DBTuple(15, "15 days"),
-    DBTuple(30, "30 days"),
+    DBTuple(15, _("15 days")),
+    DBTuple(30, _("30 days")),
 ]
 
 PAYMENT_TYPES = [
-    DBTuple("BANK", "Bank"),
+    DBTuple("BANK", _("Bank")),
 ]
 
 email_notifications = {
@@ -79,7 +80,7 @@ email_notifications = {
 
 
 def get_taxpayer_status_choices():
-    return [(v, k) for k, v in TAXPAYER_STATUS.items()]
+    return [(v, _(k)) for k, v in TAXPAYER_STATUS.items()]
 
 
 def get_taxpayer_status_pending_and_change_required():
