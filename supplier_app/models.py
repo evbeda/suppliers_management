@@ -43,15 +43,18 @@ class CompanyUniqueToken(models.Model):
     def assing_company_token(self):
         self.token = self._token_generator()
 
+    @property
+    def is_token_expired(self):
+        minutes = self._get_token_expiration_time()
+        time_delta = (timezone.now() - self.created_at).total_seconds()/60
+        return time_delta > minutes
+
+    def _get_token_expiration_time(self):
+        return 48 * 60
+
     def _token_generator(self):
         salt = uuid.uuid4().hex + str(self.company.id)
         return hashlib.sha256(salt.encode('utf-8')).hexdigest()
-
-    @property
-    def is_token_expired(self):
-        minutes = 5*60
-        time_delta = (timezone.now() - self.created_at).total_seconds()/60
-        return time_delta > minutes
 
 
 class TaxPayer(models.Model):
