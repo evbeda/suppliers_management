@@ -56,5 +56,13 @@ class User(AbstractUser):
     def is_AP(self):
         return self.groups.filter(name='ap_admin').exists()
 
+    @property
+    def is_ap_reporter(self):
+        return self.groups.filter(name='ap_reporter').exists()
+
+    @property
+    def is_ap_manager(self):
+        return self.groups.filter(name='ap_manager').exists()
+
     class Meta:
         index_together = ["email"]

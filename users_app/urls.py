@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from users_app.views import (
     AdminList,
+    change_ap_permission,
     LoginView,
     LogoutView,
     ErrorLoginView
@@ -11,4 +12,5 @@ urlpatterns = [
     url(r'^logout$', LogoutView.as_view(), name='logout'),
     url(r'^login-error$', ErrorLoginView.as_view(), name='login-error'),
     url(r'^manage-admins$', AdminList.as_view(), name='manage-admins'),
+    url(r'^manage-admins/(?P<pk>[0-9]+)/change-ap-permission$', change_ap_permission, name='change-ap-permission'),
     ]

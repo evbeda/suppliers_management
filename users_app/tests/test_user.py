@@ -2,6 +2,7 @@ from http import HTTPStatus
 from parameterized import parameterized
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.test import (
     Client,
     TestCase,
@@ -15,6 +16,8 @@ from supplier_app.tests.factory_boy import (
 from users_app.factory_boy import (
     UserFactory,
 )
+from users_app.views import AdminList, change_ap_permission
+
 
 SUPPLIER_HOME = '/suppliersite/supplier'
 AP_HOME = reverse('ap-taxpayers')
@@ -147,3 +150,44 @@ class TestLoginRedirect(TestCase):
             'supplier_app/supplier-home.html',
             response.template_name,
         )
+
+
+class TestAdmin(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        manager_group = Group.objects.get(name='ap_manager')
+        self.ap_user.groups.add(manager_group)
+
+    def test_admin_list_view(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('manage-admins')
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_change_admin_group_view(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.post(
+            reverse('change-ap-permission', kwargs={'pk': self.ap_user.id}),
+            {'group_name': 'ap_reporter'}
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertTrue(self.ap_user.groups.filter(name='ap_reporter').exists())
+
+    def test_admin_remove_group(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.post(
+            reverse('change-ap-permission', kwargs={'pk': self.ap_user.id}),
+            {'group_name': 'ap_manager'}
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertFalse(self.ap_user.groups.filter(name='ap_manager').exists())
+
+    def test_change_admin_invalid_group_view(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.post(
+            reverse('change-ap-permission', kwargs={'pk': self.ap_user.id}),
+            {'group_name': 'bad_group'}
+        )
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)

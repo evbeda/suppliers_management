@@ -11,14 +11,14 @@ from invoices_app.views import (
     SupplierInvoiceCreateView,
     SupplierInvoiceListView,
 )
-
-from invoices_app import (
+from users_app import (
     CAN_VIEW_INVOICES_PERM,
     CAN_VIEW_INVOICES_HISTORY_PERM,
     CAN_EDIT_INVOICES_PERM,
     CAN_CREATE_INVOICE_PERM,
     CAN_VIEW_SUPPLIER_INVOICES_PERM,
 )
+from users_app.views import AdminList
 
 
 class TestPermissions(TestBase):
@@ -57,9 +57,9 @@ class TestPermissions(TestBase):
         self.assertEqual(self.user.has_perm(view.permission_required), has_access)
 
     @parameterized.expand([
-        (InvoiceDetailView, False),
+        (InvoiceDetailView, True),
         (InvoiceHistory, False),
-        (InvoiceListView, False),
+        (InvoiceListView, True),
         (InvoiceUpdateView, False),
         (SupplierInvoiceCreateView, False),
         (SupplierInvoiceListView, False),
@@ -68,4 +68,19 @@ class TestPermissions(TestBase):
         user = UserFactory()
         reporter_group = Group.objects.get(name='ap_reporter')
         user.groups.add(reporter_group)
+        self.assertEqual(user.has_perm(view.permission_required), has_access)
+
+    @parameterized.expand([
+        (InvoiceDetailView, False),
+        (InvoiceHistory, False),
+        (InvoiceListView, False),
+        (InvoiceUpdateView, False),
+        (SupplierInvoiceCreateView, False),
+        (SupplierInvoiceListView, False),
+        (AdminList, True),
+    ])
+    def test_manager_user_permissions(self, view, has_access):
+        user = UserFactory()
+        manager_group = Group.objects.get(name='ap_manager')
+        user.groups.add(manager_group)
         self.assertEqual(user.has_perm(view.permission_required), has_access)

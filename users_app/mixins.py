@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from invoices_app.models import Invoice
 from supplier_app.models import TaxPayer
-from invoices_app import CAN_VIEW_ALL_INVOICES_PERM, CAN_VIEW_ALL_TAXPAYERS_PERM
+from users_app import CAN_VIEW_ALL_INVOICES_PERM, CAN_VIEW_ALL_TAXPAYERS_PERM
 
 
 class IsUserCompanyInvoice(UserPassesTestMixin):

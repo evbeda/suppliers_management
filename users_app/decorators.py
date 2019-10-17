@@ -4,7 +4,7 @@ from django.http import HttpResponseForbidden
 from django.utils.decorators import available_attrs
 
 from invoices_app.models import Invoice
-from invoices_app import CAN_VIEW_ALL_INVOICES_PERM
+from users_app import CAN_VIEW_ALL_INVOICES_PERM
 
 
 def is_invoice_for_user():
