@@ -1,13 +1,25 @@
 from parameterized import parameterized
+from unittest.mock import patch
 
-from django.test import TestCase
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.test import TestCase
+
 from users_app.factory_boy import (
     UserFactory,
 )
+from users_app.pipeline.pipeline import (
+    add_user_to_group,
+    get_strategy,
+)
+from users_app.pipeline.pipeline import (
+    StrategyAdminManagerGroup,
+    StrategyReporterGroup,
+    StrategySupplierGroup,
+)
+
+from users_app.tests import ALLOWED_AP_ACCOUNTS_FOR_TEST
 from utils.permissions import create_groups_and_apply_permisssions
-from users_app.pipeline.pipeline import add_user_to_group
 
 
 class TestUser(TestCase):
@@ -33,6 +45,10 @@ class TestUser(TestCase):
             self.assertTrue(Group.objects.filter(name=group).exists())
 
 
+def in_group(group, user):
+    return True if group in user.groups.all() else False
+
+
 class TestUserPermissionGroup(TestCase):
     def setUp(self):
         self.ap_admin_group = Group.objects.get(name='ap_admin')
@@ -40,56 +56,133 @@ class TestUserPermissionGroup(TestCase):
         self.ap_reporter_group = Group.objects.get(name='ap_reporter')
         self.supplier_group = Group.objects.get(name='supplier')
 
-    def test_add_new_AP_to_admin_and_ap_manager_group(self):
+    def test_add_user_to_group_add_new_ap_to_admin_and_manager_group(self):
         user = UserFactory(email='nahuel.valencia@eventbrite.com')
-        add_user_to_group(True, user)
 
-        self.assertTrue((self.ap_admin_group and self.ap_manager_group) in user.groups.all())
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(True, user)
 
-        self.assertFalse(self.supplier_group in user.groups.all())
-        self.assertFalse(self.ap_reporter_group in user.groups.all())
+        self.assertTrue(in_group(self.ap_admin_group, user))
+        self.assertTrue(in_group(self.ap_manager_group, user))
 
-    def test_AP_already_in_ap_admin_and_ap_manager_group_are_not_re_assigned(self):
+        self.assertFalse(in_group(self.supplier_group, user))
+        self.assertFalse(in_group(self.ap_reporter_group, user))
+
+    def test_add_user_to_group_add_new_ap_to_reporter_group(self):
+        user = UserFactory(email='ap_not_in_the_list@eventbrite.com')
+
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(True, user)
+
+        self.assertTrue(in_group(self.ap_reporter_group, user))
+
+        self.assertFalse(in_group(self.ap_admin_group, user))
+        self.assertFalse(in_group(self.ap_manager_group, user))
+        self.assertFalse(in_group(self.supplier_group, user))
+
+    def test_add_user_to_group_add_new_supplier_to_a_supplier_group(self):
+        user = UserFactory(email='nahuel.valencia21@gmail.com')
+
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(True, user)
+
+        self.assertTrue(in_group(self.supplier_group, user))
+
+        self.assertFalse(in_group(self.ap_admin_group, user))
+        self.assertFalse(in_group(self.ap_manager_group, user))
+        self.assertFalse(in_group(self.ap_reporter_group, user))
+
+    def test_add_user_to_group_doesnt_add_ap_if_it_is_already_in_ap_admin_and_ap_manager_group(self):
         user = UserFactory(email='nahuel.valencia@eventbrite.com')
         user.groups.add(self.ap_admin_group, self.ap_manager_group)
 
-        add_user_to_group(False, user)
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(False, user)
 
-        self.assertTrue((self.ap_admin_group and self.ap_manager_group) in user.groups.all())
-        self.assertTrue((self.supplier_group and self.ap_reporter_group) not in user.groups.all())
+        self.assertTrue(in_group(self.ap_admin_group, user))
+        self.assertTrue(in_group(self.ap_manager_group, user))
 
-    def test_add_new_AP_to_ap_reporter_group(self):
-        user = UserFactory(email='ap_no_in_the_list@eventbrite.com')
-        add_user_to_group(True, user)
+        self.assertFalse(in_group(self.supplier_group, user))
+        self.assertFalse(in_group(self.ap_reporter_group, user))
 
-        self.assertTrue(self.ap_reporter_group in user.groups.all())
-
-        self.assertFalse(self.ap_admin_group in user.groups.all())
-        self.assertFalse(self.ap_manager_group in user.groups.all())
-        self.assertFalse(self.supplier_group in user.groups.all())
-
-    def test_AP_already_in_ap_reporter_group_are_not_re_assigned(self):
-        user = UserFactory(email='ap_no_in_the_list@eventbrite.com')
+    def test_add_user_to_group_doesnt_add_ap_if_it_is_already_in_ap_reporter_group(self):
+        user = UserFactory(email='ap_not_in_the_list@eventbrite.com')
         user.groups.add(self.ap_reporter_group)
 
-        add_user_to_group(False, user)
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(False, user)
 
         self.assertEqual(self.ap_reporter_group, user.groups.get())
 
-    def test_add_new_SUPPLIER_to_a_supplier_group(self):
-        user = UserFactory(email='nahuel.valencia21@gmail.com')
-        add_user_to_group(True, user)
-
-        self.assertTrue(self.supplier_group in user.groups.all())
-
-        self.assertFalse(self.ap_admin_group in user.groups.all())
-        self.assertFalse(self.ap_manager_group in user.groups.all())
-        self.assertFalse(self.ap_reporter_group in user.groups.all())
-
-    def test_SUPPLIER_already_in_a_supplier_group_are_not_re_assigned(self):
+    def test_add_user_to_group_doesnt_add_supplier_if_it_is_already_in_a_supplier_group(self):
         user = UserFactory(email='nahuel.valencia21@gmail.com')
         user.groups.add(self.supplier_group)
 
-        add_user_to_group(False, user)
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            add_user_to_group(False, user)
 
         self.assertEqual(self.supplier_group, user.groups.get())
+
+
+class TestStrategy(TestCase):
+    def setUp(self):
+        self.ap_admin_group = Group.objects.get(name='ap_admin')
+        self.ap_manager_group = Group.objects.get(name='ap_manager')
+        self.ap_reporter_group = Group.objects.get(name='ap_reporter')
+        self.supplier_group = Group.objects.get(name='supplier')
+
+    @parameterized.expand([
+        ("nahuel.valencia@eventbrite.com", StrategyAdminManagerGroup),
+        ("not_in_list@eventbrite.com", StrategyReporterGroup),
+        ("nahuel.valencia21@gmail.com", StrategySupplierGroup),
+    ])
+    def test_get_strategy(self, email, strategy_class):
+        user = UserFactory()
+        user.email = email
+
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            strategy = get_strategy(user.email)
+
+        self.assertEqual(type(strategy), strategy_class)
+
+    def test_add_user_to_group_in_StrategySupplierGroup_class(self):
+        user = UserFactory()
+        user.email = "nahuel.valencia21@gmail.com"
+
+        strategy = StrategySupplierGroup()
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            strategy.add_user_to_group(user)
+
+        self.assertTrue(in_group(self.supplier_group, user))
+
+        self.assertFalse(in_group(self.ap_admin_group, user))
+        self.assertFalse(in_group(self.ap_manager_group, user))
+        self.assertFalse(in_group(self.ap_reporter_group, user))
+
+    def test_add_user_to_group_in_StrategyAdminManagerGroup_class(self):
+        user = UserFactory()
+        user.email = "nahuel.valencia@eventbrite.com"
+
+        strategy = StrategyAdminManagerGroup()
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            strategy.add_user_to_group(user)
+
+        self.assertTrue(in_group(self.ap_admin_group, user))
+        self.assertTrue(in_group(self.ap_manager_group, user))
+
+        self.assertFalse(in_group(self.supplier_group, user))
+        self.assertFalse(in_group(self.ap_reporter_group, user))
+
+    def test_add_user_to_group_in_StrategyReporterGroup_class(self):
+        user = UserFactory()
+        user.email = "no_in_list@eventbrite.com"
+
+        strategy = StrategyReporterGroup()
+        with patch('users_app.pipeline.pipeline.get_ap_allowed_accounts', return_value=ALLOWED_AP_ACCOUNTS_FOR_TEST):
+            strategy.add_user_to_group(user)
+
+        self.assertTrue(in_group(self.ap_reporter_group, user))
+
+        self.assertFalse(in_group(self.ap_admin_group, user))
+        self.assertFalse(in_group(self.ap_manager_group, user))
+        self.assertFalse(in_group(self.supplier_group, user))
