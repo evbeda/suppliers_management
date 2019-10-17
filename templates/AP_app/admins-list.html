@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+
+{% include 'AP_app/navbar.html' %}
+<br/>
+<h1 class="text-center"> {% trans "Admins List"%}</h1>
+<br/>
+<div class="container">
+    <table class="table table-hover table-sm min-height">
+        <thead class="thead-eb-dark">
+            <tr>
+                <th scope="col">{% trans "User ID"%}</th>
+                <th scope="col">{% trans "Email"%}</th>
+                <th scope="col">{% trans "AP Admin"%}</th>
+                <th scope="col">{% trans "Ap Reporter"%}</th>
+                <th scope="col">{% trans "Ap Manager"%}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in object_list %}
+            <tr>
+                <th scope="row">{{user.id}}</th>
+                <td>{{user.email}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include "_pagination.html" %}
+</div>
+{% endblock%}
