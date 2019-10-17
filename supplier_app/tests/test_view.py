@@ -365,7 +365,7 @@ class TestTaxpayerApList(TestCase):
         self.assertEqual('AP_app/ap-taxpayers.html', response.template_name[0])
 
 
-class TestTaxpayerApDetails(TestCase):
+class TestTaxpayerDetailsAp(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -373,7 +373,7 @@ class TestTaxpayerApDetails(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
-        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
 
         self.company_user_permission = CompanyUserPermissionFactory()
         self.taxpayer = TaxPayerArgentinaFactory(
@@ -452,7 +452,8 @@ class TestTaxpayerApDetails(TestCase):
             'Withholding taxes'
         )
 
-    def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
+    @patch('users_app.models.User.is_AP', return_value=True)
+    def test_details_view_has_approve_button_when_AP_has_set_workday_id(self, is_ap_mocked):
         request = self.factory.get(
             '/suppliersite/ap/taxpayer/{}/details/'.format(
                 self.taxpayer.id
@@ -460,7 +461,6 @@ class TestTaxpayerApDetails(TestCase):
         )
         request.user = self.ap_user
         response = SupplierDetailsView.as_view()(request, **self.kwargs)
-
         self.assertContains(
             response, 'Approve'
         )
@@ -541,6 +541,45 @@ class TestTaxpayerApDetails(TestCase):
         self.assertNotContains(
             response, 'Deny'
         )
+
+
+class TestTaxpayerDetailsSupplier(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.client.force_login(UserFactory(email="nicolas@gmail.com"))
+        self.supplier_detail_url = 'supplier-details'
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+        self.taxpayer_example = TaxPayerArgentinaFactory(
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+        )
+        self.bank_info_example = BankAccountFactory(
+            taxpayer=self.taxpayer_example,
+            bank_cbu_file=self.file_mock
+            )
+        self.addres_example = AddressFactory(taxpayer=self.taxpayer_example)
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer_example.id
+        }
+
+    def _get_taxpayer_detail_response(self):
+        return self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+                ),
+        )
+
+    def test_taxpayer_detail_view_as_supplier_render_correct_html(self):
+        response = self._get_taxpayer_detail_response()
+        self.assertIn('AP_app/ap-taxpayer-details.html', response.template_name)
+
+    def test_taxpayer_detail_view_as_supplier_dont_show_approve_denied_btn(self):
+        response = self._get_taxpayer_detail_response()
+        self.assertNotContains(response, "Approve")
+        self.assertNotContains(response, "Deny")
 
 
 class TestEditTaxPayerInfo(TestCase):
