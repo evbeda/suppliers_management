@@ -9,3 +9,5 @@ ALLOWED_AP_ACCOUNTS = [
     'kgerez@eventbrite.com',
     'analaura@eventbrite.com',
 ]
+
+CAN_MANAGE_APS_PERM = 'users_app.can_manage_aps'

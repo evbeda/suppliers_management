@@ -17,6 +17,10 @@
                             class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
                     <a class="dropdown-item" href="{% url 'ap-taxpayers' %}"><i
                             class="fa fa-building mr-2"></i>{% trans "Taxpayers" %}</a>
+                    {% if perms.users_app.can_manage_aps %}
+                    <a class="dropdown-item" href="{% url 'manage-admins' %}"><i
+                            class="fa fa-building mr-2"></i>{% trans "Manage Admins" %}</a>
+                    {% endif %}
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
