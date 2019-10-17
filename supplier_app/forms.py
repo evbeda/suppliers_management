@@ -77,14 +77,39 @@ class AddressCreateForm(BasePrefixCreateForm):
         }
 
 
-class TaxPayerCreateForm(BasePrefixCreateForm):
-    prefix = 'taxpayer_form'
+class BankAccountBaseForm(ModelForm):
+    class Meta:
+        model = BankAccount
+        fields = '__all__'
+        widgets = {
+            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_cbu_file': forms.FileInput(attrs={
+                'accept': 'application/pdf',
+                'class': 'form-control'
+            }),
+            'bank_info': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+
+class BankAccountCreateForm(BasePrefixCreateForm, BankAccountBaseForm):
+    prefix = 'bankaccount_form'
+
+    class Meta(BankAccountBaseForm.Meta):
+        exclude = ['taxpayer']
+
+
+class BankAccountEditForm(BankAccountBaseForm):
+
+    class Meta(BankAccountBaseForm.Meta):
+        exclude = ['taxpayer', 'bank_cbu_file']
+
+
+class TaxPayerArgentinaBaseForm(ModelForm):
 
     class Meta:
         model = TaxPayerArgentina
-        exclude = ['taxpayer_state', 'workday_id', 'company', 'country', 'taxpayer_date']
+        fields = '__all__'
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
@@ -101,29 +126,20 @@ class TaxPayerCreateForm(BasePrefixCreateForm):
                 'class': 'form-control',
                 'rows': '3'
             }),
+            'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 
-class BankAccountCreateForm(BasePrefixCreateForm):
-    prefix = 'bankaccount_form'
+class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
+    prefix = 'taxpayer_form'
 
-    class Meta:
-        model = BankAccount
-        exclude = ['taxpayer']
-        widgets = {
-            'bank_info': forms.Select(attrs={'class': 'form-control'}),
-            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'bank_cbu_file': forms.FileInput(attrs={
-                'accept': 'application/pdf',
-                'class': 'form-control'
-            }),
-        }
+    class Meta(TaxPayerArgentinaBaseForm.Meta):
+        exclude = ['taxpayer_state', 'workday_id', 'company', 'country']
 
 
-class TaxPayerEditForm(ModelForm):
+class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
 
-    class Meta:
-        model = TaxPayerArgentina
+    class Meta(TaxPayerArgentinaBaseForm.Meta):
         exclude = [
             'taxpayer_state',
             'company',
@@ -133,21 +149,3 @@ class TaxPayerEditForm(ModelForm):
             'taxpayer_comments',
             'taxpayer_date',
             ]
-        widgets = {
-            'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
-            'business_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'payment_type': forms.Select(attrs={'class': 'form-control'}),
-            'payment_term': forms.Select(attrs={'class': 'form-control'}),
-        }
-
-
-class BankAccountEditForm(ModelForm):
-
-    class Meta:
-        model = BankAccount
-        exclude = ['taxpayer', 'bank_cbu_file']
-        widgets = {
-            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'bank_info': forms.Select(attrs={'class': 'form-control'}),
-        }
