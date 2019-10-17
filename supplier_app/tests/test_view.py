@@ -626,16 +626,17 @@ class TestEditTaxPayerInfo(TestCase):
         QUERY_FORM_TAXPAYER_POST_UPDATE.update(
             TAXPAYER_POST_UPDATE
         )
-
-        edit_taxpayer_view = EditTaxpayerView()
-        edit_taxpayer_view.kwargs = {
-            'taxpayer_id': self.taxpayer.id
-        }
+        request = self.factory.post(
+            reverse(
+                'taxpayer-update',
+                kwargs=self.kwargs
+            ),
+            data=QUERY_FORM_TAXPAYER_POST_UPDATE
+        )
+        EditTaxpayerView.as_view()(request, **self.kwargs)
 
         form_taxpayer = TaxPayerEditForm(data=QUERY_FORM_TAXPAYER_POST_UPDATE)
         self.assertTrue(form_taxpayer.is_valid())
-
-        edit_taxpayer_view.form_valid(form_taxpayer)
 
         after_update = len(TaxPayer.objects.all())
 

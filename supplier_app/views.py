@@ -206,49 +206,15 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
         return context
 
 
-class EditTaxpayerView(FormView):
+class EditTaxpayerView(UpdateView):
     template_name = 'AP_app/edit-taxpayer-information.html'
-
-    def get(self, request, *args, **kwargs):
-        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
-        edit_form = TaxPayerEditForm(instance=taxpayer)
-        context = {
-            'taxpayer_form': edit_form
-        }
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-
-        taxpayer_form = TaxPayerEditForm(data=request.POST, files=request.FILES)
-
-        if taxpayer_form.is_valid():
-            return self.form_valid(taxpayer_form)
-        else:
-            return self.form_invalid(taxpayer_form)
+    model = TaxPayerArgentina
+    form_class = TaxPayerEditForm
+    pk_url_kwarg = "taxpayer_id"
 
     def get_success_url(self, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
-
-    def form_invalid(self, forms):
-        return HttpResponseRedirect(self.get_success_url())
-
-    @transaction.atomic
-    def form_valid(self, form):
-
-        taxpayer_form = form.save(commit=False)
-        taxpayer_db = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
-
-        taxpayer_db.workday_id = taxpayer_form.workday_id
-        taxpayer_db.business_name = taxpayer_form.business_name
-        taxpayer_db.cuit = taxpayer_form.cuit
-        taxpayer_db.payment_type = taxpayer_form.payment_type
-        taxpayer_db.payment_term = taxpayer_form.payment_term
-        taxpayer_db.taxpayer_comments = taxpayer_form.taxpayer_comments
-
-        taxpayer_db.save()
-
-        return HttpResponseRedirect(self.get_success_url())
 
 
 class EditAddressView(UpdateView):
