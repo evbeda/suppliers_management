@@ -28,16 +28,6 @@ ARS_INVOICE_TYPES = [
 
 INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
 
-CAN_VIEW_INVOICES_PERM = 'users_app.can_view_invoices'
-CAN_EDIT_INVOICES_PERM = 'users_app.can_edit_invoice'
-CAN_VIEW_INVOICES_HISTORY_PERM = 'users_app.can_view_invoices_history'
-CAN_VIEW_SUPPLIER_INVOICES_PERM = 'users_app.can_view_supplier_invoices'
-CAN_CREATE_INVOICE_PERM = 'users_app.can_create_invoice'
-CAN_VIEW_ALL_TAXPAYERS_PERM = 'users_app.can_view_all_taxpayers'
-CAN_VIEW_ALL_INVOICES_PERM = 'users_app.can_view_all_invoices'
-CAN_CREATE_INVOICES_PERM = 'users_app.can_create_invoice'
-CAN_CHANGE_INVOICE_STATUS_PERM = 'users_app.can_change_invoice_status'
-
 EXPORT_TO_XLS_FULL = {
     'ID': 'pk',
     'Invoice Number': 'invoice_number',

@@ -23,6 +23,16 @@ from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app import (
+    INVOICE_STATUS,
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED,
+    EXPORT_TO_XLS_FULL,
+    INVOICE_MAX_SIZE_FILE,
+)
+from users_app import (
     CAN_EDIT_INVOICES_PERM,
     CAN_CHANGE_INVOICE_STATUS_PERM,
     CAN_CREATE_INVOICES_PERM,
@@ -30,14 +40,6 @@ from invoices_app import (
     CAN_VIEW_INVOICES_PERM,
     CAN_VIEW_INVOICES_HISTORY_PERM,
     CAN_VIEW_SUPPLIER_INVOICES_PERM,
-    INVOICE_STATUS,
-    INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_CHANGES_REQUEST,
-    INVOICE_STATUS_NEW,
-    INVOICE_STATUS_PAID,
-INVOICE_STATUS_REJECTED,
-    EXPORT_TO_XLS_FULL,
-    INVOICE_MAX_SIZE_FILE,
 )
 from invoices_app.filters import InvoiceFilter
 from invoices_app.forms import InvoiceForm

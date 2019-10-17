@@ -8,10 +8,14 @@ from django_filters import (
     RangeFilter
 )
 
-from invoices_app import INVOICE_STATUS, CAN_VIEW_ALL_TAXPAYERS_PERM
+from invoices_app import INVOICE_STATUS
 from invoices_app.models import Invoice
 from supplier_app.models import TaxPayer
-from utils.custom_filters import DateRangeWidget, NumericRangeWidget
+from users_app import CAN_VIEW_ALL_TAXPAYERS_PERM
+from utils.custom_filters import (
+    NumericRangeWidget,
+    DateRangeWidget
+)
 
 
 def taxpayer_qs(request):

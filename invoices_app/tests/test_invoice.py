@@ -23,6 +23,7 @@ from invoices_app.tests.test_base import TestBase
 
 from utils.invoice_lookup import invoice_status_lookup
 
+
 class TestInvoice(TestBase):
 
     def test_invoice_create(self):
