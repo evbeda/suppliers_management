@@ -38,6 +38,8 @@
                         <td>
                             <a class='btn btn-info'
                                 href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">Invoices</a>
+                            <a class='btn btn-info'
+                                href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">Details</a>
                         </td>
                     </tr>
                     {% endfor %}

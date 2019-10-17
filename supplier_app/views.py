@@ -14,7 +14,6 @@ from django_filters.views import FilterView
 from supplier_app import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
-    email_notifications,
     EMAIL_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
@@ -193,7 +192,7 @@ class ApTaxpayers(LoginRequiredMixin, IsApUser, FilterView):
         return queryset
 
 
-class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
+class SupplierDetailsView(LoginRequiredMixin, TemplateView):
     template_name = 'AP_app/ap-taxpayer-details.html'
 
     def get_context_data(self, **kwargs):
@@ -202,7 +201,7 @@ class SupplierDetailsView(LoginRequiredMixin, IsApUser, TemplateView):
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
-
+        context['is_AP'] = self.request.user.is_AP
         return context
 
 

@@ -91,6 +91,3 @@ email_notifications = {
 def get_taxpayer_status_choices():
     return [(v, _(k)) for k, v in TAXPAYER_STATUS.items()]
 
-
-def get_taxpayer_status_pending_and_change_required():
-    return [v for k, v in TAXPAYER_STATUS.items() if (k == "Pending" or k == "Change required")]
