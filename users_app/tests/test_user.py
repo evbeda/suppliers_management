@@ -118,6 +118,7 @@ class TestLoginRedirect(TestCase):
         )
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
+        self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
@@ -145,8 +146,7 @@ class TestLoginRedirect(TestCase):
         )
         self.assertIn(
             (
-                '/suppliersite/supplier?next={}'.format(reverse('ap-taxpayers')),
-                302
+                (reverse('supplier-home'), 302)
             ),
             response.redirect_chain
             )
