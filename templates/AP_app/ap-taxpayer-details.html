@@ -151,16 +151,14 @@
     <div class="row justify-content-end">
         {% if is_AP %}
             {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-            <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">
-                {% trans "Deny" %}
-            </a>
+                
+                {% include 'AP_app/deny-taxpayer.html'%}
+            
             {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-            <a class='btn btn-success m-3' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">
-                {% trans "Approve" %}
-            </a>
-            <a class='btn btn-danger m-3' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">
-                {% trans "Deny" %}
-            </a>
+                
+                {% include 'AP_app/approve-taxpayer.html'%}
+                {% include 'AP_app/deny-taxpayer.html'%}
+            
             {% endif %}       
         {% endif %}
     </div>

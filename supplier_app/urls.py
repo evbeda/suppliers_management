@@ -10,10 +10,9 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierDetailsView,
     SupplierHome,
-    approve_taxpayer,
     company_invite,
     company_join,
-    deny_taxpayer
+    change_taxpayer_status,
 )
 
 urlpatterns = [
@@ -25,8 +24,9 @@ urlpatterns = [
     url(r'^company/join/(?P<token>[a-f0-9]{64})$', company_join, name='company-join'),
     url(r'^supplier/taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/$', SupplierDetailsView.as_view(), name='supplier-details'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/approve$', approve_taxpayer, name='approve-taxpayer'),
-    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/deny$', deny_taxpayer, name='deny-taxpayer'),
+    url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/status/$', change_taxpayer_status, name='change-taxpayer-status'),
+    #url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/approve$', change_taxpayer_status, name='approve-taxpayer'),
+    #url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/deny$', change_taxpayer_status, name='deny-taxpayer'),
     url(r'^ap/taxpayer/update/taxpayer_info/(?P<taxpayer_id>[0-9]+)$', EditTaxpayerView.as_view(), name='taxpayer-update'),
     url(r'^ap/taxpayer/address_info/(?P<address_id>[0-9]+)/update$', EditAddressView.as_view(), name='address-update'),
     url(r'^ap/taxpayer/bank_account_info/(?P<bank_id>[0-9]+)/update$', EditBankAccountView.as_view(), name='bank-account-update'),

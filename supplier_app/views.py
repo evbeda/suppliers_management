@@ -255,15 +255,6 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, UpdateView):
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-@permission_required('users_app.can_approve', raise_exception=True)
-def approve_taxpayer(self, taxpayer_id, request=None):
-    taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
-    taxpayer.approve_taxpayer()
-    taxpayer.save()
-    taxpayer_notification(taxpayer, 'taxpayer_approval')
-    return redirect('ap-taxpayers')
-
-
 @transaction.atomic
 def company_invite(request):
     try:
@@ -308,9 +299,48 @@ def _get_company_unique_token_from_token(token):
 
 
 @permission_required('users_app.can_approve', raise_exception=True)
-def deny_taxpayer(self, taxpayer_id, request=None):
+def change_taxpayer_status(request, taxpayer_id):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
-    taxpayer.deny_taxpayer()
-    taxpayer.save()
-    taxpayer_notification(taxpayer, 'taxpayer_denial')
+    action = request.POST['action']
+    strategy = get_strategy(action)
+    strategy.change_taxpayer_status(taxpayer)
+    strategy.send_email(taxpayer)
     return redirect('ap-taxpayers')
+
+
+class StrategyStatusChange():
+    def send_email(taxpayer):
+        raise NotImplementedError()
+
+    def change_taxpayer_status(taxpayer):
+        raise NotImplementedError()
+
+
+class StrategyDeny(StrategyStatusChange):
+
+    def send_email(taxpayer):
+        taxpayer_notification(taxpayer, 'taxpayer_denial')
+
+    def change_taxpayer_status(taxpayer):
+        taxpayer.deny_taxpayer()
+        taxpayer.save()
+
+
+class StrategyApprove(StrategyStatusChange):
+
+    def send_email(taxpayer):
+        taxpayer_notification(taxpayer, 'taxpayer_approval')
+
+    def change_taxpayer_status(taxpayer):
+        taxpayer.approve_taxpayer()
+        taxpayer.save()
+
+
+strategy = {
+    "approve": StrategyApprove,
+    "deny": StrategyDeny,
+}
+
+
+def get_strategy(action):
+    return strategy[action]

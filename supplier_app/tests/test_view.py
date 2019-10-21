@@ -1386,11 +1386,10 @@ class TestApprovalRefuse(TestCase):
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
         self.client.force_login(self.ap_user)
-
-        self.approve_url = 'approve-taxpayer'
-        self.deny_url = 'deny-taxpayer'
         self.app_home_url = 'ap-taxpayers'
         self.supplier_home_url = 'supplier-home'
+        self.approve_url = 'change-taxpayer-status'
+        self.deny_url = 'change-taxpayer-status'
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
@@ -1400,7 +1399,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.approve_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "approve",
+            }
         )
 
         self.assertEqual(response.status_code, 302)
@@ -1416,16 +1418,22 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.approve_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "approve" 
+            }
         )
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
-    def test_change_taxpayer_status_to_ACTIVE_when_clicking_aprove_button(self):
+    def test_change_taxpayer_status_to_active_when_clicking_aprove_button(self):
         self.client.post(
             reverse(
                 self.approve_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "approve",
+            }
         )
 
         self.assertEqual(
@@ -1443,7 +1451,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.approve_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "approve",
+            }
         )
         self.assertEqual(
             mail.outbox[0].subject,
@@ -1460,7 +1471,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.deny_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "deny"
+            }
         )
 
         self.assertEqual(response.status_code, 302)
@@ -1473,7 +1487,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.deny_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "deny"
+            }
         )
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
@@ -1482,7 +1499,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.deny_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "deny"
+            }
         )
 
         self.assertEqual(
@@ -1499,7 +1519,10 @@ class TestApprovalRefuse(TestCase):
             reverse(
                 self.deny_url,
                 kwargs=self.kwargs
-            )
+            ),
+            {
+                "action": "deny"
+            }
         )
 
         self.assertEqual(

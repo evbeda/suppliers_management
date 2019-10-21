@@ -1,0 +1,5 @@
+<form method="POST" action="{% url 'change-taxpayer-status' taxpayer_id=taxpayer.id %}">
+    {% csrf_token %}                
+    <input type="hidden" name="action" value="approve">                
+    <input class='btn btn-success' type="submit" value="Approve" id="approve"/>
+</form>
