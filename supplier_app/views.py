@@ -216,6 +216,11 @@ class EditTaxpayerView(UpdateView):
     form_class = TaxPayerEditForm
     pk_url_kwarg = "taxpayer_id"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        return context
+
     def get_success_url(self, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
@@ -227,6 +232,11 @@ class EditAddressView(UpdateView):
     form_class = AddressCreateForm
     pk_url_kwarg = "address_id"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
+        return context
+
     def get_success_url(self, **kwargs):
         taxpayer_id = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
@@ -237,6 +247,11 @@ class EditBankAccountView(UpdateView):
     model = BankAccount
     form_class = BankAccountEditForm
     pk_url_kwarg = "bank_id"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
+        return context
 
     def get_success_url(self, **kwargs):
         taxpayer_id = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
