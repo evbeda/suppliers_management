@@ -70,7 +70,8 @@ def taxpayer_notification(taxpayer, change_type):
 
 
 def get_user_emails_by_tax_payer_id(tax_payer_id):
-    company = TaxPayer.objects.get(id=tax_payer_id).company
+    taxpayer = TaxPayer.objects.get(pk=tax_payer_id)
+    company = Company.objects.get(pk=taxpayer.company.id)
     emails = CompanyUserPermission.objects.values_list(
         'user__email',
         flat=True,
