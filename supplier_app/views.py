@@ -27,7 +27,9 @@ from supplier_app.custom_messages import (
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
+    TAXPAYER_NOT_EXISTS_MESSAGE,
 )
+from supplier_app.change_status_strategy import get_strategy
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
@@ -49,7 +51,6 @@ from users_app.mixins import UserLoginPermissionRequiredMixin
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
-    taxpayer_notification,
 )
 
 
@@ -300,47 +301,15 @@ def _get_company_unique_token_from_token(token):
 
 @permission_required('users_app.can_approve', raise_exception=True)
 def change_taxpayer_status(request, taxpayer_id):
-    taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
-    action = request.POST['action']
-    strategy = get_strategy(action)
-    strategy.change_taxpayer_status(taxpayer)
-    strategy.send_email(taxpayer)
-    return redirect('ap-taxpayers')
-
-
-class StrategyStatusChange():
-    def send_email(taxpayer):
-        raise NotImplementedError()
-
-    def change_taxpayer_status(taxpayer):
-        raise NotImplementedError()
-
-
-class StrategyDeny(StrategyStatusChange):
-
-    def send_email(taxpayer):
-        taxpayer_notification(taxpayer, 'taxpayer_denial')
-
-    def change_taxpayer_status(taxpayer):
-        taxpayer.deny_taxpayer()
-        taxpayer.save()
-
-
-class StrategyApprove(StrategyStatusChange):
-
-    def send_email(taxpayer):
-        taxpayer_notification(taxpayer, 'taxpayer_approval')
-
-    def change_taxpayer_status(taxpayer):
-        taxpayer.approve_taxpayer()
-        taxpayer.save()
-
-
-strategy = {
-    "approve": StrategyApprove,
-    "deny": StrategyDeny,
-}
-
-
-def get_strategy(action):
-    return strategy[action]
+    try:
+        taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
+        action = request.POST['action']
+        strategy = get_strategy(action)
+        strategy.change_taxpayer_status(taxpayer)
+        strategy.send_email(taxpayer)
+    except ObjectDoesNotExist:
+        messages.error(request, TAXPAYER_NOT_EXISTS_MESSAGE)
+    except CouldNotSendEmailError:
+        messages.error(request, EMAIL_ERROR_MESSAGE)
+    finally:
+        return redirect('ap-taxpayers')

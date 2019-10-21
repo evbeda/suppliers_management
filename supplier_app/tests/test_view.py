@@ -17,6 +17,7 @@ from unittest.mock import (
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core import mail
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.files import File
 from django.core.urlresolvers import (
     reverse,
@@ -42,6 +43,7 @@ from supplier_app.custom_messages import (
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
+    TAXPAYER_NOT_EXISTS_MESSAGE,
 )
 from supplier_app import (
     email_notifications,
@@ -85,6 +87,7 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierHome,
 )
+from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
 from users_app.factory_boy import UserFactory
 
@@ -1388,22 +1391,26 @@ class TestApprovalRefuse(TestCase):
         self.client.force_login(self.ap_user)
         self.app_home_url = 'ap-taxpayers'
         self.supplier_home_url = 'supplier-home'
-        self.approve_url = 'change-taxpayer-status'
-        self.deny_url = 'change-taxpayer-status'
+        self.handle_taxpayer_status_url = 'handle-taxpayer-status'
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
 
-    def test_redirect_to_ap_home_when_approve_a_supplier(self):
-        response = self.client.post(
+    def _handle_taxpayer_status_request(self, action, follow=False):
+
+        return self.client.post(
             reverse(
-                self.approve_url,
+                self.handle_taxpayer_status_url,
                 kwargs=self.kwargs
             ),
             {
-                "action": "approve",
-            }
+                "action": action,
+            },
+            follow=follow,
         )
+
+    def test_redirect_to_ap_home_when_approve_a_supplier(self):
+        response = self._handle_taxpayer_status_request("approve")
 
         self.assertEqual(response.status_code, 302)
 
@@ -1414,28 +1421,11 @@ class TestApprovalRefuse(TestCase):
 
     def test_redirect_to_supplier_home_when_supplier_tries_to_approve_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
-        response = self.client.post(
-            reverse(
-                self.approve_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "approve" 
-            }
-        )
+        response = self._handle_taxpayer_status_request("approve")
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_change_taxpayer_status_to_active_when_clicking_aprove_button(self):
-        self.client.post(
-            reverse(
-                self.approve_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "approve",
-            }
-        )
-
+        self._handle_taxpayer_status_request("approve")
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
             'APPROVED'
@@ -1446,16 +1436,7 @@ class TestApprovalRefuse(TestCase):
             user=UserFactory(),
             company=self.taxpayer.company
         )
-        self.client.force_login
-        self.client.post(
-            reverse(
-                self.approve_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "approve",
-            }
-        )
+        self._handle_taxpayer_status_request("approve")
         self.assertEqual(
             mail.outbox[0].subject,
             email_notifications['taxpayer_approval']['subject']
@@ -1467,43 +1448,51 @@ class TestApprovalRefuse(TestCase):
         )
 
     def test_redirect_to_ap_home_when_deny_a_supplier(self):
-        response = self.client.post(
-            reverse(
-                self.deny_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "deny"
-            }
-        )
+        response = self._handle_taxpayer_status_request("deny")
 
         self.assertEqual(response.status_code, 302)
 
         self.assertEqual(response.url, '/suppliersite/ap')
 
+    @patch(
+        'supplier_app.change_status_strategy.StrategyApprove.send_email',
+        side_effect=CouldNotSendEmailError
+    )
+    def test_error_sending_mail_should_display_error_msg_in_taxpayer_approval(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request("approve", True)
+        self.assertContains(response, EMAIL_ERROR_MESSAGE)
+
+    @patch(
+        'supplier_app.change_status_strategy.StrategyDeny.send_email',
+        side_effect=CouldNotSendEmailError
+    )
+    def test_error_sending_mail_should_display_error_msg_in_taxpayer_denial(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request("deny", True)
+        self.assertContains(response, EMAIL_ERROR_MESSAGE)
+
+    @patch(
+        'supplier_app.views.TaxPayer.objects.get',
+        side_effect=ObjectDoesNotExist
+    )
+    def test_nonexistent_taxpayer_should_display_error_message_on_approve(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request("approve", True)
+        self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
+
+    @patch(
+        'supplier_app.views.TaxPayer.objects.get',
+        side_effect=ObjectDoesNotExist
+    )
+    def test_nonexistent_taxpayer_should_display_error_message_on_denial(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request("deny", True)
+        self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
+
     def test_redirect_to_supplier_home_when_supplier_tries_to_deny_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
-        response = self.client.post(
-            reverse(
-                self.deny_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "deny"
-            }
-        )
+        response = self._handle_taxpayer_status_request("deny")
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_change_taxpayer_status_to_DENIED_when_clicking_deny_button(self):
-        self.client.post(
-            reverse(
-                self.deny_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "deny"
-            }
-        )
+        self._handle_taxpayer_status_request("deny")
 
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
@@ -1515,15 +1504,7 @@ class TestApprovalRefuse(TestCase):
             user=UserFactory(),
             company=self.taxpayer.company
         )
-        self.client.post(
-            reverse(
-                self.deny_url,
-                kwargs=self.kwargs
-            ),
-            {
-                "action": "deny"
-            }
-        )
+        self._handle_taxpayer_status_request("deny")
 
         self.assertEqual(
             mail.outbox[0].subject,
@@ -1574,7 +1555,7 @@ class TestNotifyMessages(TestCase):
 
     @patch(
         'utils.send_email.send_mail',
-        side_effect=Exception
+        side_effect=CouldNotSendEmailError
     )
     @patch(
         'supplier_app.models.CompanyUniqueToken._token_generator',
