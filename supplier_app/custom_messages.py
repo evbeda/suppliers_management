@@ -1,0 +1,8 @@
+COMPANY_ERROR_MESSAGE = "You dont have a company yet please contact with us mail@mail.com"
+EMAIL_SUCCESS_MESSAGE = "Your invitation was sent successfully"
+EMAIL_ERROR_MESSAGE = "There was an error sending your email"
+JOIN_COMPANY_SUCCESS_MESSAGE = "You have joined the company succesfully"
+JOIN_COMPANY_ERROR_MESSAGE = "An error has ocurred while joining the company"
+TAXPAYER_CREATION_SUCCESS_MESSAGE = "Your taxpayer was created successfully"
+TAXPAYER_CREATION_ERROR_MESSAGE = "There was an error on creating your taxpayer please try again"
+TAXPAYER_FORM_INVALID_MESSAGE = "Your form is invalid"

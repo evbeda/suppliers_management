@@ -5,19 +5,26 @@ from django.contrib.auth.mixins import (
 )
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.db import DatabaseError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, FormView, UpdateView
+from django.views.generic.edit import (
+    CreateView,
+    FormView,
+    UpdateView,
+)
 from django.views.generic.list import ListView
 from django_filters.views import FilterView
 
-from supplier_app import (
+from supplier_app.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
+    JOIN_COMPANY_SUCCESS_MESSAGE,
+    JOIN_COMPANY_ERROR_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
@@ -53,32 +60,6 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
     fields = '__all__'
     template_name = 'AP_app/company_creation.html'
     success_url = reverse_lazy('ap-taxpayers')
-
-
-class CompanyJoinView(UserLoginPermissionRequiredMixin, TemplateView):
-    template_name = 'supplier_app/company_selector.html'
-
-    permission_required = ('users_app.supplier_role')
-
-    def get(self, request, *args, **kwargs):
-        companyuniquetoken = self._get_companyuniquetoken_from_token(kwargs['token'])
-        if self._token_is_valid(companyuniquetoken):
-            return self.render_to_response(
-                self.get_context_data(companyuniquetoken, **kwargs)
-            )
-        return HttpResponseRedirect(Http404)
-
-    def get_context_data(self, companyuniquetoken, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['company_name'] = companyuniquetoken.company.name
-        return context
-
-    def _token_is_valid(self, companyuniquetoken):
-        if companyuniquetoken and not companyuniquetoken.is_token_expired:
-            return True
-
-    def _get_companyuniquetoken_from_token(self, token):
-        return get_object_or_404(CompanyUniqueToken, token=token)
 
 
 class CompanyListView(LoginRequiredMixin, ListView):
@@ -272,10 +253,10 @@ def company_invite(request):
         email = [request.POST['email']]
         company_id = request.POST['company_id']
         company = Company.objects.get(pk=company_id)
-        companyuniquetoken = CompanyUniqueToken(company=company)
-        companyuniquetoken.assing_company_token
-        companyuniquetoken.save()
-        token = companyuniquetoken.token
+        company_unique_token = CompanyUniqueToken(company=company)
+        company_unique_token.assing_company_token
+        company_unique_token.save()
+        token = company_unique_token.token
         company_invitation_notification(company, token, email)
         messages.success(request, _(EMAIL_SUCCESS_MESSAGE))
     except CouldNotSendEmailError:
@@ -285,13 +266,28 @@ def company_invite(request):
 
 
 @permission_required('users_app.supplier_role', raise_exception=True)
-def company_join(request, token):
-    user = request.user
-    companyuniquetoken = get_object_or_404(CompanyUniqueToken, token=token)
-    company = companyuniquetoken.company
-    CompanyUserPermission.objects.create(user=user, company=company)
-    companyuniquetoken.delete()
-    return redirect('supplier-home')
+def company_join(request, *args, **kwargs):
+    company_unique_token = _get_company_unique_token_from_token(kwargs['token'])
+    if _token_is_valid(company_unique_token):
+        try:
+            user = request.user
+            company = company_unique_token.company
+            CompanyUserPermission.objects.create(user=user, company=company)
+            company_unique_token.delete()
+            messages.success(request, JOIN_COMPANY_SUCCESS_MESSAGE)
+        except DatabaseError:
+            messages.error(request, JOIN_COMPANY_ERROR_MESSAGE)
+        finally:
+            return redirect('supplier-home')
+    return HttpResponseRedirect(Http404)
+
+
+def _token_is_valid(company_unique_token):
+    return company_unique_token and not company_unique_token.is_token_expired
+
+
+def _get_company_unique_token_from_token(token):
+    return get_object_or_404(CompanyUniqueToken, token=token)
 
 
 def deny_taxpayer(self, taxpayer_id, request=None):
