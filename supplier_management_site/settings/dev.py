@@ -1,5 +1,5 @@
 from .base import *  # noqa
-from supplier_management_site import get_env_variable
+from utils.env import get_env_variable
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -24,3 +24,9 @@ DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 
 DEBUG = True
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

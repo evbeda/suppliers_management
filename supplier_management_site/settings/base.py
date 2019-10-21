@@ -1,6 +1,6 @@
 import os
 from django.utils.translation import ugettext_lazy as _
-from supplier_management_site import get_env_variable
+from utils.env import get_env_variable
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'pure_pagination',
     'simple_history',
     'django_filters',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -163,3 +164,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL NOTIFICATION URLS
 COMPANY_INVITATION_URL = 'http://127.0.0.1:8000/suppliersite/company/join'
 SUPPLIER_HOME_URL = 'http://127.0.0.1:8000/suppliersite/supplier'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

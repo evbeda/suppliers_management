@@ -1,6 +1,6 @@
 from .base import *  # noqa
 import dj_database_url
-from supplier_management_site import get_env_variable
+from utils.env import get_env_variable
 
 ALLOWED_HOSTS = [
     'britesu.herokuapp.com',
