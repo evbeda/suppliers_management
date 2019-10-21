@@ -1,7 +1,7 @@
 {% load i18n %}
 {% if messages %}
 {% for message in messages %}
-<div class="row justify-content-center">
+<div class="row">
     {% if message.level == 40 %}
     <h5 class="alert alert-danger">{{ message }}</h5>
     {% elif message.level == 25%}
