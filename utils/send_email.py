@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from supplier_app.models import (
     Company,
     CompanyUserPermission,
+    TaxPayer,
 )
 from supplier_app import email_notifications
 
@@ -69,7 +70,7 @@ def taxpayer_notification(taxpayer, change_type):
 
 
 def get_user_emails_by_tax_payer_id(tax_payer_id):
-    company = Company.objects.get(pk=tax_payer_id)
+    company = TaxPayer.objects.get(id=tax_payer_id).company
     emails = CompanyUserPermission.objects.values_list(
         'user__email',
         flat=True,
