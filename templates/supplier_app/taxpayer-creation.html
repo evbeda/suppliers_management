@@ -3,7 +3,7 @@
 {% block content %}
 {% include 'supplier_app/navbar.html' %}
 {% include 'messages_notification.html' %}
-<form method="post" enctype="multipart/form-data">
+<form class="p-3"method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row m-3">
         <div class="col-md-6 form-group">
@@ -22,10 +22,9 @@
             {{bank_account_form}}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <input class="btn btn-primary d-inline-block w-50" type="submit" value="Create taxpayer" />
-        </div>
+    <div class="row justify-content-end pr-5">
+        <input class="btn btn-success mr-3" type="submit" value="Create taxpayer"/>
+        <a class="btn btn-danger" href="{% url 'supplier-home' %}">Cancel</a>
     </div>
 </form>
 {% endblock %}
