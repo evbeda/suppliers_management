@@ -1,5 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
@@ -36,6 +39,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina
 )
+from users_app.mixins import UserLoginPermissionRequiredMixin
 from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
@@ -51,8 +55,10 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
     success_url = reverse_lazy('ap-taxpayers')
 
 
-class CompanyJoinView(LoginRequiredMixin, TemplateView):
+class CompanyJoinView(UserLoginPermissionRequiredMixin, TemplateView):
     template_name = 'supplier_app/company_selector.html'
+
+    permission_required = ('users_app.supplier_role')
 
     def get(self, request, *args, **kwargs):
         companyuniquetoken = self._get_companyuniquetoken_from_token(kwargs['token'])
@@ -79,12 +85,10 @@ class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
 
 
-class SupplierHome(
-    LoginRequiredMixin,
-    TemplateView
-):
+class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
     model = TaxPayer
     template_name = 'supplier_app/supplier-home.html'
+    permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -110,8 +114,9 @@ class SupplierHome(
             return True
 
 
-class CreateTaxPayerView(LoginRequiredMixin, TemplateView, FormView):
+class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
+    permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer', 'users_app.can_create_taxpayer')
 
     def get_context_data(self, **kwargs):
         kwargs.update({
@@ -264,6 +269,7 @@ def company_invite(request):
         return redirect('company-list')
 
 
+@permission_required('users_app.supplier_role', raise_exception=True)
 def company_join(request, token):
     user = request.user
     companyuniquetoken = get_object_or_404(CompanyUniqueToken, token=token)

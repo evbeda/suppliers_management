@@ -8,6 +8,7 @@ from unittest.mock import (
     patch,
 )
 
+from django.contrib.auth.models import Group
 from django.core.files import File
 from django.http import (
     HttpResponseRedirect,
@@ -76,7 +77,9 @@ class TestTaxPayerFormValidation(TestCase):
         self.create_taxpayer_view = CreateTaxPayerView()
         self.company = CompanyFactory()
         self.bank_info = get_bank_info_example("BBVA BANCO FRANCES S.A.")
+        self.supplier_group = Group.objects.get(name='supplier')
         self.user_with_eb_social = UserFactory()
+        self.user_with_eb_social.groups.add(self.supplier_group)
         self.client.force_login(self.user_with_eb_social)
         self.taxpayer_creation_url = 'taxpayer-create'
         self.companyuserpermission = CompanyUserPermissionFactory(
