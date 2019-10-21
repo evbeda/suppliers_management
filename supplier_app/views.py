@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
-    PermissionRequiredMixin,
 )
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -40,20 +39,13 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina
 )
+from users_app.mixins import UserLoginPermissionRequiredMixin
 from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
     taxpayer_notification,
 )
-
-
-class SupplierPermission(PermissionRequiredMixin):
-    def get_login_url(self):
-        if self.request.user.is_authenticated:
-            return reverse('ap-taxpayers')
-        else:
-            return '/'
 
 
 class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
@@ -63,7 +55,7 @@ class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
     success_url = reverse_lazy('ap-taxpayers')
 
 
-class CompanyJoinView(LoginRequiredMixin, SupplierPermission, TemplateView):
+class CompanyJoinView(UserLoginPermissionRequiredMixin, TemplateView):
     template_name = 'supplier_app/company_selector.html'
 
     permission_required = ('users_app.supplier_role')
@@ -93,7 +85,7 @@ class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
 
 
-class SupplierHome(LoginRequiredMixin, SupplierPermission, TemplateView):
+class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
     model = TaxPayer
     template_name = 'supplier_app/supplier-home.html'
     permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer')
@@ -122,7 +114,7 @@ class SupplierHome(LoginRequiredMixin, SupplierPermission, TemplateView):
             return True
 
 
-class CreateTaxPayerView(LoginRequiredMixin, SupplierPermission, TemplateView, FormView):
+class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
     permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer', 'users_app.can_create_taxpayer')
 
@@ -277,7 +269,7 @@ def company_invite(request):
         return redirect('company-list')
 
 
-@permission_required('users_app.supplier_role')
+@permission_required('users_app.supplier_role', raise_exception=True)
 def company_join(request, token):
     user = request.user
     companyuniquetoken = get_object_or_404(CompanyUniqueToken, token=token)

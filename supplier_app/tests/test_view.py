@@ -246,6 +246,10 @@ class TestCreateTaxPayer(TestCase):
             'registration/login.html',
             response.template_name,
         )
+        self.assertNotIn(
+            'supplier_app/taxpayer-creation.html',
+            response.template_name
+        )
         self.assertEqual(
             response.status_code,
             HTTPStatus.OK
@@ -268,6 +272,10 @@ class TestCreateTaxPayer(TestCase):
         self.assertIn(
             'AP_app/ap-taxpayers.html',
             response.template_name,
+        )
+        self.assertNotIn(
+            'supplier_app/taxpayer-creation.html',
+            response.template_name
         )
         self.assertEqual(
             response.status_code,
@@ -350,6 +358,10 @@ class TestSupplierHome(TestCase):
             'registration/login.html',
             response.template_name,
         )
+        self.assertNotIn(
+            'supplier_app/supplier-home.html',
+            response.template_name
+        )
         self.assertEqual(
             response.status_code,
             HTTPStatus.OK
@@ -371,6 +383,10 @@ class TestSupplierHome(TestCase):
         self.assertIn(
             'AP_app/ap-taxpayers.html',
             response.template_name,
+        )
+        self.assertNotIn(
+            'supplier_app/supplier-home.html',
+            response.template_name
         )
         self.assertEqual(
             response.status_code,
@@ -1161,6 +1177,10 @@ class TestCompanyJoinView(TestCase):
             'registration/login.html',
             response.template_name,
         )
+        self.assertNotIn(
+            'supplier_app/taxpayer-creat.html',
+            response.template_name
+        )
         self.assertEqual(
             response.status_code,
             HTTPStatus.OK
@@ -1183,6 +1203,10 @@ class TestCompanyJoinView(TestCase):
         self.assertIn(
             'AP_app/ap-taxpayers.html',
             response.template_name,
+        )
+        self.assertNotIn(
+            'supplier_app/taxpayer-creat.html',
+            response.template_name
         )
         self.assertEqual(
             response.status_code,
@@ -1239,6 +1263,38 @@ class TestCompanyJoin(TestCase):
         )
         with self.assertRaises(CompanyUniqueToken.DoesNotExist):
             CompanyUniqueToken.objects.get(token=companyuniquetoken.token)
+
+    def test_company_join_user_has_required_permissions(self):
+        companyuniquetoken = CompanyUniqueTokenFactory()
+        kwargs = {'token': companyuniquetoken.token}
+        response = self.client.get(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs
+            ),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(
+            'supplier_app/supplier-home.html',
+            response.template_name,
+        )
+
+    def test_company_join_user_doesnt_have_required_permissions(self):
+        client = Client()
+        user = UserFactory()
+        companyuniquetoken = CompanyUniqueTokenFactory()
+        kwargs = {'token': companyuniquetoken.token}
+
+        client.force_login(user)
+        response = client.get(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs
+            ),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
 
 class TestApprovalRefuse(TestCase):
