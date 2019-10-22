@@ -33,6 +33,8 @@ def add_group_permissions(*args, **kwargs):
             ('can_reject', 'Can reject', content_type),
             ('can_request_change', 'Can request changes', content_type),
             ('ap_role', 'Is ap', content_type),
+            ('can_create_company', 'Can create company', content_type),
+            ('can_send_company_invite', 'Can send company invite', content_type),
         ],
         'ap_reporter': [
             ('can_view_invoices', 'Can view invoices', content_type),

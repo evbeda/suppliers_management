@@ -47,7 +47,6 @@ from supplier_app.models import (
     TaxPayerArgentina
 )
 from users_app.mixins import UserLoginPermissionRequiredMixin
-from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
@@ -55,11 +54,14 @@ from utils.send_email import (
 )
 
 
-class CompanyCreatorView(LoginRequiredMixin, IsApUser, CreateView):
+class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'AP_app/company_creation.html'
     success_url = reverse_lazy('ap-taxpayers')
+    permission_required = (
+        'users_app.can_create_company',
+    )
 
 
 class CompanyListView(LoginRequiredMixin, ListView):
@@ -164,10 +166,13 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             return HttpResponseRedirect(self.get_success_url())
 
 
-class ApTaxpayers(LoginRequiredMixin, IsApUser, FilterView):
+class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayerArgentina
     template_name = 'AP_app/ap-taxpayers.html'
     filterset_class = TaxPayerFilter
+    permission_required = (
+        'users_app.can_view_all_taxpayers',
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -178,8 +183,11 @@ class ApTaxpayers(LoginRequiredMixin, IsApUser, FilterView):
         return queryset
 
 
-class SupplierDetailsView(LoginRequiredMixin, TemplateView):
+class SupplierDetailsView(UserLoginPermissionRequiredMixin, TemplateView):
     template_name = 'AP_app/ap-taxpayer-details.html'
+    permission_required = (
+        'users_app.can_view_taxpayer',
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -191,11 +199,14 @@ class SupplierDetailsView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EditTaxpayerView(UpdateView):
+class EditTaxpayerView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-taxpayer-information.html'
     model = TaxPayerArgentina
     form_class = TaxPayerEditForm
     pk_url_kwarg = "taxpayer_id"
+    permission_required = (
+        'users_app.can_edit_taxpayer',
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -207,11 +218,14 @@ class EditTaxpayerView(UpdateView):
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditAddressView(UpdateView):
+class EditAddressView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
     model = Address
     form_class = AddressCreateForm
     pk_url_kwarg = "address_id"
+    permission_required = (
+        'users_app.can_edit_taxpayer',
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -223,11 +237,14 @@ class EditAddressView(UpdateView):
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditBankAccountView(UpdateView):
+class EditBankAccountView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-bank-account-information.html'
     model = BankAccount
     form_class = BankAccountEditForm
     pk_url_kwarg = "bank_id"
+    permission_required = (
+        'users_app.can_edit_taxpayer',
+    )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -239,6 +256,7 @@ class EditBankAccountView(UpdateView):
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
+@permission_required('users_app.can_approve', raise_exception=True)
 def approve_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.approve_taxpayer()
@@ -290,6 +308,7 @@ def _get_company_unique_token_from_token(token):
     return get_object_or_404(CompanyUniqueToken, token=token)
 
 
+@permission_required('users_app.can_approve', raise_exception=True)
 def deny_taxpayer(self, taxpayer_id, request=None):
     taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
     taxpayer.deny_taxpayer()

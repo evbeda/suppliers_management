@@ -16,8 +16,6 @@ from supplier_app.tests.factory_boy import (
 from users_app.factory_boy import (
     UserFactory,
 )
-from users_app.views import AdminList, change_ap_permission
-
 
 SUPPLIER_HOME = '/suppliersite/supplier'
 AP_HOME = reverse('ap-taxpayers')
@@ -96,7 +94,7 @@ class TestLoginRedirect(TestCase):
         url_ap, status_code_ap = response_ap.redirect_chain[0]
         url_sup, status_code_sup = response_supplier.redirect_chain[0]
         self.assertEqual(HTTPStatus.FOUND, status_code_ap)
-        self.assertEqual(reverse('supplier-home')+'?next={}'.format(AP_HOME), url_ap)
+        self.assertEqual('/?next={}'.format(AP_HOME), url_ap)
         self.assertEqual(HTTPStatus.FOUND, status_code_sup)
         self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
 
@@ -118,19 +116,25 @@ class TestLoginRedirect(TestCase):
         )
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
+        self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual('AP_app/ap-taxpayers.html', response.template_name[0])
 
-    @parameterized.expand([
-        ('invoices-list',),
-        ('ap-taxpayers',),
-    ])
-    def test_ap_site_permission(self, page_name):
+    def test_ap_site_permission_invoice_list(self):
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(
-            reverse(page_name),
+            reverse('invoices-list'),
+            follow=True,
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_ap_site_permission_taxpayers(self):
+        self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
+        self.client.force_login(self.user_with_google_social)
+        response = self.client.get(
+            reverse('ap-taxpayers'),
             follow=True,
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
@@ -145,8 +149,7 @@ class TestLoginRedirect(TestCase):
         )
         self.assertIn(
             (
-                '/suppliersite/supplier?next={}'.format(reverse('ap-taxpayers')),
-                302
+                (reverse('supplier-home'), 302)
             ),
             response.redirect_chain
             )
