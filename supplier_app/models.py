@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from supplier_app import (
     PAYMENT_TERMS,
@@ -16,7 +17,7 @@ from supplier_app.bank_info import get_bank_info_choices
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, verbose_name=_("Name"))
     description = models.TextField()
 
     def __str__(self):
@@ -59,7 +60,7 @@ class CompanyUniqueToken(models.Model):
 class TaxPayer(models.Model):
 
     workday_id = models.CharField(max_length=200)
-    business_name = models.CharField(max_length=200)
+    business_name = models.CharField(max_length=200, verbose_name=_("Business name"))
     taxpayer_state = models.CharField(
         max_length=200,
         choices=get_taxpayer_status_choices(),
@@ -67,11 +68,12 @@ class TaxPayer(models.Model):
     )
     country = models.CharField(max_length=50, default='AR')
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    taxpayer_date = models.DateField(auto_now_add=True)
+    taxpayer_date = models.DateField(auto_now_add=True, verbose_name=_("Creation date"))
     taxpayer_comments = models.CharField(
         max_length=200,
         blank=True,
-        null=True
+        null=True,
+        verbose_name=_("Comments"),
         )
 
     def __str__(self):
@@ -85,10 +87,10 @@ class TaxPayer(models.Model):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
     def approve_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Active']
+        self.taxpayer_state = TAXPAYER_STATUS['Approved'].value
 
     def deny_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Denied']
+        self.taxpayer_state = TAXPAYER_STATUS['Denied'].value
 
     def has_workday_id(self):
         return True if self.workday_id else False
@@ -99,22 +101,24 @@ class TaxPayerArgentina(TaxPayer):
     payment_type = models.CharField(
         max_length=20,
         choices=PAYMENT_TYPES,
-        default="BANK"
+        default="BANK",
+        verbose_name=_("Payment type")
     )
     payment_term = models.IntegerField(
         choices=PAYMENT_TERMS,
-        default=15
+        default=15,
+        verbose_name=_("Payment term")
     )
     afip_registration_file = models.FileField(
         upload_to='file',
         blank=False,
-        verbose_name='AFIP registration certificate',
+        verbose_name=_('AFIP registration certificate'),
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         )
     witholding_taxes_file = models.FileField(
         upload_to='file',
         blank=False,
-        verbose_name='Certificate of no tax withholding of IVA, income or SUSS',
+        verbose_name=_('Certificate of no tax withholding of IVA, income or SUSS'),
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         )
 
@@ -128,20 +132,20 @@ COUNTRIES = {
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=100)
-    number = models.CharField(max_length=10)
-    zip_code = models.CharField(max_length=10)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
+    street = models.CharField(max_length=100, verbose_name=_("Street"))
+    number = models.CharField(max_length=10, verbose_name=_("Number"))
+    zip_code = models.CharField(max_length=10, verbose_name=_("Zip code"))
+    city = models.CharField(max_length=50, verbose_name=_("City"))
+    state = models.CharField(max_length=50, verbose_name=_("State"))
+    country = models.CharField(max_length=50, verbose_name=_("Country"))
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
 
 class BankAccount(models.Model):
-    bank_account_number = models.CharField(max_length=60, unique=True)
+    bank_account_number = models.CharField(max_length=60, unique=True, verbose_name=_("Bank account number"))
     bank_info = models.IntegerField(
         choices=get_bank_info_choices(),
-        verbose_name='Bank name'
+        verbose_name=_('Bank name')
     )
     taxpayer = models.ForeignKey(
         TaxPayer,
@@ -151,7 +155,7 @@ class BankAccount(models.Model):
     bank_cbu_file = models.FileField(
         upload_to='file',
         blank=False,
-        verbose_name='CBU bank certificate',
+        verbose_name=_('Bank account certificate'),
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
     )
 

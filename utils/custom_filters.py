@@ -1,5 +1,6 @@
 from django.forms import NumberInput
 from django_filters.widgets import RangeWidget, SuffixedMultiWidget
+from django.utils.translation import ugettext_lazy as _
 
 from bootstrap_datepicker_plus import DatePickerInput
 
@@ -25,12 +26,12 @@ class DateRangeWidget(RangeWidget):
             DatePickerInput(options={
                     "format": "MM/DD/YYYY",
                 },
-                attrs={'class': 'form-control', 'placeholder': 'From Date', }
+                attrs={'class': 'form-control', 'placeholder': _('From Date'), }
             ),
             DatePickerInput(options={
                     "format": "MM/DD/YYYY",
                 },
-                attrs={'class': 'form-control', 'placeholder': 'To Date', }
+                attrs={'class': 'form-control', 'placeholder': _('To Date'), }
             )
         )
         super(SuffixedMultiWidget, self).__init__(widgets, attrs)

@@ -1430,7 +1430,7 @@ class TestApprovalRefuse(TestCase):
 
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
-            'ACTIVE'
+            'APPROVED'
         )
 
     def test_change_taxpayer_status_to_active_sends_email_notification(self):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-19 15:35+0000\n"
+"POT-Creation-Date: 2019-10-23 15:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,562 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: supplier_management_site/settings/base.py:126
+#: supplier_app/__init__.py:19
+msgid "Approved"
+msgstr "Aprobado"
+
+#: supplier_app/__init__.py:20
+msgid "Change required"
+msgstr "Solicitud de cambio"
+
+#: supplier_app/__init__.py:21
+msgid "Pending"
+msgstr "Pendiente"
+
+#: supplier_app/__init__.py:22
+msgid "Denied"
+msgstr "Rechazado"
+
+#: supplier_app/__init__.py:26
+msgid "15 days"
+msgstr "15 días"
+
+#: supplier_app/__init__.py:27
+msgid "30 days"
+msgstr "30 días"
+
+#: supplier_app/__init__.py:31
+msgid "Bank"
+msgstr "Banco"
+
+#: supplier_app/custom_messages.py:3
+msgid ""
+"You dont have a company yet please contact with us supplier-"
+"onboarding@eventbrite.com"
+msgstr ""
+"Todavía no perteneces a una compañía, por favor contáctate con supplier-"
+"onboarding@eventbrite.com"
+
+#: supplier_app/custom_messages.py:4
+msgid "Your invitation was sent successfully"
+msgstr "Su invitación se envió correctamente"
+
+#: supplier_app/custom_messages.py:5
+msgid "There was an error sending your email"
+msgstr "Error, no se pudo enviar el email"
+
+#: supplier_app/custom_messages.py:6
+msgid "You have joined the company succesfully"
+msgstr "Te uniste a la compañía correctamente"
+
+#: supplier_app/custom_messages.py:7
+msgid "An error has ocurred while joining the company"
+msgstr "Ocurrió un error en la asignación de la compañía"
+
+#: supplier_app/custom_messages.py:8
+msgid "Your taxpayer was created successfully"
+msgstr "Su grupo económico se creó correctamente"
+
+#: supplier_app/custom_messages.py:9
+msgid "There was an error on creating your taxpayer please try again"
+msgstr "No se pudo crear el grupo económico, por favor intentelo nuevamente"
+
+#: supplier_app/custom_messages.py:10
+msgid "Your form is invalid"
+msgstr "El formulario es invalido"
+
+#: supplier_app/filters.py:19
+msgid "Taxpayer state"
+msgstr "Estados del grupo economico"
+
+#: supplier_app/filters.py:30 supplier_app/models.py:140
+#: templates/AP_app/ap-taxpayer-details.html:33
+#: templates/AP_app/ap-taxpayer-details.html:83
+#: templates/invoices_app/invoice-list.html:32
+msgid "Country"
+msgstr "País"
+
+#: supplier_app/models.py:20 templates/AP_app/company_creation.html:14
+#: templates/supplier_app/company_list.html:19
+msgid "Name"
+msgstr "Nombre"
+
+#: supplier_app/models.py:63 templates/AP_app/ap-taxpayer-details.html:28
+#: templates/AP_app/ap-taxpayers.html:21
+#: templates/supplier_app/supplier-home.html:26
+msgid "Business name"
+msgstr "Razón social"
+
+#: supplier_app/models.py:71
+msgid "Creation date"
+msgstr "Fecha de creación"
+
+#: supplier_app/models.py:76 templates/AP_app/ap-taxpayer-details.html:32
+msgid "Comments"
+msgstr "Comentarios adicionales"
+
+#: supplier_app/models.py:105
+msgid "Payment type"
+msgstr "Tipo de pago"
+
+#: supplier_app/models.py:110
+msgid "Payment term"
+msgstr "Termino de pago"
+
+#: supplier_app/models.py:115
+msgid "AFIP registration certificate"
+msgstr "Certificado AFIP"
+
+#: supplier_app/models.py:121
+msgid "Certificate of no tax withholding of IVA, income or SUSS"
+msgstr "Certificado de no retención IVA, SUSS"
+
+#: supplier_app/models.py:135 templates/AP_app/ap-taxpayer-details.html:78
+msgid "Street"
+msgstr "Calle"
+
+#: supplier_app/models.py:136 templates/AP_app/ap-taxpayer-details.html:79
+msgid "Number"
+msgstr "Número"
+
+#: supplier_app/models.py:137
+msgid "Zip code"
+msgstr "Código postal"
+
+#: supplier_app/models.py:138 templates/AP_app/ap-taxpayer-details.html:81
+msgid "City"
+msgstr "Cíudad"
+
+#: supplier_app/models.py:139 templates/AP_app/ap-taxpayer-details.html:82
+msgid "State"
+msgstr "Provincia"
+
+#: supplier_app/models.py:145
+msgid "Bank account number"
+msgstr "Cuenta bancaria"
+
+#: supplier_app/models.py:148
+msgid "Bank name"
+msgstr "Banco"
+
+#: supplier_app/models.py:158
+msgid "Bank account certificate"
+msgstr "Cuenta bancaria"
+
+#: supplier_management_site/settings/base.py:143
 msgid "English"
-msgstr ""
+msgstr "Ingles"
 
-#: supplier_management_site/settings/base.py:127
-msgid "Espanol"
-msgstr ""
+#: supplier_management_site/settings/base.py:144
+msgid "Spanish"
+msgstr "Español"
 
-#: supplier_management_site/settings/base.py:128
+#: supplier_management_site/settings/base.py:145
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugues"
 
 #: supplier_management_site/tests/templates/tests/index.html:4
-#: supplier_management_site/tests/test.py:13
+#: supplier_management_site/tests/test.py:50
 msgid "Hello world"
 msgstr "Hola Mundo"
 
-#: templates/AP_app/ap-home.html:3
-msgid "Welcome AP "
-msgstr "Bienvenido AP"
+#: templates/AP_app/admins-list.html:9
+msgid "Admins List"
+msgstr "Lista de administradores"
 
-#: templates/supplier_app/supplier-home.html:3
-msgid "Welcome Supplier"
-msgstr "Bienvenido Proveedor"
+#: templates/AP_app/admins-list.html:15
+msgid "User ID"
+msgstr "ID de usuario"
 
-#: users_app/models.py:16
+#: templates/AP_app/admins-list.html:16
+msgid "Email"
+msgstr "Email"
+
+#: templates/AP_app/admins-list.html:17
+msgid "AP Admin"
+msgstr "AP admin"
+
+#: templates/AP_app/admins-list.html:18
+msgid "Ap Reporter"
+msgstr "AP reporter"
+
+#: templates/AP_app/admins-list.html:19
+msgid "Ap Manager"
+msgstr "AP manager"
+
+#: templates/AP_app/ap-taxpayer-details.html:17
+msgid "You must set workday id to the taxpayer"
+msgstr "Debes ponerle un workday id al grupo económico"
+
+#: templates/AP_app/ap-taxpayer-details.html:24
+msgid "General Information"
+msgstr "Información general"
+
+#: templates/AP_app/ap-taxpayer-details.html:29
+#: templates/AP_app/ap-taxpayers.html:22
+#: templates/invoices_app/invoice_detail.html:60
+#: templates/supplier_app/supplier-home.html:27
+msgid "CUIT"
+msgstr "CUIT"
+
+#: templates/AP_app/ap-taxpayer-details.html:30
+msgid "Payment Type"
+msgstr "Tipo de pago"
+
+#: templates/AP_app/ap-taxpayer-details.html:31
+msgid "Payment Term"
+msgstr "Período de pago"
+
+#: templates/AP_app/ap-taxpayer-details.html:34
+#: templates/AP_app/ap-taxpayer-details.html:120
+msgid "Files"
+msgstr "Archivos"
+
+#: templates/AP_app/ap-taxpayer-details.html:36
+#: templates/AP_app/ap-taxpayer-details.html:85
+#: templates/AP_app/ap-taxpayer-details.html:122
+#: templates/AP_app/ap-taxpayers.html:24
+msgid "Action"
+msgstr "Operaciones"
+
+#: templates/AP_app/ap-taxpayer-details.html:51
+msgid "AFIP certificate"
+msgstr "Cerificado AFIP"
+
+#: templates/AP_app/ap-taxpayer-details.html:54
+msgid "Withholding taxes"
+msgstr "Impuesto a las ganancias"
+
+#: templates/AP_app/ap-taxpayer-details.html:61
+#: templates/AP_app/ap-taxpayer-details.html:100
+#: templates/AP_app/ap-taxpayer-details.html:142
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/AP_app/ap-taxpayer-details.html:74
+msgid "Address Information"
+msgstr "Domicilio"
+
+#: templates/AP_app/ap-taxpayer-details.html:80
+msgid "Zip_Code"
+msgstr "Código postal"
+
+#: templates/AP_app/ap-taxpayer-details.html:113
+msgid "Bank Account Information"
+msgstr "Información bancaria"
+
+#: templates/AP_app/ap-taxpayer-details.html:117
+msgid "Bank Name"
+msgstr "Banco"
+
+#: templates/AP_app/ap-taxpayer-details.html:118
+msgid "Bank Code"
+msgstr "Código de banco"
+
+#: templates/AP_app/ap-taxpayer-details.html:119
+msgid "Account Number"
+msgstr "Número de cuenta"
+
+#: templates/AP_app/ap-taxpayer-details.html:135
+msgid "CBU"
+msgstr "CBU"
+
+#: templates/AP_app/ap-taxpayer-details.html:155
+#: templates/AP_app/ap-taxpayer-details.html:162
+msgid "Deny"
+msgstr "Rechazado"
+
+#: templates/AP_app/ap-taxpayer-details.html:159
+#: templates/invoices_app/invoice_detail.html:103
+msgid "Approve"
+msgstr "Aprobado"
+
+#: templates/AP_app/ap-taxpayers.html:14
+msgid "Taxpayer"
+msgstr "Grupos económicos"
+
+#: templates/AP_app/ap-taxpayers.html:23
+#: templates/invoices_app/history-list.html:28
+#: templates/invoices_app/invoice-list.html:38
+#: templates/invoices_app/invoice_detail.html:30
+#: templates/supplier_app/invoice-list.html:33
+#: templates/supplier_app/supplier-home.html:28
+msgid "Status"
+msgstr "Estado"
+
+#: templates/AP_app/ap-taxpayers.html:35
+msgid "More details"
+msgstr "Detalles"
+
+#: templates/AP_app/company_creation.html:7
+msgid "Create a new company"
+msgstr "Crear nueva compaia"
+
+#: templates/AP_app/company_creation.html:20
+#: templates/supplier_app/company_list.html:20
+msgid "Description"
+msgstr "Descripcion"
+
+#: templates/AP_app/company_creation.html:24
+msgid "Create Company"
+msgstr "Crear nueva compañía"
+
+#: templates/AP_app/edit-address-information.html:25
+#: templates/AP_app/edit-bank-account-information.html:25
+#: templates/AP_app/edit-taxpayer-information.html:28
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/AP_app/edit-address-information.html:25
+#: templates/AP_app/edit-bank-account-information.html:25
+#: templates/AP_app/edit-taxpayer-information.html:28
+msgid "Request change"
+msgstr "Solicitud de cambio"
+
+#: templates/AP_app/edit-address-information.html:27
+#: templates/AP_app/edit-bank-account-information.html:27
+#: templates/AP_app/edit-taxpayer-information.html:30
+#: templates/supplier_app/invoices_form.html:137
+#: templates/supplier_app/taxpayer-creation.html:28
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/AP_app/navbar.html:13 templates/supplier_app/navbar.html:39
+msgid "Management"
+msgstr "Administración"
+
+#: templates/AP_app/navbar.html:17 templates/supplier_app/navbar.html:26
+#: templates/supplier_app/navbar.html:43
+#: templates/supplier_app/supplier-home.html:41
+msgid "Invoices"
+msgstr "Facturas"
+
+#: templates/AP_app/navbar.html:19
+msgid "Taxpayers"
+msgstr "Grupos económicos"
+
+#: templates/AP_app/navbar.html:22
+msgid "Manage Admins"
+msgstr "Administrar APs"
+
+#: templates/AP_app/navbar.html:28
+msgid "Companies"
+msgstr "Compañías"
+
+#: templates/AP_app/navbar.html:32
+msgid "See all"
+msgstr "Ver todas"
+
+#: templates/AP_app/navbar.html:34
+msgid "Create one"
+msgstr "Crear nueva"
+
+#: templates/AP_app/navbar.html:50 templates/supplier_app/navbar.html:59
+msgid "Log out"
+msgstr "Cerrar sesión"
+
+#: templates/AP_app/taxpayer_filter.html:51 templates/_filters.html:80
+msgid "Apply"
+msgstr "Aplicar"
+
+#: templates/AP_app/taxpayer_filter.html:60 templates/_filters.html:87
+msgid "Filters"
+msgstr "Filtros"
+
+#: templates/invoices_app/history-list.html:12
+msgid "Invoice history "
+msgstr "Historial de facturas"
+
+#: templates/invoices_app/history-list.html:18
+#: templates/invoices_app/invoice-list.html:29
+#: templates/supplier_app/invoice-list.html:28
+msgid "Invoice ID"
+msgstr "Id de factura"
+
+#: templates/invoices_app/history-list.html:19
+msgid "User"
+msgstr "Usuario"
+
+#: templates/invoices_app/history-list.html:20
+msgid "Modified"
+msgstr "Modificado"
+
+#: templates/invoices_app/history-list.html:21
+msgid "Currency"
+msgstr "Moneda"
+
+#: templates/invoices_app/history-list.html:22
+#: templates/invoices_app/invoice-list.html:31
+msgid "Tax Payer"
+msgstr "Grupo económico"
+
+#: templates/invoices_app/history-list.html:23
+#: templates/invoices_app/invoice-list.html:35
+#: templates/supplier_app/invoice-list.html:30
+msgid "Invoice Number"
+msgstr "Número de factura"
+
+#: templates/invoices_app/history-list.html:24
+#: templates/invoices_app/invoice-list.html:36
+#: templates/invoices_app/invoice_detail.html:62
+#: templates/supplier_app/invoice-list.html:31
+msgid "PO Number"
+msgstr "Número de orden de compra"
+
+#: templates/invoices_app/history-list.html:25
+#: templates/invoices_app/invoice_detail.html:71
+msgid "Net Amount"
+msgstr "Neto"
+
+#: templates/invoices_app/history-list.html:26
+msgid "VAT"
+msgstr "VAT"
+
+#: templates/invoices_app/history-list.html:27
+#: templates/invoices_app/invoice-list.html:37
+#: templates/supplier_app/invoice-list.html:32
+msgid "Total Amount"
+msgstr "Total"
+
+#: templates/invoices_app/invoice-list.html:14
+msgid "Invoice List"
+msgstr "Lista de facturas"
+
+#: templates/invoices_app/invoice-list.html:30
+msgid "Received"
+msgstr "Recibido"
+
+#: templates/invoices_app/invoice-list.html:33
+msgid "Invoice Date"
+msgstr "Fecha de facturas"
+
+#: templates/invoices_app/invoice-list.html:34
+msgid "Due Date"
+msgstr "Fecha de vencimiento"
+
+#: templates/invoices_app/invoice-list.html:40
+#: templates/supplier_app/invoice-list.html:34
+msgid "View"
+msgstr "Ver"
+
+#: templates/invoices_app/invoice-list.html:45
+#: templates/supplier_app/invoice-list.html:40
+msgid "No invoices"
+msgstr "No hay facturas"
+
+#: templates/invoices_app/invoice_detail.html:17
+msgid "Invoice"
+msgstr "Facturas"
+
+#: templates/invoices_app/invoice_detail.html:19
+#: templates/supplier_app/invoice-list.html:29
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/invoices_app/invoice_detail.html:26
+msgid "Edit info"
+msgstr "Editar"
+
+#: templates/invoices_app/invoice_detail.html:50
+msgid "From"
+msgstr "De"
+
+#: templates/invoices_app/invoice_detail.html:59
+#: templates/supplier_app/supplier-home.html:45
+msgid "Details"
+msgstr "Detalles"
+
+#: templates/invoices_app/invoice_detail.html:61
+msgid "Payment option"
+msgstr "Tipo de pago"
+
+#: templates/supplier_app/company_list.html:13
+msgid "Company List"
+msgstr "Lista de compañías"
+
+#: templates/supplier_app/company_list.html:21
+msgid "Email Invitation"
+msgstr "Invitación de email"
+
+#: templates/supplier_app/company_selector.html:10
+msgid "Welcome to "
+msgstr "Bienvenido a"
+
+#: templates/supplier_app/invoice-list.html:11
+#: templates/supplier_app/navbar.html:30
+msgid "My Invoices"
+msgstr "Mis facturas"
+
+#: templates/supplier_app/invoice-list.html:41
+msgid "Create one?"
+msgstr "Crear nueva"
+
+#: templates/supplier_app/invoices_form.html:20
+#: templates/supplier_app/navbar.html:32
+msgid "New Invoice"
+msgstr "Nueva factura"
+
+#: templates/supplier_app/invoices_form.html:134
+msgid "Submit"
+msgstr "Cargar"
+
+#: templates/supplier_app/navbar.html:6
+msgid "Supplier"
+msgstr "Proveedor"
+
+#: templates/supplier_app/navbar.html:13
+msgid "Tax payers"
+msgstr "Grupos económicos"
+
+#: templates/supplier_app/navbar.html:17
+msgid "My Tax Payers"
+msgstr "Mis grupos económicos"
+
+#: templates/supplier_app/navbar.html:19
+msgid "New Tax Payer"
+msgstr "Crear grupo económico"
+
+#: templates/supplier_app/supplier-home.html:16
+msgid "Create a new taxpayer"
+msgstr "Crear grupo económico"
+
+#: templates/supplier_app/taxpayer-creation.html:11
+msgid "Taxpayer info"
+msgstr "Información del grupo económico"
+
+#: templates/supplier_app/taxpayer-creation.html:15
+msgid "Address info"
+msgstr "Domicilio"
+
+#: templates/supplier_app/taxpayer-creation.html:22
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#: templates/supplier_app/taxpayer-creation.html:27
+msgid "Create taxpayer"
+msgstr "Cargar"
+
+#: users_app/models.py:17
 msgid "The Email must be set"
-msgstr ""
+msgstr "Debe especificar un email"
 
-#: users_app/models.py:31
+#: users_app/models.py:34
 msgid "Superuser must have is_staff=True."
 msgstr ""
 
-#: users_app/models.py:33
+#: users_app/models.py:36
 msgid "Superuser must have is_superuser=True."
 msgstr ""
 
-#: users_app/models.py:39
+#: users_app/models.py:43
 msgid "email address"
-msgstr ""
+msgstr "Email"
+
+#: utils/custom_filters.py:29
+msgid "From Date"
+msgstr "Desde"
+
+#: utils/custom_filters.py:34
+msgid "To Date"
+msgstr "Hasta"
+

@@ -5,6 +5,7 @@ from django_filters import (
     FilterSet,
     MultipleChoiceFilter
 )
+from django.utils.translation import ugettext_lazy as _
 
 from supplier_app import get_taxpayer_status_choices
 from supplier_app.models import TaxPayer
@@ -15,14 +16,18 @@ class TaxPayerFilter(FilterSet):
     taxpayer_state = MultipleChoiceFilter(
         choices=get_taxpayer_status_choices,
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+        label=_("Taxpayer state")
     )
-    taxpayer_date = DateFromToRangeFilter(widget=DateRangeWidget())
+    taxpayer_date = DateFromToRangeFilter(
+        widget=DateRangeWidget()
+        )
 
     country = CharFilter(
         widget=Select(
             choices=[('AR', 'Argentina'), ['BR', 'Brasil']],
             attrs={'class': 'custom-select'}
         ),
+        label=_("Country")
     )
 
     class Meta:

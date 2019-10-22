@@ -141,7 +141,7 @@ LOCALE_PATHS = (
 
 LANGUAGES = (
     ('en', _('English')),
-    ('es', _('Espanol')),
+    ('es', _('Spanish')),
     ('pt-br', _('Portuguese (Brazil)')),
 )
 
