@@ -34,15 +34,17 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
-from supplier_app.custom_messages import COMPANY_ERROR_MESSAGE
-from supplier_app import (
-    email_notifications,
-    EMAIL_SUCCESS_MESSAGE,
+from supplier_app.custom_messages import (
+    COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
+    EMAIL_SUCCESS_MESSAGE,
     JOIN_COMPANY_ERROR_MESSAGE,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
+)
+from supplier_app import (
+    email_notifications,
 )
 from supplier_app.forms import (
     AddressCreateForm,

@@ -208,6 +208,11 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, UpdateView):
         'users_app.can_edit_taxpayer',
     )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        return context
+
     def get_success_url(self, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
