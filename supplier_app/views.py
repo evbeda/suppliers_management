@@ -3,11 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
 )
-from django.core.exceptions import (
-    ObjectDoesNotExist,
-    PermissionDenied,
-    PermissionRequiredMixin,
-)
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db import DatabaseError
 from django.http import Http404, HttpResponseRedirect
@@ -51,7 +47,6 @@ from supplier_app.models import (
     TaxPayerArgentina
 )
 from users_app.mixins import UserLoginPermissionRequiredMixin
-from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
@@ -59,21 +54,7 @@ from utils.send_email import (
 )
 
 
-class ApLoginPermissionRequiredMixin(LoginRequiredMixin, PermissionRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        if not self.has_permission():
-            return self.handle_no_authorization()
-        return super().dispatch(request, *args, **kwargs)
-
-    def handle_no_authorization(self):
-        if self.raise_exception:
-            raise PermissionDenied(self.get_permission_denied_message())
-        return redirect(reverse_lazy('supplier-home'))
-
-
-class CompanyCreatorView(ApLoginPermissionRequiredMixin, CreateView):
+class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'AP_app/company_creation.html'
@@ -185,7 +166,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             return HttpResponseRedirect(self.get_success_url())
 
 
-class ApTaxpayers(ApLoginPermissionRequiredMixin, IsApUser, FilterView):
+class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayerArgentina
     template_name = 'AP_app/ap-taxpayers.html'
     filterset_class = TaxPayerFilter
@@ -202,7 +183,7 @@ class ApTaxpayers(ApLoginPermissionRequiredMixin, IsApUser, FilterView):
         return queryset
 
 
-class SupplierDetailsView(ApLoginPermissionRequiredMixin, TemplateView):
+class SupplierDetailsView(UserLoginPermissionRequiredMixin, TemplateView):
     template_name = 'AP_app/ap-taxpayer-details.html'
     permission_required = (
         'users_app.can_view_taxpayer',
@@ -218,7 +199,7 @@ class SupplierDetailsView(ApLoginPermissionRequiredMixin, TemplateView):
         return context
 
 
-class EditTaxpayerView(ApLoginPermissionRequiredMixin, FormView):
+class EditTaxpayerView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-taxpayer-information.html'
     model = TaxPayerArgentina
     form_class = TaxPayerEditForm
@@ -227,34 +208,12 @@ class EditTaxpayerView(ApLoginPermissionRequiredMixin, FormView):
         'users_app.can_edit_taxpayer',
     )
 
-    def get(self, request, *args, **kwargs):
-        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
-        edit_form = TaxPayerEditForm(instance=taxpayer)
-        context = {
-            'taxpayer_form': edit_form
-        }
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-
-        taxpayer_form = TaxPayerEditForm(data=request.POST, files=request.FILES)
-
-        if taxpayer_form.is_valid():
-            return self.form_valid(taxpayer_form)
-        else:
-            return self.form_invalid(taxpayer_form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
-        return context
-
     def get_success_url(self, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditAddressView(ApLoginPermissionRequiredMixin, UpdateView):
+class EditAddressView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
     model = Address
     form_class = AddressCreateForm
@@ -273,7 +232,7 @@ class EditAddressView(ApLoginPermissionRequiredMixin, UpdateView):
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditBankAccountView(ApLoginPermissionRequiredMixin, UpdateView):
+class EditBankAccountView(UserLoginPermissionRequiredMixin, UpdateView):
     template_name = 'AP_app/edit-bank-account-information.html'
     model = BankAccount
     form_class = BankAccountEditForm

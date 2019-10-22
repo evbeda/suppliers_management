@@ -403,7 +403,7 @@ class TestApTaxpayers(TestCase):
         self.client = Client()
 
         self.ap_home_url = 'ap-taxpayers'
-        
+
         self.company1 = CompanyFactory(
             name='Empresa 1',
             description='Descripcion de la empresa 1'
@@ -415,7 +415,6 @@ class TestApTaxpayers(TestCase):
         self.taxpayer_ar1 = TaxPayerArgentinaFactory(
             business_name=BUSINESS_EXAMPLE_NAME_1,
             workday_id='1',
-            country='AR',
             taxpayer_state=STATUS_PENDING,
             cuit='20-31789965-3',
             company=self.company1,
@@ -423,7 +422,6 @@ class TestApTaxpayers(TestCase):
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
             business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
-            country='US',
             taxpayer_state=STATUS_CHANGE_REQUIRED,
             cuit='20-39237968-5',
             company=self.company2,
@@ -463,13 +461,8 @@ class TestApTaxpayers(TestCase):
         ),
         (
             'country=AR',
-            [BUSINESS_EXAMPLE_NAME_1],
-            [BUSINESS_EXAMPLE_NAME_2],
-        ),
-        (
-            'country=US',
-            [BUSINESS_EXAMPLE_NAME_2],
-            [BUSINESS_EXAMPLE_NAME_1]
+            [BUSINESS_EXAMPLE_NAME_1, BUSINESS_EXAMPLE_NAME_2],
+            [],
         ),
     ])
     def test_get_taxpayers_with_filters(
@@ -509,13 +502,6 @@ class TestApTaxpayers(TestCase):
         self.assertContains(response, self.taxpayer_ar2.cuit)
         self.assertContains(response, self.taxpayer_ar1.taxpayer_state)
         self.assertContains(response, self.taxpayer_ar2.taxpayer_state)
-
-    def test_get_taxpayers_list_success(self):
-        request = self.factory.get('/suppliersite/ap')
-        request.user = self.user_ap
-
-        response = ApTaxpayers()
-        response = ApTaxpayers.as_view()(request)
 
     def test_get_all_taxpayers_list_as_ap(self):
         self.client.force_login(self.user_ap)
@@ -869,7 +855,9 @@ class TestEditTaxPayerInfo(TestCase):
         after_update = len(TaxPayer.objects.all())
 
         taxpayer = TaxPayerArgentina.objects.get(pk=self.taxpayer_id)
+
         self.assertEqual(before_update, after_update)
+
         for index, attribute in enumerate(fields_changed):
             self.assertEqual(
                 getattr(taxpayer, attribute), value_expected[index]
