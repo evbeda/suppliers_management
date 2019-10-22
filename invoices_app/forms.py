@@ -52,12 +52,31 @@ class InvoiceForm(forms.ModelForm):
                     'accept': 'application/pdf',
                 }
             ),
-            'vat': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'VAT'}),
-            'total_amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Total'}),
-            'net_amount': forms.NumberInput(attrs={'class': 'form-control',  'placeholder': 'Net Amount'}),
+            'vat': forms.NumberInput(
+                attrs={
+                    'id': 'vat',
+                    'class': 'form-control',
+                    'placeholder': 'VAT',
+                    'onChange': 'calculate_total_amount()',
+                }
+            ),
+            'total_amount': forms.NumberInput(
+                attrs={
+                    'id': 'total',
+                    'class': 'form-control',
+                    'placeholder': 'Total'
+                }
+            ),
+            'net_amount': forms.NumberInput(
+                attrs={
+                    'id': 'net_amount',
+                    'class': 'form-control', 
+                    'placeholder': 'Net Amount',
+                    'onChange': 'calculate_total_amount()',
+                    }
+                ),
             'invoice_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Invoice Number'}),
         }
-
 
     def is_valid(self):
         super(InvoiceForm, self).is_valid()

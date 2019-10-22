@@ -14,20 +14,21 @@
   <div class="col-md-8">
     <div class="card">
       <div class="card-header">
-        {% trans "Invoice" %} #
-        <strong>{{invoice.invoice_number}}</strong>
-        {% trans "Date" %}
-        <strong>{{invoice.invoice_date}}</strong>
-        {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and is_AP %}
-        <span><a href="{% url 'invoice-update' pk=invoice.id %}" title="Edit Invoice" class="fa fa-edit"></a></span>
-        {% endif %}
-        {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and not is_AP %}
-        <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="fa fa-edit">
+        <strong>{% trans "Invoice #" %}</strong>
+        {{invoice.invoice_number}}
+        <strong>{% trans "Date:" %}</strong>
+        {{invoice.invoice_date}}
+        {% if not taxpayer and invoice.status == INVOICE_STATUS_CHANGES_REQUEST or is_AP %}
+        <a href="{% url 'invoice-update' pk=invoice.id %}" class="btn btn-outline-primary btn-sm mx-2">
           {% trans "Edit info" %}
-        </a></span>
+        </a>
+        {% elif taxpayer and invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
+        <a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="btn btn-outline-primary btn-sm mx-2">
+          {% trans "Edit info" %}
+        </a>
         {% endif %}
         <span class="float-right">
-          <a class='btn btn-primary btn-sm mr-2 d-inline' href="{{ invoice.invoice_file.url }}">Download Invoice</a>
+          <a class='btn btn-primary btn-sm mr-2 d-inline' href="{{ invoice.invoice_file.url }}">{% trans "Download Invoice" %}</a>
           <strong>{% trans "Status" %}:</strong>
           {% if invoice.status == INVOICE_STATUS_NEW %}
           <span class="badge badge-primary">{{invoice.get_status_display}}</span>
@@ -48,7 +49,7 @@
       <div class="card-body">
         <div class="row mb-4">
           <div class="col-sm-4">
-            <h6 class="mb-3">{% trans "From" %}:</h6>
+            <h6 class="mb-3">{% trans "From: " %}</h6>
             <div>
               <strong>{{taxpayer.business_name}}</strong>
             </div>
@@ -57,10 +58,10 @@
             <div>{{address.country}}</div>
           </div>
           <div class="col-sm-4">
-            <h6 class="mb-3">{% trans "Details" %}:</h6>
-            <div><strong>{% trans "CUIT" %}:</strong> {{taxpayer.cuit}}</div>
-            <div><strong>{% trans "Payment option" %}:</strong> {{taxpayer.forma_de_pago}}</div>
-            <div><strong>{% trans "PO Number" %}:</strong> {{invoice.po_number}}</div>
+            <h6 class="mb-3">{% trans "Details:" %}</h6>
+            <div><strong>{% trans "CUIT:" %}</strong> {{taxpayer.cuit}}</div>
+            <div><strong>{% trans "Payment Option:" %}</strong> {{taxpayer.get_payment_term_display}}</div>
+            <div><strong>{% trans "PO number:" %}</strong> {{invoice.po_number}}</div>
           </div>
         </div>
         <div class="row">
@@ -69,7 +70,7 @@
               <tbody>
                 <tr>
                   <td class="left">
-                    <strong>{% trans "Net Amount" %}: </strong>
+                    <strong>{% trans "Net amount: " %}</strong>
                   </td>
                   <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.net_amount}}
@@ -77,7 +78,7 @@
                 </tr>
                 <tr>
                   <td class="left">
-                    <strong>VAT</strong>
+                    <strong>{% trans "VAT" %}</strong>
                   </td>
                   <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.vat}}
@@ -85,7 +86,7 @@
                 </tr>
                 <tr>
                   <td class="left">
-                    <strong>Total</strong>
+                    <strong>{% trans "Total" %}</strong>
                   </td>
                   <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.total_amount}}
@@ -104,12 +105,13 @@
            <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
              {% csrf_token %}
              <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
-             <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
-             <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
+             <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">{% trans "Request Changes" %}</button>
+             <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">{% trans "Reject" %}</button>
+             <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">{% trans "Pay" %}</button>
            </form>
          </div>
          <div class="col text-rigth">
-           <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">Invoice History</a></span>
+           <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">{% trans "Invoice History" %}</a></span>
          </div>
        </div>
      </div>
@@ -121,14 +123,15 @@
   </div>
   <div class="col-md-12 text-center mt-4">
     {% if invoice.po_file %}
-    <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">View
-        PO</a></span>
+    <span><a href="http://docs.google.com/gview?url={{ invoice.po_file.url }}" class="btn btn-info" target="_blank">
+      {% trans "View PO" %}
+    </a></span>
     {% endif %}
 
   </div>
   <div class="col-md-8">
     <div class="card my-3 p-3 bg-white rounded shadow-sm">
-      <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
+      <h6 class="border-bottom border-gray pb-2 mb-0">{% trans "Recent updates" %}</h6>
       <div>
         <div class="container">
           <div class="row mt-2 pb-2 border-bottom border-gray ">
@@ -143,7 +146,7 @@
                   </div>
                 {% endfor %}
               {% endif %}
-              <h6>Make a comment</h6>
+              <h6>{% trans "Make a comment" %}</h6>
               <form method='POST' action='{% url 'post-comment' pk=invoice.id %}' enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
@@ -151,13 +154,13 @@
                 </div>
                 <div class="row pl-3">
                 <div class="pl-0 pr-0 col-md-3">
-                  <button type="submit" name="status" class="btn btn-success">Post a comment</button>
+                  <button type="submit" name="status" class="btn btn-success">{% trans "Post a comment" %}</button>
                 </div>
                 <div class="col-md-9">
                     <div class="input-group">
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" name="invoice_file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
-                      <label class="custom-file-label" for="inputGroupFile01">Choose a file</label>
+                      <label class="custom-file-label" for="inputGroupFile01">{% trans "Choose a file" %}</label>
                     </div>
                   </div>
                 </div>
@@ -173,7 +176,7 @@
             {{ comment.message }}
             {% if comment.comment_file %}
             <div class="row ml-0 mb-0">
-              <p class="mb-0">Attachment: </p>
+              <p class="mb-0">{% trans "Attachment: " %}</p>
               <a target="_blank" href="http://docs.google.com/gview?url={{ comment.comment_file.url }}">
                 <i class="fas fa-paperclip"></i>
               </a>
