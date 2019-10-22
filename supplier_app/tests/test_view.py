@@ -748,15 +748,24 @@ class TestTaxpayerDetailsSupplier(TestCase):
 
 class TestEditTaxPayerInfo(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
         self.client = Client()
+        self.client2 = Client()
 
-        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
-        self.user_with_social_evb1 = UserFactory(email='nahuel')
-        self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+        self.client.force_login(self.ap_user)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
+        self.client2.force_login(self.supplier_user)
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.comapnyuserpermission = CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
         self.taxpayer_detail_url = 'supplier-details'
         self.taxpayer_edit_url = 'taxpayer-update'
         self.edit_taxpayer_view = EditTaxpayerView()
@@ -768,12 +777,11 @@ class TestEditTaxPayerInfo(TestCase):
         self.taxpayer_id = self.taxpayer.id
 
     def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
-        self.client.force_login(self.ap_user)
         response = self.client.get(
-            reverse_lazy(
+            reverse(
                 self.taxpayer_edit_url,
                 kwargs=self.kwargs
-            )
+            ),
         )
 
         self.assertEqual(
@@ -782,14 +790,13 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_taxpayer_info(self):
-        request = self.factory.post(
-            '/suppliersite/ap/taxpayer/{}/update/taxpayer_info/'.format(
-                self.taxpayer_id
+        response = self.client.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
             ),
             data=self.TAXPAYER_POST
         )
-        request.user = self.ap_user
-        response = EditTaxpayerView.as_view()(request, **self.kwargs)
 
         self.assertEqual(
             reverse(
@@ -800,17 +807,17 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_taxpayer_info_as_supplier_should_redirect_to_supplier_home(self):
-        request = self.factory.post(
-            '/suppliersite/ap/taxpayer/{}/update/taxpayer_info/'.format(
-                self.taxpayer_id
+        response = self.client2.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
             ),
             data=self.TAXPAYER_POST
         )
-        request.user = self.user_with_social_evb1
-        response = EditTaxpayerView.as_view()(request, **self.kwargs)
         self.assertEqual(
             reverse_lazy(
-                'supplier-home',
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs,
             ),
             response.url
         )
@@ -853,15 +860,14 @@ class TestEditTaxPayerInfo(TestCase):
         QUERY_FORM_TAXPAYER_POST_UPDATE.update(
             TAXPAYER_POST_UPDATE
         )
-        request = self.factory.post(
+
+        self.client.post(
             reverse(
-                'taxpayer-update',
+                self.taxpayer_edit_url,
                 kwargs=self.kwargs
             ),
             data=QUERY_FORM_TAXPAYER_POST_UPDATE
         )
-        request.user = self.ap_user
-        EditTaxpayerView.as_view()(request, **self.kwargs)
 
         form_taxpayer = TaxPayerEditForm(data=QUERY_FORM_TAXPAYER_POST_UPDATE)
         self.assertTrue(form_taxpayer.is_valid())
@@ -881,14 +887,24 @@ class TestEditTaxPayerInfo(TestCase):
 class TestEditAddressInfo(TestCase):
     def setUp(self):
         self.client = Client()
-        self.factory = RequestFactory()
+        self.client2 = Client()
 
-        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
-        self.user_with_social_evb1 = UserFactory(email='nahuel')
-        self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+        self.client.force_login(self.ap_user)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
+        self.client2.force_login(self.supplier_user)
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.comapnyuserpermission = CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+
         self.address = AddressFactory(taxpayer=self.taxpayer)
         self.address_edit_url = 'address-update'
         self.taxpayer_detail_url = 'supplier-details'
@@ -900,20 +916,21 @@ class TestEditAddressInfo(TestCase):
             'address_form-state': 'Mendoza',
             'address_form-country': 'Argentina',
         }
-        self.kwargs_taxpayer = {
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+            'address_id': self.address.id,
+        }
+        self.kwargs_taxpayer_id = {
             'taxpayer_id': self.taxpayer.id,
         }
-        self.kwargs_address = {
-            'address_id': self.address.id
-        }
+
         self.taxpayer_id = self.taxpayer.id
 
     def test_GET_edit_address_view(self):
-        self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse(
                 self.address_edit_url,
-                kwargs=self.kwargs_address
+                kwargs=self.kwargs
             )
         )
         self.assertEqual(
@@ -922,38 +939,35 @@ class TestEditAddressInfo(TestCase):
         )
 
     def test_post_edit_address_info_as_ap(self):
-        request = self.factory.post(
+        response = self.client.post(
             reverse(
                 self.address_edit_url,
-                kwargs=self.kwargs_address
+                kwargs=self.kwargs
             ),
             data=self.ADDRESS_POST
         )
-        request.user = self.ap_user
-        response = EditAddressView.as_view()(request, **self.kwargs_address)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             reverse(
                 self.taxpayer_detail_url,
-                kwargs=self.kwargs_taxpayer
+                kwargs=self.kwargs_taxpayer_id,
             ),
             response.url
         )
 
-    def test_post_edit_address_info_as_supplier_redirects_to_supplier_home(self):
-        request = self.factory.post(
+    def test_post_edit_address_info_as_supplier_redirects_to_supplier_details(self):
+        response = self.client2.post(
             reverse(
                 self.address_edit_url,
-                kwargs=self.kwargs_address
+                kwargs=self.kwargs
             ),
             data=self.ADDRESS_POST
         )
-        request.user = self.user_with_social_evb1
-        response = EditAddressView.as_view()(request, **self.kwargs_address)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
-            reverse_lazy(
-                'supplier-home',
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer_id,
             ),
             response.url
         )
@@ -961,15 +975,25 @@ class TestEditAddressInfo(TestCase):
 
 class TestEditBankAccountInfo(TestCase):
     def setUp(self):
-        self.factory = RequestFactory()
         self.client = Client()
+        self.client2 = Client()
 
-        self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
-        self.user_with_social_evb1 = UserFactory(email='nahuel')
-        self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+        self.client.force_login(self.ap_user)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
+        self.client2.force_login(self.supplier_user)
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.comapnyuserpermission = CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
         self.bank_update_url = 'bank-account-update'
 
@@ -979,19 +1003,19 @@ class TestEditBankAccountInfo(TestCase):
         }
 
         self.taxpayer_detail_url = 'supplier-details'
-        self.kwargs_taxpayer = {
+        self.kwargs = {
             'taxpayer_id': self.taxpayer.id,
-        }
-        self.kwargs_bank = {
             'bank_id': self.bank_account.id,
+        }
+        self.kwargs_taxpayer_id = {
+            'taxpayer_id': self.taxpayer.id,
         }
 
         self.taxpayer_id = self.taxpayer.id
 
-    def test_GET_bank_account_edit_view(self):
-        self.client.force_login(self.ap_user)
+    def test_GET_bank_account_edit_view_as_ap(self):
         response = self.client.get(
-            reverse(self.bank_update_url, kwargs=self.kwargs_bank)
+            reverse(self.bank_update_url, kwargs=self.kwargs)
         )
 
         self.assertEqual(
@@ -1003,12 +1027,11 @@ class TestEditBankAccountInfo(TestCase):
             response.template_name[0]
         )
 
-    def test_post_edit_bank_account_info(self):
-        self.client.force_login(self.ap_user)
+    def test_post_edit_bank_account_info_as_ap(self):
         response = self.client.post(
             reverse(
                 self.bank_update_url,
-                kwargs=self.kwargs_bank
+                kwargs=self.kwargs,
             ),
             self.BANK_ACCOUNT_POST
         )
@@ -1016,23 +1039,25 @@ class TestEditBankAccountInfo(TestCase):
         self.assertEqual(
             reverse(
                 self.taxpayer_detail_url,
-                kwargs=self.kwargs_taxpayer
+                kwargs=self.kwargs_taxpayer_id
             ),
             response.url
         )
 
-    def test_post_edit_bank_account_info_as_supplier_redirect_to_supplier_home(self):
-        self.client.force_login(self.user_with_social_evb1)
-        response = self.client.post(
+    def test_post_edit_bank_account_info_as_supplier_redirect_to_taxpayer_details(self):
+        response = self.client2.post(
             reverse(
                 self.bank_update_url,
-                kwargs=self.kwargs_bank
+                kwargs=self.kwargs
             ),
             self.BANK_ACCOUNT_POST
         )
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
-            reverse('supplier-home'),
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer_id
+            ),
             response.url
         )
 
@@ -1385,7 +1410,7 @@ class TestCompanyJoin(TestCase):
                 kwargs=kwargs
             ),
         )
-        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
 
 class TestApprovalRefuse(TestCase):

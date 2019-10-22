@@ -25,8 +25,7 @@ urlpatterns = [
     url(r'^supplier/taxpayer/create$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/$', SupplierDetailsView.as_view(), name='supplier-details'),
     url(r'^ap/taxpayer/(?P<taxpayer_id>[0-9]+)/status/$', change_taxpayer_status, name='handle-taxpayer-status'),
-    url(r'^ap/taxpayer/update/taxpayer_info/(?P<taxpayer_id>[0-9]+)$', EditTaxpayerView.as_view(), name='taxpayer-update'),
-    url(r'^ap/taxpayer/address_info/(?P<address_id>[0-9]+)/update$', EditAddressView.as_view(), name='address-update'),
-    url(r'^ap/taxpayer/bank_account_info/(?P<bank_id>[0-9]+)/update$', EditBankAccountView.as_view(), name='bank-account-update'),
-
+    url(r'^taxpayer/update/taxpayer_info/(?P<taxpayer_id>[0-9]+)$', EditTaxpayerView.as_view(), name='taxpayer-update'),
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/update/address_info/(?P<address_id>[0-9]+)$', EditAddressView.as_view(), name='address-update'),
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/update/bank_account_info/(?P<bank_id>[0-9]+)$', EditBankAccountView.as_view(), name='bank-account-update'),
 ]

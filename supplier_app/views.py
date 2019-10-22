@@ -204,7 +204,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissio
         return context
 
 
-class EditTaxpayerView(UserLoginPermissionRequiredMixin, UpdateView):
+class EditTaxpayerView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-taxpayer-information.html'
     model = TaxPayerArgentina
     form_class = TaxPayerEditForm
@@ -218,43 +218,58 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, UpdateView):
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         return context
 
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
+
     def get_success_url(self, **kwargs):
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditAddressView(UserLoginPermissionRequiredMixin, UpdateView):
+class EditAddressView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
     model = Address
     form_class = AddressCreateForm
     pk_url_kwarg = "address_id"
     permission_required = (
         'users_app.can_edit_taxpayer',
+        'users_app.can_edit_taxpayer_address',
     )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
+        taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        context['taxpayer_id'] = taxpayer.id
+        get_object_or_404(Address, pk=self.kwargs['address_id'], taxpayer=taxpayer)
         return context
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
 
     def get_success_url(self, **kwargs):
         taxpayer_id = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditBankAccountView(UserLoginPermissionRequiredMixin, UpdateView):
+class EditBankAccountView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-bank-account-information.html'
     model = BankAccount
     form_class = BankAccountEditForm
     pk_url_kwarg = "bank_id"
     permission_required = (
         'users_app.can_edit_taxpayer',
+        'users_app.can_edit_taxpayer_bank_account',
     )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
+        taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        context['taxpayer_id'] = taxpayer.id
+        get_object_or_404(BankAccount, pk=self.kwargs['bank_id'], taxpayer=taxpayer)
         return context
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
 
     def get_success_url(self, **kwargs):
         taxpayer_id = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
@@ -279,9 +294,10 @@ def company_invite(request):
         return redirect('company-list')
 
 
-@permission_required('users_app.supplier_role', raise_exception=True)
 def company_join(request, *args, **kwargs):
     company_unique_token = _get_company_unique_token_from_token(kwargs['token'])
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/?next={}'.format(request.get_full_path()))
     if _token_is_valid(company_unique_token):
         try:
             user = request.user

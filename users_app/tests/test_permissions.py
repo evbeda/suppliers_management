@@ -255,7 +255,7 @@ class TestSupplierPermissions(TestCase):
             'taxpayer_id': self.taxpayer2.id
         }
 
-    def test_supplier_is_not_able_to_see_another_supplier_taxpayer_details(self):
+    def test_supplier_cant_access_to_another_supplier_taxpayer_details(self):
         response = self.client.get(
             reverse(
                 'supplier-details',
@@ -266,7 +266,7 @@ class TestSupplierPermissions(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
-    def test_supplier_is_able_to_see_his_taxpayers_details(self):
+    def test_supplier_can_access_to_see_his_taxpayers_details(self):
         kwargs = {
             'taxpayer_id': self.taxpayer1.id
         }
@@ -282,3 +282,46 @@ class TestSupplierPermissions(TestCase):
             "AP_app/ap-taxpayer-details.html",
             response.template_name,
         )
+
+    def test_supplier_cant_access_to_edit_another_supplier_taxpayer(self):
+        response = self.client.get(
+            reverse(
+                'taxpayer-update',
+                kwargs=self.kwargs
+            ),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_supplier_cant_access_to_edit_another_taxpayer_address_info(self):
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer1.id,
+            'address_id': self.addres2.id
+        }
+
+        response = self.client.get(
+            reverse(
+                'address-update',
+                kwargs=self.kwargs
+            ),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_supplier_cant_access_to_edit_another_taxpayer_bank_account(self):
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer1.id,
+            'bank_id': self.bank_info2.id
+        }
+
+        response = self.client.get(
+            reverse(
+                'bank-account-update',
+                kwargs=self.kwargs
+            ),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
