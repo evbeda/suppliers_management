@@ -9,7 +9,6 @@ from django.db import DatabaseError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.edit import (
     CreateView,
@@ -91,7 +90,7 @@ class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
     def _user_has_company(self):
         user = self.request.user
         if not user.companyuserpermission_set.all():
-            messages.error(self.request, _(COMPANY_ERROR_MESSAGE))
+            messages.error(self.request, COMPANY_ERROR_MESSAGE)
             return False
         else:
             return True
@@ -133,7 +132,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
     def form_invalid(self, forms):
         messages.error(
             self.request,
-            _(TAXPAYER_FORM_INVALID_MESSAGE),
+            TAXPAYER_FORM_INVALID_MESSAGE,
         )
         return HttpResponseRedirect(reverse('taxpayer-create'))
 
@@ -155,12 +154,12 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             bankaccount.save()
             messages.success(
                 self.request,
-                _(TAXPAYER_CREATION_SUCCESS_MESSAGE)
+                TAXPAYER_CREATION_SUCCESS_MESSAGE
             )
         except ObjectDoesNotExist:
             messages.error(
                 self.request,
-                _(TAXPAYER_CREATION_ERROR_MESSAGE)
+                TAXPAYER_CREATION_ERROR_MESSAGE
             )
         finally:
             return HttpResponseRedirect(self.get_success_url())
@@ -276,9 +275,9 @@ def company_invite(request):
         company_unique_token.save()
         token = company_unique_token.token
         company_invitation_notification(company, token, email)
-        messages.success(request, _(EMAIL_SUCCESS_MESSAGE))
+        messages.success(request, EMAIL_SUCCESS_MESSAGE)
     except CouldNotSendEmailError:
-        messages.error(request, _(EMAIL_ERROR_MESSAGE))
+        messages.error(request, EMAIL_ERROR_MESSAGE)
     finally:
         return redirect('company-list')
 

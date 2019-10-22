@@ -14,19 +14,20 @@
   <div class="col-md-8">
     <div class="card">
       <div class="card-header">
-        Invoice #
+        {% trans "Invoice" %} #
         <strong>{{invoice.invoice_number}}</strong>
-        Date
+        {% trans "Date" %}
         <strong>{{invoice.invoice_date}}</strong>
         {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and is_AP %}
         <span><a href="{% url 'invoice-update' pk=invoice.id %}" title="Edit Invoice" class="fa fa-edit"></a></span>
         {% endif %}
         {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST and not is_AP %}
-        <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="fa fa-edit">Edit
-            info</a></span>
+        <span><a href="{% url 'taxpayer-invoice-update' taxpayer_id=taxpayer.id pk=invoice.id %}" class="fa fa-edit">
+          {% trans "Edit info" %}
+        </a></span>
         {% endif %}
         <span class="float-right">
-          <strong>Status:</strong>
+          <strong>{% trans "Status" %}:</strong>
           {% if invoice.status == INVOICE_STATUS_NEW %}
           <span class="badge badge-primary">{{invoice.get_status_display}}</span>
           {% endif %}
@@ -46,7 +47,7 @@
       <div class="card-body">
         <div class="row mb-4">
           <div class="col-sm-4">
-            <h6 class="mb-3">From:</h6>
+            <h6 class="mb-3">{% trans "From" %}:</h6>
             <div>
               <strong>{{taxpayer.business_name}}</strong>
             </div>
@@ -55,10 +56,10 @@
             <div>{{address.country}}</div>
           </div>
           <div class="col-sm-4">
-            <h6 class="mb-3">Details:</h6>
-            <div><strong>CUIT:</strong> {{taxpayer.cuit}}</div>
-            <div><strong>Payment option:</strong> {{taxpayer.forma_de_pago}}</div>
-            <div><strong>PO Number:</strong> {{invoice.po_number}}</div>
+            <h6 class="mb-3">{% trans "Details" %}:</h6>
+            <div><strong>{% trans "CUIT" %}:</strong> {{taxpayer.cuit}}</div>
+            <div><strong>{% trans "Payment option" %}:</strong> {{taxpayer.forma_de_pago}}</div>
+            <div><strong>{% trans "PO Number" %}:</strong> {{invoice.po_number}}</div>
           </div>
         </div>
         <div class="row">
@@ -67,7 +68,7 @@
               <tbody>
                 <tr>
                   <td class="left">
-                    <strong>Net Amount: </strong>
+                    <strong>{% trans "Net Amount" %}: </strong>
                   </td>
                   <td class="text-right">
                     <strong>{{invoice.currency}}</strong> {{invoice.net_amount}}
@@ -99,7 +100,7 @@
       <div class="card-footer">
         <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
           {% csrf_token %}
-          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">Approve</button>
+          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
           <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
           <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
           <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">Pay</button>

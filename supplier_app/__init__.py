@@ -10,16 +10,16 @@ TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE = 26214400
 
 TAXPAYER_BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS = ['.pdf']
 
-TAXPAYER_STATUS_ACTIVE = "ACTIVE"
+TAXPAYER_STATUS_ACTIVE = "APPROVED"
 TAXPAYER_STATUS_CHANGE_REQUIRED = "CHANGE REQUIRED"
 TAXPAYER_STATUS_PENDING = "PENDING"
 TAXPAYER_STATUS_DENIED = "DENIED"
 
 TAXPAYER_STATUS = {
-    "Active": TAXPAYER_STATUS_ACTIVE,
-    "Change required": TAXPAYER_STATUS_CHANGE_REQUIRED,
-    "Pending": TAXPAYER_STATUS_PENDING,
-    "Denied": TAXPAYER_STATUS_DENIED,
+    "Approved": DBTuple(TAXPAYER_STATUS_ACTIVE, _("Approved")),
+    "Change required": DBTuple(TAXPAYER_STATUS_CHANGE_REQUIRED, _("Change required")),
+    "Pending": DBTuple(TAXPAYER_STATUS_PENDING, _("Pending")),
+    "Denied": DBTuple(TAXPAYER_STATUS_DENIED, _("Denied")),
 }
 
 PAYMENT_TERMS = [
@@ -85,5 +85,4 @@ email_notifications = {
 
 
 def get_taxpayer_status_choices():
-    return [(v, _(k)) for k, v in TAXPAYER_STATUS.items()]
-
+    return TAXPAYER_STATUS.values()

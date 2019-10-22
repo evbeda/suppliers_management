@@ -14,7 +14,7 @@
 <div class="container h-100">
     {% if not workday_id_is_setted %}
     <div class="row justify-content-center alert alert-danger" role="alert">
-        <h3>You must set workday id to the taxpayer</h3>
+        <h3>{% trans "You must set workday id to the taxpayer" %}</h3>
     </div>
     {% endif %}
     <div class="row justify-content-center">
@@ -151,10 +151,16 @@
     <div class="row justify-content-end">
         {% if is_AP %}
             {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-            <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
+            <a class='btn btn-danger' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">
+                {% trans "Deny" %}
+            </a>
             {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-            <a class='btn btn-success m-3' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">Approve</a>
-            <a class='btn btn-danger m-3' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">Deny</a>
+            <a class='btn btn-success m-3' href="{% url 'approve-taxpayer'  taxpayer_id=taxpayer.id%}">
+                {% trans "Approve" %}
+            </a>
+            <a class='btn btn-danger m-3' href="{% url 'deny-taxpayer'  taxpayer_id=taxpayer.id %}">
+                {% trans "Deny" %}
+            </a>
             {% endif %}       
         {% endif %}
     </div>
