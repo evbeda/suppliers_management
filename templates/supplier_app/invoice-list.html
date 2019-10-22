@@ -16,7 +16,8 @@
     <div class="col-md-2">
         <ul class="nav flex-column text-center">
             <li class="nav-item">
-                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i class="fa fa-plus"></i> New Invoice </a>
+                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i
+                        class="fa fa-plus"></i> New Invoice </a>
             </li>
         </ul>
     </div>
@@ -34,10 +35,13 @@
                 </tr>
             </thead>
             <tbody>
-            {% if not object_list%}
-            <tr><td  class="table-danger text-center" colspan="7">{% trans "No invoices" %} <a href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}">Create one?</a></td> </tr>
-            {% endif %}
-            {% for invoice in object_list %}
+                {% if not object_list%}
+                <tr>
+                    <td class="table-danger text-center" colspan="7">{% trans "No invoices" %} <a
+                            href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}">{% trans "Create one?" %}</a></td>
+                </tr>
+                {% endif %}
+                {% for invoice in object_list %}
                 <tr>
                     <th scope="row">{{invoice.id}}</th>
                     <td>{{invoice.invoice_date_received}}</td>
@@ -45,26 +49,27 @@
                     <td>{{invoice.po_number}}</td>
                     <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>
                     <td>{% if invoice.status == INVOICE_STATUS_NEW %}
-                      <span class="badge badge-primary">{{invoice.get_status_display}}</span>
-                      {% endif %}
-                      {% if invoice.status == INVOICE_STATUS_REJECTED %}
-                      <span class="badge badge-danger">{{invoice.get_status_display}}</span>
-                      {% endif %}
-                      {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
-                      <span class="badge badge-warning">{{invoice.get_status_display}}</span>
-                      {% endif %}
-                      {% if invoice.status == INVOICE_STATUS_PAID %}
-                      <span class="badge badge-dark">{{invoice.get_status_display}}</span>
-                      {% endif %}
-                      {% if invoice.status == INVOICE_STATUS_APPROVED %}
-                      <span class="badge badge-success">{{invoice.get_status_display}}</span>
-                      {% endif %}
+                        <span class="badge badge-primary">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_REJECTED %}
+                        <span class="badge badge-danger">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_CHANGES_REQUEST %}
+                        <span class="badge badge-warning">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_PAID %}
+                        <span class="badge badge-dark">{{invoice.get_status_display}}</span>
+                        {% endif %}
+                        {% if invoice.status == INVOICE_STATUS_APPROVED %}
+                        <span class="badge badge-success">{{invoice.get_status_display}}</span>
+                        {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'invoices-detail' taxpayer_id=invoice.taxpayer.id pk=invoice.id %}"><i class="fa fa-eye ml-2"></i></a>
+                        <a href="{% url 'invoices-detail' taxpayer_id=invoice.taxpayer.id pk=invoice.id %}"><i
+                                class="fa fa-eye ml-2"></i></a>
                     </td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     </div>
