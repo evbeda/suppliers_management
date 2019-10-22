@@ -533,7 +533,7 @@ class TestSupplierDetailsView(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
-
+        
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
         self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.ap_user)
@@ -699,16 +699,25 @@ class TestSupplierDetailsView(TestCase):
 class TestTaxpayerDetailsSupplier(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user_sup = UserFactory(email="nicolas@gmail.com")
+        self.user_sup = UserFactory(email="nicolas.nunez@gmail.com")
         self.user_sup.groups.add(Group.objects.get(name='supplier'))
         self.client.force_login(self.user_sup)
         self.supplier_detail_url = 'supplier-details'
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
+        self.company = CompanyFactory(
+            name='FakeCompany',
+            description='Best catering worldwide'
+        )
+        self.companyuserpermission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user_sup
+        )
         self.taxpayer_example = TaxPayerArgentinaFactory(
             afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
+            company=self.company,
         )
         self.bank_info_example = BankAccountFactory(
             taxpayer=self.taxpayer_example,

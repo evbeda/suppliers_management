@@ -1,10 +1,25 @@
 from parameterized import parameterized
-from unittest.mock import patch
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
+from http import HTTPStatus
 
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
-
+from django.core.files import File
+from django.core.urlresolvers import reverse
+from django.test import (
+    Client,
+    TestCase,
+)
+from supplier_app.tests.factory_boy import (
+    AddressFactory,
+    BankAccountFactory,
+    CompanyFactory,
+    CompanyUserPermissionFactory,
+    TaxPayerArgentinaFactory,
+)
 from users_app.factory_boy import (
     UserFactory,
 )
@@ -186,3 +201,84 @@ class TestStrategy(TestCase):
         self.assertFalse(in_group(self.ap_admin_group, user))
         self.assertFalse(in_group(self.ap_manager_group, user))
         self.assertFalse(in_group(self.supplier_group, user))
+
+
+class TestSupplierPermissions(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = UserFactory(email="nahuel.valencia21@gmail.com")
+        self.supplier_group = Group.objects.get(name='supplier')
+        self.user.groups.add(self.supplier_group)
+        self.client.force_login(self.user)
+
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+
+        self.company1 = CompanyFactory(
+            name='FakeCompany',
+            description='Best catering worldwide'
+        )
+        self.companyuserpermission1 = CompanyUserPermissionFactory(
+            company=self.company1,
+            user=self.user
+        )
+        self.taxpayer1 = TaxPayerArgentinaFactory(
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+            company=self.company1,
+        )
+        self.bank_info1 = BankAccountFactory(
+            taxpayer=self.taxpayer1,
+            bank_cbu_file=self.file_mock
+            )
+        self.addres1 = AddressFactory(taxpayer=self.taxpayer1)
+
+        self.company2 = CompanyFactory(
+            name='AnotherFakeCompany',
+            description='Worst catering worldwide'
+        )
+        self.companyuserpermission2 = CompanyUserPermissionFactory(
+            company=self.company2,
+        )
+        self.taxpayer2 = TaxPayerArgentinaFactory(
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+            company=self.company2,
+        )
+        self.bank_info2 = BankAccountFactory(
+            taxpayer=self.taxpayer2,
+            bank_cbu_file=self.file_mock
+            )
+        self.addres2 = AddressFactory(taxpayer=self.taxpayer2)
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer2.id
+        }
+
+    def test_supplier_is_not_able_to_see_another_supplier_taxpayer_details(self):
+        response = self.client.get(
+            reverse(
+                'supplier-details',
+                kwargs=self.kwargs
+            ),
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_supplier_is_able_to_see_his_taxpayers_details(self):
+        kwargs = {
+            'taxpayer_id': self.taxpayer1.id
+        }
+        response = self.client.get(
+            reverse(
+                'supplier-details',
+                kwargs=kwargs
+            ),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(
+            "AP_app/ap-taxpayer-details.html",
+            response.template_name,
+        )

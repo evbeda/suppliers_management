@@ -47,7 +47,11 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina
 )
-from users_app.mixins import UserLoginPermissionRequiredMixin
+from users_app.mixins import (
+    HasTaxPayerPermissionMixin,
+    UserLoginPermissionRequiredMixin,
+)
+from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
@@ -183,11 +187,12 @@ class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
         return queryset
 
 
-class SupplierDetailsView(UserLoginPermissionRequiredMixin, TemplateView):
+class SupplierDetailsView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, TemplateView):
     template_name = 'AP_app/ap-taxpayer-details.html'
-    permission_required = (
-        'users_app.can_view_taxpayer',
-    )
+    permission_required = ('users_app.can_view_taxpayer')
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
