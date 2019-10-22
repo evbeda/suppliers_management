@@ -163,13 +163,13 @@
   </div>
 </div>
 
-</script>
 <script type="text/javascript">
   $(function() { {
     $("#invoiceForm").submit(function() {
       $("#submitBtn").attr("disabled", true);
       return true;
     });
+<<<<<<< HEAD
   });
 
   $('#inputGroupFile01').change(function(e) {
@@ -179,5 +179,16 @@
   $('#inputGroupFile02').change(function(e) {
     $(this).next('#id-custom-file-label2').html(e.target.files[0].name);
   });
+=======
+});
+
+function calculate_total_amount() {
+  a = Number(document.getElementById('net_amount').value);
+  b = Number(document.getElementById('vat').value);
+  c = a + b;
+
+  document.getElementById('total').value = c;
+}
+>>>>>>> added trans to templates when was missing
 </script>
 {% endblock %}

@@ -10,15 +10,20 @@ from django.contrib.auth.mixins import (
 from django.http import (
     HttpResponseBadRequest,
 )
+from django.shortcuts import (
+    get_object_or_404,
+    redirect
+)
 from django.urls import (
     reverse,
     reverse_lazy
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
+
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
@@ -150,10 +155,10 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
         form.instance.invoice_due_date = form.cleaned_data['invoice_date'] + timedelta(days=payment_term)
         invoice_number = form.cleaned_data['invoice_number']
         if taxpayer.taxpayer_state != TAXPAYER_STATUS_ACTIVE:
-            form.add_error(None, 'Taxpayer not approved yet')
+            form.add_error(None, _('Taxpayer not approved yet'))
             return super().form_invalid(form)
         if Invoice.objects.filter(taxpayer=taxpayer.id, invoice_number=invoice_number).exists():
-            form.errors['invoice_number'] = 'The invoice {} already exists'.format(invoice_number)
+            form.errors['invoice_number'] = _('The invoice {} already exists').format(invoice_number)
             return super().form_invalid(form)
 
         return super().form_valid(form)
@@ -201,18 +206,18 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         Comment.objects.create(
             user=request.user,
             invoice=invoice,
-            message='{} has changed the invoice'.format(
-              request.user.email,
+            message=_('{} has changed the invoice').format(
+                request.user.email,
             )
         )
         if request.user.is_AP:
-            subject = 'Eventbrite Invoice Edited'
-            upper_text = 'Your Invoice # {} was edited by an administrator. \
-                Please check your invoice'.format(invoice.invoice_number)
+            subject = _('Eventbrite Invoice Edited')
+            upper_text = _('Your Invoice # {} was edited by an administrator. \
+                Please check your invoice').format(invoice.invoice_number)
             message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,
-                'Thank you'
+                _('Thank you')
             )
             recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
             send_email_notification.apply_async([subject, message, recipient_list])
@@ -289,23 +294,23 @@ def change_invoice_status(request, pk):
     Comment.objects.create(
         invoice=invoice,
         user=request.user,
-        message='{} has changed the invoice status to {}'.format(
+        message=_('{} has changed the invoice status to {}').format(
             request.user.email,
             status_message,
         )
     )
-    subject = 'Invoice {} changed status to {}'.format(
+    subject = _('Invoice {} changed status to {}').format(
             invoice.invoice_number,
             invoice.get_status_display(),
         )
-    upper_text = 'Invoice {} changed status to {}'.format(
+    upper_text = _('Invoice {} changed status to {}').format(
                 invoice.invoice_number,
                 invoice.get_status_display(),
             )
     message = build_mail_html(
             invoice.taxpayer.business_name,
             upper_text,
-            'Thank you'
+            _('Thank you')
         )
     recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
     send_email_notification.apply_async([subject, message, recipient_list])
@@ -376,15 +381,15 @@ def post_a_comment(request, pk):
     )
 
     if request.user.is_AP:
-        subject = 'Eventbrite Invoice {} commented'.format(invoice.invoice_number)
-        upper_text = 'You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}'.format(
+        subject = _('Eventbrite Invoice {} commented').format(invoice.invoice_number)
+        upper_text = _('You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}').format(
             invoice.invoice_number,
             request.POST['message']
         )
         message = build_mail_html(
             invoice.taxpayer.business_name,
             upper_text,
-            'Thank you'
+            _('Thank you')
         )
         recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
         send_email_notification.apply_async([subject, message, recipient_list])
