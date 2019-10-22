@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core import mail
 
+from supplier_app import TAXPAYER_STATUS_PENDING
 from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from users_app.factory_boy import UserFactory
 
@@ -556,3 +557,15 @@ class TestInvoice(TestBase):
             reverse('invoice-to-xls'),
         )
         self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))
+
+    def test_invoice_creation_when_taxpayer_is_not_approved(self):
+        self.client.force_login(self.user)
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_PENDING
+        self.taxpayer.save()
+
+        response = self.client.post(
+            reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.invoice_post_data,
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, 'Taxpayer not approved yet')

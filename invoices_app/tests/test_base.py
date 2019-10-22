@@ -13,6 +13,7 @@ from django.test import (
 from django.core import mail
 from invoices_app.factory_boy import InvoiceFactory
 
+from supplier_app import TAXPAYER_STATUS_ACTIVE
 from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     CompanyFactory,
@@ -35,7 +36,7 @@ class TestBase(TestCase):
         supplier_group = Group.objects.get(name='supplier')
         self.user.groups.add(supplier_group)
         self.company = CompanyFactory()
-        self.taxpayer = TaxPayerArgentinaFactory(company=self.company)
+        self.taxpayer = TaxPayerArgentinaFactory(company=self.company, taxpayer_state=TAXPAYER_STATUS_ACTIVE)
         self.companyuserpermission = CompanyUserPermissionFactory(
             company=self.company,
             user=self.user
