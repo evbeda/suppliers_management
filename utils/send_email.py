@@ -6,17 +6,17 @@ from django.utils.translation import (
     ugettext_lazy as _,
     activate,
 )
-
+from django.utils.translation import ugettext_lazy as _
 from supplier_app.models import (
-    Company,
     CompanyUserPermission,
     TaxPayer,
 )
 from supplier_app import email_notifications
-
+from celery import task
 from utils.exceptions import CouldNotSendEmailError
 
 
+@task(ignore_result=True)
 def send_email_notification(subject, message, recipient_list):
     plain_message = strip_tags(message)
     try:
@@ -33,7 +33,8 @@ def send_email_notification(subject, message, recipient_list):
     except Exception:
         raise CouldNotSendEmailError()
 
-
+    
+@task(ignore_result=True)
 def company_invitation_notification(company, token, email, language):
     activate(language)
     subject = _(email_notifications['company_invitation']['subject'])
@@ -52,6 +53,11 @@ def company_invitation_notification(company, token, email, language):
         ),
         email,
     )
+
+
+@task(ignore_result=True)
+def sumar(a, b):
+    return a+b
 
 
 def taxpayer_notification(taxpayer, change_type):
@@ -74,8 +80,7 @@ def taxpayer_notification(taxpayer, change_type):
 
 
 def get_user_emails_by_tax_payer_id(tax_payer_id):
-    taxpayer = TaxPayer.objects.get(pk=tax_payer_id)
-    company = Company.objects.get(pk=taxpayer.company.id)
+    company = TaxPayer.objects.get(pk=tax_payer_id).company
     emails = CompanyUserPermission.objects.values_list(
         'user__email',
         flat=True,
