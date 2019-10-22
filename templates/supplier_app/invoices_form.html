@@ -7,6 +7,13 @@
 
 {% block content %}
 {% include 'supplier_app/navbar.html' %}
+{% if form.non_field_errors %}
+<div class="row justify-content-center mt-2">
+    {% for err in form.non_field_errors %}
+    <h5 class="alert alert-danger">{{ err }}</h5>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="container">
     <div class="row">
         <div class="col-md-12">
