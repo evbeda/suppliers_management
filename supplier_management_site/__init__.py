@@ -1,14 +1,7 @@
-import os
-from django.core.exceptions import ImproperlyConfigured
-from .celery import celery_app
+from __future__ import absolute_import, unicode_literals
 
-
-def get_env_variable(var_name):
-    try:
-        return os.environ[var_name]
-    except KeyError:
-        error_msg = 'Set the %s environment variable' % var_name
-        raise ImproperlyConfigured(error_msg)
-
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
 
 __all__ = ('celery_app',)
