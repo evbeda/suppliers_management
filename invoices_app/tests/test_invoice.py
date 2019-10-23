@@ -1,7 +1,9 @@
 from datetime import date, timedelta
+from functools import reduce
 from http import HTTPStatus
 from parameterized import parameterized
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core import mail
@@ -16,6 +18,7 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PAID,
+    INVOICE_MAX_SIZE_FILE,
 )
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
@@ -50,15 +53,37 @@ class TestInvoice(TestBase):
         ('test.xml', 500000000, False),
     ])
     def test_form_file_is_valid(self, name_file, size_file, expected):
-        self.file_mock.name = name_file
-        self.file_mock.size = size_file
         form = InvoiceForm(
             data=self.invoice_post_data,
             files={
-                'invoice_file': self.file_mock,
+                'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             }
         )
         self.assertEqual(form.is_valid(), expected)
+
+    @parameterized.expand([
+        ('test.xml', 20, ['Only .pdf allowed']),
+        ('test.pdf', 5242881, [
+            'The file size is greater than {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))]),
+        ('test.xml', 5242881, [
+            'Only .pdf allowed', 'The file size is greater than {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))])
+    ])
+    def test_invoice_file_is_valid_message(
+        self,
+        name_file,
+        size_file,
+        messages
+    ):
+        form = InvoiceForm(
+            data=self.invoice_post_data,
+            files={
+                'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
+            }
+        )
+        is_valid = form.is_valid()
+        errors = reduce(lambda a,b:a+b, form.errors.values())
+        for message in messages:
+            self.assertTrue(message in errors)
 
     @parameterized.expand([
         ('test.pdf', 20, True),
@@ -68,13 +93,11 @@ class TestInvoice(TestBase):
 
     ])
     def test_form_po_file_is_valid(self, name_file, size_file, expected):
-        self.po_file_mock.name = name_file
-        self.po_file_mock.size = size_file
         form = InvoiceForm(
             data=self.invoice_post_data,
             files={
                 'invoice_file': self.file_mock,
-                'po_file': self.po_file_mock,
+                'po_file': SimpleUploadedFile(name_file, bytes(size_file)),
             }
         )
         self.assertEqual(form.is_valid(), expected)

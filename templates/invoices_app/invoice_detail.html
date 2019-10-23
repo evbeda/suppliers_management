@@ -97,27 +97,13 @@
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-      {% if is_AP %}
-      <div class="card-footer">
-        <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
-          {% csrf_token %}
-          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
-          <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
-          <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
-          <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">Pay</button>
-        </form>
-        <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">History</a></span>
-      </div>
-      {% endif %}
-=======
      {% if is_AP %}
      <div class="card-footer">
        <div class="row">
          <div class="col">
            <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
              {% csrf_token %}
-             <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">Approve</button>
+             <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
              <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">Request Changes</button>
              <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">Reject</button>
            </form>
@@ -128,7 +114,6 @@
        </div>
      </div>
     {% endif %}
->>>>>>> Changes in styling
     </div>
   </div>
   <div class="col-md-4">
@@ -157,7 +142,6 @@
                     </button>
                   </div>
                 {% endfor %}
-
               {% endif %}
               <h6>Make a comment</h6>
               <form method='POST' action='{% url 'post-comment' pk=invoice.id %}' enctype="multipart/form-data">
@@ -170,13 +154,11 @@
                   <button type="submit" name="status" class="btn btn-success">Post a comment</button>
                 </div>
                 <div class="col-md-9">
-                  <div>
                     <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="myFile" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
+                      <input type="file" class="custom-file-input" name="invoice_file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
                       <label class="custom-file-label" for="inputGroupFile01">Choose a file</label>
                     </div>
-                  </div>
                   </div>
                 </div>
               </div>

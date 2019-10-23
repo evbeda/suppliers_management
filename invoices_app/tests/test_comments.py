@@ -310,7 +310,7 @@ class CommentsTest(TestBase):
             ),
             {
             'message': message,
-            'myFile': self.file_mock,
+            'invoice_file': self.file_mock,
             }
         )
 
@@ -352,7 +352,7 @@ class CommentsTest(TestBase):
             ),
             {
             'message': message,
-            'myFile': self.file_mock
+            'invoice_file': self.file_mock
             }
         )
 
@@ -399,7 +399,7 @@ class CommentsTest(TestBase):
             ),
             {
             'message': 'Valid Text',
-            'myFile': SimpleUploadedFile(name_file, bytes(size_file)),
+            'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             },
             follow=True
         )
@@ -429,7 +429,7 @@ class CommentsTest(TestBase):
             ),
             {
             'message': 'Valid Text',
-            'myFile': SimpleUploadedFile(name_file, bytes(size_file)),
+            'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             },
             follow=True
         )
