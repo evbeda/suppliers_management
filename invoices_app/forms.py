@@ -1,7 +1,13 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from django import forms
 
-from invoices_app import INVOICE_MAX_SIZE_FILE
+from django.utils.translation import gettext_lazy as _
+
+from invoices_app import (
+    ENGLISH_LANGUAGE_CODE,
+    INVOICE_DATE_FORMAT,
+    INVOICE_MAX_SIZE_FILE
+)
 from invoices_app.models import Invoice
 from utils.file_validator import validate_file
 
@@ -23,15 +29,18 @@ class InvoiceForm(forms.ModelForm):
             'po_file',
         )
         widgets = {
-            'invoice_date': DatePickerInput(options={
-                    "format": "MM/DD/YYYY",
-                    # "locale": "en",
+            'invoice_date': DatePickerInput(
+                options={
+                    "format": str(INVOICE_DATE_FORMAT),
+                    "locale": str(ENGLISH_LANGUAGE_CODE),
                 },
-                attrs={'placeholder': 'Invoice Date', }
+                attrs={
+                    'placeholder': _('Invoice Date'),
+                }
             ),
             'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
-            'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Purchase Order'}),
+            'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Purchase Order')}),
             'invoice_file': forms.FileInput(
                 attrs={
                     'type': 'file',
@@ -56,7 +65,7 @@ class InvoiceForm(forms.ModelForm):
                 attrs={
                     'id': 'vat',
                     'class': 'form-control',
-                    'placeholder': 'VAT',
+                    'placeholder': '0',
                     'onChange': 'calculate_total_amount()',
                 }
             ),
@@ -64,18 +73,24 @@ class InvoiceForm(forms.ModelForm):
                 attrs={
                     'id': 'total',
                     'class': 'form-control',
-                    'placeholder': 'Total'
+                    'placeholder': '0'
                 }
             ),
             'net_amount': forms.NumberInput(
                 attrs={
                     'id': 'net_amount',
-                    'class': 'form-control', 
-                    'placeholder': 'Net Amount',
+                    'class': 'form-control',
+                    'placeholder': '0',
+                    'label': _('Net Amount'),
                     'onChange': 'calculate_total_amount()',
                     }
                 ),
-            'invoice_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Invoice Number'}),
+            'invoice_number': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('Invoice Number'),
+                }
+            ),
         }
 
     def is_valid(self):

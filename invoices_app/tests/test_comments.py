@@ -21,13 +21,14 @@ from users_app.factory_boy import UserFactory
 
 from utils.invoice_lookup import invoice_status_lookup
 
+
 class CommentsTest(TestBase):
     # Feature: Generates comments when invoice state changes
     @parameterized.expand([
-        (INVOICE_STATUS_APPROVED,),
-        (INVOICE_STATUS_CHANGES_REQUEST,),
-        (INVOICE_STATUS_REJECTED),
-        (INVOICE_STATUS_PAID,),
+        ('APPROVED',),
+        ('CHANGES REQUESTED',),
+        ('REJECTED'),
+        ('PAID',),
     ])
     def test_generate_a_comment_when_invoice_changes_his_state(
         self,

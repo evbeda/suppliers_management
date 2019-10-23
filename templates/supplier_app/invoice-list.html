@@ -16,7 +16,8 @@
     <div class="col-md-2">
         <ul class="nav flex-column text-center">
             <li class="nav-item">
-                <a class='btn btn-primary' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i class="fa fa-plus"></i> New Invoice </a>
+                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i
+                        class="fa fa-plus"></i>{% trans "New Invoice" %}</a>
             </li>
         </ul>
     </div>
@@ -79,4 +80,4 @@
     </div>
 </div>
 
-{% endblock%}
+{% endblock %}
