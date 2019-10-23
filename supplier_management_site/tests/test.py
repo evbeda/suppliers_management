@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from parameterized import parameterized
 from unittest.mock import patch
 
@@ -49,9 +50,6 @@ class TestTranslationConfiguration(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def tearDown(self):
-        activate('en')
-
     def test_plain_translation(self):
         activate('es')
         self.assertEqual(_('Hello world'), 'Hola Mundo')
@@ -77,40 +75,49 @@ class TestLanguageSelection(TestCase):
         self.taxpayer_create = 'taxpayer-create'
         self.i18n_url = 'set_language'
 
-    def test_user_select_different_languages(self):
-        self.client.force_login(self.sup_user)
+    def tearDown(self):
+        activate('en')
+
+    def _set_language(self, lang):
+        set_lang = {'next': reverse(self.sup_home), 'language': lang}
+        return self.client.post(
+            reverse(self.i18n_url),
+            data=set_lang, follow=True
+        )
+
+    def test_user_default_language(self):
         self.client.get(reverse(self.sup_home))
-        default_lang = get_language()
-        set_es = {'next': reverse(self.sup_home), 'language': 'es'}
-        self.client.post(reverse(self.i18n_url), data=set_es, follow=True)
-        selected_es = get_language()
-        set_pt_br = {'next': reverse(self.sup_home), 'language': 'pt-br'}
-        self.client.post(reverse(self.i18n_url), data=set_pt_br, follow=True)
-        selected_pt_br = get_language()
-        self.assertEqual(default_lang, 'en')
-        self.assertEqual(selected_es, 'es')
-        self.assertEqual(selected_pt_br, 'pt-br')
+        actual_lang = get_language()
+        self.assertEqual(actual_lang, 'en')
+
+    def test_user_selecting_preferred_languages(self):
+        self.client.get(reverse(self.sup_home))
+        self._set_language('es')
+        expected_selected_lang = get_language()
+        self.assertEqual(expected_selected_lang, 'es')
+
+    def test_user_tries_to_select_a_new_prefered_language(self):
+        self._set_language('es')
+        actual_lang = get_language()
+        self._set_language('pt-br')
+        expected_selected_lang = get_language()
+        self.assertEqual(actual_lang, 'es')
+        self.assertEqual(expected_selected_lang, 'pt-br')
 
     def test_user_select_language_redirects_to_same_url(self):
-        self.client.force_login(self.sup_user)
         self.client.get(reverse(self.sup_home))
-        set_es = {'next': reverse(self.sup_home), 'language': 'es'}
-        response_es = self.client.post(reverse(self.i18n_url), data=set_es, follow=True)
+        response_es = self._set_language('es')
         self.assertEqual(
             response_es.redirect_chain[0],
-            ('/suppliersite/supplier', 302)
+            (reverse(self.sup_home), HTTPStatus.FOUND)
         )
 
     def test_users_language_selection_persist_in_current_session(self):
-        self.client.force_login(self.sup_user)
         self.client.get(reverse(self.sup_home))
-        default_lang = get_language()
-        set_language = {'next': reverse(self.sup_home), 'language': 'es'}
-        self.client.post(reverse(self.i18n_url), data=set_language, follow=True)
+        self._set_language('es')
         selected_lang = get_language()
         self.client.get(reverse(self.taxpayer_create))
         persisted_lang = get_language()
-        self.assertEqual(default_lang, 'en')
         self.assertEqual(selected_lang, 'es')
         self.assertEqual(persisted_lang, 'es')
 
