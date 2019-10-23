@@ -1,8 +1,9 @@
 from bootstrap_datepicker_plus import DatePickerInput
 from django import forms
 
+from invoices_app import INVOICE_MAX_SIZE_FILE
 from invoices_app.models import Invoice
-from utils.file_validator import is_file_valid
+from utils.file_validator import validate_file
 
 
 class InvoiceForm(forms.ModelForm):
@@ -31,22 +32,53 @@ class InvoiceForm(forms.ModelForm):
             'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Purchase Order'}),
-            'invoice_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
-            'po_file': forms.FileInput(attrs={'accept': 'application/pdf'}),
+            'invoice_file': forms.FileInput(
+                attrs={
+                    'type': 'file',
+                    'class': 'custom-file-input',
+                    'name': 'invoice_file',
+                    'id': 'inputGroupFile01',
+                    'aria-describedby': 'inputGroupFileAddon01',
+                    'accept': 'application/pdf',
+                }
+            ),
+            'po_file': forms.FileInput(
+                attrs={
+                    'type': 'file',
+                    'class': 'custom-file-input',
+                    'name': 'invoice_file',
+                    'id': 'inputGroupFile02',
+                    'aria-describedby': 'inputGroupFileAddon01',
+                    'accept': 'application/pdf',
+                }
+            ),
             'vat': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'VAT'}),
             'total_amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Total'}),
             'net_amount': forms.NumberInput(attrs={'class': 'form-control',  'placeholder': 'Net Amount'}),
             'invoice_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Invoice Number'}),
         }
 
-    def is_valid(self):
-        valid_from_super = super().is_valid()
 
-        if not self.fields.get('invoice_file'):
+    def is_valid(self):
+        super(InvoiceForm, self).is_valid()
+        if not self.files.get('invoice_file'):
+            self.add_error('invoice_file', 'No Invoice File')
             return False
 
-        return is_file_valid(
-            self,
-            valid_from_super,
-            self.fields['invoice_file']
-        )
+        file_fields = list(self.files.keys())
+        files_valids = {}
+
+        for file_field in file_fields:
+            if self.files.get(file_field):
+                file_is_valid, errors = validate_file(
+                    self.files[file_field],
+                    INVOICE_MAX_SIZE_FILE,
+                )
+
+                files_valids[file_field] = file_is_valid
+
+                for error in errors:
+                    if not file_is_valid:
+                        self.add_error(file_field, error)
+
+        return all(list(files_valids.values()))

@@ -344,10 +344,10 @@ def post_a_comment(request, pk):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
-
+    
     if request.FILES:
         is_valid, msgs = validate_file(
-            request.FILES['myFile'],
+            request.FILES['invoice_file'],
             INVOICE_MAX_SIZE_FILE
         )
 
@@ -372,7 +372,7 @@ def post_a_comment(request, pk):
             request.user.email,
             request.POST['message'],
         ),
-        comment_file=request.FILES.get('myFile'),
+        comment_file=request.FILES.get('invoice_file'),
     )
 
     if request.user.is_AP:
