@@ -234,7 +234,7 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id,
                 }
             ),
-            {'status': invoice_status_lookup(status),}
+            {'status': invoice_status_lookup(status), }
         )
 
         invoice = get_object_or_404(Invoice, pk=self.invoice.id)

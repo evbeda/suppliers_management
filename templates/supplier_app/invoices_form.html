@@ -18,9 +18,8 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h4 class="text-center">{% trans "New Invoice" %}</h4>
+      <h4 class="text-center py-4">{% trans "New Invoice" %}</h4>
     </div>
-    <div class="container">
       <form id="invoiceForm" method="post" class="form-row" enctype="multipart/form-data">
         <div class="col-md-2">
         </div>
@@ -79,7 +78,7 @@
               {% endif %}
             </div>
             <div class="form-group col-md-3">
-              <label for="id_net_amount">Net Amount</label>
+                {{ form.net_amount.label_tag }} 
               {{ form.net_amount }}
               <small class="text-danger">
                 {{ form.net_amount.errors }}
@@ -88,7 +87,7 @@
               <p class="help">{{ form.net_amount.help_text|safe }}</p>
               {% endif %}
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               {{ form.vat.label_tag }} {{ form.vat }}
               <small class="text-danger">
                 {{ form.vat.errors }}
@@ -97,7 +96,7 @@
               <p class="help">{{ form.vat.help_text|safe }}</p>
               {% endif %}
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               {{ form.total_amount.label_tag }} {{ form.total_amount }}
               <small class="text-danger">
                 {{ form.total_amount.errors }}
@@ -110,11 +109,11 @@
           <div class="row ml-0 mr-0 mb-3">
                 <div class="input-group">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupFileAddon01">Invoice File</span>
+                    <span class="input-group-text" id="inputGroupFileAddon01">{% trans "Invoice File" %}</span>
                   </div>
                   <div class="custom-file">
                     {{ form.invoice_file }}
-                    <label class="custom-file-label" id='id-custom-file-label1' for="inputGroupFile01">Choose file</label>
+                    <label class="custom-file-label" id='id-custom-file-label1' for="inputGroupFile01">{% trans "Choose file" %}</label>
                   </div>
                 </div>
           </div>
@@ -131,11 +130,11 @@
           <div class="row ml-0 mr-0 mt-3">
             <div class="input-group">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">PO File</span>
+                <span class="input-group-text" id="inputGroupFileAddon01">{% trans "PO File" %}</span>
               </div>
               <div class="custom-file">
                 {{ form.po_file }}
-                <label class="custom-file-label" id='id-custom-file-label2' for="inputGroupFile01">Choose file</label>
+                <label class="custom-file-label" id='id-custom-file-label2' for="inputGroupFile01">{% trans "Choose file" %}</label>
               </div>
             </div>
           </div>
@@ -152,24 +151,23 @@
         </div>
         <div class="col-md-12 text-right mt-3">
           <button id="submitBtn" type="submit" class="btn btn-primary">
-            Submit
+            {% trans "Submit" %}
           </button>
-          <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">Cancel</a>
+          <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">{% trans "Cancel" %}</a>
         </div>
         {% csrf_token %}
       </form>
-    </div>
+
 
   </div>
 </div>
 
 <script type="text/javascript">
-  $(function() { {
+  $(function()  {
     $("#invoiceForm").submit(function() {
       $("#submitBtn").attr("disabled", true);
       return true;
     });
-<<<<<<< HEAD
   });
 
   $('#inputGroupFile01').change(function(e) {
@@ -179,16 +177,12 @@
   $('#inputGroupFile02').change(function(e) {
     $(this).next('#id-custom-file-label2').html(e.target.files[0].name);
   });
-=======
-});
 
 function calculate_total_amount() {
   a = Number(document.getElementById('net_amount').value);
   b = Number(document.getElementById('vat').value);
   c = a + b;
-
   document.getElementById('total').value = c;
 }
->>>>>>> added trans to templates when was missing
 </script>
 {% endblock %}

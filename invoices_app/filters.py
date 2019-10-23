@@ -7,6 +7,7 @@ from django_filters import (
     MultipleChoiceFilter,
     RangeFilter
 )
+from django.utils.translation import ugettext_lazy as _
 
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Invoice
@@ -34,22 +35,25 @@ class InvoiceFilter(FilterSet):
     status = MultipleChoiceFilter(
         choices=INVOICE_STATUS,
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+        label=_('Status'),
     )
-    invoice_date = DateFromToRangeFilter(widget=DateRangeWidget())
-    invoice_due_date = DateFromToRangeFilter(widget=DateRangeWidget())
+    invoice_date = DateFromToRangeFilter(widget=DateRangeWidget(), label=_('Invoice Date'))
+    invoice_due_date = DateFromToRangeFilter(widget=DateRangeWidget(), label=_('Due Date'))
 
-    total_amount = RangeFilter(widget=NumericRangeWidget())
+    total_amount = RangeFilter(widget=NumericRangeWidget(), label=_('Total Amount'))
     taxpayer = ModelChoiceFilter(
         queryset=taxpayer_qs,
-        empty_label='All',
+        empty_label=_('All'),
         widget=Select(attrs={'class': 'custom-select'}),
+        label=_('Taxpayer'),
     )
 
     taxpayer__country = CharFilter(
         widget=Select(
-            choices=[('AR', 'Argentina'), ['BR', 'Brasil']],
+            choices=[('AR', 'AR'), ('BR', 'BR'), ('US', 'US')],
             attrs={'class': 'custom-select'}
         ),
+        label=_('Country'),
     )
 
     class Meta:
