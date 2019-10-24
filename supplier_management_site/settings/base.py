@@ -41,6 +41,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
+    'users_app.middleware.middleware.UserLanguageMiddleware'
 ]
 
 SOCIAL_AUTH_PIPELINE = (

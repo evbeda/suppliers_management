@@ -1,3 +1,5 @@
+fixture.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -112,5 +114,3 @@ setup_env.sh
 .DS_Store
 
 htmlcov
-
-fixture.json

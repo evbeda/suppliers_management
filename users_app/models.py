@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
@@ -46,6 +46,11 @@ class User(AbstractUser):
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    preferred_language = models.CharField(
+        max_length=40,
+        choices=settings.LANGUAGES,
+        default=settings.LANGUAGE_CODE
+    )
 
     objects = UserManager()
 

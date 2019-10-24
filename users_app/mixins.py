@@ -34,10 +34,7 @@ class IsUserCompanyInvoice(UserPassesTestMixin):
             self.request.user.companyuserpermission_set.filter(
                 company=company
             )
-        if companyuserpermission:
-            return True
-        else:
-            return False
+        return True if companyuserpermission else False
 
 
 class TaxPayerPermissionMixin(UserPassesTestMixin):
@@ -55,10 +52,7 @@ class TaxPayerPermissionMixin(UserPassesTestMixin):
             self.request.user.companyuserpermission_set.filter(
                 company=company
             )
-        if companyuserpermission:
-            return True
-        else:
-            return False
+        return True if companyuserpermission else False
 
 
 class UserLoginPermissionRequiredMixin(LoginRequiredMixin, PermissionRequiredMixin):
