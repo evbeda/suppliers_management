@@ -16,6 +16,7 @@ from django.views.generic.edit import (
     UpdateView,
 )
 from django.views.generic.list import ListView
+from django.utils import translation
 from django_filters.views import FilterView
 
 from supplier_app.custom_messages import (
@@ -290,6 +291,9 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
 @transaction.atomic
 def company_invite(request):
     try:
+        old_language = translation.get_language()
+        language = request.POST['language']
+        translation.activate(language)
         email = [request.POST['email']]
         company_id = request.POST['company_id']
         company = Company.objects.get(pk=company_id)
@@ -297,11 +301,12 @@ def company_invite(request):
         company_unique_token.assing_company_token
         company_unique_token.save()
         token = company_unique_token.token
-        company_invitation_notification(company, token, email)
+        company_invitation_notification(company, token, email, language)
         messages.success(request, EMAIL_SUCCESS_MESSAGE)
     except CouldNotSendEmailError:
         messages.error(request, EMAIL_ERROR_MESSAGE)
     finally:
+        translation.activate(old_language)
         return redirect('company-list')
 
 

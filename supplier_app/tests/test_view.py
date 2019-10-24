@@ -1153,18 +1153,23 @@ class TestCompanyListView(TestCase):
 class TestCompanyInvite(TestCase):
     def setUp(self):
         CompanyFactory()
-        self.company_constants = {
-            'email': 'something@eventbrite.com',
-            'company_id': '1',
-        }
-
         self.client = Client()
 
-    def _make_post(self):
-        return self.client.post(
-            reverse('company-invite'),
-            self.company_constants,
+    def _make_post(self, language='en'):
+        response = self.client.post(
+            path=reverse('company-invite'),
+            data={
+                'email': 'something@eventbrite.com',
+                'company_id': '1',
+                'language': language,
+            },
         )
+        return response
+
+    def test_company_invite_sends_email_notification_in_spanish(self,):
+        self._make_post("es")
+        self.assertIn("Bienvenido a BriteSu!\nPor favor accede al siguiente link.", mail.outbox[0].body)
+        self.assertIn("¡Gracias!", mail.outbox[0].body)
 
     def test_company_invite_sends_email_notification(self):
         self._make_post()
@@ -1543,6 +1548,7 @@ class TestNotifyMessages(TestCase):
         self.company_constants = {
             'email': 'something@eventbrite.com',
             'company_id': '1',
+            'language': 'en',
         }
         self.POST = taxpayer_creation_POST_factory()
 

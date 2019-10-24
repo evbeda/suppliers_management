@@ -214,9 +214,9 @@ class EmailUtilsTest(TestCase):
     ])
     def test_taxpayer_email_notification(self, change_type):
         taxpayer_notification(self.tax_payer1, change_type)
-        self.assertIn(
+        self.assertEqual(
             email_notifications[change_type]['subject'],
-            mail.outbox[0].subject
+            mail.outbox[0].subject,
         )
 
     def test_business_name_in_subject_for_taxpayer_email_notification(self):
