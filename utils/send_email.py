@@ -12,11 +12,11 @@ from supplier_app.models import (
     TaxPayer,
 )
 from supplier_app import email_notifications
-from celery import task
+from celery import shared_task
 from utils.exceptions import CouldNotSendEmailError
 
 
-@task(ignore_result=True)
+@shared_task(ignore_result=True)
 def send_email_notification(subject, message, recipient_list):
     plain_message = strip_tags(message)
     try:
@@ -33,31 +33,21 @@ def send_email_notification(subject, message, recipient_list):
     except Exception:
         raise CouldNotSendEmailError()
 
-    
-@task(ignore_result=True)
+
 def company_invitation_notification(company, token, email, language):
-    activate(language)
     subject = _(email_notifications['company_invitation']['subject'])
     upper_text = _(email_notifications['company_invitation']['body']['upper_text'])
     lower_text = _(email_notifications['company_invitation']['body']['lower_text'])
     btn_text = _(email_notifications['company_invitation']['body']['btn_text'])
     btn_url = email_notifications['company_invitation']['body']['btn_url']
-    send_email_notification(
-        subject,
-        build_mail_html(
-            company.name,
-            upper_text,
-            lower_text,
-            btn_text,
-            '{}/{}'.format(btn_url, token),
-        ),
-        email,
+    message = build_mail_html(
+        company.name,
+        upper_text,
+        lower_text,
+        btn_text,
+        '{}/{}'.format(btn_url, token),
     )
-
-
-@task(ignore_result=True)
-def sumar(a, b):
-    return a+b
+    send_email_notification.apply_async([subject, message, email])
 
 
 def taxpayer_notification(taxpayer, change_type):
@@ -66,17 +56,15 @@ def taxpayer_notification(taxpayer, change_type):
     lower_text = _(email_notifications[change_type]['body']['lower_text'])
     btn_text = _(email_notifications[change_type]['body']['btn_text'])
     btn_url = email_notifications[change_type]['body']['btn_url']
-    send_email_notification(
-        subject,
-        build_mail_html(
-            taxpayer.business_name,
-            upper_text,
-            lower_text,
-            btn_text,
-            btn_url,
-        ),
-        get_user_emails_by_tax_payer_id(taxpayer.id)
+    message = build_mail_html(
+        taxpayer.business_name,
+        upper_text,
+        lower_text,
+        btn_text,
+        btn_url,
     )
+    recipient_list = get_user_emails_by_tax_payer_id(taxpayer.id)
+    send_email_notification.apply_async([subject, message, recipient_list])
 
 
 def get_user_emails_by_tax_payer_id(tax_payer_id):
