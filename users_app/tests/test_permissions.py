@@ -219,7 +219,7 @@ class TestSupplierPermissions(TestCase):
             name='FakeCompany',
             description='Best catering worldwide'
         )
-        self.companyuserpermission1 = CompanyUserPermissionFactory(
+        self.company_user_permission1 = CompanyUserPermissionFactory(
             company=self.company1,
             user=self.user
         )
@@ -234,32 +234,21 @@ class TestSupplierPermissions(TestCase):
             )
         self.addres1 = AddressFactory(taxpayer=self.taxpayer1)
 
-        self.company2 = CompanyFactory(
-            name='AnotherFakeCompany',
-            description='Worst catering worldwide'
-        )
-        self.companyuserpermission2 = CompanyUserPermissionFactory(
-            company=self.company2,
-        )
-        self.taxpayer2 = TaxPayerArgentinaFactory(
-            afip_registration_file=self.file_mock,
-            witholding_taxes_file=self.file_mock,
-            company=self.company2,
-        )
-        self.bank_info2 = BankAccountFactory(
-            taxpayer=self.taxpayer2,
-            bank_cbu_file=self.file_mock
-            )
-        self.addres2 = AddressFactory(taxpayer=self.taxpayer2)
-        self.kwargs = {
-            'taxpayer_id': self.taxpayer2.id
-        }
+        self.taxpayer2 = TaxPayerArgentinaFactory()
+
+        self.supplier_detail_url = 'supplier-details'
+        self.taxpayer_update_url = 'taxpayer-update'
+        self.address_update_url = 'address-update'
+        self.bank_update_url = 'bank-account-update'
 
     def test_supplier_cant_access_to_another_supplier_taxpayer_details(self):
+        kwargs = {
+            'taxpayer_id': self.taxpayer2.id
+        }
         response = self.client.get(
             reverse(
-                'supplier-details',
-                kwargs=self.kwargs
+                self.supplier_detail_url,
+                kwargs=kwargs
             ),
             follow=True
         )
@@ -272,7 +261,7 @@ class TestSupplierPermissions(TestCase):
         }
         response = self.client.get(
             reverse(
-                'supplier-details',
+                self.supplier_detail_url,
                 kwargs=kwargs
             ),
         )
@@ -284,10 +273,14 @@ class TestSupplierPermissions(TestCase):
         )
 
     def test_supplier_cant_access_to_edit_another_supplier_taxpayer(self):
+        kwargs = {
+            'taxpayer_id': self.taxpayer2.id
+        }
+
         response = self.client.get(
             reverse(
-                'taxpayer-update',
-                kwargs=self.kwargs
+                self.taxpayer_update_url,
+                kwargs=kwargs
             ),
             follow=True
         )
@@ -295,15 +288,17 @@ class TestSupplierPermissions(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_supplier_cant_access_to_edit_another_taxpayer_address_info(self):
-        self.kwargs = {
+        address2 = AddressFactory(taxpayer=self.taxpayer2)
+
+        kwargs = {
             'taxpayer_id': self.taxpayer1.id,
-            'address_id': self.addres2.id
+            'address_id': address2.id
         }
 
         response = self.client.get(
             reverse(
-                'address-update',
-                kwargs=self.kwargs
+                self.address_update_url,
+                kwargs=kwargs
             ),
             follow=True
         )
@@ -311,14 +306,16 @@ class TestSupplierPermissions(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_supplier_cant_access_to_edit_another_taxpayer_bank_account(self):
+        bank_info2 = BankAccountFactory(taxpayer=self.taxpayer2)
+
         self.kwargs = {
             'taxpayer_id': self.taxpayer1.id,
-            'bank_id': self.bank_info2.id
+            'bank_id': bank_info2.id
         }
 
         response = self.client.get(
             reverse(
-                'bank-account-update',
+                self.bank_update_url,
                 kwargs=self.kwargs
             ),
             follow=True

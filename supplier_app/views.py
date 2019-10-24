@@ -48,8 +48,19 @@ from supplier_app.models import (
     TaxPayerArgentina
 )
 from users_app.mixins import (
-    HasTaxPayerPermissionMixin,
+    TaxPayerPermissionMixin,
     UserLoginPermissionRequiredMixin,
+)
+from users_app import (
+    CAN_CREATE_COMPANY_PERM,
+    CAN_CREATE_TAXPAYER_PERM,
+    CAN_EDIT_TAXPAYER_ADDRESS_PERM,
+    CAN_EDIT_TAXPAYER_BANK_ACCOUNT_PERM,
+    CAN_EDIT_TAXPAYER_PERM,
+    CAN_VIEW_ALL_TAXPAYERS_PERM,
+    CAN_VIEW_TAXPAYER_PERM,
+    COMPANY_USER_CAN_APPROVE_PERM,
+    SUPPLIER_ROLE_PERM,
 )
 from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
@@ -64,7 +75,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     template_name = 'AP_app/company_creation.html'
     success_url = reverse_lazy('ap-taxpayers')
     permission_required = (
-        'users_app.can_create_company',
+        CAN_CREATE_COMPANY_PERM,
     )
 
 
@@ -75,7 +86,7 @@ class CompanyListView(LoginRequiredMixin, ListView):
 class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
     model = TaxPayer
     template_name = 'supplier_app/supplier-home.html'
-    permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer')
+    permission_required = (SUPPLIER_ROLE_PERM, CAN_VIEW_TAXPAYER_PERM)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -103,7 +114,7 @@ class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
 
 class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
     template_name = 'supplier_app/taxpayer-creation.html'
-    permission_required = ('users_app.supplier_role', 'users_app.can_view_taxpayer', 'users_app.can_create_taxpayer')
+    permission_required = (SUPPLIER_ROLE_PERM, CAN_VIEW_TAXPAYER_PERM, CAN_CREATE_TAXPAYER_PERM)
 
     def get_context_data(self, **kwargs):
         kwargs.update({
@@ -175,7 +186,7 @@ class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
     template_name = 'AP_app/ap-taxpayers.html'
     filterset_class = TaxPayerFilter
     permission_required = (
-        'users_app.can_view_all_taxpayers',
+        CAN_VIEW_ALL_TAXPAYERS_PERM,
     )
 
     def get_context_data(self, **kwargs):
@@ -187,9 +198,9 @@ class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
         return queryset
 
 
-class SupplierDetailsView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, TemplateView):
+class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
     template_name = 'AP_app/ap-taxpayer-details.html'
-    permission_required = ('users_app.can_view_taxpayer')
+    permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
     def handle_no_permission(self):
         return HttpResponseRedirect(Http404)
@@ -204,13 +215,13 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissio
         return context
 
 
-class EditTaxpayerView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
+class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-taxpayer-information.html'
     model = TaxPayerArgentina
     form_class = TaxPayerEditForm
     pk_url_kwarg = "taxpayer_id"
     permission_required = (
-        'users_app.can_edit_taxpayer',
+        CAN_EDIT_TAXPAYER_PERM,
     )
 
     def get_context_data(self, **kwargs):
@@ -226,14 +237,14 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMi
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditAddressView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
+class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
     model = Address
     form_class = AddressCreateForm
     pk_url_kwarg = "address_id"
     permission_required = (
-        'users_app.can_edit_taxpayer',
-        'users_app.can_edit_taxpayer_address',
+        CAN_EDIT_TAXPAYER_PERM,
+        CAN_EDIT_TAXPAYER_ADDRESS_PERM,
     )
 
     def get_context_data(self, **kwargs):
@@ -251,14 +262,14 @@ class EditAddressView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMix
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-class EditBankAccountView(UserLoginPermissionRequiredMixin, HasTaxPayerPermissionMixin, UpdateView):
+class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-bank-account-information.html'
     model = BankAccount
     form_class = BankAccountEditForm
     pk_url_kwarg = "bank_id"
     permission_required = (
-        'users_app.can_edit_taxpayer',
-        'users_app.can_edit_taxpayer_bank_account',
+        CAN_EDIT_TAXPAYER_PERM,
+        CAN_EDIT_TAXPAYER_BANK_ACCOUNT_PERM,
     )
 
     def get_context_data(self, **kwargs):
@@ -320,7 +331,7 @@ def _get_company_unique_token_from_token(token):
     return get_object_or_404(CompanyUniqueToken, token=token)
 
 
-@permission_required('users_app.can_approve', raise_exception=True)
+@permission_required(COMPANY_USER_CAN_APPROVE_PERM, raise_exception=True)
 def change_taxpayer_status(request, taxpayer_id):
     try:
         taxpayer = TaxPayer.objects.get(pk=taxpayer_id)

@@ -40,7 +40,7 @@ class IsUserCompanyInvoice(UserPassesTestMixin):
             return False
 
 
-class HasTaxPayerPermissionMixin(UserPassesTestMixin):
+class TaxPayerPermissionMixin(UserPassesTestMixin):
     def test_func(self):
         
         if not self.request.user.is_active:
