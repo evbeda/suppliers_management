@@ -2,7 +2,10 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import (
+    ugettext_lazy as _,
+    activate,
+)
 
 from supplier_app.models import (
     Company,
@@ -31,7 +34,8 @@ def send_email_notification(subject, message, recipient_list):
         raise CouldNotSendEmailError()
 
 
-def company_invitation_notification(company, token, email):
+def company_invitation_notification(company, token, email, language):
+    activate(language)
     subject = _(email_notifications['company_invitation']['subject'])
     upper_text = _(email_notifications['company_invitation']['body']['upper_text'])
     lower_text = _(email_notifications['company_invitation']['body']['lower_text'])

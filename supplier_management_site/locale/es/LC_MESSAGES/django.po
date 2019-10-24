@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-23 18:53+0000\n"
+"POT-Creation-Date: 2019-10-25 12:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,75 @@ msgstr "30 días"
 msgid "Bank"
 msgstr "Banco"
 
+#: supplier_app/__init__.py:36
+msgid "You have been invited to BriteSu"
+msgstr "Has sido invitado a BriteSu"
+
+#: supplier_app/__init__.py:39
+msgid ""
+"Welcome to BriteSu!\n"
+"Please click on the following link to register.\n"
+msgstr ""
+"Bienvenido a BriteSu!\n"
+"Por favor accede al siguiente link.\n"
+
+#: supplier_app/__init__.py:42 supplier_app/__init__.py:54
+#: supplier_app/__init__.py:67
+msgid "Thank you!"
+msgstr "¡Gracias!"
+
+#: supplier_app/__init__.py:43
+msgid "Join"
+msgstr "Únete"
+
+#: supplier_app/__init__.py:48
+msgid "Your taxpayer has been approved"
+msgstr "Su grupo económico fue aprobado"
+
+#: supplier_app/__init__.py:51
+msgid ""
+"You are ready to start using BriteSu.\n"
+"You can access the platform now and upload your invoices.\n"
+msgstr ""
+"Ya estas habilitado en BriteSU.\n"
+"Ahora podes acceder a la plataforma y subir tus facturas.\n"
+
+#: supplier_app/__init__.py:55 supplier_app/__init__.py:68
+#: supplier_app/__init__.py:80
+msgid "Go to BriteSu"
+msgstr "Dirígete a BriteSU"
+
+#: supplier_app/__init__.py:60
+msgid "Your taxpayer has some pending modifications"
+msgstr "Su grupo economico tiene algunas modificaciones pendientes"
+
+#: supplier_app/__init__.py:63
+msgid ""
+"Please visit your taxpayer and read comments.\n"
+"Once changes are done and approved by eventbrite,\n"
+"we will send you an email.\n"
+msgstr ""
+"Por favor diríjase a su grupo económico y lea los nuevos comentarios.\n"
+"Una vez que realice los cambios propuestos, Eventbrite los evaluara.\n"
+"Cuando se apruebe su grupo económico Eventbrite se lo notificará por email.\n"
+
+#: supplier_app/__init__.py:73
+msgid "Your taxpayer has been rejected"
+msgstr "Su grupo económico fue rechazado"
+
+#: supplier_app/__init__.py:76
+msgid ""
+"We are afraid that the taxpayer you were trying to submit is invalid\n"
+"Please contact the eventbrite employee that hired you.\n"
+msgstr ""
+"Lamentamos notificarle que el grupo economico que esta tratando de cargar es invalido.\n"
+"Por favor contáctate con el empleado de Eventbrite que pactaste la compra.\n"
+
+#: supplier_app/__init__.py:79
+msgid "Please contact the eventbrite employee that hired you, Thank you!"
+
+msgstr "Por favor contáctate con el empleado de Eventbrite que pactaste la compra. Gracias"
+
 #: supplier_app/custom_messages.py:3
 msgid ""
 "You dont have a company yet please contact with us supplier-"
@@ -82,6 +151,10 @@ msgstr "No se pudo crear el grupo económico, por favor intentelo nuevamente"
 msgid "Your form is invalid"
 msgstr "El formulario es invalido"
 
+#: supplier_app/custom_messages.py:11
+msgid "The taxpayer you try to access/modify doesnt exists"
+msgstr "El grupo economico al que intentas acceder/modificar no existe"
+
 #: supplier_app/filters.py:19
 msgid "Taxpayer state"
 msgstr "Estados del grupo economico"
@@ -99,7 +172,7 @@ msgid "Name"
 msgstr "Nombre"
 
 #: supplier_app/models.py:63 templates/AP_app/ap-taxpayer-details.html:28
-#: templates/AP_app/ap-taxpayers.html:21
+#: templates/AP_app/ap-taxpayers.html:22
 #: templates/supplier_app/supplier-home.html:26
 msgid "Business name"
 msgstr "Razón social"
@@ -161,10 +234,12 @@ msgid "Bank account certificate"
 msgstr "Cuenta bancaria"
 
 #: supplier_management_site/settings/base.py:143
+#: templates/supplier_app/company_list.html:36
 msgid "English"
 msgstr "Ingles"
 
 #: supplier_management_site/settings/base.py:144
+#: templates/supplier_app/company_list.html:39
 msgid "Spanish"
 msgstr "Español"
 
@@ -173,7 +248,7 @@ msgid "Portuguese (Brazil)"
 msgstr "Portugues"
 
 #: supplier_management_site/tests/templates/tests/index.html:4
-#: supplier_management_site/tests/test.py:57
+#: supplier_management_site/tests/test.py:55
 msgid "Hello world"
 msgstr "Hola Mundo"
 
@@ -210,7 +285,7 @@ msgid "General Information"
 msgstr "Información general"
 
 #: templates/AP_app/ap-taxpayer-details.html:29
-#: templates/AP_app/ap-taxpayers.html:22
+#: templates/AP_app/ap-taxpayers.html:23
 #: templates/invoices_app/invoice_detail.html:60
 #: templates/supplier_app/supplier-home.html:27
 msgid "CUIT"
@@ -232,7 +307,7 @@ msgstr "Archivos"
 #: templates/AP_app/ap-taxpayer-details.html:36
 #: templates/AP_app/ap-taxpayer-details.html:85
 #: templates/AP_app/ap-taxpayer-details.html:122
-#: templates/AP_app/ap-taxpayers.html:24
+#: templates/AP_app/ap-taxpayers.html:25
 msgid "Action"
 msgstr "Operaciones"
 
@@ -278,21 +353,11 @@ msgstr "Número de cuenta"
 msgid "CBU"
 msgstr "CBU"
 
-#: templates/AP_app/ap-taxpayer-details.html:155
-#: templates/AP_app/ap-taxpayer-details.html:162
-msgid "Deny"
-msgstr "Rechazado"
-
-#: templates/AP_app/ap-taxpayer-details.html:159
-#: templates/invoices_app/invoice_detail.html:103
-msgid "Approve"
-msgstr "Aprobado"
-
-#: templates/AP_app/ap-taxpayers.html:14
+#: templates/AP_app/ap-taxpayers.html:15
 msgid "Taxpayer"
 msgstr "Grupos económicos"
 
-#: templates/AP_app/ap-taxpayers.html:23
+#: templates/AP_app/ap-taxpayers.html:24
 #: templates/invoices_app/history-list.html:28
 #: templates/invoices_app/invoice-list.html:38
 #: templates/invoices_app/invoice_detail.html:30
@@ -301,7 +366,7 @@ msgstr "Grupos económicos"
 msgid "Status"
 msgstr "Estado"
 
-#: templates/AP_app/ap-taxpayers.html:35
+#: templates/AP_app/ap-taxpayers.html:36
 msgid "More details"
 msgstr "Detalles"
 
@@ -338,37 +403,37 @@ msgstr "Solicitud de cambio"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/AP_app/navbar.html:13 templates/supplier_app/navbar.html:39
+#: templates/AP_app/navbar.html:15 templates/supplier_app/navbar.html:40
 msgid "Management"
 msgstr "Administración"
 
-#: templates/AP_app/navbar.html:17 templates/supplier_app/navbar.html:26
-#: templates/supplier_app/navbar.html:43
+#: templates/AP_app/navbar.html:19 templates/supplier_app/navbar.html:27
+#: templates/supplier_app/navbar.html:44
 #: templates/supplier_app/supplier-home.html:41
 msgid "Invoices"
 msgstr "Facturas"
 
-#: templates/AP_app/navbar.html:19
+#: templates/AP_app/navbar.html:21
 msgid "Taxpayers"
 msgstr "Grupos económicos"
 
-#: templates/AP_app/navbar.html:22
+#: templates/AP_app/navbar.html:24
 msgid "Manage Admins"
 msgstr "Administrar APs"
 
-#: templates/AP_app/navbar.html:28
+#: templates/AP_app/navbar.html:30
 msgid "Companies"
 msgstr "Compañías"
 
-#: templates/AP_app/navbar.html:32
+#: templates/AP_app/navbar.html:34
 msgid "See all"
 msgstr "Ver todas"
 
-#: templates/AP_app/navbar.html:34
+#: templates/AP_app/navbar.html:36
 msgid "Create one"
 msgstr "Crear nueva"
 
-#: templates/AP_app/navbar.html:50 templates/supplier_app/navbar.html:64
+#: templates/AP_app/navbar.html:52 templates/supplier_app/navbar.html:63
 msgid "Log out"
 msgstr "Cerrar sesión"
 
@@ -487,14 +552,24 @@ msgstr "Detalles"
 msgid "Payment option"
 msgstr "Tipo de pago"
 
-#: templates/registration/invalid_login.html:16
+#: templates/invoices_app/invoice_detail.html:103
+msgid "Approve"
+msgstr "Aprobado"
+
+#: templates/mail_template.html:307
+msgid "New Mail from Eventbrite Supplier Management"
+msgstr "Nuevo email de 'BriteSu'"
+
+#: templates/mail_template.html:323
+msgid "Hello"
+msgstr "Hola"
+
+#: templates/registration/invalid_login.html:17
 #: templates/registration/login.html:24
 msgid "If you are a supplier please:"
 msgstr "Si sos un proveedor por favor:"
 
-#: templates/registration/invalid_login.html:24
-
-#| msgid "Login with Google"
+#: templates/registration/invalid_login.html:25
 msgid "Login home"
 msgstr "Pagina de Ingreso"
 
@@ -508,7 +583,7 @@ msgstr "Ingresar"
 
 #: templates/registration/login.html:26
 msgid "Login with Eventbrite"
-msgstr "Ingresa a travez de Eventbrite"
+msgstr "Ingresa a través de Eventbrite"
 
 #: templates/registration/login.html:31
 msgid "If you are a EB employee please:"
@@ -516,7 +591,7 @@ msgstr "Si sos empleado de EB por favor:"
 
 #: templates/registration/login.html:33
 msgid "Login with Google"
-msgstr "Ingresa a travez de Google"
+msgstr "Ingresa a través de Google"
 
 #: templates/supplier_app/company_list.html:13
 msgid "Company List"
@@ -526,12 +601,18 @@ msgstr "Lista de compañías"
 msgid "Email Invitation"
 msgstr "Invitación de email"
 
-#: templates/supplier_app/company_selector.html:10
-msgid "Welcome to "
-msgstr "Bienvenido a"
+#: templates/supplier_app/company_list.html:42
+#, fuzzy
+#| msgid "Portuguese (Brazil)"
+msgid "Portuguese"
+msgstr "Portugues"
+
+#: templates/supplier_app/company_list.html:45
+msgid "Invite"
+msgstr "Invitar"
 
 #: templates/supplier_app/invoice-list.html:11
-#: templates/supplier_app/navbar.html:30
+#: templates/supplier_app/navbar.html:31
 msgid "My Invoices"
 msgstr "Mis facturas"
 
@@ -540,7 +621,7 @@ msgid "Create one?"
 msgstr "Crear nueva"
 
 #: templates/supplier_app/invoices_form.html:20
-#: templates/supplier_app/navbar.html:32
+#: templates/supplier_app/navbar.html:33
 msgid "New Invoice"
 msgstr "Nueva factura"
 
@@ -552,15 +633,15 @@ msgstr "Cargar"
 msgid "Supplier"
 msgstr "Proveedor"
 
-#: templates/supplier_app/navbar.html:13
+#: templates/supplier_app/navbar.html:14
 msgid "Tax payers"
 msgstr "Grupos económicos"
 
-#: templates/supplier_app/navbar.html:17
+#: templates/supplier_app/navbar.html:18
 msgid "My Tax Payers"
 msgstr "Mis grupos económicos"
 
-#: templates/supplier_app/navbar.html:19
+#: templates/supplier_app/navbar.html:20
 msgid "New Tax Payer"
 msgstr "Crear grupo económico"
 
@@ -607,3 +688,6 @@ msgstr "Desde"
 #: utils/custom_filters.py:34
 msgid "To Date"
 msgstr "Hasta"
+
+#~ msgid "Welcome to "
+#~ msgstr "Bienvenido a"
