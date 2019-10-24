@@ -1,12 +1,17 @@
+from http import HTTPStatus
+
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import Group
-from django.http import HttpResponseBadRequest
+from django.http import (
+    HttpResponseBadRequest,
+)
 from django.shortcuts import get_object_or_404, redirect
+from django.views.i18n import set_language
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
-
+from django.utils.translation import activate
 from users_app import ALLOWED_AP_ACCOUNTS, CAN_MANAGE_APS_PERM
 from users_app.models import User
 
@@ -59,3 +64,27 @@ def change_ap_permission(request, pk):
     else:
         user.groups.add(group)
     return redirect('manage-admins')
+
+def set_user_language(request):
+    if not request.POST.get('language'):
+        return HttpResponseBadRequest()
+
+    if not request.POST.get('next'):
+        return HttpResponseBadRequest()
+
+    response = set_language(request)
+
+    if response.status_code == HTTPStatus.NO_CONTENT:
+        return response
+
+    activate(request.POST['language'])
+
+    user = User.objects.filter(id=request.user.id).first()
+    if not user:
+        return response
+
+    if user.preferred_language != request.POST['language']:
+        user.preferred_language = request.POST['language']
+        user.save()
+
+    return response
