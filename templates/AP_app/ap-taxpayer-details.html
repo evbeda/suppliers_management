@@ -12,7 +12,7 @@
 {% include 'supplier_app/navbar.html' %}
 {% endif %}
 <div class="container h-100">
-    {% if not workday_id_is_setted %}
+    {% if not workday_id_is_setted  and is_AP%}
     <div class="row justify-content-center alert alert-danger" role="alert">
         <h3>{% trans "You must set workday id to the taxpayer" %}</h3>
     </div>

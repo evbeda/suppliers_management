@@ -1294,7 +1294,7 @@ class TestCompanyJoinView(TestCase):
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/taxpayer-creat.html',
+            'supplier_app/taxpayer-create.html',
             response.template_name
         )
         self.assertEqual(
@@ -1379,38 +1379,6 @@ class TestCompanyJoin(TestCase):
         )
         with self.assertRaises(CompanyUniqueToken.DoesNotExist):
             CompanyUniqueToken.objects.get(token=company_unique_token.token)
-
-    def test_company_join_user_has_required_permissions(self):
-        company_unique_token = CompanyUniqueTokenFactory()
-        kwargs = {'token': company_unique_token.token}
-        response = self.client.get(
-            reverse(
-                self.url_company_join,
-                kwargs=kwargs
-            ),
-            follow=True
-        )
-
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertIn(
-            'supplier_app/supplier-home.html',
-            response.template_name,
-        )
-
-    def test_company_join_user_doesnt_have_required_permissions(self):
-        client = Client()
-        user = UserFactory()
-        company_unique_token = CompanyUniqueTokenFactory()
-        kwargs = {'token': company_unique_token.token}
-
-        client.force_login(user)
-        response = client.get(
-            reverse(
-                self.url_company_join,
-                kwargs=kwargs
-            ),
-        )
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
 
 class TestApprovalRefuse(TestCase):
