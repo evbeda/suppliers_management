@@ -556,7 +556,6 @@ class TestInvoice(TestBase):
             ),
             self.invoice_post_data
         )
-
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(len(mail.outbox[0].to), 3)
 

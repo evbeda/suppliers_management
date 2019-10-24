@@ -1567,19 +1567,6 @@ class TestNotifyMessages(TestCase):
         response = self._make_email_invitation_post()
         self.assertContains(response, EMAIL_SUCCESS_MESSAGE)
 
-    @patch(
-        'utils.send_email.send_mail',
-        side_effect=CouldNotSendEmailError
-    )
-    @patch(
-        'supplier_app.models.CompanyUniqueToken._token_generator',
-        return_value=TOKEN_COMPANY
-    )
-    def test_send_mail_failure_should_show_error_message(self, email_notif_mocked, token_mocked):
-
-        response = self._make_email_invitation_post()
-        self.assertContains(response, EMAIL_ERROR_MESSAGE)
-
     def test_supplier_without_company_should_see_notification_message_in_home(self):
         self.client.force_login(self.supplier_without_company)
         response = self.client.get(

@@ -73,6 +73,7 @@ from utils.reports import (
 
 from utils.file_validator import validate_file
 
+
 class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
     template_name = 'invoices_app/invoice-list.html'
     model = Invoice
@@ -172,7 +173,10 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        taxpayer_id = self.kwargs.get('taxpayer_id')
+        if not taxpayer_id:
+            taxpayer_id = Invoice.objects.get(id=int(self.kwargs['pk'])).taxpayer.id
+        context['taxpayer_id'] = taxpayer_id
         return context
 
     def get_success_url(self):
@@ -205,15 +209,13 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             subject = 'Eventbrite Invoice Edited'
             upper_text = 'Your Invoice # {} was edited by an administrator. \
                 Please check your invoice'.format(invoice.invoice_number)
-            send_email_notification(
-                subject,
-                build_mail_html(
-                    invoice.taxpayer.business_name,
-                    upper_text,
-                    'Thank you'
-                ),
-                get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+            message = build_mail_html(
+                invoice.taxpayer.business_name,
+                upper_text,
+                'Thank you'
             )
+            recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+            send_email_notification.apply_async([subject, message, recipient_list])
 
         # Change the invoices values
         self.object = self.get_object()
@@ -300,15 +302,13 @@ def change_invoice_status(request, pk):
                 invoice.invoice_number,
                 invoice.get_status_display(),
             )
-    send_email_notification(
-        subject,
-        build_mail_html(
+    message = build_mail_html(
             invoice.taxpayer.business_name,
             upper_text,
             'Thank you'
-        ),
-        get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
-    )
+        )
+    recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+    send_email_notification.apply_async([subject, message, recipient_list])
 
     return redirect('invoices-list')
 
@@ -381,15 +381,13 @@ def post_a_comment(request, pk):
             invoice.invoice_number,
             request.POST['message']
         )
-        send_email_notification(
-            subject,
-            build_mail_html(
-                invoice.taxpayer.business_name,
-                upper_text,
-                'Thank you'
-            ),
-            get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+        message = build_mail_html(
+            invoice.taxpayer.business_name,
+            upper_text,
+            'Thank you'
         )
+        recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+        send_email_notification.apply_async([subject, message, recipient_list])
 
     return redirect(
         reverse(

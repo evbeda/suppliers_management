@@ -84,3 +84,17 @@ DEBUG = False
 # EMAIL NOTIFICATION URLS
 COMPANY_INVITATION_URL = os.environ.get('COMPANY_INVITATION_URL')
 SUPPLIER_HOME_URL = os.environ.get('SUPPLIER_HOME_URL')
+
+# CELERY REDIS CONFIG
+BROKER_URL = 'redis://:{}@{}'.format(get_env_variable('REDISLAB_PASSWORD'), get_env_variable('REDISLAB_ENDPOINT'))
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BROKER_URL = BROKER_URL
+CELERY_RESULT_BACKEND = BROKER_URL
+EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+CELERY_EMAIL_TASK_CONFIG = {
+    'name': 'djcelery_email_send',
+    'ignore_result': True,
+}

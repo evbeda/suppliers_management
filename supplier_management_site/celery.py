@@ -4,7 +4,7 @@ from celery import Celery
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'supplier_management_site.settings.dev')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'supplier_management_site.settings.production')
 
 app = Celery('supplier_management_site')
 
