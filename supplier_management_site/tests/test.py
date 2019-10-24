@@ -1,10 +1,18 @@
+from http import HTTPStatus
 from parameterized import parameterized
 from unittest.mock import patch
 
+from django.contrib.auth.models import Group
 from django.core import mail
-from django.test import TestCase, RequestFactory
+from django.core.urlresolvers import reverse
+from django.test import (
+    Client,
+    TestCase,
+    RequestFactory,
+)
 from django.utils.translation import (
     activate,
+    get_language,
     ugettext_lazy as _
 )
 
@@ -42,9 +50,6 @@ class TestTranslationConfiguration(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
-    def tearDown(self):
-        activate('en')
-
     def test_plain_translation(self):
         activate('es')
         self.assertEqual(_('Hello world'), 'Hola Mundo')
@@ -59,6 +64,62 @@ class TestTranslationConfiguration(TestCase):
         request = self.factory.get("/{}/".format(lang))
         response = home(request)
         self.assertContains(response, text)
+
+
+class TestLanguageSelection(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.sup_user = UserFactory(email='sup@gmail.com')
+        self.sup_user.groups.add(Group.objects.get(name='supplier'))
+        self.sup_home = 'supplier-home'
+        self.taxpayer_create = 'taxpayer-create'
+        self.i18n_url = 'set_language'
+
+    def tearDown(self):
+        activate('en')
+
+    def _set_language(self, lang):
+        set_lang = {'next': reverse(self.sup_home), 'language': lang}
+        return self.client.post(
+            reverse(self.i18n_url),
+            data=set_lang, follow=True
+        )
+
+    def test_user_default_language(self):
+        self.client.get(reverse(self.sup_home))
+        actual_lang = get_language()
+        self.assertEqual(actual_lang, 'en')
+
+    def test_user_selecting_preferred_languages(self):
+        self.client.get(reverse(self.sup_home))
+        self._set_language('es')
+        expected_selected_lang = get_language()
+        self.assertEqual(expected_selected_lang, 'es')
+
+    def test_user_tries_to_select_a_new_prefered_language(self):
+        self._set_language('es')
+        actual_lang = get_language()
+        self._set_language('pt-br')
+        expected_selected_lang = get_language()
+        self.assertEqual(actual_lang, 'es')
+        self.assertEqual(expected_selected_lang, 'pt-br')
+
+    def test_user_select_language_redirects_to_same_url(self):
+        self.client.get(reverse(self.sup_home))
+        response_es = self._set_language('es')
+        self.assertEqual(
+            response_es.redirect_chain[0],
+            (reverse(self.sup_home), HTTPStatus.FOUND)
+        )
+
+    def test_users_language_selection_persist_in_current_session(self):
+        self.client.get(reverse(self.sup_home))
+        self._set_language('es')
+        selected_lang = get_language()
+        self.client.get(reverse(self.taxpayer_create))
+        persisted_lang = get_language()
+        self.assertEqual(selected_lang, 'es')
+        self.assertEqual(persisted_lang, 'es')
 
 
 class EmailUtilsTest(TestCase):

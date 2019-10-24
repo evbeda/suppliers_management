@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-23 15:02+0000\n"
+"POT-Creation-Date: 2019-10-23 18:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,7 +173,7 @@ msgid "Portuguese (Brazil)"
 msgstr "Portugues"
 
 #: supplier_management_site/tests/templates/tests/index.html:4
-#: supplier_management_site/tests/test.py:50
+#: supplier_management_site/tests/test.py:57
 msgid "Hello world"
 msgstr "Hola Mundo"
 
@@ -368,7 +368,7 @@ msgstr "Ver todas"
 msgid "Create one"
 msgstr "Crear nueva"
 
-#: templates/AP_app/navbar.html:50 templates/supplier_app/navbar.html:59
+#: templates/AP_app/navbar.html:50 templates/supplier_app/navbar.html:64
 msgid "Log out"
 msgstr "Cerrar sesión"
 
@@ -487,6 +487,37 @@ msgstr "Detalles"
 msgid "Payment option"
 msgstr "Tipo de pago"
 
+#: templates/registration/invalid_login.html:16
+#: templates/registration/login.html:24
+msgid "If you are a supplier please:"
+msgstr "Si sos un proveedor por favor:"
+
+#: templates/registration/invalid_login.html:24
+
+#| msgid "Login with Google"
+msgid "Login home"
+msgstr "Pagina de Ingreso"
+
+#: templates/registration/login.html:16
+msgid "Welcome to BriteSU"
+msgstr "Bienvenido a BriteSU"
+
+#: templates/registration/login.html:21
+msgid "Sign In"
+msgstr "Ingresar"
+
+#: templates/registration/login.html:26
+msgid "Login with Eventbrite"
+msgstr "Ingresa a travez de Eventbrite"
+
+#: templates/registration/login.html:31
+msgid "If you are a EB employee please:"
+msgstr "Si sos empleado de EB por favor:"
+
+#: templates/registration/login.html:33
+msgid "Login with Google"
+msgstr "Ingresa a travez de Google"
+
 #: templates/supplier_app/company_list.html:13
 msgid "Company List"
 msgstr "Lista de compañías"
@@ -576,4 +607,3 @@ msgstr "Desde"
 #: utils/custom_filters.py:34
 msgid "To Date"
 msgstr "Hasta"
-

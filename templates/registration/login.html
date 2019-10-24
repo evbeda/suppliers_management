@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block styles %}
     {% load static %}
@@ -6,28 +7,30 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="float-right">
+    {% include 'language_selector.html' %}
+</div>
 <div class="container">
     <div class="row align-items-center">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-          <h1 class="text-center"> Welcome to BriteSU </h1>
+          <h1 class="text-center"> {% trans "Welcome to BriteSU" %} </h1>
       </div>
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
           <div class="card card-signin my-5">
             <div class="card-body">
-              <h5 class="card-title text-center">Sign In</h5>
+              <h5 class="card-title text-center">{% trans "Sign In" %}</h5>
                 <hr class="my-4">
                 <div>
-                  <h5> If you are a supplier please:</h5>
+                  <h5> {% trans "If you are a supplier please:" %}</h5>
                   <a class="btn btn-eb btn-block text-white text-uppercase" href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
-                      Login with Eventbrite
+                      {% trans "Login with Eventbrite" %}
                   </a>
                 </div>
                 <hr>
                 <div>
-                  <h5> If you are a EB employee please:</h5>
+                  <h5> {% trans "If you are a EB employee please:"%}</h5>
                   <a class="btn btn-google text-white btn-block text-uppercase" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
-                      Login with Google              
+                      {% trans "Login with Google" %}             
                   </a>
                 </div>
               </form>
@@ -37,11 +40,11 @@
     </div>
 </div>
 
-  <footer class="page-footer fixed-bottom font-small blue-eb ">
-    <div class="footer-copyright text-center text-white py-3">© 2019 Copyright:
-        <a href="https://eventbrite.com"> Eventbrite.com</a>
-    </div>
-  </footer>
-
+<footer class="page-footer fixed-bottom font-small blue-eb ">
+  <div class="footer-copyright text-center text-white py-3">
+    © 2019 Copyright:
+    <a href="https://eventbrite.com"> Eventbrite.com</a>
+  </div>
+</footer>
 
 {% endblock %}
