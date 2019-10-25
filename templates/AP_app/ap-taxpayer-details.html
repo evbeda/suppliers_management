@@ -12,7 +12,7 @@
 {% include 'supplier_app/navbar.html' %}
 {% endif %}
 <div class="container h-100">
-    {% if not workday_id_is_setted %}
+    {% if not workday_id_is_setted  and is_AP%}
     <div class="row justify-content-center alert alert-danger" role="alert">
         <h3>{% trans "You must set workday id to the taxpayer" %}</h3>
     </div>
@@ -97,7 +97,7 @@
                             {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <td>
                                 <a class='btn btn-info'
-                                    href="{% url 'address-update' address_id=taxpayer_address.id %}">{% trans "Edit" %}</a>
+                                    href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">{% trans "Edit" %}</a>
                             </td>
                             {% endif %}
                         </tr>
@@ -139,7 +139,7 @@
                             {% if taxpayer.taxpayer_state != 'DENIED' %}
                             <td>
                                 <a class='btn btn-info'
-                                    href="{% url 'bank-account-update'  bank_id=taxpayer_bank_account.id%}">{% trans "Edit" %}</a>
+                                    href="{% url 'bank-account-update'  taxpayer_id=taxpayer.id bank_id=taxpayer_bank_account.id%}">{% trans "Edit" %}</a>
                             </td>
                             {% endif %}
                         </tr>

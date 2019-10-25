@@ -57,7 +57,7 @@ from supplier_app.models import (
 from users_app.decorators import (
     is_invoice_for_user,
 )
-from users_app.mixins import IsUserCompanyInvoice, HasTaxPayerPermissionMixin
+from users_app.mixins import IsUserCompanyInvoice, TaxPayerPermissionMixin
 
 from utils.invoice_lookup import invoice_status_lookup
 from utils.send_email import (
@@ -104,7 +104,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
 
 class SupplierInvoiceListView(
     PermissionRequiredMixin,
-    HasTaxPayerPermissionMixin,
+    TaxPayerPermissionMixin,
     PaginationMixin,
     ListView
 ):
@@ -131,7 +131,7 @@ class SupplierInvoiceListView(
         return context
 
 
-class SupplierInvoiceCreateView(PermissionRequiredMixin, HasTaxPayerPermissionMixin, CreateView):
+class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin, CreateView):
     model = Invoice
     form_class = InvoiceForm
     template_name = 'supplier_app/invoices_form.html'
