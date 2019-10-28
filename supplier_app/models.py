@@ -163,3 +163,14 @@ class BankAccount(models.Model):
         return "Account_number:{}".format(
             self.bank_account_number,
         )
+
+
+class TaxpayerComment(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        default=None
+    )
+    comment_date_received = models.DateTimeField(auto_now_add=True)
+    message = models.TextField()
+    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
