@@ -8,7 +8,9 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core import mail
 
-from supplier_app import TAXPAYER_STATUS_PENDING
+from supplier_app import (
+    TAXPAYER_STATUS_PENDING,
+)
 from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from users_app.factory_boy import UserFactory
 
@@ -591,3 +593,23 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(response, 'Taxpayer not approved yet')
+
+    def test_new_invoice_button_shows_when_approved(self):
+        self.client.force_login(self.user)
+        response = self.client.get(
+            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.invoice_post_data,
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, 'New Invoice')
+
+    def test_new_invoice_button_doesnt_show_when_not_approved(self):
+        self.client.force_login(self.user)
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_PENDING
+        self.taxpayer.save()
+        response = self.client.get(
+            reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.invoice_post_data,
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertNotContains(response, 'New Invoice')

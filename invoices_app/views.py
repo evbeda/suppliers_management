@@ -53,7 +53,7 @@ from invoices_app.models import (
     Comment
 )
 
-from supplier_app import TAXPAYER_STATUS_ACTIVE
+from supplier_app import TAXPAYER_STATUS_APPROVED
 from supplier_app.models import (
     TaxPayer,
     Address,
@@ -154,7 +154,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
         payment_term = taxpayer.get_taxpayer_child().payment_term
         form.instance.invoice_due_date = form.cleaned_data['invoice_date'] + timedelta(days=payment_term)
         invoice_number = form.cleaned_data['invoice_number']
-        if taxpayer.taxpayer_state != TAXPAYER_STATUS_ACTIVE:
+        if taxpayer.taxpayer_state != TAXPAYER_STATUS_APPROVED:
             form.add_error(None, _('Taxpayer not approved yet'))
             return super().form_invalid(form)
         if Invoice.objects.filter(taxpayer=taxpayer.id, invoice_number=invoice_number).exists():
