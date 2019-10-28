@@ -24,6 +24,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 from django.views.generic.list import ListView
 
+from bootstrap_datepicker_plus import DatePickerInput
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
@@ -34,7 +35,9 @@ from invoices_app import (
     INVOICE_STATUS_NEW,
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED,
+    ENGLISH_LANGUAGE_CODE,
     EXPORT_TO_XLS_FULL,
+    INVOICE_DATE_FORMAT,
     INVOICE_MAX_SIZE_FILE,
 )
 from users_app import (
@@ -167,6 +170,19 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         return context
+
+    def get_form_class(self):
+        form = self.form_class
+        form.base_fields['invoice_date'].widget = DatePickerInput(
+                options={
+                    "format": str(INVOICE_DATE_FORMAT),
+                    "locale": str(ENGLISH_LANGUAGE_CODE),
+                },
+                attrs={
+                    'placeholder': _('Invoice Date'),
+                }
+            )
+        return form
 
 
 class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPassesTestMixin, UpdateView):

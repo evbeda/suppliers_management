@@ -37,8 +37,8 @@ class InvoiceFilter(FilterSet):
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
         label=_('Status'),
     )
-    invoice_date = DateFromToRangeFilter(widget=DateRangeWidget(), label=_('Invoice Date'))
-    invoice_due_date = DateFromToRangeFilter(widget=DateRangeWidget(), label=_('Due Date'))
+    invoice_date = DateFromToRangeFilter(label=_('Invoice Date'))
+    invoice_due_date = DateFromToRangeFilter(label=_('Due Date'))
 
     total_amount = RangeFilter(widget=NumericRangeWidget(), label=_('Total Amount'))
     taxpayer = ModelChoiceFilter(
@@ -59,3 +59,9 @@ class InvoiceFilter(FilterSet):
     class Meta:
         model = Invoice
         fields = ('invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer', 'taxpayer__country')
+
+    def get_form_class(self):
+        form = super(FilterSet, self).get_form_class()
+        form.base_fields['invoice_date'].widget = DateRangeWidget()
+        form.base_fields['invoice_due_date'].widget = DateRangeWidget()
+        return form

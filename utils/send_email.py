@@ -4,9 +4,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.translation import (
     ugettext_lazy as _,
-    activate,
 )
-from django.utils.translation import ugettext_lazy as _
 from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
