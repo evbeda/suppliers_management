@@ -128,7 +128,7 @@ class SupplierInvoiceListView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        context['taxpayer'] = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)

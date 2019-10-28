@@ -16,8 +16,11 @@
     <div class="col-md-2">
         <ul class="nav flex-column text-center">
             <li class="nav-item">
-                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"><i
-                        class="fa fa-plus"></i>{% trans "New Invoice" %}</a>
+                {% if taxpayer.taxpayer_state == "APPROVED" %}
+                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">
+                    <i class="fa fa-plus"></i>{% trans "New Invoice" %}
+                </a>
+                {% endif %}
             </li>
         </ul>
     </div>
@@ -38,7 +41,7 @@
                 {% if not object_list%}
                 <tr>
                     <td class="table-danger text-center" colspan="7">{% trans "No invoices" %} <a
-                            href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}">{% trans "Create one?" %}</a></td>
+                            href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">{% trans "Create one?" %}</a></td>
                 </tr>
                 {% endif %}
                 {% for invoice in object_list %}
