@@ -419,12 +419,12 @@ msgid "AP Admin"
 msgstr "Administrador do AP"
 
 #: templates/AP_app/admins-list.html:18
-msgid "Ap Reporter"
-msgstr "Ap Reporter"
+msgid "AP Reporter"
+msgstr "AP Reporter"
 
 #: templates/AP_app/admins-list.html:19
-msgid "Ap Manager"
-msgstr "Ap Manager"
+msgid "AP Manager"
+msgstr "AP Manager"
 
 #: templates/AP_app/ap-taxpayer-details.html:17
 msgid "You must set workday id to the taxpayer"

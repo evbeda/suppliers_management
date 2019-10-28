@@ -147,7 +147,7 @@ class TaxPayerArgentina(TaxPayer):
     witholding_taxes_file = models.FileField(
         upload_to='file',
         blank=False,
-        verbose_name=_('Certificate of no tax withholding of IVA, income or SUSS'),
+        verbose_name=_('Certificate of no tax withholding of Tax liens, income or SUSS'),
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         )
 

@@ -61,7 +61,7 @@ email_notifications = {
         'body': {
             'upper_text': _(
                 'Please visit your taxpayer and read comments.\n'
-                'Once changes are done and approved by eventbrite,\n'
+                'Once changes are done and approved by Eventbrite,\n'
                 'we will send you an email.\n'
             ),
             'lower_text': _('Thank you!'),
@@ -74,9 +74,9 @@ email_notifications = {
         'body': {
             'upper_text': _(
                 'We are afraid that the taxpayer you were trying to submit is invalid\n'
-                'Please contact the eventbrite employee that hired you.\n'
+                'Please contact the Eventbrite employee that hired you.\n'
             ),
-            'lower_text': _('Please contact the eventbrite employee that hired you, Thank you!'),
+            'lower_text': _('Please contact the Eventbrite employee that hired you, Thank you!'),
             'btn_text': _('Go to BriteSu'),
             'btn_url': settings.SUPPLIER_HOME_URL,
         },
