@@ -29,6 +29,7 @@
                             <th scope="col">{% trans "CUIT" %}</th>
                             <th scope="col">{% trans "Payment Type" %}</th>
                             <th scope="col">{% trans "Payment Term" %}</th>
+                            <th scope="col">{% trans "EB entities" %}</th>
                             <th scope="col">{% trans "Comments" %}</th>
                             <th scope="col">{% trans "Country" %}</th>
                             <th scope="col">{% trans "Files" %} </th>
@@ -43,7 +44,14 @@
                             <td>{{taxpayer.cuit}}</td>
                             <td>{{taxpayer.payment_type}}</td>
                             <td>{{taxpayer.payment_term}}</td>
-                            <td>{{taxpayer.comments}}</td>
+                            <td>
+                                <ul class="list-group list-group-flush">
+                                    {% for eb in taxpayer.taxpayerxebentity_set.all %}
+                                    <li>{{eb.eb_entity}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{taxpayer.taxpayer_comments}}</td>
                             <td>{{taxpayer.country}}</td>
                             <td>
                                 <ul class="list-group">
@@ -130,10 +138,10 @@
                             <td>{{taxpayer_bank_account.bank_account_number}}</td>
                             <td>
                                 <ul class="list-group">
-                                    <li>
-                                        <a target="_blank"
-                                            href="http://docs.google.com/gview?url={{ taxpayer_bank_account.bank_cbu_file.url }}">{% trans "CBU" %}</a>
-                                    </li>
+                                    <a target="_blank"
+                                        href="http://docs.google.com/gview?url={{ taxpayer_bank_account.bank_cbu_file.url }}">
+                                        {% trans "CBU" %}
+                                    </a>
                                 </ul>
                             </td>
                             {% if taxpayer.taxpayer_state != 'DENIED' %}

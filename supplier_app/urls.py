@@ -16,6 +16,7 @@ from supplier_app.views import (
     TaxpayerHistory,
 )
 
+
 urlpatterns = [
     url(r'^ap$', ApTaxpayers.as_view(), name='ap-taxpayers'),
     url(r'^supplier$', SupplierHome.as_view(), name='supplier-home'),

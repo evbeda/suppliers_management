@@ -14,7 +14,8 @@ from supplier_app import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
-from supplier_app.bank_info import get_bank_info_choices
+from supplier_app.constants.bank_info import get_bank_info_choices
+from supplier_app.constants.countries import get_countries_choices
 
 
 class Company(models.Model):
@@ -58,6 +59,22 @@ class CompanyUniqueToken(models.Model):
         return hashlib.sha256(salt.encode('utf-8')).hexdigest()
 
 
+class EBEntity(models.Model):
+    eb_name = models.CharField(
+        max_length=15,
+        verbose_name=_("Eventbrite entity name"),
+        )
+    eb_country = models.CharField(
+        max_length=15,
+        verbose_name=_("Country"),
+        choices=get_countries_choices(),
+        default=None,
+    )
+
+    def __str__(self):
+        return self.eb_name
+
+
 class TaxPayer(models.Model):
 
     workday_id = models.CharField(max_length=200)
@@ -67,7 +84,11 @@ class TaxPayer(models.Model):
         choices=get_taxpayer_status_choices(),
         default="PENDING",
     )
-    country = models.CharField(max_length=50, default='AR')
+    country = models.CharField(
+        max_length=50,
+        choices=get_countries_choices(),
+        verbose_name=_("Country")
+    )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     taxpayer_date = models.DateField(auto_now_add=True, verbose_name=_("Creation date"))
     taxpayer_comments = models.CharField(
@@ -75,7 +96,7 @@ class TaxPayer(models.Model):
         blank=True,
         null=True,
         verbose_name=_("Comments"),
-        )
+    )
 
     history = HistoricalRecords(inherit=True)
 
@@ -97,6 +118,11 @@ class TaxPayer(models.Model):
 
     def has_workday_id(self):
         return True if self.workday_id else False
+
+
+class TaxPayerEBEntity(models.Model):
+    eb_entity = models.ForeignKey(EBEntity)
+    taxpayer = models.ForeignKey(TaxPayer)
 
 
 class TaxPayerArgentina(TaxPayer):
@@ -140,7 +166,11 @@ class Address(models.Model):
     zip_code = models.CharField(max_length=10, verbose_name=_("Zip code"))
     city = models.CharField(max_length=50, verbose_name=_("City"))
     state = models.CharField(max_length=50, verbose_name=_("State"))
-    country = models.CharField(max_length=50, verbose_name=_("Country"))
+    country = models.CharField(
+        max_length=50,
+        choices=get_countries_choices(),
+        verbose_name=_("Country"),
+    )
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
     history = HistoricalRecords()

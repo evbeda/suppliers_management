@@ -19,7 +19,7 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
-from supplier_app.custom_messages import (
+from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
@@ -37,7 +37,7 @@ from supplier_app.forms import (
     BankAccountCreateForm,
     BankAccountEditForm,
     TaxPayerCreateForm,
-    TaxPayerEditForm
+    TaxPayerEditForm,
 )
 from supplier_app.models import (
     Address,
@@ -45,8 +45,10 @@ from supplier_app.models import (
     Company,
     CompanyUniqueToken,
     CompanyUserPermission,
+    EBEntity,
     TaxPayer,
-    TaxPayerArgentina
+    TaxPayerArgentina,
+    TaxPayerEBEntity,
 )
 from users_app.mixins import (
     TaxPayerPermissionMixin,
@@ -64,7 +66,6 @@ from users_app import (
     COMPANY_USER_CAN_APPROVE_PERM,
     SUPPLIER_ROLE_PERM,
 )
-from users_app.views import IsApUser
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import (
     company_invitation_notification,
@@ -164,6 +165,13 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             company = Company.objects.get(companyuserpermission__user=self.request.user)
             taxpayer.company = company
             taxpayer.save()
+            eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
+            for eb_entity in eb_entities:
+                eb_entity = EBEntity.objects.get(pk=eb_entity.id)
+                TaxPayerEBEntity.objects.create(
+                    eb_entity=eb_entity,
+                    taxpayer=taxpayer
+                )
             address = forms['address_form'].save(commit=False)
             address.taxpayer = taxpayer
             address.save()

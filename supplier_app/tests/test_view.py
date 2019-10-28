@@ -37,7 +37,7 @@ from django.utils.datastructures import MultiValueDict
 
 from simple_history.models import HistoricalRecords
 
-from supplier_app.custom_messages import (
+from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
@@ -80,12 +80,12 @@ from supplier_app.tests.factory_boy import (
     CompanyFactory,
     CompanyUniqueTokenFactory,
     CompanyUserPermissionFactory,
+    EBEntityFactory,
     TaxPayerArgentinaFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
     CompanyUserPermission,
-    EditAddressView,
     EditTaxpayerView,
     SupplierHome,
 )
@@ -119,8 +119,8 @@ class TestCreateTaxPayer(TestCase):
             user=self.user_with_eb_social
         )
         self.POST = taxpayer_creation_POST_factory(
-            self.file_mock,
-            self.bank_info
+            afip_file=self.file_mock,
+            bank_info=self.bank_info,
         )
 
     def tearDown(self):
@@ -129,9 +129,19 @@ class TestCreateTaxPayer(TestCase):
         ):
             rmtree('file')
 
-    def _get_example_forms(self):
+    def _get_example_forms(self, **kwargs):
+        eb_entities = []
+        if 'eb_entities' in kwargs:
+            for eb_entity in kwargs['eb_entities']:
+                eb_entities.append(str(eb_entity.id))
+        else:
+            eb_entities.append(str(EBEntityFactory().id))
         FORM_POST = QueryDict('', mutable=True)
         FORM_POST.update(self.POST)
+        FORM_POST.setlist(
+            'taxpayer_form-eb_entities',
+            eb_entities,
+        )
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
             'bankaccount_form': BankAccountCreateForm(
@@ -170,9 +180,10 @@ class TestCreateTaxPayer(TestCase):
             )
 
     def _taxpayer_creation_request(self):
+        eb_entity = EBEntityFactory()
         request = self.factory.post(
             '/suppliersite/supplier/taxpayer/create',
-            data=taxpayer_creation_POST_factory(),
+            data=taxpayer_creation_POST_factory(eb_entity.id),
             )
         request.user = self.user_with_eb_social
         return request
@@ -223,6 +234,36 @@ class TestCreateTaxPayer(TestCase):
             taxpayer_created,
             bankaccount.taxpayer
         )
+
+    @patch('supplier_app.views.messages.add_message')
+    def test_new_taxpayer_should_be_related_with_3_eb_entities(self, msg_mocked):
+        eb_entities = [EBEntityFactory(), EBEntityFactory(), EBEntityFactory()]
+        taxpayer_creation_forms = self._get_example_forms(eb_entities=eb_entities)
+
+        self.create_taxpayer_view.request = \
+            self._taxpayer_creation_request()
+        self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
+        taxpayer_created = TaxPayer.objects.last()
+
+        self.assertEqual(3, len(taxpayer_created.taxpayerebentity_set.all()))
+
+    @patch('supplier_app.views.messages.add_message')
+    def test_multiple_equal_eb_entities_when_create_taxpayer_should_fail(self, msg_mocked):
+        eb_1 = EBEntityFactory()
+        eb_2 = EBEntityFactory()
+        eb_entities = [eb_1, eb_2, eb_1]
+        taxpayer_creation_forms = self._get_example_forms(eb_entities=eb_entities)
+
+        self.create_taxpayer_view.request = \
+            self._taxpayer_creation_request()
+        self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
+        taxpayer_created = TaxPayer.objects.last()
+
+        eb_entities_related_with_taxpayer = \
+            [e.eb_entity for e in taxpayer_created.taxpayerebentity_set.all()]
+        self.assertEqual(2, len(taxpayer_created.taxpayerebentity_set.all()))
+        self.assertIn(eb_1, eb_entities_related_with_taxpayer)
+        self.assertIn(eb_2, eb_entities_related_with_taxpayer)
 
     def test_logged_in_supplier_can_create_taxpayer(self):
 
@@ -540,7 +581,7 @@ class TestSupplierDetailsView(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
-        
+
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
         self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.ap_user)
@@ -777,7 +818,8 @@ class TestEditTaxPayerInfo(TestCase):
         self.taxpayer_edit_url = 'taxpayer-update'
         self.edit_taxpayer_view = EditTaxpayerView()
 
-        self.TAXPAYER_POST = taxpayer_edit_POST_factory()
+        self.eb_entity = EBEntityFactory()
+        self.TAXPAYER_POST = taxpayer_edit_POST_factory(self.eb_entity.id)
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id,
         }
@@ -911,7 +953,7 @@ class TestEditAddressInfo(TestCase):
             'address_form-zip_code': '123',
             'address_form-city': 'Mendoza',
             'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
+            'address_form-country': 'AR',
         }
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id,
@@ -1555,7 +1597,8 @@ class TestNotifyMessages(TestCase):
             'company_id': '1',
             'language': 'en',
         }
-        self.POST = taxpayer_creation_POST_factory()
+        self.eb_entity = EBEntityFactory()
+        self.POST = taxpayer_creation_POST_factory(self.eb_entity.id)
 
     def _make_email_invitation_post(self):
         return self.client.post(
@@ -1625,7 +1668,7 @@ class TestTaxpayerHistory(TestCase):
 
         TAXPAYER_POST = QueryDict("", mutable=True)
         TAXPAYER_POST.update(
-            taxpayer_edit_POST_factory()
+            taxpayer_edit_POST_factory(eb_entity=EBEntityFactory().id)
         )
 
         row_before_modification = len(self.taxpayer.history.all())
@@ -1667,7 +1710,7 @@ class TestTaxpayerHistory(TestCase):
             'address_form-zip_code': '123',
             'address_form-city': 'Mendoza',
             'address_form-state': 'Mendoza',
-            'address_form-country': 'Argentina',
+            'address_form-country': 'AR',
         }
 
         row_before_modification = len(address.history.all())

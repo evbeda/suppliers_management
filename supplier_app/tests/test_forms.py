@@ -29,6 +29,7 @@ from supplier_app.tests import (
 from supplier_app.tests.factory_boy import (
     CompanyFactory,
     CompanyUserPermissionFactory,
+    EBEntityFactory,
 )
 from supplier_app.forms import (
     AddressCreateForm,
@@ -48,6 +49,7 @@ class TestCreatePrefixForm(TestCase):
 
     def setUp(self):
         self.POST = taxpayer_creation_POST_factory(
+            '1',
             bank_info=get_bank_info_example()
         )
 
@@ -62,13 +64,14 @@ class TestCreatePrefixForm(TestCase):
         taxpayer_form = TaxPayerCreateForm(data=data)
         bankaccount_form = BankAccountCreateForm(data=data)
         self.assertEqual(6, len(address_form.data))
-        self.assertEqual(9, len(taxpayer_form.data))
+        self.assertEqual(10, len(taxpayer_form.data))
         self.assertEqual(3, len(bankaccount_form.data))
 
 
 class TestTaxPayerFormValidation(TestCase):
 
     def setUp(self):
+        self.eb_entity = EBEntityFactory()
         self.client = Client()
         self.factory = RequestFactory()
         self.file_mock = MagicMock(spec=File)
@@ -86,7 +89,7 @@ class TestTaxPayerFormValidation(TestCase):
             company=self.company,
             user=self.user_with_eb_social
         )
-        self.POST = taxpayer_creation_POST_factory(self.file_mock, self.bank_info)
+        self.POST = taxpayer_creation_POST_factory(self.eb_entity.id, self.file_mock, self.bank_info)
 
     def tearDown(self):
         if self.file_mock and path.exists(
@@ -94,9 +97,20 @@ class TestTaxPayerFormValidation(TestCase):
         ):
             rmtree('file')
 
-    def _get_example_forms(self):
+    def _get_example_forms(self, **kwargs):
+        eb_entities = []
+        if 'eb_entities' in kwargs:
+            for eb_entity in kwargs['eb_entities']:
+                eb_entities.append(str(eb_entity.id))
+        else:
+            eb_entities.append(str(EBEntityFactory().id))
+
         FORM_POST = QueryDict('', mutable=True)
         FORM_POST.update(self.POST)
+        FORM_POST.setlist(
+            'taxpayer_form-eb_entities',
+            eb_entities,
+        )
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
             'bankaccount_form': BankAccountCreateForm(
@@ -198,10 +212,10 @@ class TestTaxPayerFormValidation(TestCase):
     @patch(
         'supplier_app.views.CreateTaxPayerView.form_valid',
         return_value=HttpResponseRedirect('/suppliersite/supplier')
-        )
+    )
     def test_form_valid_method_should_be_called_with_an_valid_POST(
         self,
-        mocked_valid_form
+        mocked_valid_form,
     ):
         request = self.factory.post(
             '/suppliersite/supplier/taxpayer/create',
