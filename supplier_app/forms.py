@@ -3,7 +3,12 @@ from django.forms.models import ModelForm
 from django.http import QueryDict
 
 from supplier_app import TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE
-from supplier_app.models import Address, BankAccount, TaxPayerArgentina
+from supplier_app.models import (
+    Address,
+    BankAccount,
+    EBEntity,
+    TaxPayerArgentina,
+)
 from utils.file_validator import validate_file
 
 
@@ -17,9 +22,10 @@ class BasePrefixCreateForm(ModelForm):
         if data or files:
             data = data or {}
             files = files or {}
-            data_query_dict = self._create_query_dict_filter_by_prefix(data)
-            files_query_dict = self._create_query_dict_filter_by_prefix(files)
-
+            data_query_dict = \
+                self._create_query_dict_filter_by_prefix(data) if data else {}
+            files_query_dict = \
+                self._create_query_dict_filter_by_prefix(files) if files else {}
         super().__init__(
             data=data_query_dict,
             files=files_query_dict,
@@ -51,13 +57,9 @@ class BasePrefixCreateForm(ModelForm):
 
     def _create_query_dict_filter_by_prefix(self, generic_data):
         query_dict = QueryDict('', mutable=True)
-        query_dict.update(
-            {
-                data_key: data_value
-                for data_key, data_value in generic_data.items()
-                if data_key.startswith(self.prefix)
-            }
-        )
+        for data_key, data_value in generic_data.lists():
+            if data_key.startswith(self.prefix):
+                query_dict.setlist(data_key, data_value)
         return query_dict
 
 
@@ -73,7 +75,7 @@ class AddressCreateForm(BasePrefixCreateForm):
              'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
              'city': forms.TextInput(attrs={'class': 'form-control'}),
              'state': forms.TextInput(attrs={'class': 'form-control'}),
-             'country': forms.TextInput(attrs={'class': 'form-control'}),
+             'country': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -105,6 +107,11 @@ class BankAccountEditForm(BankAccountBaseForm):
 
 
 class TaxPayerArgentinaBaseForm(ModelForm):
+    eb_entities = \
+        forms.ModelMultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple,
+            queryset=EBEntity.objects.all(),
+        )
 
     class Meta:
         model = TaxPayerArgentina
@@ -127,6 +134,12 @@ class TaxPayerArgentinaBaseForm(ModelForm):
                 'rows': '3'
             }),
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'type': 'hidden',
+                    'value': 'AR'
+                })
         }
 
 
@@ -134,7 +147,7 @@ class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
     prefix = 'taxpayer_form'
 
     class Meta(TaxPayerArgentinaBaseForm.Meta):
-        exclude = ['taxpayer_state', 'workday_id', 'company', 'country']
+        exclude = ['taxpayer_state', 'workday_id', 'company']
 
 
 class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
@@ -143,7 +156,6 @@ class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
         exclude = [
             'taxpayer_state',
             'company',
-            'country',
             'afip_registration_file',
             'witholding_taxes_file',
             'taxpayer_comments',

@@ -1,6 +1,6 @@
 import factory
-
 from django.utils import timezone
+from random import choice
 
 from supplier_app.models import (
     Address,
@@ -8,14 +8,15 @@ from supplier_app.models import (
     Company,
     CompanyUniqueToken,
     CompanyUserPermission,
+    EBEntity,
     TaxPayer,
     TaxPayerArgentina,
 )
 
-from supplier_app.bank_info import BANK_INFO
+from supplier_app.constants.bank_info import BANK_INFO
 from supplier_app import (
     PAYMENT_TERMS,
-    PAYMENT_TYPES
+    PAYMENT_TYPES,
 )
 from users_app.factory_boy import (
     UserFactory,
@@ -49,6 +50,15 @@ class CompanyUniqueTokenFactory(factory.django.DjangoModelFactory):
     created_at = timezone.now()
 
 
+class EBEntityFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = EBEntity
+
+    eb_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
+    eb_country = "AR"
+
+
 class TaxPayerFactory(factory.django.DjangoModelFactory):
 
     class Meta:
@@ -57,8 +67,8 @@ class TaxPayerFactory(factory.django.DjangoModelFactory):
     workday_id = factory.Sequence(lambda n: "{}".format(n))
     business_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
     taxpayer_state = "PENDING"
-    country = "AR"
     company = factory.SubFactory(CompanyFactory)
+    country = "AR"
 
 
 class TaxPayerArgentinaFactory(TaxPayerFactory):

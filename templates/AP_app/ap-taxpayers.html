@@ -10,6 +10,7 @@
 <div class="container h-100 w-100 mt-3">
     {% include 'messages_notification.html'%}
     {% include 'AP_app/taxpayer_filter.html' %}
+    {% include 'messages_notification.html' %}
     <div class="row justify-content-center">
         <h1>
             {% trans "Taxpayer" %}
@@ -30,7 +31,7 @@
                 <tr>
                     <td>{{taxpayer.business_name}}</td>
                     <td>{{taxpayer.taxpayer_identifier}}</td>
-                    <td>{{taxpayer.taxpayer_state}}</td>
+                    <td>{{taxpayer.get_taxpayer_state_display}}</td>
                     <td>
                         <a class='btn btn-info' href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">
                             {% trans "More details" %}

@@ -34,7 +34,7 @@
                     <tr>
                         <td>{{taxpayer.business_name}}</td>
                         <td>{{taxpayer.cuit}}</td>
-                        <td>{{taxpayer.taxpayer_state}}</td>
+                        <td>{{taxpayer.get_taxpayer_state_display}}</td>
                         <td>
                             <a class='btn btn-info'
                                 href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">

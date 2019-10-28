@@ -1,0 +1,23 @@
+[
+    {
+        "model": "supplier_app.EBEntity",
+        "pk": 1,
+        "fields": {
+            "eb_name": "Eventbrite ARG"
+        }
+    },
+    {
+        "model": "supplier_app.EBEntity",
+        "pk": 2,
+        "fields": {
+            "eb_name": "Eventbrite USA"
+        }
+    },
+    {
+        "model": "supplier_app.EBEntity",
+        "pk": 3,
+        "fields": {
+            "eb_name": "Eventbrite BR"
+        }
+    }
+]

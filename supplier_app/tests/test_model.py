@@ -4,7 +4,7 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
 
-from supplier_app.bank_info import get_bank_info_choices
+from supplier_app.constants.bank_info import get_bank_info_choices
 from supplier_app.models import (
     Address,
     BankAccount,

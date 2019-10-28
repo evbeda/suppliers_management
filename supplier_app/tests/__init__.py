@@ -5,7 +5,7 @@ from supplier_app import (
     PAYMENT_TERMS,
     PAYMENT_TYPES,
 )
-from supplier_app.bank_info import BANK_INFO
+from supplier_app.constants.bank_info import BANK_INFO
 
 BUSINESS_EXAMPLE_NAME_1 = 'Pyme 1'
 BUSINESS_EXAMPLE_NAME_2 = 'Pyme 2'
@@ -35,6 +35,7 @@ def get_payment_type_example(index=None):
 
 
 def taxpayer_creation_POST_factory(
+    eb_entity=None,
     afip_file=None,
     witholding_taxes_file=None,
     bank_cbu_file=None,
@@ -45,6 +46,7 @@ def taxpayer_creation_POST_factory(
         'taxpayer_form-business_name': 'EB ARG',
         'taxpayer_form-cuit': '20-3123214-0',
         'taxpayer_form-country': 'AR',
+        'taxpayer_form-eb_entities': eb_entity,
         'taxpayer_form-taxpayer_comments': '.',
         'taxpayer_form-payment_type': 'BANK',
         'taxpayer_form-payment_term': '30',
@@ -55,7 +57,7 @@ def taxpayer_creation_POST_factory(
         'address_form-zip_code': '123',
         'address_form-city': 'Mendoza',
         'address_form-state': 'Mendoza',
-        'address_form-country': 'Argentina',
+        'address_form-country': 'AR',
         'bankaccount_form-bank_cbu_file': bank_cbu_file or file_mock,
         'bankaccount_form-bank_info': bank_info or get_bank_info_example(),
         'bankaccount_form-bank_account_number': '123214',
@@ -63,6 +65,7 @@ def taxpayer_creation_POST_factory(
 
 
 def taxpayer_edit_POST_factory(
+    eb_entity=None,
     workday_id=None,
     business_name=None,
     cuit=None,
@@ -72,6 +75,8 @@ def taxpayer_edit_POST_factory(
     return {
             'workday_id': workday_id or '1',
             'business_name': business_name or 'EB ARG',
+            'eb_entities': eb_entity or "1",
+            'country': 'AR',
             'cuit': cuit or '20-3123214-0',
             'payment_type': get_payment_type_example(payment_type),
             'payment_term': get_payment_term_example(payment_term),
