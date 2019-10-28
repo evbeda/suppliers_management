@@ -201,15 +201,17 @@ class TestTaxpayerComment(TestCase):
             'message': 'please upload updated AFIP form',
         }
 
+    def test_taxpayer_comment_persists_in_db(self):
         self.comment = TaxpayerComment.objects.create(**self.data)
 
-    def test_taxpayer_comment_persists_in_db(self):
         self.assertEqual(
             self.comment,
             TaxpayerComment.objects.last()
         )
 
     def test_taxpayer_comment_and_taxpayer_relationship(self):
+        self.comment = TaxpayerComment.objects.create(**self.data)
+
         self.assertEqual(
             self.comment.taxpayer,
             self.data['taxpayer']
