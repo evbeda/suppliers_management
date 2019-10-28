@@ -18,9 +18,7 @@ class TaxPayerFilter(FilterSet):
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
         label=_("Taxpayer state")
     )
-    taxpayer_date = DateFromToRangeFilter(
-        widget=DateRangeWidget()
-        )
+    taxpayer_date = DateFromToRangeFilter()
 
     country = CharFilter(
         widget=Select(
@@ -37,3 +35,8 @@ class TaxPayerFilter(FilterSet):
             'taxpayer_date',
             'country'
         )
+
+    def get_form_class(self):
+        form = super(FilterSet, self).get_form_class()
+        form.base_fields['taxpayer_date'].widget = DateRangeWidget()
+        return form
