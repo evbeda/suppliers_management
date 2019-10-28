@@ -1,11 +1,8 @@
-from bootstrap_datepicker_plus import DatePickerInput
 from django import forms
 
 from django.utils.translation import gettext_lazy as _
 
 from invoices_app import (
-    ENGLISH_LANGUAGE_CODE,
-    INVOICE_DATE_FORMAT,
     INVOICE_MAX_SIZE_FILE
 )
 from invoices_app.models import Invoice
@@ -29,15 +26,6 @@ class InvoiceForm(forms.ModelForm):
             'po_file',
         )
         widgets = {
-            'invoice_date': DatePickerInput(
-                options={
-                    "format": str(INVOICE_DATE_FORMAT),
-                    "locale": str(ENGLISH_LANGUAGE_CODE),
-                },
-                attrs={
-                    'placeholder': _('Invoice Date'),
-                }
-            ),
             'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Purchase Order')}),

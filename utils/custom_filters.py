@@ -4,6 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from bootstrap_datepicker_plus import DatePickerInput
 
+from invoices_app import (
+    INVOICE_DATE_FORMAT,
+    ENGLISH_LANGUAGE_CODE,
+)
+
 
 class NumericRangeWidget(RangeWidget):
     template_name = 'django_filters/widgets/multiwidget.html'
@@ -24,12 +29,14 @@ class DateRangeWidget(RangeWidget):
     def __init__(self, attrs=None):
         widgets = (
             DatePickerInput(options={
-                    "format": "MM/DD/YYYY",
+                    "format": str(INVOICE_DATE_FORMAT),
+                    "locale": str(ENGLISH_LANGUAGE_CODE)
                 },
                 attrs={'class': 'form-control', 'placeholder': _('From Date'), }
             ),
             DatePickerInput(options={
-                    "format": "MM/DD/YYYY",
+                    "format": str(INVOICE_DATE_FORMAT),
+                    "locale": str(ENGLISH_LANGUAGE_CODE)
                 },
                 attrs={'class': 'form-control', 'placeholder': _('To Date'), }
             )
