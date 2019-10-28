@@ -20,30 +20,33 @@
                             class="fa fa-plus mr-2"></i>{% trans "New Tax Payer" %}</a>
                 </div>
             </li>
-            {% if taxpayer_id %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                {% trans "Management" %}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'invoices-list' %}"><i
+                    class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
+                </div>
+            </li>
+            {% if taxpayer %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    {% trans "Invoices" %}
+                    {{ taxpayer.business_name }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}"><i
+                    <a class="dropdown-item" href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}"><i
                             class="fa fa-file-invoice mr-2"></i>{% trans "My Invoices" %}</a>
-                    <a class="dropdown-item" href="{% url 'invoice-create' taxpayer_id=taxpayer_id %}"> <i
-                            class="fa fa-plus mr-2"></i>{% trans "New Invoice" %}</a>
+                    {% if taxpayer.taxpayer_state == "APPROVED" %}
+                    <a class="dropdown-item" href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}"> 
+                        <i class="fa fa-plus mr-2"></i>{% trans "New Invoice" %}
+                    </a>
+                    {% endif %}
                 </div>
             </li>
             {% endif %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    {% trans "Management" %}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'invoices-list' %}"><i
-                            class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
-                </div>
-            </li>
         </ul>
         
         <div class="collapse navbar-collapse justify-content-end">
