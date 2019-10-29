@@ -874,7 +874,6 @@ class TestEditTaxPayerInfo(TestCase):
     @parameterized.expand([
         (
             taxpayer_edit_POST_factory(
-                eb_entity="1",
                 workday_id="1",
                 business_name="EB US",
                 cuit="20-3123214-1",
@@ -884,7 +883,6 @@ class TestEditTaxPayerInfo(TestCase):
         ),
         (
             taxpayer_edit_POST_factory(
-                eb_entity="1",
                 cuit="20-3123214-1",
             ),
             ["cuit", "business_name"],
@@ -892,7 +890,6 @@ class TestEditTaxPayerInfo(TestCase):
         ),
         (
             taxpayer_edit_POST_factory(
-                eb_entity="1",
                 payment_term=1,
             ),
             ["payment_term"],

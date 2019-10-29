@@ -112,5 +112,5 @@ setup_env.sh
 
 .vscode
 .DS_Store
-htmlcov
 fixture.json
+htmlcov

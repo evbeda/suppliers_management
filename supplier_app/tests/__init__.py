@@ -14,12 +14,6 @@ file_mock = MagicMock(spec=File)
 file_mock.name = 'test.pdf'
 file_mock.size = 50
 
-EB_entity_list = [
-    "EB_ARG",
-    "EB_USA",
-    "EB_BR",
-]
-
 STATUS_PENDING = "PENDING"
 STATUS_ACTIVE = "ACTIVE"
 STATUS_CHANGE_REQUIRED = "CHANGE REQUIRED"

@@ -119,7 +119,6 @@ class TaxPayerArgentinaBaseForm(ModelForm):
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'form-control'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
-            'eb_entity': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
