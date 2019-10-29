@@ -35,6 +35,8 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
+from simple_history.models import HistoricalRecords
+
 from supplier_app.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -1601,3 +1603,173 @@ class TestNotifyMessages(TestCase):
             follow=True,
         )
         self.assertContains(response, TAXPAYER_FORM_INVALID_MESSAGE)
+
+
+class TestTaxpayerHistory(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.ap_user = UserFactory(email="ap@eventbrite.com")
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user.groups.add(self.ap_group)
+        self.client.force_login(self.ap_user)
+
+        self.taxpayer = TaxPayerArgentinaFactory(business_name="SupraSA")
+
+    def test_create_new_row_in_history_taxpayer_table(self):
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+        TAXPAYER_POST = taxpayer_edit_POST_factory()
+
+        row_before_modification = len(self.taxpayer.history.all())
+
+        self.client.post(
+            reverse(
+                'taxpayer-update',
+                kwargs=kwargs
+            ),
+            data=TAXPAYER_POST
+        )
+
+        row_after_modification = len(self.taxpayer.history.all())
+
+        last_row_taxpayer_history = self.taxpayer.history.last()
+
+        self.assertGreater(row_after_modification, row_before_modification)
+        self.assertEqual(self.taxpayer.cuit, last_row_taxpayer_history.cuit)
+        self.assertEqual(self.taxpayer.payment_term, last_row_taxpayer_history.payment_term)
+        self.assertEqual(self.taxpayer.payment_type, last_row_taxpayer_history.payment_type)
+        self.assertEqual(self.taxpayer.workday_id, last_row_taxpayer_history.workday_id)
+        self.assertEqual(self.taxpayer.business_name, last_row_taxpayer_history.business_name)
+        self.assertEqual(self.taxpayer.taxpayer_state, last_row_taxpayer_history.taxpayer_state)
+        self.assertEqual(self.taxpayer.country, last_row_taxpayer_history.country)
+        self.assertEqual(self.taxpayer.taxpayer_comments, last_row_taxpayer_history.taxpayer_comments)
+
+    def test_create_new_row_in_history_address_table(self):
+        address = AddressFactory(taxpayer=self.taxpayer)
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+            'address_id': address.id,
+        }
+        
+        ADDRESS_POST = {
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'Argentina',
+        }
+
+        row_before_modification = len(address.history.all())
+
+        self.client.post(
+            reverse(
+                'address-update',
+                kwargs=kwargs
+            ),
+            data=ADDRESS_POST
+        )
+
+        row_after_modification = len(address.history.all())
+
+        last_row_address_history = address.history.last()
+
+        self.assertGreater(row_after_modification, row_before_modification)
+        self.assertEqual(address.street, last_row_address_history.street)
+        self.assertEqual(address.number, last_row_address_history.number)
+        self.assertEqual(address.zip_code, last_row_address_history.zip_code)
+        self.assertEqual(address.city, last_row_address_history.city)
+        self.assertEqual(address.state, last_row_address_history.state)
+        self.assertEqual(address.country, last_row_address_history.country)
+
+    def test_create_new_row_in_history_bank_account_table(self):
+        bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+            'bank_id': bank_account.id,
+        }
+
+        BANK_ACCOUNT_POST = {
+            'bank_info': get_bank_info_example("CITIBANK N.A."),
+            'bank_account_number': '123214',
+        }
+
+        row_before_modification = len(bank_account.history.all())
+
+        self.client.post(
+            reverse(
+                'bank-account-update',
+                kwargs=kwargs
+            ),
+            data=BANK_ACCOUNT_POST
+        )
+
+        row_after_modification = len(bank_account.history.all())
+
+        last_row_bank_account_history = bank_account.history.last()
+
+        self.assertGreater(row_after_modification, row_before_modification)
+        self.assertEqual(bank_account.bank_account_number, last_row_bank_account_history.bank_account_number)
+        self.assertEqual(bank_account.bank_info, last_row_bank_account_history.bank_info)
+
+    def test_history_taxpayer_should_contain_old_and_new_values(self):
+        old_name = self.taxpayer.business_name
+        self.taxpayer.business_name = "New_SupraSA"
+        new_name = self.taxpayer.business_name
+        self.taxpayer.save()
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-history',
+                kwargs={'pk': self.taxpayer.id}
+                ),
+        )
+
+        self.assertContains(response, old_name)
+        self.assertContains(response, new_name)
+        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+
+    def test_history_address_should_contain_old_and_new_values(self):
+        address = AddressFactory(taxpayer=self.taxpayer)
+
+        old_street = address.street
+        address.street = "New Street"
+        new_street = address.street
+
+        address.save()
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-history',
+                kwargs={'pk': address.taxpayer.id}
+                ),
+        )
+
+        self.assertContains(response, old_street)
+        self.assertContains(response, new_street)
+        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+
+    def test_history_bank_account_should_contain_old_and_new_values(self):
+        bank_account = BankAccountFactory(
+            taxpayer=self.taxpayer,
+            bank_account_number="132456789",
+            )
+
+        old_bank_account_number = bank_account.bank_account_number
+        bank_account.bank_account_number = "17508976543"
+        new_bank_account_number = bank_account.bank_account_number
+
+        bank_account.save()
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-history',
+                kwargs={'pk': bank_account.taxpayer.id}
+                ),
+        )
+
+        self.assertContains(response, old_bank_account_number)
+        self.assertContains(response, new_bank_account_number)
+        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')

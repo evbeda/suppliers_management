@@ -261,10 +261,11 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             return reverse('invoices-list')
 
 
-class InvoiceHistory(PermissionRequiredMixin, ListView):
+class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
     model = Invoice
     template_name = 'invoices_app/history-list.html'
     permission_required = CAN_VIEW_INVOICES_HISTORY_PERM
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Invoice.history.filter(id=self.kwargs['pk'])

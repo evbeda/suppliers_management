@@ -27,6 +27,7 @@ def add_group_permissions(*args, **kwargs):
             ('can_view_invoices', 'Can view invoices', content_type),
             ('can_view_all_invoices', 'Can view all invoices', content_type),
             ('can_view_invoices_history', 'Can view invoice history', content_type),
+            ('can_view_taxpayer_history', 'Can view taxpayer history', content_type),
             ('can_view_taxpayer', 'Can view taxpayers', content_type),
             ('can_view_all_taxpayers', 'Can view all taxpayers', content_type),
             ('can_edit_taxpayer', 'Can edit taxpayer', content_type),

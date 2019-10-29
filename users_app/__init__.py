@@ -23,6 +23,7 @@ CAN_CHANGE_INVOICE_STATUS_PERM = 'users_app.can_change_invoice_status'
 
 CAN_CREATE_COMPANY_PERM = 'users_app.can_create_company'
 CAN_VIEW_TAXPAYER_PERM = 'users_app.can_view_taxpayer'
+CAN_VIEW_TAXPAYER_HISTORY_PERM = 'users_app.can_view_taxpayer_history'
 CAN_CREATE_TAXPAYER_PERM = 'users_app.can_create_taxpayer'
 CAN_EDIT_TAXPAYER_PERM = 'users_app.can_edit_taxpayer'
 CAN_EDIT_TAXPAYER_ADDRESS_PERM = 'users_app.can_edit_taxpayer_address'

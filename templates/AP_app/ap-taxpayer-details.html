@@ -48,7 +48,7 @@
                             <td>
                                 <ul class="list-group">
                                     <li><a target="_blank"
-                                            href="http://docs.google.com/gview?url={{ taxpayer.AFIP_registration_file.url }}">{% trans "AFIP certificate" %}</a>
+                                            href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">{% trans "AFIP certificate" %}</a>
                                     </li>
                                     <li><a target="_blank"
                                             href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">{% trans "Withholding taxes" %}</a>
@@ -150,6 +150,9 @@
     </div>
     <div class="row justify-content-end">
         {% if is_AP %}
+        <div class="col text-rigth">
+            <span><a href="{% url 'taxpayer-history' pk=taxpayer.id %}" class="btn btn-primary float-right">{% trans "Taxpayer History" %}</a></span>
+        </div>
             {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
                 
                 {% include 'AP_app/deny-taxpayer.html'%}

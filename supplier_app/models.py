@@ -6,6 +6,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from simple_history.models import HistoricalRecords
 
 from supplier_app import (
     PAYMENT_TERMS,
@@ -76,6 +77,8 @@ class TaxPayer(models.Model):
         verbose_name=_("Comments"),
         )
 
+    history = HistoricalRecords(inherit=True)
+
     def __str__(self):
         return self.business_name
 
@@ -140,6 +143,8 @@ class Address(models.Model):
     country = models.CharField(max_length=50, verbose_name=_("Country"))
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
 
+    history = HistoricalRecords()
+
 
 class BankAccount(models.Model):
     bank_account_number = models.CharField(max_length=60, unique=True, verbose_name=_("Bank account number"))
@@ -158,6 +163,8 @@ class BankAccount(models.Model):
         verbose_name=_('Bank account certificate'),
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
     )
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return "Account_number:{}".format(

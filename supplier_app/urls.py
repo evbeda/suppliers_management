@@ -2,17 +2,18 @@ from django.conf.urls import url
 
 from supplier_app.views import (
     ApTaxpayers,
+    change_taxpayer_status,
     CompanyCreatorView,
     CompanyListView,
+    company_invite,
+    company_join,
     CreateTaxPayerView,
     EditAddressView,
     EditBankAccountView,
     EditTaxpayerView,
     SupplierDetailsView,
     SupplierHome,
-    company_invite,
-    company_join,
-    change_taxpayer_status,
+    TaxpayerHistory,
 )
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     url(r'^taxpayer/update/taxpayer_info/(?P<taxpayer_id>[0-9]+)$', EditTaxpayerView.as_view(), name='taxpayer-update'),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/update/address_info/(?P<address_id>[0-9]+)$', EditAddressView.as_view(), name='address-update'),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/update/bank_account_info/(?P<bank_id>[0-9]+)$', EditBankAccountView.as_view(), name='bank-account-update'),
+    url(r'^taxpayer/history/(?P<pk>[0-9]+)/$', TaxpayerHistory.as_view(), name='taxpayer-history'),
 ]
