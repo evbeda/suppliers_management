@@ -11,6 +11,7 @@ from supplier_app.models import (
     Company,
     CompanyUniqueToken,
     TaxPayer,
+    TaxpayerComment,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -189,4 +190,29 @@ class TestCompanyUniqueToken(TestCase):
         )
         self.assertFalse(
             companyuniquetoken.is_token_expired
+        )
+
+
+class TestTaxpayerComment(TestCase):
+    def setUp(self):
+        self.data = {
+            'taxpayer': TaxPayerFactory(),
+            'user': UserFactory(),
+            'message': 'please upload updated AFIP form',
+        }
+
+    def test_taxpayer_comment_persists_in_db(self):
+        self.comment = TaxpayerComment.objects.create(**self.data)
+
+        self.assertEqual(
+            self.comment,
+            TaxpayerComment.objects.last()
+        )
+
+    def test_taxpayer_comment_and_taxpayer_relationship(self):
+        self.comment = TaxpayerComment.objects.create(**self.data)
+
+        self.assertEqual(
+            self.comment.taxpayer,
+            self.data['taxpayer']
         )
