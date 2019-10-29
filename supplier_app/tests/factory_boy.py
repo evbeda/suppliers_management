@@ -18,6 +18,7 @@ from supplier_app import (
     PAYMENT_TERMS,
     PAYMENT_TYPES,
 )
+from supplier_app.tests import EB_entity_list
 from users_app.factory_boy import (
     UserFactory,
 )

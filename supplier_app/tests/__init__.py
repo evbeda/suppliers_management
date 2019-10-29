@@ -14,6 +14,12 @@ file_mock = MagicMock(spec=File)
 file_mock.name = 'test.pdf'
 file_mock.size = 50
 
+EB_entity_list = [
+    "EB_ARG",
+    "EB_USA",
+    "EB_BR",
+]
+
 STATUS_PENDING = "PENDING"
 STATUS_ACTIVE = "ACTIVE"
 STATUS_CHANGE_REQUIRED = "CHANGE REQUIRED"
@@ -75,8 +81,12 @@ def taxpayer_edit_POST_factory(
     return {
             'workday_id': workday_id or '1',
             'business_name': business_name or 'EB ARG',
+<<<<<<< HEAD
             'eb_entities': eb_entity or "1",
             'country': 'AR',
+=======
+            'eb_entity': eb_entity,
+>>>>>>> EB entity model added in order to allow the supplier to select many eventbrite entities as they want
             'cuit': cuit or '20-3123214-0',
             'payment_type': get_payment_type_example(payment_type),
             'payment_term': get_payment_term_example(payment_term),
