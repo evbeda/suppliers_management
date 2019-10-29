@@ -14,7 +14,8 @@ from invoices_app import (
     INVOICE_STATUS_NEW,
 )
 from supplier_app.models import (
-    TaxPayer
+    EBEntity,
+    TaxPayer,
 )
 
 from utils.invoice_lookup import invoice_status_lookup
@@ -75,6 +76,8 @@ class Invoice(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         verbose_name=_('PO file'),
     )
+
+    invoice_eb_entity = models.ForeignKey(EBEntity, default=None)
 
     history = HistoricalRecords()
 

@@ -107,6 +107,10 @@ class TaxPayer(models.Model):
     def taxpayer_identifier(self):
         return self.get_taxpayer_child().get_taxpayer_identifier()
 
+    @property
+    def eb_entities(self):
+        return [txe.eb_entity for txe in self.taxpayerebentity_set.all()]
+
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 

@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import factory
 
 from invoices_app.models import Invoice
+from supplier_app.tests.factory_boy import EBEntityFactory
 
 
 def get_due_date():
@@ -20,6 +21,7 @@ class InvoiceFactory(factory.django.DjangoModelFactory):
     net_amount = '4000'
     vat = '1200'
     total_amount = '5200'
+    invoice_eb_entity = factory.SubFactory(EBEntityFactory)
 
     class Meta:
         model = Invoice

@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "eb_name": "Eventbrite ARG",
-	    "eb_country": "AR"
+	        "eb_country": "AR"
         }
     },
     {
@@ -12,7 +12,7 @@
         "pk": 2,
         "fields": {
             "eb_name": "Eventbrite USA",
-	    "eb_country": "US"
+            "eb_country": "US"
         }
     },
     {
@@ -20,7 +20,7 @@
         "pk": 3,
         "fields": {
             "eb_name": "Eventbrite BR",
-	    "eb_country": "BR"
+            "eb_country": "BR"
         }
     }
 ]

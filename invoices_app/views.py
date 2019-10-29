@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import (
 )
 from django.http import (
     HttpResponseBadRequest,
+    HttpResponseRedirect,
 )
 from django.shortcuts import (
     get_object_or_404,
@@ -60,8 +61,9 @@ from invoices_app.models import (
 
 from supplier_app import TAXPAYER_STATUS_APPROVED
 from supplier_app.models import (
-    TaxPayer,
     Address,
+    EBEntity,
+    TaxPayer,
 )
 
 from users_app.decorators import (
@@ -166,12 +168,18 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
             form.errors['invoice_number'] = _('The invoice {} already exists').format(invoice_number)
             return super().form_invalid(form)
 
-        return super().form_valid(form)
+        invoice = form.save(commit=False)
+        EBEntity.objects.get(pk=form.cleaned_data['eb_entity'])
+        invoice.invoice_eb_entity = EBEntity.objects.get(pk=form.cleaned_data['eb_entity'])
+        invoice.save()
+
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         context['is_AP'] = self.request.user.is_AP
+        context['eb_entities'] = TaxPayer.objects.get(pk=context['taxpayer_id']).eb_entities
         return context
 
     def get_form_class(self):
@@ -202,6 +210,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             taxpayer_id = Invoice.objects.get(id=int(self.kwargs['pk'])).taxpayer.id
         context['taxpayer_id'] = taxpayer_id
         context['is_AP'] = self.request.user.is_AP
+        context['eb_entities'] = TaxPayer.objects.get(pk=context['taxpayer_id']).eb_entities
         return context
 
     def get_success_url(self):
@@ -218,9 +227,14 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
 
     def post(self, request, *args, **kwargs):
         # Changing the status
-        invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-        invoice.status = invoice_status_lookup(INVOICE_STATUS_NEW)
-        invoice.save()
+        try:
+            invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
+            invoice.status = invoice_status_lookup(INVOICE_STATUS_NEW)
+            invoice.invoice_eb_entity = EBEntity.objects.get(pk=request.POST['eb_entity'])
+            invoice.save()
+        except KeyError:
+            self.object = self.get_object()
+            super().form_invalid(self.get_form())
 
         if request.user.is_AP:
             subject = _('Eventbrite Invoice Edited')
