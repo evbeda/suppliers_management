@@ -112,3 +112,5 @@ setup_env.sh
 .DS_Store
 
 htmlcov
+
+fixture.json
