@@ -59,6 +59,7 @@ from users_app import (
     CAN_EDIT_TAXPAYER_BANK_ACCOUNT_PERM,
     CAN_EDIT_TAXPAYER_PERM,
     CAN_VIEW_ALL_TAXPAYERS_PERM,
+    CAN_VIEW_TAXPAYER_HISTORY_PERM,
     CAN_VIEW_TAXPAYER_PERM,
     COMPANY_USER_CAN_APPROVE_PERM,
     SUPPLIER_ROLE_PERM,
@@ -287,6 +288,20 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         taxpayer_id = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
+
+class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
+    model = TaxPayerArgentina
+    template_name = 'AP_app/taxpayer-history-list.html'
+    permission_required = CAN_VIEW_TAXPAYER_HISTORY_PERM
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['taxpayer_history'] = TaxPayerArgentina.history.filter(id=self.kwargs['pk'])
+        context['is_AP'] = self.request.user.is_AP
+        for taxpayer in context['taxpayer_history'].values():
+            context['address_history'] = Address.history.filter(taxpayer_id=taxpayer.get('id'))
+            context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))        
+        return context
 
 @transaction.atomic
 def company_invite(request):
