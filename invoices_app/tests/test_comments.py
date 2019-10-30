@@ -5,10 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from invoices_app import (
-    INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_REJECTED,
     INVOICE_STATUS_CHANGES_REQUEST,
-    INVOICE_STATUS_PAID,
     INVOICE_MAX_SIZE_FILE
 )
 from invoices_app.factory_boy import InvoiceFactory
@@ -20,6 +17,7 @@ from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from users_app.factory_boy import UserFactory
 
 from utils.invoice_lookup import invoice_status_lookup
+from utils.history import invoice_history_comments
 
 
 class CommentsTest(TestBase):
@@ -37,7 +35,7 @@ class CommentsTest(TestBase):
         # Given an invoice and a logged AP
         # invoice : self.invoice
         self.client.force_login(self.ap_user)
-
+        old_status = self.invoice.get_status_display()
         # When AP changes its state
         response = self.client.post(
             reverse(
@@ -48,15 +46,14 @@ class CommentsTest(TestBase):
             ),
             {'status': invoice_status_lookup(new_status)}
         )
-        # Then the invoice should have a comment associated to it with its message
-        comment = Comment.objects.filter(
-            invoice=self.invoice
-        ).latest('comment_date_received')
 
+        # Then the invoice should have a comment associated to it with its message
+        comment = invoice_history_comments(self.invoice)[0]
         self.assertEqual(
-            str(comment),
-            '{} has changed the invoice status to {}'.format(
-                self.ap_user.email,
+            comment.message,
+            'Changed: \n{} from {} to {}\n'.format(
+                'Status',
+                old_status,
                 new_status
             )
         )
@@ -67,6 +64,7 @@ class CommentsTest(TestBase):
         # Given an invoice and a logged Supplier
         # invoice : self.invoice
         self.client.force_login(self.user)
+        old_invoice_number = self.invoice.invoice_number
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         self.invoice.save()
 
@@ -82,15 +80,14 @@ class CommentsTest(TestBase):
             self.invoice_post_data
         )
         # Then the invoice should have a comment associated to it with its message
-        comment = Comment.objects.filter(
-            invoice = self.invoice
-        ).latest('comment_date_received')
-
-        self.assertEqual(
-            str(comment),
-            '{} has changed the invoice'.format(
-                self.user.email,
-            )
+        comment = invoice_history_comments(self.invoice)[-1]
+        self.assertIn(
+            '{} from 1234 to 987654321'.format(
+                'Invoice Number',
+                old_invoice_number,
+                self.invoice.invoice_number,
+            ),
+            comment.message,
         )
         self.assertEqual(comment.user, self.user)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
@@ -105,7 +102,8 @@ class CommentsTest(TestBase):
 
         # When AP writes a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -115,16 +113,13 @@ class CommentsTest(TestBase):
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
         self.assertEqual(
             comment.message,
-            '{} {}'.format(
-                self.ap_user,
-                message
-            )
+            message
         )
         self.assertEqual(comment.user, self.ap_user)
 
@@ -142,7 +137,8 @@ class CommentsTest(TestBase):
 
         # When AP writes a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -152,16 +148,13 @@ class CommentsTest(TestBase):
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
         self.assertEqual(
             comment.message,
-            '{} {}'.format(
-                self.user,
-                message
-            )
+            message
         )
         self.assertEqual(comment.user, self.user)
 
@@ -172,7 +165,8 @@ class CommentsTest(TestBase):
 
         # When AP writes an empty comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -208,7 +202,8 @@ class CommentsTest(TestBase):
 
         # When the user posts a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -218,16 +213,13 @@ class CommentsTest(TestBase):
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
         self.assertEqual(
             comment.message,
-            '{} {}'.format(
-                self.user,
-                message
-            )
+            message
         )
         self.assertEqual(comment.user, self.user)
 
@@ -238,7 +230,8 @@ class CommentsTest(TestBase):
 
         # When the user posts a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice_from_other_user.id,
                 },
@@ -255,7 +248,8 @@ class CommentsTest(TestBase):
 
         # When the user posts a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -273,7 +267,8 @@ class CommentsTest(TestBase):
 
         # When the user posts a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
@@ -304,29 +299,27 @@ class CommentsTest(TestBase):
 
         # When AP writes a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
             ),
             {
-            'message': message,
-            'invoice_file': self.file_mock,
+                'message': message,
+                'invoice_file': self.file_mock,
             }
         )
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
         self.assertEqual(
             comment.message,
-            '{} {}'.format(
-                self.ap_user,
-                message
-            )
+            message
         )
         self.assertEqual(comment.user, self.ap_user)
         self.assertTrue(self.file_mock.name in comment.comment_file.name)
@@ -346,34 +339,30 @@ class CommentsTest(TestBase):
 
         # When supplier writes a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
             ),
             {
-            'message': message,
-            'invoice_file': self.file_mock
+                'message': message,
+                'invoice_file': self.file_mock
             }
         )
 
         # Then the invoice should have a comment associated to it with its message
         comment = Comment.objects.filter(
-            invoice = self.invoice
+            invoice=self.invoice
         ).latest('comment_date_received')
 
         self.assertEqual(expected_status_code, response.status_code)
         self.assertEqual(
             comment.message,
-            '{} {}'.format(
-                self.user,
-                message
-            )
+            message
         )
         self.assertEqual(comment.user, self.user)
         self.assertTrue(self.file_mock.name in comment.comment_file.name)
-
-
 
     @parameterized.expand([
         ('test.xml', 20, ['Only .pdf allowed']),
@@ -393,14 +382,15 @@ class CommentsTest(TestBase):
         self.client.force_login(self.user)
         # When supplier writes a comment
         response = self.client.post(
-            reverse('post-comment',
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
             ),
             {
-            'message': 'Valid Text',
-            'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
+                'message': 'Valid Text',
+                'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             },
             follow=True
         )
@@ -422,15 +412,16 @@ class CommentsTest(TestBase):
         # invoice : self.invoice
         self.client.force_login(self.user)
         # When supplier writes a comment
-        response = self.client.post(
-            reverse('post-comment',
+        self.client.post(
+            reverse(
+                'post-comment',
                 kwargs={
                     'pk': self.invoice.id,
                 },
             ),
             {
-            'message': 'Valid Text',
-            'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
+                'message': 'Valid Text',
+                'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             },
             follow=True
         )

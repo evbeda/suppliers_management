@@ -1,5 +1,6 @@
-import urllib
 from datetime import timedelta
+from itertools import chain
+import urllib
 
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
 from django.contrib import messages
@@ -68,19 +69,19 @@ from users_app.decorators import (
 )
 from users_app.mixins import IsUserCompanyInvoice, TaxPayerPermissionMixin
 
+from utils.file_validator import validate_file
+from utils.history import invoice_history_comments
 from utils.invoice_lookup import invoice_status_lookup
-from utils.send_email import (
-    build_mail_html,
-    get_user_emails_by_tax_payer_id,
-    send_email_notification
-)
 from utils.reports import (
     generate_xls,
     ExcelReportInputParams,
     generate_response_xls,
 )
-
-from utils.file_validator import validate_file
+from utils.send_email import (
+    build_mail_html,
+    get_user_emails_by_tax_payer_id,
+    send_email_notification
+)
 
 
 class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
@@ -170,6 +171,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        context['is_AP'] = self.request.user.is_AP
         return context
 
     def get_form_class(self):
@@ -199,6 +201,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         if not taxpayer_id:
             taxpayer_id = Invoice.objects.get(id=int(self.kwargs['pk'])).taxpayer.id
         context['taxpayer_id'] = taxpayer_id
+        context['is_AP'] = self.request.user.is_AP
         return context
 
     def get_success_url(self):
@@ -219,14 +222,6 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         invoice.status = invoice_status_lookup(INVOICE_STATUS_NEW)
         invoice.save()
 
-        # Creating a comment
-        Comment.objects.create(
-            user=request.user,
-            invoice=invoice,
-            message=_('{} has changed the invoice').format(
-                request.user.email,
-            )
-        )
         if request.user.is_AP:
             subject = _('Eventbrite Invoice Edited')
             upper_text = _('Your Invoice # {} was edited by an administrator. \
@@ -239,9 +234,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
             send_email_notification.apply_async([subject, message, recipient_list])
 
-        # Change the invoices values
-        self.object = self.get_object()
-        return super(InvoiceUpdateView, self).post(request, *args, **kwargs)
+        return super(UpdateView, self).post(request, *args, **kwargs)
 
     def user_has_permission(self):
         if not self.request.user.has_perm(CAN_CHANGE_INVOICE_STATUS_PERM):
@@ -260,6 +253,19 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
         else:
             return reverse('invoices-list')
+
+    def get_form_class(self):
+        form = self.form_class
+        form.base_fields['invoice_date'].widget = DatePickerInput(
+                options={
+                    "format": str(INVOICE_DATE_FORMAT),
+                    "locale": str(ENGLISH_LANGUAGE_CODE),
+                },
+                attrs={
+                    'placeholder': _('Invoice Date'),
+                }
+            )
+        return form
 
 
 class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
@@ -282,22 +288,10 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
         return context
 
 
-def invoice_history_changes(record):
-    changes = []
-    while record.next_record:
-        next_record = record.next_record
-        delta = next_record.diff_against(record)
-        for change in delta.changes:
-            changes.append({'field': change.field, 'old': change.old, 'new': change.new})
-        record = next_record
-    return changes
-
-
 @permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
 @is_invoice_for_user()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
-    available_status_values = [value for (_, value) in INVOICE_STATUS]
     available_status_keys = [key for (key, _) in INVOICE_STATUS]
 
     if status not in available_status_keys:
@@ -307,16 +301,7 @@ def change_invoice_status(request, pk):
     invoice.status = status
     invoice.save()
 
-    # Make a comment
-    status_message = available_status_values[available_status_keys.index(invoice.status)]
-    Comment.objects.create(
-        invoice=invoice,
-        user=request.user,
-        message=_('{} has changed the invoice status to {}').format(
-            request.user.email,
-            status_message,
-        )
-    )
+    # Email
     subject = _('Invoice {} changed status to {}').format(
             invoice.invoice_number,
             invoice.get_status_display(),
@@ -342,9 +327,24 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
     login_url = '/'
     permission_required = CAN_VIEW_INVOICES_PERM
 
+    def get_comments(self, invoice):
+        comments = Comment.objects.filter(
+            invoice=invoice,
+        ).order_by('-comment_date_received')
+
+        history_comments = invoice_history_comments(invoice)
+
+        result_list = sorted(
+            chain(comments, history_comments),
+            key=lambda instance: instance.comment_date_received,
+            reverse=True,
+        )
+        return result_list
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['invoice'] = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        context['invoice'] = invoice
         father_taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['is_AP'] = self.request.user.is_AP
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
@@ -354,9 +354,7 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
-        context['comments'] = Comment.objects.filter(
-            invoice=context['invoice']
-        ).order_by('-comment_date_received')
+        context['comments'] = self.get_comments(invoice)
         return context
 
 
@@ -367,7 +365,7 @@ def post_a_comment(request, pk):
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
-    
+
     if request.FILES:
         is_valid, msgs = validate_file(
             request.FILES['invoice_file'],
@@ -391,10 +389,7 @@ def post_a_comment(request, pk):
     Comment.objects.create(
         invoice=invoice,
         user=request.user,
-        message='{} {}'.format(
-            request.user.email,
-            request.POST['message'],
-        ),
+        message=request.POST['message'],
         comment_file=request.FILES.get('invoice_file'),
     )
 
