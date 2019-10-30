@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from parameterized import parameterized
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group

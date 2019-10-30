@@ -25,12 +25,7 @@ class UserLanguageMiddleware(superclass):
         if not user or not user.is_authenticated:
             return response
 
-        user_language = user.preferred_language
-
-        if not user_language:
-            return response
-
-        translation.activate(user_language)
-        request.session[translation.LANGUAGE_SESSION_KEY] = user_language
+        translation.activate(user.preferred_language)
+        request.session[translation.LANGUAGE_SESSION_KEY] = user.preferred_language
 
         return response

@@ -72,19 +72,20 @@ def set_user_language(request):
     if not request.POST.get('next'):
         return HttpResponseBadRequest()
 
+    user = User.objects.filter(id=request.user.id).first()
+    if not user:
+        return set_language(request)
+
+    if user.preferred_language != request.POST['language']:
+        user.preferred_language = request.POST['language']
+        user.save()
+        request.user.preferred_language = request.POST['language']
+
     response = set_language(request)
 
     if response.status_code == HTTPStatus.NO_CONTENT:
         return response
 
     activate(request.POST['language'])
-
-    user = User.objects.filter(id=request.user.id).first()
-    if not user:
-        return response
-
-    if user.preferred_language != request.POST['language']:
-        user.preferred_language = request.POST['language']
-        user.save()
 
     return response
