@@ -40,14 +40,16 @@
             <tbody>
                 {% if not object_list%}
                 <tr>
-                    <td class="table-danger text-center" colspan="7">{% trans "No invoices" %} <a
-                            href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">{% trans "Create one?" %}</a></td>
+                    <td class="table-danger text-center" colspan="7">{% trans "No invoices" %}
+                        {% if taxpayer.taxpayer_state == "APPROVED" %}
+                        <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">{% trans "Create one?" %}</a></td>
+                        {% endif %}
                 </tr>
                 {% endif %}
                 {% for invoice in object_list %}
                 <tr>
                     <th scope="row">{{invoice.id}}</th>
-                    <td>{{invoice.invoice_date_received}}</td>
+                    <td>{{invoice.invoice_date_received|date:"d M, Y"}}</td>
                     <td>{{invoice.invoice_number}}</td>
                     <td>{{invoice.po_number}}</td>
                     <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>

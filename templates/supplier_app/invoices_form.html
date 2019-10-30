@@ -6,7 +6,11 @@
 {% endblock %}
 
 {% block content %}
+{% if is_AP %}
+  {% include 'AP_app/navbar.html' %}
+{% else %}
 {% include 'supplier_app/navbar.html' %}
+  {% endif %}
 {% if form.non_field_errors %}
 <div class="row justify-content-center mt-2">
     {% for err in form.non_field_errors %}
@@ -18,7 +22,11 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h4 class="text-center py-4">{% trans "New Invoice" %}</h4>
+      {% if invoice %}
+      <p class="text-center py-4 h3">{% trans "Update Invoice" %}</p>
+      {% else %}
+      <p class="text-center py-4 h3">{% trans "Create Invoice" %}</p>
+      {% endif %}
     </div>
       <form id="invoiceForm" method="post" class="form-row" enctype="multipart/form-data">
         <div class="col-md-2">
@@ -153,7 +161,13 @@
           <button id="submitBtn" type="submit" class="btn btn-primary">
             {% trans "Submit" %}
           </button>
+          {% if invoice %}
+          <a class='btn btn-danger' href="{% url 'invoices-detail' taxpayer_id=taxpayer_id pk=invoice.id %}">{% trans "Cancel" %}</a>
+          {% elif is_AP %}
+          <a class='btn btn-danger' href="{% url 'invoices-list' %}">{% trans "Cancel" %}</a>
+          {% else %}
           <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">{% trans "Cancel" %}</a>
+          {% endif %}
         </div>
         {% csrf_token %}
       </form>
