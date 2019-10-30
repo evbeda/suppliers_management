@@ -9,3 +9,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
     email = factory.Sequence(lambda n: 'person{}@gmail.com'.format(n))
+
+
+class ApUserFactory(UserFactory):
+    email = "ap@eventbrite.com"

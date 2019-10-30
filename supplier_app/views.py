@@ -297,9 +297,10 @@ class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_history'] = TaxPayerArgentina.history.filter(id=self.kwargs['pk'])
+        context['is_AP'] = self.request.user.is_AP
         for taxpayer in context['taxpayer_history'].values():
             context['address_history'] = Address.history.filter(taxpayer_id=taxpayer.get('id'))
-            context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))
+            context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))        
         return context
 
 @transaction.atomic

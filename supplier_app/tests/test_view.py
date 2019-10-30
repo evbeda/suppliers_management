@@ -91,7 +91,10 @@ from supplier_app.views import (
 )
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
-from users_app.factory_boy import UserFactory
+from users_app.factory_boy import (
+    UserFactory,
+    ApUserFactory,
+)
 
 
 class TestCreateTaxPayer(TestCase):
@@ -1608,7 +1611,7 @@ class TestNotifyMessages(TestCase):
 class TestTaxpayerHistory(TestCase):
     def setUp(self):
         self.client = Client()
-        self.ap_user = UserFactory(email="ap@eventbrite.com")
+        self.ap_user = ApUserFactory()
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user.groups.add(self.ap_group)
         self.client.force_login(self.ap_user)
@@ -1620,7 +1623,10 @@ class TestTaxpayerHistory(TestCase):
             'taxpayer_id': self.taxpayer.id,
         }
 
-        TAXPAYER_POST = taxpayer_edit_POST_factory()
+        TAXPAYER_POST = QueryDict("", mutable=True)
+        TAXPAYER_POST.update(
+            taxpayer_edit_POST_factory()
+        )
 
         row_before_modification = len(self.taxpayer.history.all())
 
@@ -1629,22 +1635,24 @@ class TestTaxpayerHistory(TestCase):
                 'taxpayer-update',
                 kwargs=kwargs
             ),
-            data=TAXPAYER_POST
+            data=TAXPAYER_POST,
         )
 
         row_after_modification = len(self.taxpayer.history.all())
 
-        last_row_taxpayer_history = self.taxpayer.history.last()
+        last_row_taxpayer_history = self.taxpayer.history.latest()
+        updated_taxpayer = TaxPayerArgentina.objects.get(pk=self.taxpayer.id)
 
         self.assertGreater(row_after_modification, row_before_modification)
-        self.assertEqual(self.taxpayer.cuit, last_row_taxpayer_history.cuit)
-        self.assertEqual(self.taxpayer.payment_term, last_row_taxpayer_history.payment_term)
-        self.assertEqual(self.taxpayer.payment_type, last_row_taxpayer_history.payment_type)
-        self.assertEqual(self.taxpayer.workday_id, last_row_taxpayer_history.workday_id)
-        self.assertEqual(self.taxpayer.business_name, last_row_taxpayer_history.business_name)
-        self.assertEqual(self.taxpayer.taxpayer_state, last_row_taxpayer_history.taxpayer_state)
-        self.assertEqual(self.taxpayer.country, last_row_taxpayer_history.country)
-        self.assertEqual(self.taxpayer.taxpayer_comments, last_row_taxpayer_history.taxpayer_comments)
+
+        self.assertEqual(updated_taxpayer.cuit, last_row_taxpayer_history.cuit)
+        self.assertEqual(updated_taxpayer.payment_term, last_row_taxpayer_history.payment_term)
+        self.assertEqual(updated_taxpayer.payment_type, last_row_taxpayer_history.payment_type)
+        self.assertEqual(updated_taxpayer.workday_id, last_row_taxpayer_history.workday_id)
+        self.assertEqual(updated_taxpayer.business_name, last_row_taxpayer_history.business_name)
+        self.assertEqual(updated_taxpayer.taxpayer_state, last_row_taxpayer_history.taxpayer_state)
+        self.assertEqual(updated_taxpayer.country, last_row_taxpayer_history.country)
+        self.assertEqual(updated_taxpayer.taxpayer_comments, last_row_taxpayer_history.taxpayer_comments)
 
     def test_create_new_row_in_history_address_table(self):
         address = AddressFactory(taxpayer=self.taxpayer)
@@ -1652,7 +1660,7 @@ class TestTaxpayerHistory(TestCase):
             'taxpayer_id': self.taxpayer.id,
             'address_id': address.id,
         }
-        
+
         ADDRESS_POST = {
             'address_form-street': 'San Martin',
             'address_form-number': '21312',
@@ -1674,15 +1682,17 @@ class TestTaxpayerHistory(TestCase):
 
         row_after_modification = len(address.history.all())
 
-        last_row_address_history = address.history.last()
+        last_row_address_history = address.history.latest()
+        updated_address = Address.objects.get(pk=address.id)
 
         self.assertGreater(row_after_modification, row_before_modification)
-        self.assertEqual(address.street, last_row_address_history.street)
-        self.assertEqual(address.number, last_row_address_history.number)
-        self.assertEqual(address.zip_code, last_row_address_history.zip_code)
-        self.assertEqual(address.city, last_row_address_history.city)
-        self.assertEqual(address.state, last_row_address_history.state)
-        self.assertEqual(address.country, last_row_address_history.country)
+
+        self.assertEqual(updated_address.street, last_row_address_history.street)
+        self.assertEqual(updated_address.number, last_row_address_history.number)
+        self.assertEqual(updated_address.zip_code, last_row_address_history.zip_code)
+        self.assertEqual(updated_address.city, last_row_address_history.city)
+        self.assertEqual(updated_address.state, last_row_address_history.state)
+        self.assertEqual(updated_address.country, last_row_address_history.country)
 
     def test_create_new_row_in_history_bank_account_table(self):
         bank_account = BankAccountFactory(taxpayer=self.taxpayer)
@@ -1708,11 +1718,13 @@ class TestTaxpayerHistory(TestCase):
 
         row_after_modification = len(bank_account.history.all())
 
-        last_row_bank_account_history = bank_account.history.last()
+        last_row_bank_account_history = bank_account.history.latest()
+        updated_bank = BankAccount.objects.get(pk=bank_account.id)
 
         self.assertGreater(row_after_modification, row_before_modification)
-        self.assertEqual(bank_account.bank_account_number, last_row_bank_account_history.bank_account_number)
-        self.assertEqual(bank_account.bank_info, last_row_bank_account_history.bank_info)
+
+        self.assertEqual(updated_bank.bank_account_number, last_row_bank_account_history.bank_account_number)
+        self.assertEqual(updated_bank.bank_info, last_row_bank_account_history.bank_info)
 
     def test_history_taxpayer_should_contain_old_and_new_values(self):
         old_name = self.taxpayer.business_name
@@ -1726,9 +1738,13 @@ class TestTaxpayerHistory(TestCase):
                 kwargs={'pk': self.taxpayer.id}
                 ),
         )
-
         self.assertContains(response, old_name)
         self.assertContains(response, new_name)
+
+        # last: means last in the table, so it is old data
+        self.assertEqual(old_name, self.taxpayer.history.last().business_name)
+        # latest: means that is updated data
+        self.assertEqual(new_name, self.taxpayer.history.latest().business_name)
         self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
 
     def test_history_address_should_contain_old_and_new_values(self):
@@ -1749,13 +1765,18 @@ class TestTaxpayerHistory(TestCase):
 
         self.assertContains(response, old_street)
         self.assertContains(response, new_street)
+
+        # last: means last in the table, so it is old data
+        self.assertEqual(old_street, address.history.last().street)
+        # latest: means that is updated data
+        self.assertEqual(new_street, address.history.latest().street)
         self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
 
     def test_history_bank_account_should_contain_old_and_new_values(self):
         bank_account = BankAccountFactory(
             taxpayer=self.taxpayer,
             bank_account_number="132456789",
-            )
+        )
 
         old_bank_account_number = bank_account.bank_account_number
         bank_account.bank_account_number = "17508976543"
@@ -1772,4 +1793,9 @@ class TestTaxpayerHistory(TestCase):
 
         self.assertContains(response, old_bank_account_number)
         self.assertContains(response, new_bank_account_number)
+
+        # last: means last in the table, so it is old data
+        self.assertEqual(old_bank_account_number, bank_account.history.last().bank_account_number)
+        # latest: means that is updated data
+        self.assertEqual(new_bank_account_number, bank_account.history.latest().bank_account_number)
         self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')

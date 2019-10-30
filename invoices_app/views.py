@@ -29,6 +29,7 @@ from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
 from invoices_app import (
+    DEFAULT_NUMBER_PAGINATION,
     INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_CHANGES_REQUEST,
@@ -265,7 +266,7 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
     model = Invoice
     template_name = 'invoices_app/history-list.html'
     permission_required = CAN_VIEW_INVOICES_HISTORY_PERM
-    paginate_by = 10
+    paginate_by = DEFAULT_NUMBER_PAGINATION
 
     def get_queryset(self):
         queryset = Invoice.history.filter(id=self.kwargs['pk'])
