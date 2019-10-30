@@ -69,5 +69,9 @@ class User(AbstractUser):
     def is_ap_manager(self):
         return self.groups.filter(name='ap_manager').exists()
 
+    @property
+    def is_supplier(self):
+        return self.groups.filter(name='supplier').exists()
+
     class Meta:
         index_together = ["email"]

@@ -1,0 +1,9 @@
+{% load i18n %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="form-group">   
+	    <textarea name="message" rows=3 class="form-control" type="textarea" placeholder="write your comments here"></textarea>
+    </div>
+    <input type="submit">
+</form>

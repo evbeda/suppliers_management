@@ -116,6 +116,12 @@ class TaxPayer(models.Model):
     def deny_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Denied'].value
 
+    def change_required_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS['Change required'].value
+
+    def change_to_pending_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS['Pending'].value
+
     def has_workday_id(self):
         return True if self.workday_id else False
 

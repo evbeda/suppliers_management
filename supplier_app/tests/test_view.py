@@ -49,6 +49,7 @@ from supplier_app.constants.custom_messages import (
 )
 from supplier_app import (
     email_notifications,
+    TAXPAYER_STATUS,
 )
 from supplier_app.forms import (
     AddressCreateForm,
@@ -932,6 +933,40 @@ class TestEditTaxPayerInfo(TestCase):
                 getattr(taxpayer, attribute), value_expected[index]
             )
 
+    def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
+        status_approved = TAXPAYER_STATUS['Approved'].value
+        status_pending = TAXPAYER_STATUS['Pending'].value
+        self.taxpayer.taxpayer_state = status_approved
+        self.client2.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
+            ),
+            data=self.TAXPAYER_POST
+        )
+        edited_taxpayer_state = TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
+        self.assertEqual(
+            edited_taxpayer_state,
+            status_pending,
+        )
+
+    def test_post_edit_active_taxpayer_as_ap_dont_chang_state(self):
+        status_approved = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer.taxpayer_state = status_approved
+        self.taxpayer.save()
+        self.client.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
+            ),
+            data=self.TAXPAYER_POST
+        )
+        edited_taxpayer_state = TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
+        self.assertEqual(
+            edited_taxpayer_state,
+            status_approved
+        )
+
 
 class TestEditAddressInfo(TestCase):
     def setUp(self):
@@ -999,7 +1034,7 @@ class TestEditAddressInfo(TestCase):
         supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         supplier_user.groups.add(supplier_group)
 
-        company_user_permission = CompanyUserPermissionFactory(
+        CompanyUserPermissionFactory(
             user=supplier_user,
             company=self.taxpayer.company
         )
@@ -1090,7 +1125,7 @@ class TestEditBankAccountInfo(TestCase):
         supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         supplier_user.groups.add(supplier_group)
 
-        company_user_permission = CompanyUserPermissionFactory(
+        CompanyUserPermissionFactory(
             user=supplier_user,
             company=self.taxpayer.company
         )
@@ -1578,7 +1613,6 @@ class TestApprovalRefuse(TestCase):
 
 
 class TestNotifyMessages(TestCase):
-
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()

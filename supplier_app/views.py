@@ -246,6 +246,13 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
+    def post(self, request, *args, **kwargs):
+        if request.user.is_supplier:
+            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
+            taxpayer.change_to_pending_taxpayer()
+            taxpayer.save()
+        return super().post(request, *args, **kwargs)
+
 
 class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
