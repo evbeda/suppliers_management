@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from parameterized import parameterized
+from unittest.mock import patch
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
@@ -27,9 +28,11 @@ class CommentsTest(TestBase):
         ('REJECTED'),
         ('PAID',),
     ])
+    @patch('invoices_app.views._send_email_when_change_invoice_status')
     def test_generate_a_comment_when_invoice_changes_his_state(
         self,
         new_status,
+        _
     ):
         # Given an invoice and a logged AP
         # invoice : self.invoice
@@ -59,7 +62,8 @@ class CommentsTest(TestBase):
         self.assertEqual(comment.user, self.ap_user)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
 
-    def test_supplier_invoice_edit_and_it_exists_a_new_comment(self):
+    @patch('invoices_app.views._send_email_when_editing_invoice')
+    def test_supplier_invoice_edit_and_it_exists_a_new_comment(self, _):
         # Given an invoice and a logged Supplier
         # invoice : self.invoice
         self.client.force_login(self.user)
@@ -94,7 +98,13 @@ class CommentsTest(TestBase):
     @parameterized.expand([
         ('Valid text', HTTPStatus.FOUND),
     ])
-    def test_ap_can_add_a_comment_in_an_invoice(self, message, expected_status_code):
+    @patch('invoices_app.views._send_email_when_posting_a_comment')
+    def test_ap_can_add_a_comment_in_an_invoice(
+        self,
+        message,
+        expected_status_code,
+        _,
+    ):
         # Given an invoice and a logged AP
         # invoice : self.invoice
         self.client.force_login(self.ap_user)
@@ -287,10 +297,12 @@ class CommentsTest(TestBase):
     @parameterized.expand([
         ('Valid text', HTTPStatus.FOUND),
     ])
+    @patch('invoices_app.views._send_email_when_posting_a_comment')
     def test_ap_can_add_a_comment_in_an_invoice_with_a_file(
         self,
         message,
         expected_status_code,
+        _
     ):
         # Given an invoice and a logged AP
         # invoice : self.invoice
