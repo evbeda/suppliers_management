@@ -1467,6 +1467,26 @@ class TestCompanyListView(TestCase):
         response = self.client.get(reverse('company-list'))
         self.assertTemplateUsed(response, 'supplier_app/company_list.html')
 
+    def test_company_search(self):
+        company_list = [
+            CompanyFactory(name='Test name'),
+            CompanyFactory(name='test name'),
+            CompanyFactory(name='testing name'),
+            CompanyFactory(name='name test'),
+        ]
+        unmatching_company_list = [
+            CompanyFactory(name='unmatching name'),
+            CompanyFactory(name='tes name'),
+        ]
+        response = self.client.get(
+            reverse('company-list'),
+            {'company': 'test'},
+        )
+        for company in company_list:
+            self.assertIn(company, response.context['company_list'])
+        for company in unmatching_company_list:
+            self.assertNotIn(company, response.context['company_list'])
+
 
 class TestCompanyInvite(TestCase):
     def setUp(self):

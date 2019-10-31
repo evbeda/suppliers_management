@@ -12,6 +12,22 @@
     <div class="row justify-content-center m-3">
         <h1 class='text-center'> {% trans "Company List" %}</h1>
     </div>
+    <div class="row">
+        <div class="col">
+            <form class="form-inline py-2" action='{% url "company-list" %}' method="get">
+                <div class="form-group">
+                    <label for="search">{% trans "Search by name" %}</label>
+                    <input id="search" class="form-control mx-3" list="companies" name="company">
+                    <datalist id="companies">
+                    {% for company in all_companies %}
+                      <option value={{company.name}}>
+                    {% endfor %}
+                    </datalist>
+                    <input class="btn btn-primary" type="submit">
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <table class="table table-hover table-sm">
             <thead class="thead-eb-dark">
