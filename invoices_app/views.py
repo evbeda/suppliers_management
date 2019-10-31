@@ -230,6 +230,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             )
 
     def post(self, request, *args, **kwargs):
+
         # Changing the status
         try:
             invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
