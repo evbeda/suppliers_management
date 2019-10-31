@@ -30,7 +30,10 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
 )
-from supplier_app.change_status_strategy import get_strategy
+from supplier_app.change_status_strategy import (
+    get_strategy,
+    StrategyChangeRequired,
+)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
@@ -48,6 +51,7 @@ from supplier_app.models import (
     EBEntity,
     TaxPayer,
     TaxPayerArgentina,
+    TaxpayerComment,
     TaxPayerEBEntity,
 )
 from users_app.mixins import (
@@ -221,6 +225,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
+        # context['comments'] = context['taxpayer'].taxpayercomment_set.get()
         context['is_AP'] = self.request.user.is_AP
         return context
 
@@ -329,8 +334,37 @@ class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
         context['is_AP'] = self.request.user.is_AP
         for taxpayer in context['taxpayer_history'].values():
             context['address_history'] = Address.history.filter(taxpayer_id=taxpayer.get('id'))
-            context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))        
+            context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))
         return context
+
+
+class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, CreateView):
+    model = TaxpayerComment
+    fields = ['message']
+    template_name = 'comments.html'
+    success_url = reverse_lazy('ap-taxpayers')
+    permission_required = CAN_EDIT_TAXPAYER_PERM
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_AP:
+            taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
+            StrategyChangeRequired.change_taxpayer_status(taxpayer)
+            StrategyChangeRequired.send_email(taxpayer)
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form = self.set_required_fields(form)
+        return super().form_valid(form)
+
+    def set_required_fields(self, form):
+        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
+        form.instance.taxpayer = taxpayer
+        form.instance.user = self.request.user
+        return form
+
 
 @transaction.atomic
 def company_invite(request):

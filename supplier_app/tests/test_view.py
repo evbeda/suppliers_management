@@ -35,8 +35,6 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
-from simple_history.models import HistoricalRecords
-
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -64,6 +62,7 @@ from supplier_app.models import (
     CompanyUniqueToken,
     TaxPayer,
     TaxPayerArgentina,
+    TaxpayerComment,
 )
 from supplier_app.tests import (
     taxpayer_creation_POST_factory,
@@ -1917,3 +1916,110 @@ class TestTaxpayerHistory(TestCase):
         # latest: means that is updated data
         self.assertEqual(new_bank_account_number, bank_account.history.latest().bank_account_number)
         self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+
+
+class TestTaxpayerCommentView(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
+
+        self.supplier_detail_url = 'supplier-details'
+        self.comment_post_url = 'taxpayer-comment'
+
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
+        self.company = CompanyFactory(
+            name='FakeCompany',
+            description='Best catering worldwide'
+        )
+        self.companyuserpermission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.supplier_user
+        )
+        self.taxpayer_example = TaxPayerArgentinaFactory(
+            afip_registration_file=self.file_mock,
+            witholding_taxes_file=self.file_mock,
+            company=self.company,
+        )
+        BankAccountFactory(
+            taxpayer=self.taxpayer_example,
+            bank_cbu_file=self.file_mock
+            )
+        AddressFactory(taxpayer=self.taxpayer_example)
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer_example.id
+        }
+        self.comment_post = {
+            'message': 'Testing comment',
+            'user': self.supplier_user.id,
+            'taxpayer': self.taxpayer_example.id
+        }
+
+    def _make_comment_post(self):
+        return self.client.post(
+            reverse(
+                self.comment_post_url,
+                kwargs=self.kwargs
+            ),
+            data=self.comment_post,
+            follow=True
+        )
+
+    def test_request_change_btn_for_ap_in_comment_submit_form(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertContains(response, 'Request Change')
+
+    def test_make_comment_btn_for_supplier_in_comment_submit_form(self):
+        self.client.force_login(self.supplier_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertContains(response, 'Make Comment')
+
+    def test_supplier_make_comment(self):
+        self.client.force_login(self.supplier_user)
+        self._make_comment_post()
+        self.assertEqual(
+            TaxpayerComment.objects.last().message,
+            self.comment_post['message']
+        )
+
+    def test_supplier_without_taxpayer_ownership_cant_make_comment(self):
+
+        user = UserFactory(email='supplier@gmail.com')
+        user.groups.add(self.supplier_group)
+
+        self.client.force_login(user)
+        response = self._make_comment_post()
+        self.assertEqual(HTTPStatus.NOT_FOUND, response.status_code)
+
+    def test_ap_make_comment(self):
+        self.client.force_login(self.ap_user)
+        self._make_comment_post()
+        # comment persist
+        self.assertEqual(
+            TaxpayerComment.objects.last().message,
+            self.comment_post['message']
+        )
+        # taxpayer state changes to change required
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
+            TAXPAYER_STATUS['Change required'].value
+        )
