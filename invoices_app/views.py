@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
+from django.forms import ValidationError
 from django.http import (
     HttpResponseBadRequest,
     HttpResponseRedirect,
@@ -20,6 +21,7 @@ from django.urls import (
     reverse,
     reverse_lazy
 )
+from django.core.validators import validate_integer
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView
 from django.views.generic.detail import DetailView
@@ -32,7 +34,6 @@ from pure_pagination.mixins import PaginationMixin
 
 from invoices_app import (
     DEFAULT_NUMBER_PAGINATION,
-    INVOICE_STATUS,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_NEW,
@@ -42,6 +43,9 @@ from invoices_app import (
     EXPORT_TO_XLS_FULL,
     INVOICE_DATE_FORMAT,
     INVOICE_MAX_SIZE_FILE,
+    NO_WORKDAY_ID_ERROR,
+    INVALID_WORKDAY_ID_ERROR,
+    AVAILABLE_INVOICE_STATUS_CHANGES,
 )
 from users_app import (
     CAN_EDIT_INVOICES_PERM,
@@ -306,9 +310,8 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
 @is_invoice_for_user()
 def change_invoice_status(request, pk):
     status = request.POST.get('status')
-    available_status_keys = [key for (key, _) in INVOICE_STATUS]
 
-    if status not in available_status_keys:
+    if status not in AVAILABLE_INVOICE_STATUS_CHANGES:
         return HttpResponseBadRequest()
 
     invoice = get_object_or_404(Invoice, pk=pk)
@@ -333,6 +336,49 @@ def change_invoice_status(request, pk):
     send_email_notification.apply_async([subject, message, recipient_list])
 
     return redirect('invoices-list')
+
+
+@permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
+def approve_invoice(request, pk):
+    status = request.POST.get('status')
+    workday_id = request.POST.get('workday_id')
+    invoice = get_object_or_404(Invoice, pk=pk)
+    if status == invoice_status_lookup(INVOICE_STATUS_APPROVED) and not request.POST.get('workday_id'):
+        messages.error(request, NO_WORKDAY_ID_ERROR)
+        return redirect(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': invoice.taxpayer.id,
+                    'pk': pk,
+                }
+            )
+        )
+    try:
+        validate_integer(workday_id)
+    except ValidationError:
+        messages.error(request, INVALID_WORKDAY_ID_ERROR)
+        return redirect(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': invoice.taxpayer.id,
+                    'pk': pk,
+                }
+            )
+        )
+    invoice.status = status
+    invoice.workday_id = workday_id
+    invoice.save()
+    return redirect(
+        reverse(
+            'invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice.taxpayer.id,
+                'pk': pk,
+            }
+        )
+    )
 
 
 class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailView):

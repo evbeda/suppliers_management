@@ -24,6 +24,8 @@ from invoices_app import (
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PAID,
     INVOICE_MAX_SIZE_FILE,
+    NO_WORKDAY_ID_ERROR,
+    INVALID_WORKDAY_ID_ERROR,
 )
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
@@ -89,23 +91,6 @@ class TestInvoice(TestBase):
         errors = reduce(lambda a, b: a+b, form.errors.values())
         for message in messages:
             self.assertTrue(message in errors)
-
-    @parameterized.expand([
-        ('test.pdf', 20, True),
-        ('test.xml', 20, False),
-        ('test.pdf', 500000000, False),
-        ('test.xml', 500000000, False),
-
-    ])
-    def test_form_po_file_is_valid(self, name_file, size_file, expected):
-        form = InvoiceForm(
-            data=self.invoice_post_data,
-            files={
-                'invoice_file': self.file_mock,
-                'po_file': SimpleUploadedFile(name_file, bytes(size_file)),
-            }
-        )
-        self.assertEqual(form.is_valid(), expected)
 
     def test_invoice_create_db(self):
         self.assertEqual(
@@ -253,7 +238,6 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     @parameterized.expand([
-        (INVOICE_STATUS_APPROVED,),
         (INVOICE_STATUS_CHANGES_REQUEST,),
         (INVOICE_STATUS_REJECTED),
         (INVOICE_STATUS_PAID,),
@@ -302,8 +286,6 @@ class TestInvoice(TestBase):
     @parameterized.expand([
         (1, 302),
         (31, 404),
-        (1, 302),
-        (31, 404),
     ])
     def test_invoice_change_status_code(self, id, expected):
         self.client.force_login(self.ap_user)
@@ -315,10 +297,79 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'status': invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST),
             }
         )
         self.assertEqual(request.status_code, expected)
+
+    def test_invoice_change_status_to_approved_no_workday_id(self):
+        self.client.force_login(self.ap_user)
+        request = self.client.post(
+            reverse(
+                'approve-invoice',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+            },
+            follow=True
+        )
+        self.assertContains(request, NO_WORKDAY_ID_ERROR)
+
+    def test_invoice_approbe_in_db(self):
+        self.client.force_login(self.ap_user)
+        self.client.post(
+            reverse(
+                'approve-invoice',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'workday_id': 123123, 
+            },
+            follow=True
+        )
+
+        invoice = get_object_or_404(Invoice, pk=self.invoice.id)
+        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_APPROVED))
+        self.assertEqual(invoice.workday_id, 123123)
+
+    def test_invoice_change_status_code_to_approved(self):
+        self.client.force_login(self.ap_user)
+        request = self.client.post(
+            reverse(
+                'approve-invoice',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'workday_id': 123123,
+            }
+        )
+        self.assertEqual(request.status_code, 302)
+
+    def test_invoice_change_status_invalid_workday_id(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.post(
+            reverse(
+                'approve-invoice',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'workday_id': "invalid id",
+            },
+            follow=True
+        )
+        self.assertContains(response, INVALID_WORKDAY_ID_ERROR)
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)

@@ -82,6 +82,17 @@
                 {% endfor %}
               </select>
             </div>
+            {% if user.is_AP%}
+            <div class="form-group col-md-5">
+                {{ form.workday_id.label_tag }} {{ form.workday_id }}
+                <small class="text-danger">
+                  {{ form.workday_id.errors }}
+                </small>
+                {% if form.workday_id.help_text %}
+                <small class="text-muted">{{ form.workday_id.help_text|safe }}</small>
+                {% endif %}
+            </div>
+            {% endif %}
           </div>
           <div class="row">
             <div class="form-group col-md-2">
@@ -136,27 +147,6 @@
           {% if form.invoice_file.errors %}
             {% for error in form.invoice_file.errors %}
               <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                {{ error }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-            {% endfor %}
-          {% endif %}
-          <div class="row ml-0 mr-0 mt-3">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupFileAddon01">{% trans "PO File" %}</span>
-              </div>
-              <div class="custom-file">
-                {{ form.po_file }}
-                <label class="custom-file-label" id='id-custom-file-label2' for="inputGroupFile01">{% trans "Choose file" %}</label>
-              </div>
-            </div>
-          </div>
-          {% if form.po_file.errors %}
-            {% for error in form.po_file.errors %}
-              <div class="alert alert-danger alert-dismissible fade show mt-3 mb-0" role="alert">
                 {{ error }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>

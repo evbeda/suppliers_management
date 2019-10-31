@@ -71,9 +71,6 @@ class TestBase(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
-        self.po_file_mock = MagicMock(spec=File)
-        self.po_file_mock.name = 'test.pdf'
-        self.po_file_mock.size = 50
 
         self.eb_entity_example = EBEntityFactory()
         self.invoice_post_data = {

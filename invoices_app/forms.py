@@ -24,7 +24,7 @@ class InvoiceForm(forms.ModelForm):
             'vat',
             'total_amount',
             'invoice_file',
-            'po_file',
+            'workday_id',
         )
         widgets = {
             'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
@@ -36,16 +36,6 @@ class InvoiceForm(forms.ModelForm):
                     'class': 'custom-file-input',
                     'name': 'invoice_file',
                     'id': 'inputGroupFile01',
-                    'aria-describedby': 'inputGroupFileAddon01',
-                    'accept': 'application/pdf',
-                }
-            ),
-            'po_file': forms.FileInput(
-                attrs={
-                    'type': 'file',
-                    'class': 'custom-file-input',
-                    'name': 'invoice_file',
-                    'id': 'inputGroupFile02',
                     'aria-describedby': 'inputGroupFileAddon01',
                     'accept': 'application/pdf',
                 }
@@ -80,6 +70,8 @@ class InvoiceForm(forms.ModelForm):
                     'placeholder': _('Invoice Number'),
                 }
             ),
+            'workday_id': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Workday ID')}),
+
         }
 
     def is_valid(self):
