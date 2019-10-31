@@ -229,31 +229,21 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
                 'invoices-list',
             )
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
+        form.instance.status = invoice_status_lookup(INVOICE_STATUS_NEW)
 
-        # Changing the status
-        try:
-            invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
-            invoice.status = invoice_status_lookup(INVOICE_STATUS_NEW)
-            invoice.invoice_eb_entity = EBEntity.objects.get(pk=request.POST['eb_entity'])
-            invoice.save()
-        except KeyError:
-            self.object = self.get_object()
-            super().form_invalid(self.get_form())
-
-        if request.user.is_AP:
+        if self.request.user.is_AP:
             subject = _('Eventbrite Invoice Edited')
             upper_text = _('Your Invoice # {} was edited by an administrator. \
-                Please check your invoice').format(invoice.invoice_number)
+                Please check your invoice').format(form.instance.invoice_number)
             message = build_mail_html(
-                invoice.taxpayer.business_name,
+                form.instance.taxpayer.business_name,
                 upper_text,
                 _('Thank you')
             )
-            recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
+            recipient_list = get_user_emails_by_tax_payer_id(form.instance.taxpayer.id)
             send_email_notification.apply_async([subject, message, recipient_list])
-
-        return super(UpdateView, self).post(request, *args, **kwargs)
+        return super().form_valid(form)
 
     def user_has_permission(self):
         if not self.request.user.has_perm(CAN_CHANGE_INVOICE_STATUS_PERM):

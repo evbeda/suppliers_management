@@ -383,7 +383,7 @@ class TestInvoice(TestBase):
                     'pk': self.invoice.id
                 }
             ),
-            self.invoice_post_data
+            self.invoice_post_data,
         )
         self.assertEqual(res.status_code, HTTPStatus.FOUND)
         self.invoice.refresh_from_db()

@@ -65,7 +65,6 @@ class Invoice(models.Model):
     invoice_file = models.FileField(
         upload_to='file',
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         verbose_name=_('Invoice File'),
     )
     workday_id = models.PositiveIntegerField(blank=True, null=True)
