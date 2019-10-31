@@ -74,26 +74,34 @@ class InvoiceForm(forms.ModelForm):
 
         }
 
-    def is_valid(self):
-        super(InvoiceForm, self).is_valid()
-        if not self.files.get('invoice_file'):
-            self.add_error('invoice_file', 'No Invoice File')
-            return False
-
-        file_fields = list(self.files.keys())
-        files_valids = {}
-
-        for file_field in file_fields:
-            if self.files.get(file_field):
-                file_is_valid, errors = validate_file(
+    def clean_invoice_file(self):
+        import ipdb; ipdb.set_trace()
+        file_is_valid, errors = validate_file(
                     self.files[file_field],
                     INVOICE_MAX_SIZE_FILE,
                 )
+        return True
 
-                files_valids[file_field] = file_is_valid
+    # def is_valid(self):
+    #     super(InvoiceForm, self).is_valid()
+    #     if not self.files.get('invoice_file'):
+    #         self.add_error('invoice_file', 'No Invoice File')
+    #         return False
 
-                for error in errors:
-                    if not file_is_valid:
-                        self.add_error(file_field, error)
+    #     file_fields = list(self.files.keys())
+    #     files_valids = {}
 
-        return all(list(files_valids.values()))
+    #     for file_field in file_fields:
+    #         if self.files.get(file_field):
+    #             file_is_valid, errors = validate_file(
+    #                 self.files[file_field],
+    #                 INVOICE_MAX_SIZE_FILE,
+    #             )
+
+    #             files_valids[file_field] = file_is_valid
+
+    #             for error in errors:
+    #                 if not file_is_valid:
+    #                     self.add_error(file_field, error)
+
+    #     return all(list(files_valids.values()))
