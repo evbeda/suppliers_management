@@ -19,10 +19,6 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
-from supplier_app.constants.eb_entities_status import (
-    CURRENT_STATUS,
-    UNUSED_STATUS,
-)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -140,41 +136,59 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
     template_name = 'supplier_app/taxpayer-creation.html'
     permission_required = (SUPPLIER_ROLE_PERM, CAN_VIEW_TAXPAYER_PERM, CAN_CREATE_TAXPAYER_PERM)
 
-    def get_context_data(self, **kwargs):
-        kwargs.update({
+    def get(self, request, *args, **kwargs):
+        kwargs['forms'] = {
             'address_form': AddressCreateForm(),
             'taxpayer_form': TaxPayerCreateForm(),
             'bank_account_form': BankAccountCreateForm(),
-        })
-        return kwargs
+        }
+        return self.render_to_response(self.get_context_data(**kwargs))
 
     def post(self, request, *args, **kwargs):
-        forms = {
-            'taxpayer_form': TaxPayerCreateForm(
-                data=request.POST,
-                files=request.FILES),
-            'address_form': AddressCreateForm(data=request.POST),
-            'bankaccount_form': BankAccountCreateForm(
-                data=request.POST,
-                files=request.FILES),
-        }
+
+        forms = self._create_forms_from_request(request)
         if self.forms_are_valid(forms):
             return self.form_valid(forms)
         else:
             return self.form_invalid(forms)
 
-    def forms_are_valid(self, forms):
-        return all([form.is_valid() for form in forms.values()])
+    def get_context_data(self, **kwargs):
+        if 'forms' in kwargs:
+            kwargs.update(**kwargs['forms'])
+        return kwargs
+
+    def _create_forms_from_request(self, request):
+        return {
+            'taxpayer_form': TaxPayerCreateForm(
+                data=request.POST,
+                files=request.FILES),
+            'address_form': AddressCreateForm(data=request.POST),
+            'bank_account_form': BankAccountCreateForm(
+                data=request.POST,
+                files=request.FILES),
+        }
 
     def get_success_url(self):
         return reverse('supplier-home')
 
+    def forms_are_valid(self, forms):
+        return all([form.is_valid() for form in forms.values()])
+
     def form_invalid(self, forms):
+        new_forms = {}
         messages.error(
             self.request,
             TAXPAYER_FORM_INVALID_MESSAGE,
         )
-        return HttpResponseRedirect(reverse('taxpayer-create'))
+        for k, v in forms.items():
+            new_forms[k] = v
+
+        kwargs = {}
+        kwargs['forms'] = new_forms
+
+        return self.render_to_response(
+            self.get_context_data(**kwargs)
+        )
 
     @transaction.atomic
     def form_valid(self, forms):
@@ -196,7 +210,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             address = forms['address_form'].save(commit=False)
             address.taxpayer = taxpayer
             address.save()
-            bankaccount = forms['bankaccount_form'].save(commit=False)
+            bankaccount = forms['bank_account_form'].save(commit=False)
             bankaccount.taxpayer = taxpayer
             bankaccount.save()
             messages.success(

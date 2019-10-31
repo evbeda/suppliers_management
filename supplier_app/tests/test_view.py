@@ -88,7 +88,6 @@ from supplier_app.tests.factory_boy import (
 from supplier_app.views import (
     CreateTaxPayerView,
     CompanyUserPermission,
-    EditTaxpayerView,
     SupplierHome,
     EditTaxpayerView,
 )
@@ -147,7 +146,7 @@ class TestCreateTaxPayer(TestCase):
         )
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
-            'bankaccount_form': BankAccountCreateForm(
+            'bank_account_form': BankAccountCreateForm(
                 data=FORM_POST,
                 files=self._get_request_FILES()
             ),
@@ -171,7 +170,7 @@ class TestCreateTaxPayer(TestCase):
             'taxpayer_form-witholding_taxes_file': [
                 witholding_taxes_file or self.file_mock
             ],
-            'bankaccount_form-bank_cbu_file': [
+            'bank_account_form-bank_cbu_file': [
                 bank_cbu_file or self.file_mock
             ],
         })
@@ -1926,7 +1925,7 @@ class TestNotifyMessages(TestCase):
         response = self.client.post(
             reverse(self.taxpayer_creation_url),
             self.POST,
-            follow=True
+            follow=True,
         )
         self.assertContains(response, TAXPAYER_CREATION_SUCCESS_MESSAGE)
 

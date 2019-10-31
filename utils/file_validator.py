@@ -1,7 +1,43 @@
+import os
+
+from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
+
+from django.utils.translation import ugettext_lazy as _
+
 from invoices_app import (
     INVOICE_MAX_SIZE_FILE,
     INVOICE_ALLOWED_FILE_EXTENSIONS,
 )
+
+
+class FileSizeValidator(object):
+    # message = _(
+    #     "File size '%(size)d' is not allowed."
+    #     "Limit size: '%(limit_size)d'."
+    # )
+    message = _("File size {} is not allowed.\n Limit size: {}.")
+
+    code = 'invalid_size'
+
+    def __init__(self, limit_size=None, message=None, code=None):
+        self.limit_size = limit_size
+        if message is not None:
+            self.message = message
+        if code is not None:
+            self.code = code
+
+    def __call__(self, value):
+        size = value.size
+        if self.limit_size is not None and size > self.limit_size:
+            raise ValidationError(
+                self.message.format(size, self.limit_size),
+                code=self.code,
+                params={
+                    'size': size,
+                    'limit_size': ', '.join(str(self.limit_size))
+                }
+            )
 
 
 def validate_file(file, max_size_form=None):

@@ -3,14 +3,12 @@ from django.forms.models import ModelForm
 from django.http import QueryDict
 from django.utils.translation import ugettext_lazy as _
 
-from supplier_app import TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE
 from supplier_app.models import (
     Address,
     BankAccount,
     EBEntity,
     TaxPayerArgentina,
 )
-from utils.file_validator import validate_file
 
 
 class BasePrefixCreateForm(ModelForm):
@@ -32,29 +30,10 @@ class BasePrefixCreateForm(ModelForm):
             files=files_query_dict,
             *args, **kwargs)
 
-    def is_valid(self):
-        valid = super().is_valid()
-        if not valid:
-            return valid
-        file_fields = self._get_file_fields()
-        if file_fields:
-            for file_field in file_fields:
-                if file_field not in self.cleaned_data:
-                    self.add_error(file_field, 'No file')
-                    return False
-
-                file_is_valid, msg = validate_file(
-                    self.cleaned_data[file_field],
-                    TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE,
-                )
-                if not file_is_valid:
-                    self.add_error(file_field, msg)
-                    return file_is_valid
-            return file_is_valid
-        return valid
-
     def _get_file_fields(self):
-        return [field for field in self.fields if field.endswith('file')]
+        return [
+            k for k, v in self.fields.items() if k.endswith('file') and v.required
+            ]
 
     def _create_query_dict_filter_by_prefix(self, generic_data):
         query_dict = QueryDict('', mutable=True)
@@ -95,7 +74,7 @@ class BankAccountBaseForm(ModelForm):
 
 
 class BankAccountCreateForm(BasePrefixCreateForm, BankAccountBaseForm):
-    prefix = 'bankaccount_form'
+    prefix = 'bank_account_form'
 
     class Meta(BankAccountBaseForm.Meta):
         exclude = ['taxpayer']
