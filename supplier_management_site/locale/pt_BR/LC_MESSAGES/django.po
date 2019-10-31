@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-28 17:59+0000\n"
+"POT-Creation-Date: 2019-10-31 20:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,24 +40,24 @@ msgstr "PAGO"
 
 #: invoices_app/__init__.py:47
 msgid "MM/DD/YYYY"
-msgstr "MM / DD / AAAA"
+msgstr "DD/MM/YYYY"
 
 #: invoices_app/__init__.py:48
 msgid "en"
 msgstr "en"
 
 #: invoices_app/filters.py:38 invoices_app/models.py:34
-#: templates/AP_app/ap-taxpayers.html:24
+#: templates/AP_app/ap-taxpayers.html:25
 #: templates/invoices_app/history-list.html:28
 #: templates/invoices_app/invoice-list.html:38
 #: templates/invoices_app/invoice_detail.html:32
-#: templates/supplier_app/invoice-list.html:33
+#: templates/supplier_app/invoice-list.html:36
 #: templates/supplier_app/supplier-home.html:28
 msgid "Status"
 msgstr "Status"
 
-#: invoices_app/filters.py:40 invoices_app/forms.py:38
-#: templates/invoices_app/invoice-list.html:33
+#: invoices_app/filters.py:40 invoices_app/views.py:185
+#: invoices_app/views.py:265 templates/invoices_app/invoice-list.html:33
 msgid "Invoice Date"
 msgstr "Data da fatura"
 
@@ -68,7 +68,7 @@ msgstr "Data de Vencimento"
 
 #: invoices_app/filters.py:43 templates/invoices_app/history-list.html:27
 #: templates/invoices_app/invoice-list.html:37
-#: templates/supplier_app/invoice-list.html:32
+#: templates/supplier_app/invoice-list.html:35
 msgid "Total Amount"
 msgstr "Valor total"
 
@@ -76,29 +76,34 @@ msgstr "Valor total"
 msgid "All"
 msgstr "Tudo"
 
-#: invoices_app/filters.py:48 templates/AP_app/ap-taxpayers.html:15
+#: invoices_app/filters.py:48 templates/AP_app/ap-taxpayers.html:16
+#: templates/invoices_app/history-list.html:22
+#: templates/invoices_app/invoice-list.html:31
 msgid "Taxpayer"
 msgstr "Contribuinte"
 
-#: invoices_app/filters.py:56 supplier_app/filters.py:30
-#: supplier_app/models.py:140 templates/AP_app/ap-taxpayer-details.html:33
-#: templates/AP_app/ap-taxpayer-details.html:83
+#: invoices_app/filters.py:56 supplier_app/filters.py:28
+#: supplier_app/models.py:69 supplier_app/models.py:90
+#: supplier_app/models.py:172 templates/AP_app/ap-taxpayer-details.html:34
+#: templates/AP_app/ap-taxpayer-details.html:91
+#: templates/AP_app/taxpayer-history-list.html:25
+#: templates/AP_app/taxpayer-history-list.html:58
 #: templates/invoices_app/invoice-list.html:32
 msgid "Country"
 msgstr "País"
 
-#: invoices_app/forms.py:43
+#: invoices_app/forms.py:31
 msgid "Purchase Order"
 msgstr "Ordem de compra"
 
-#: invoices_app/forms.py:84 templates/invoices_app/history-list.html:25
+#: invoices_app/forms.py:72 templates/invoices_app/history-list.html:25
 msgid "Net Amount"
 msgstr "Valor líquido"
 
-#: invoices_app/forms.py:91 invoices_app/models.py:40
+#: invoices_app/forms.py:79 invoices_app/models.py:40
 #: templates/invoices_app/history-list.html:23
 #: templates/invoices_app/invoice-list.html:35
-#: templates/supplier_app/invoice-list.html:30
+#: templates/supplier_app/invoice-list.html:33
 msgid "Invoice Number"
 msgstr "Número da fatura"
 
@@ -135,7 +140,7 @@ msgstr "Liens fiscais"
 msgid "Total"
 msgstr "Total"
 
-#: invoices_app/models.py:68 templates/supplier_app/invoices_form.html:112
+#: invoices_app/models.py:68 templates/supplier_app/invoices_form.html:120
 msgid "Invoice File"
 msgstr "Arquivo de fatura"
 
@@ -143,49 +148,43 @@ msgstr "Arquivo de fatura"
 msgid "PO file"
 msgstr "Arquivo PO"
 
-#: invoices_app/views.py:158
+#: invoices_app/views.py:163
 msgid "Taxpayer not approved yet"
 msgstr "Contribuinte ainda não aprovado"
 
-#: invoices_app/views.py:161
+#: invoices_app/views.py:166
 msgid "The invoice {} already exists"
 msgstr "A fatura {} já existe"
 
-#: invoices_app/views.py:209
-msgid "{} has changed the invoice"
-msgstr "{} alterou a fatura"
-
-#: invoices_app/views.py:214
+#: invoices_app/views.py:226
 msgid "Eventbrite Invoice Edited"
 msgstr "Fatura da Eventbrite editada"
 
-#: invoices_app/views.py:215
+#: invoices_app/views.py:227
 msgid ""
 "Your Invoice # {} was edited by an administrator.                 Please "
 "check your invoice"
 msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 
-#: invoices_app/views.py:220 invoices_app/views.py:313
-#: invoices_app/views.py:392
+#: invoices_app/views.py:232 invoices_app/views.py:316
+#: invoices_app/views.py:405
 msgid "Thank you"
 msgstr "Obrigado"
 
-#: invoices_app/views.py:297
-msgid "{} has changed the invoice status to {}"
-msgstr "{} alterou o status da fatura para {}"
-
-#: invoices_app/views.py:302 invoices_app/views.py:306
+#: invoices_app/views.py:305 invoices_app/views.py:309
 msgid "Invoice {} changed status to {}"
 msgstr "A fatura {} alterou o status para {}"
 
-#: invoices_app/views.py:384
+#: invoices_app/views.py:397
 msgid "Eventbrite Invoice {} commented"
 msgstr "Fatura da Eventbrite {} comentada"
 
-#: invoices_app/views.py:385
+#: invoices_app/views.py:398
 msgid ""
 "You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}"
-msgstr "Você tem um novo comentário na fatura # {}. Por favor, verifique sua fatura. COMENTE:{}"
+msgstr ""
+"Você tem um novo comentário na fatura # {}. Por favor, verifique sua fatura. "
+"COMENTE:{}"
 
 #: supplier_app/__init__.py:19
 msgid "Approved"
@@ -223,7 +222,9 @@ msgstr "Você foi convidado a BriteSu"
 msgid ""
 "Welcome to BriteSu!\n"
 "Please click on the following link to register.\n"
-msgstr "Bem-vindo ao BriteSu! \n Clique no link a seguir para se registrar. \n"
+msgstr ""
+"Bem-vindo ao BriteSu! \n"
+" Clique no link a seguir para se registrar. \n"
 
 #: supplier_app/__init__.py:42 supplier_app/__init__.py:54
 #: supplier_app/__init__.py:67
@@ -242,7 +243,9 @@ msgstr "Seu contribuinte foi aprovado"
 msgid ""
 "You are ready to start using BriteSu.\n"
 "You can access the platform now and upload your invoices.\n"
-msgstr "Você está pronto para começar a usar o BriteSu. \n Você pode acessar a plataforma agora e fazer o upload de suas faturas. \n"
+msgstr ""
+"Você está pronto para começar a usar o BriteSu. \n"
+" Você pode acessar a plataforma agora e fazer o upload de suas faturas. \n"
 
 #: supplier_app/__init__.py:55 supplier_app/__init__.py:68
 #: supplier_app/__init__.py:80
@@ -256,9 +259,12 @@ msgstr "Seu contribuinte tem algumas modificações pendentes"
 #: supplier_app/__init__.py:63
 msgid ""
 "Please visit your taxpayer and read comments.\n"
-"Once changes are done and approved by eventbrite,\n"
+"Once changes are done and approved by Eventbrite,\n"
 "we will send you an email.\n"
-msgstr "Visite seu contribuinte e leia os comentários. \n Uma vez que as alterações forem aprovadas pela eventbrite, \n enviaremos um e-mail. \n"
+msgstr ""
+"Visite seu contribuinte e leia os comentários. \n"
+" Uma vez que as alterações forem aprovadas pela eventbrite, \n"
+" enviaremos um e-mail. \n"
 
 #: supplier_app/__init__.py:73
 msgid "Your taxpayer has been rejected"
@@ -267,48 +273,66 @@ msgstr "Seu contribuinte foi rejeitado"
 #: supplier_app/__init__.py:76
 msgid ""
 "We are afraid that the taxpayer you were trying to submit is invalid\n"
-"Please contact the eventbrite employee that hired you.\n"
-msgstr "Temos medo de que o contribuinte que você estava tentando enviar seja inválido \n Entre em contato com o funcionário da eventbrite que o contratou. \n"
- 
-#: supplier_app/__init__.py:79
-msgid "Please contact the eventbrite employee that hired you, Thank you!"
-msgstr "Entre em contato com o funcionário da eventbrite que o contratou, Obrigado!"
+"Please contact the Eventbrite employee that hired you.\n"
+msgstr ""
+"Temos medo de que o contribuinte que você estava tentando enviar seja "
+"inválido \n"
+" Entre em contato com o funcionário da eventbrite que o contratou. \n"
 
-#: supplier_app/custom_messages.py:3
+#: supplier_app/__init__.py:79
+msgid "Please contact the Eventbrite employee that hired you, Thank you!"
+msgstr ""
+"Entre em contato com o funcionário da eventbrite que o contratou, Obrigado!"
+
+#: supplier_app/constants/countries.py:7
+msgid "Argentina"
+msgstr ""
+
+#: supplier_app/constants/countries.py:8
+msgid "Brazil"
+msgstr ""
+
+#: supplier_app/constants/countries.py:9
+msgid "United states"
+msgstr ""
+
+#: supplier_app/constants/custom_messages.py:3
 msgid ""
 "You dont have a company yet please contact with us supplier-"
 "onboarding@eventbrite.com"
-msgstr "Você ainda não tem uma empresa, entre em contato conosco supplier-onboarding@eventbrite.com"
+msgstr ""
+"Você ainda não tem uma empresa, entre em contato conosco supplier-"
+"onboarding@eventbrite.com"
 
-#: supplier_app/custom_messages.py:4
+#: supplier_app/constants/custom_messages.py:4
 msgid "Your invitation was sent successfully"
 msgstr "Seu convite foi enviado com sucesso"
 
-#: supplier_app/custom_messages.py:5
+#: supplier_app/constants/custom_messages.py:5
 msgid "There was an error sending your email"
 msgstr "Ocorreu um erro ao enviar seu email"
 
-#: supplier_app/custom_messages.py:6
+#: supplier_app/constants/custom_messages.py:6
 msgid "You have joined the company succesfully"
 msgstr "Você ingressou na empresa com sucesso"
 
-#: supplier_app/custom_messages.py:7
+#: supplier_app/constants/custom_messages.py:7
 msgid "An error has ocurred while joining the company"
 msgstr "Ocorreu um erro ao ingressar na empresa"
 
-#: supplier_app/custom_messages.py:8
+#: supplier_app/constants/custom_messages.py:8
 msgid "Your taxpayer was created successfully"
 msgstr "Seu contribuinte foi criado com sucesso"
 
-#: supplier_app/custom_messages.py:9
+#: supplier_app/constants/custom_messages.py:9
 msgid "There was an error on creating your taxpayer please try again"
 msgstr "Ocorreu um erro ao criar seu contribuinte, tente novamente"
 
-#: supplier_app/custom_messages.py:10
+#: supplier_app/constants/custom_messages.py:10
 msgid "Your form is invalid"
 msgstr "Seu formulário é inválido"
 
-#: supplier_app/custom_messages.py:11
+#: supplier_app/constants/custom_messages.py:11
 msgid "The taxpayer you try to access/modify doesnt exists"
 msgstr "O contribuinte que você tenta acessar / modificar não existe"
 
@@ -316,89 +340,99 @@ msgstr "O contribuinte que você tenta acessar / modificar não existe"
 msgid "Taxpayer state"
 msgstr "Estado do contribuinte"
 
-#: supplier_app/models.py:20 templates/AP_app/company_creation.html:14
+#: supplier_app/models.py:22 templates/AP_app/company_creation.html:14
 #: templates/supplier_app/company_list.html:19
 msgid "Name"
 msgstr "Nome"
 
-#: supplier_app/models.py:63 templates/AP_app/ap-taxpayer-details.html:28
-#: templates/AP_app/ap-taxpayers.html:22
+#: supplier_app/models.py:65
+msgid "Eventbrite entity name"
+msgstr "Nome da entidade da Eventbrite"
+
+#: supplier_app/models.py:81 templates/AP_app/ap-taxpayer-details.html:28
+#: templates/AP_app/ap-taxpayers.html:23
+#: templates/AP_app/taxpayer-history-list.html:20
 #: templates/supplier_app/supplier-home.html:26
 msgid "Business name"
 msgstr "Nome da empresa"
 
-#: supplier_app/models.py:71
+#: supplier_app/models.py:93
 msgid "Creation date"
 msgstr "Data de criação"
 
-#: supplier_app/models.py:76 templates/AP_app/ap-taxpayer-details.html:32
+#: supplier_app/models.py:98 templates/AP_app/ap-taxpayer-details.html:33
+#: templates/AP_app/taxpayer-history-list.html:24
 msgid "Comments"
 msgstr "Comentários"
 
-#: supplier_app/models.py:105
+#: supplier_app/models.py:134
 msgid "Payment type"
 msgstr "Tipo de pagamento"
 
-#: supplier_app/models.py:110
+#: supplier_app/models.py:139
 msgid "Payment term"
 msgstr "Termo de pagamento"
 
-#: supplier_app/models.py:115
+#: supplier_app/models.py:144
 msgid "AFIP registration certificate"
 msgstr "Certificado de registro AFIP"
 
-#: supplier_app/models.py:121
-msgid "Certificate of no tax withholding of IVA, income or SUSS"
+#: supplier_app/models.py:150
+msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgstr "Certificado sem retenção na fonte de IVA, renda ou SUSS"
 
-#: supplier_app/models.py:135 templates/AP_app/ap-taxpayer-details.html:78
+#: supplier_app/models.py:164 templates/AP_app/ap-taxpayer-details.html:86
+#: templates/AP_app/taxpayer-history-list.html:53
 msgid "Street"
 msgstr "Rua"
 
-#: supplier_app/models.py:136 templates/AP_app/ap-taxpayer-details.html:79
+#: supplier_app/models.py:165 templates/AP_app/ap-taxpayer-details.html:87
+#: templates/AP_app/taxpayer-history-list.html:54
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:137
+#: supplier_app/models.py:166 templates/AP_app/taxpayer-history-list.html:55
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:138 templates/AP_app/ap-taxpayer-details.html:81
+#: supplier_app/models.py:167 templates/AP_app/ap-taxpayer-details.html:89
+#: templates/AP_app/taxpayer-history-list.html:56
 msgid "City"
 msgstr "Cidade"
 
-#: supplier_app/models.py:139 templates/AP_app/ap-taxpayer-details.html:82
+#: supplier_app/models.py:168 templates/AP_app/ap-taxpayer-details.html:90
+#: templates/AP_app/taxpayer-history-list.html:57
 msgid "State"
 msgstr "Estado"
 
-#: supplier_app/models.py:145
+#: supplier_app/models.py:180
 msgid "Bank account number"
 msgstr "número da conta de banco"
 
-#: supplier_app/models.py:148
+#: supplier_app/models.py:183
 msgid "Bank name"
 msgstr "nome do banco"
 
-#: supplier_app/models.py:158
+#: supplier_app/models.py:193
 msgid "Bank account certificate"
 msgstr "Certificado de conta bancária"
 
-#: supplier_management_site/settings/base.py:145
+#: supplier_management_site/settings/base.py:146
 #: templates/supplier_app/company_list.html:40
 msgid "English"
 msgstr "Inglês"
 
-#: supplier_management_site/settings/base.py:146
+#: supplier_management_site/settings/base.py:147
 #: templates/supplier_app/company_list.html:43
 msgid "Spanish"
 msgstr "espanhol"
 
-#: supplier_management_site/settings/base.py:147
+#: supplier_management_site/settings/base.py:148
 msgid "Portuguese (Brazil)"
 msgstr "Português (Brasil)"
 
 #: supplier_management_site/tests/templates/tests/index.html:4
-#: supplier_management_site/tests/test.py:55
+#: users_app/tests/test_languages.py:34
 msgid "Hello world"
 msgstr "Olá, mundo!"
 
@@ -435,74 +469,86 @@ msgid "General Information"
 msgstr "Informação geral"
 
 #: templates/AP_app/ap-taxpayer-details.html:29
-#: templates/AP_app/ap-taxpayers.html:23
+#: templates/AP_app/ap-taxpayers.html:24
 #: templates/supplier_app/supplier-home.html:27
-msgid "CUIT"
-msgstr "CUIT"
+msgid "Taxpayer Identification Number"
+msgstr ""
 
 #: templates/AP_app/ap-taxpayer-details.html:30
+#: templates/AP_app/taxpayer-history-list.html:22
 msgid "Payment Type"
 msgstr "Tipo de pagamento"
 
 #: templates/AP_app/ap-taxpayer-details.html:31
+#: templates/AP_app/taxpayer-history-list.html:23
 msgid "Payment Term"
 msgstr "Termo de pagamento"
 
-#: templates/AP_app/ap-taxpayer-details.html:34
-#: templates/AP_app/ap-taxpayer-details.html:120
+#: templates/AP_app/ap-taxpayer-details.html:32
+msgid "EB entities"
+msgstr ""
+
+#: templates/AP_app/ap-taxpayer-details.html:35
+#: templates/AP_app/ap-taxpayer-details.html:128
 msgid "Files"
 msgstr "arquivos"
 
-#: templates/AP_app/ap-taxpayer-details.html:36
-#: templates/AP_app/ap-taxpayer-details.html:85
-#: templates/AP_app/ap-taxpayer-details.html:122
-#: templates/AP_app/ap-taxpayers.html:25
+#: templates/AP_app/ap-taxpayer-details.html:37
+#: templates/AP_app/ap-taxpayer-details.html:93
+#: templates/AP_app/ap-taxpayer-details.html:130
+#: templates/AP_app/ap-taxpayers.html:26
 msgid "Action"
 msgstr "Açao"
 
-#: templates/AP_app/ap-taxpayer-details.html:51
+#: templates/AP_app/ap-taxpayer-details.html:59
 msgid "AFIP certificate"
 msgstr "Certificado AFIP"
 
-#: templates/AP_app/ap-taxpayer-details.html:54
+#: templates/AP_app/ap-taxpayer-details.html:62
 msgid "Withholding taxes"
 msgstr "Impostos retidos na fonte"
 
-#: templates/AP_app/ap-taxpayer-details.html:61
-#: templates/AP_app/ap-taxpayer-details.html:100
-#: templates/AP_app/ap-taxpayer-details.html:142
+#: templates/AP_app/ap-taxpayer-details.html:69
+#: templates/AP_app/ap-taxpayer-details.html:108
+#: templates/AP_app/ap-taxpayer-details.html:150
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/AP_app/ap-taxpayer-details.html:74
+#: templates/AP_app/ap-taxpayer-details.html:82
 msgid "Address Information"
 msgstr "Informação de Endereço"
 
-#: templates/AP_app/ap-taxpayer-details.html:80
+#: templates/AP_app/ap-taxpayer-details.html:88
 msgid "Zip_Code"
 msgstr "Código postal"
 
-#: templates/AP_app/ap-taxpayer-details.html:113
+#: templates/AP_app/ap-taxpayer-details.html:121
 msgid "Bank Account Information"
 msgstr "Informações de conta bancária"
 
-#: templates/AP_app/ap-taxpayer-details.html:117
+#: templates/AP_app/ap-taxpayer-details.html:125
+#: templates/AP_app/taxpayer-history-list.html:86
 msgid "Bank Name"
 msgstr "Nome do banco"
 
-#: templates/AP_app/ap-taxpayer-details.html:118
+#: templates/AP_app/ap-taxpayer-details.html:126
 msgid "Bank Code"
 msgstr "Código bancário"
 
-#: templates/AP_app/ap-taxpayer-details.html:119
+#: templates/AP_app/ap-taxpayer-details.html:127
 msgid "Account Number"
 msgstr "Número da conta"
 
-#: templates/AP_app/ap-taxpayer-details.html:135
+#: templates/AP_app/ap-taxpayer-details.html:143
 msgid "CBU"
 msgstr "CBU"
 
-#: templates/AP_app/ap-taxpayers.html:36
+#: templates/AP_app/ap-taxpayer-details.html:162
+#: templates/AP_app/taxpayer-history-list.html:12
+msgid "Taxpayer History"
+msgstr "História do Contribuinte"
+
+#: templates/AP_app/ap-taxpayers.html:37
 msgid "More details"
 msgstr "Mais detalhes"
 
@@ -534,22 +580,23 @@ msgstr "Solicitar alteração"
 #: templates/AP_app/edit-address-information.html:27
 #: templates/AP_app/edit-bank-account-information.html:27
 #: templates/AP_app/edit-taxpayer-information.html:30
-#: templates/supplier_app/invoices_form.html:156
+#: templates/supplier_app/invoices_form.html:165
+#: templates/supplier_app/invoices_form.html:167
+#: templates/supplier_app/invoices_form.html:169
 #: templates/supplier_app/taxpayer-creation.html:28
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/AP_app/navbar.html:15 templates/supplier_app/navbar.html:40
+#: templates/AP_app/navbar.html:15 templates/supplier_app/navbar.html:26
 msgid "Management"
 msgstr "Gestão"
 
-#: templates/AP_app/navbar.html:19 templates/supplier_app/navbar.html:27
-#: templates/supplier_app/navbar.html:44
+#: templates/AP_app/navbar.html:19 templates/supplier_app/navbar.html:30
 #: templates/supplier_app/supplier-home.html:41
 msgid "Invoices"
 msgstr "Faturas"
 
-#: templates/AP_app/navbar.html:21
+#: templates/AP_app/navbar.html:21 templates/supplier_app/navbar.html:14
 msgid "Taxpayers"
 msgstr "Contribuintes"
 
@@ -569,9 +616,39 @@ msgstr "Ver tudo"
 msgid "Create one"
 msgstr "Crie um"
 
-#: templates/AP_app/navbar.html:52 templates/supplier_app/navbar.html:60
+#: templates/AP_app/navbar.html:52 templates/supplier_app/navbar.html:63
 msgid "Log out"
 msgstr "Sair"
+
+#: templates/AP_app/taxpayer-history-list.html:18
+#: templates/AP_app/taxpayer-history-list.html:51
+#: templates/AP_app/taxpayer-history-list.html:84
+#: templates/invoices_app/history-list.html:19
+msgid "User"
+msgstr "Do utilizador"
+
+#: templates/AP_app/taxpayer-history-list.html:19
+#: templates/AP_app/taxpayer-history-list.html:52
+#: templates/AP_app/taxpayer-history-list.html:85
+#: templates/invoices_app/history-list.html:20
+msgid "Modified"
+msgstr "Modificado"
+
+#: templates/AP_app/taxpayer-history-list.html:21
+msgid "Taxpayer identification number"
+msgstr "Número de Identificação Fiscal"
+
+#: templates/AP_app/taxpayer-history-list.html:45
+msgid "Address History"
+msgstr "Histórico de Endereços"
+
+#: templates/AP_app/taxpayer-history-list.html:78
+msgid "Bank Account History"
+msgstr "Histórico da conta bancária"
+
+#: templates/AP_app/taxpayer-history-list.html:87
+msgid "Bank Account Number"
+msgstr "Número da conta de banco"
 
 #: templates/AP_app/taxpayer_filter.html:51 templates/_filters.html:80
 msgid "Apply"
@@ -587,26 +664,13 @@ msgstr "Histórico da fatura "
 
 #: templates/invoices_app/history-list.html:18
 #: templates/invoices_app/invoice-list.html:29
-#: templates/supplier_app/invoice-list.html:28
+#: templates/supplier_app/invoice-list.html:31
 msgid "Invoice ID"
 msgstr "ID da fatura"
 
-#: templates/invoices_app/history-list.html:19
-msgid "User"
-msgstr "Do utilizador"
-
-#: templates/invoices_app/history-list.html:20
-msgid "Modified"
-msgstr "Modificado"
-
-#: templates/invoices_app/history-list.html:22
-#: templates/invoices_app/invoice-list.html:31
-msgid "Tax Payer"
-msgstr "Contribuinte"
-
 #: templates/invoices_app/history-list.html:24
 #: templates/invoices_app/invoice-list.html:36
-#: templates/supplier_app/invoice-list.html:31
+#: templates/supplier_app/invoice-list.html:34
 msgid "PO Number"
 msgstr "Número do pedido"
 
@@ -619,12 +683,12 @@ msgid "Received"
 msgstr "Recebido"
 
 #: templates/invoices_app/invoice-list.html:40
-#: templates/supplier_app/invoice-list.html:34
+#: templates/supplier_app/invoice-list.html:37
 msgid "View"
 msgstr "Visão"
 
 #: templates/invoices_app/invoice-list.html:45
-#: templates/supplier_app/invoice-list.html:40
+#: templates/supplier_app/invoice-list.html:43
 msgid "No invoices"
 msgstr "Nenhuma fatura"
 
@@ -654,8 +718,8 @@ msgid "Details:"
 msgstr "Detalhes:"
 
 #: templates/invoices_app/invoice_detail.html:62
-msgid "CUIT:"
-msgstr "CUIT:"
+msgid "Taxpayer Identification Number:"
+msgstr ""
 
 #: templates/invoices_app/invoice_detail.html:63
 msgid "Payment Option:"
@@ -709,7 +773,7 @@ msgstr "Publicar um comentário"
 msgid "Choose a file"
 msgstr "Escolha um arquivo"
 
-#: templates/invoices_app/invoice_detail.html:179
+#: templates/invoices_app/invoice_detail.html:180
 msgid "Attachment: "
 msgstr "Anexo: "
 
@@ -726,7 +790,6 @@ msgid "ERROR"
 msgstr "ERRO"
 
 #: templates/registration/invalid_login.html:17
-#: templates/registration/login.html:24
 msgid "If you are a supplier please:"
 msgstr "Se você é um fornecedor, por favor:"
 
@@ -734,25 +797,21 @@ msgstr "Se você é um fornecedor, por favor:"
 msgid "Login home"
 msgstr "Iniciar sessão"
 
-#: templates/registration/login.html:16
+#: templates/registration/login.html:18
 msgid "Welcome to BriteSU"
 msgstr "Bem-vindo ao BriteSU"
 
-#: templates/registration/login.html:21
+#: templates/registration/login.html:23
 msgid "Sign In"
 msgstr "Assinar em"
 
-#: templates/registration/login.html:26
+#: templates/registration/login.html:27
 msgid "Login with Eventbrite"
 msgstr "Entre com a Eventbrite"
 
-#: templates/registration/login.html:31
-msgid "If you are a EB employee please:"
-msgstr "Se você é um funcionário da EB, por favor:"
-
-#: templates/registration/login.html:33
-msgid "Login with Google"
-msgstr "Entre com o Google"
+#: templates/registration/login.html:49
+msgid "AP login"
+msgstr ""
 
 #: templates/supplier_app/company_list.html:13
 msgid "Company List"
@@ -771,34 +830,41 @@ msgid "Invite"
 msgstr "Convite"
 
 #: templates/supplier_app/invoice-list.html:11
-#: templates/supplier_app/navbar.html:31
+#: templates/supplier_app/navbar.html:41
 msgid "My Invoices"
 msgstr "Minhas faturas"
 
-#: templates/supplier_app/invoice-list.html:20
-#: templates/supplier_app/invoices_form.html:21
-#: templates/supplier_app/navbar.html:33
+#: templates/supplier_app/invoice-list.html:21
+#: templates/supplier_app/navbar.html:44
 msgid "New Invoice"
 msgstr "Nova fatura"
 
-#: templates/supplier_app/invoice-list.html:29
+#: templates/supplier_app/invoice-list.html:32
 msgid "Date"
 msgstr "Encontro"
 
-#: templates/supplier_app/invoice-list.html:41
+#: templates/supplier_app/invoice-list.html:45
 msgid "Create one?"
 msgstr "Crie um?"
 
-#: templates/supplier_app/invoices_form.html:116
-#: templates/supplier_app/invoices_form.html:137
+#: templates/supplier_app/invoices_form.html:26
+msgid "Update Invoice"
+msgstr "Atualizar fatura"
+
+#: templates/supplier_app/invoices_form.html:28
+msgid "Create Invoice"
+msgstr "Criar fatura"
+
+#: templates/supplier_app/invoices_form.html:124
+#: templates/supplier_app/invoices_form.html:145
 msgid "Choose file"
 msgstr "Escolher arquivo"
 
-#: templates/supplier_app/invoices_form.html:133
+#: templates/supplier_app/invoices_form.html:141
 msgid "PO File"
 msgstr "Arquivo PO"
 
-#: templates/supplier_app/invoices_form.html:154
+#: templates/supplier_app/invoices_form.html:162
 msgid "Submit"
 msgstr "Enviar"
 
@@ -806,16 +872,12 @@ msgstr "Enviar"
 msgid "Supplier"
 msgstr "Proveedor"
 
-#: templates/supplier_app/navbar.html:14
-msgid "Tax payers"
-msgstr "Contribuintes"
-
 #: templates/supplier_app/navbar.html:18
-msgid "My Tax Payers"
+msgid "My Taxpayers"
 msgstr "Meus contribuintes"
 
 #: templates/supplier_app/navbar.html:20
-msgid "New Tax Payer"
+msgid "New Taxpayer"
 msgstr "Novo contribuinte"
 
 #: templates/supplier_app/supplier-home.html:16
@@ -858,11 +920,42 @@ msgstr "O superusuário deve ter is_superuser = True."
 msgid "email address"
 msgstr "endereço de e-mail"
 
-#: utils/custom_filters.py:29
+#: utils/custom_filters.py:35
 msgid "From Date"
 msgstr "Da data"
 
-#: utils/custom_filters.py:34
+#: utils/custom_filters.py:41
 msgid "To Date"
 msgstr "Até a presente data"
 
+#: utils/history.py:28
+msgid "Changed: \n"
+msgstr ""
+
+#: utils/history.py:36
+msgid "{} from {} to {}\n"
+msgstr ""
+
+#~ msgid "{} has changed the invoice"
+#~ msgstr "{} alterou a fatura"
+
+#~ msgid "{} has changed the invoice status to {}"
+#~ msgstr "{} alterou o status da fatura para {}"
+
+#~ msgid "CUIT"
+#~ msgstr "CUIT"
+
+#~ msgid "Tax Payer"
+#~ msgstr "Contribuinte"
+
+#~ msgid "CUIT:"
+#~ msgstr "CUIT:"
+
+#~ msgid "If you are a EB employee please:"
+#~ msgstr "Se você é um funcionário da EB, por favor:"
+
+#~ msgid "Login with Google"
+#~ msgstr "Entre com o Google"
+
+#~ msgid "Tax payers"
+#~ msgstr "Contribuintes"
