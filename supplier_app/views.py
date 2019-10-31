@@ -161,6 +161,8 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             self.request,
             TAXPAYER_FORM_INVALID_MESSAGE,
         )
+        for form in forms:
+            super().form_invalid(form)
         return HttpResponseRedirect(reverse('taxpayer-create'))
 
     @transaction.atomic
