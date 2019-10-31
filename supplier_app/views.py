@@ -278,6 +278,13 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
         taxpayer_id = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
+    def post(self, request, *args, **kwargs):
+        if request.user.is_supplier:
+            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
+            taxpayer.change_to_pending_taxpayer()
+            taxpayer.save()
+        return super().post(request, *args, **kwargs)
+
 
 class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-bank-account-information.html'
@@ -302,6 +309,13 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
     def get_success_url(self, **kwargs):
         taxpayer_id = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_supplier:
+            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
+            taxpayer.change_to_pending_taxpayer()
+            taxpayer.save()
+        return super().post(request, *args, **kwargs)
 
 
 class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):

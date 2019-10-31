@@ -1,9 +1,10 @@
 {% load i18n %}
 
-<form action="" method="POST">
+<form action="" method="POST" class="form-inline d-flex align-items-start justify-content-between">
     {% csrf_token %}
-    <div class="form-group">   
-	    <textarea name="message" rows=3 class="form-control" type="textarea" placeholder="write your comments here"></textarea>
+    <div class="form-group w-75"> 
+    	<input type="hidden" name="action" value="change required">                
+	<textarea name="message" class="form-control w-100" placeholder={% trans "write your comments here" %}></textarea>
     </div>
-    <input type="submit">
+    <button type="submit" class="btn btn-primary">{% trans "Change required"%}</button>
 </form>

@@ -975,9 +975,14 @@ class TestEditAddressInfo(TestCase):
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
-        self.client.force_login(self.ap_user)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer.save()
         self.address = AddressFactory(taxpayer=self.taxpayer)
 
         self.address_edit_url = 'address-update'
@@ -998,7 +1003,17 @@ class TestEditAddressInfo(TestCase):
             'taxpayer_id': self.taxpayer.id,
         }
 
+    def _make_address_post(self):
+        return self.client.post(
+            reverse(
+                self.address_edit_url,
+                kwargs=self.kwargs
+            ),
+            data=self.ADDRESS_POST
+        )
+
     def test_get_edit_address_view_as_ap(self):
+        self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse(
                 self.address_edit_url,
@@ -1010,14 +1025,11 @@ class TestEditAddressInfo(TestCase):
             response.template_name[0]
         )
 
-    def test_post_edit_address_info_as_ap(self):
-        response = self.client.post(
-            reverse(
-                self.address_edit_url,
-                kwargs=self.kwargs
-            ),
-            data=self.ADDRESS_POST
-        )
+    def test_post_edit_address_info_as_ap_redirects_to_taxpayer_details(self):
+        self.client.force_login(self.ap_user)
+        response = self._make_address_post()
+
+        # checking response status code and url should go to taxpayer detail
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             reverse(
@@ -1027,28 +1039,24 @@ class TestEditAddressInfo(TestCase):
             response.url
         )
 
-    def test_post_edit_address_info_as_supplier_redirects_to_supplier_details(self):
-        client2 = Client()
+    def test_post_edit_address_info_as_ap_dont_change_status(self):
+        self.client.force_login(self.ap_user)
+        status_approved = TAXPAYER_STATUS['Approved'].value
+        self._make_address_post()
+        self.assertEqual(
+            status_approved,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
+        )
 
-        supplier_group = Group.objects.get(name="supplier")
-        supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
-        supplier_user.groups.add(supplier_group)
+    def test_post_edit_address_info_as_supplier_redirects_to_taxpayer_details(self):
+        self.client.force_login(self.supplier_user)
 
         CompanyUserPermissionFactory(
-            user=supplier_user,
+            user=self.supplier_user,
             company=self.taxpayer.company
         )
 
-        client2.force_login(supplier_user)
-
-        response = client2.post(
-            reverse(
-                self.address_edit_url,
-                kwargs=self.kwargs
-            ),
-            data=self.ADDRESS_POST
-        )
-
+        response = self._make_address_post()
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             reverse(
@@ -1056,6 +1064,20 @@ class TestEditAddressInfo(TestCase):
                 kwargs=self.kwargs_taxpayer_id,
             ),
             response.url
+        )
+
+    def test_post_edit_addres_info_as_supplier_change_status_to_pending(self):
+        self.client.force_login(self.supplier_user)
+        status_pending = TAXPAYER_STATUS['Pending'].value
+
+        CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+        self._make_address_post()
+        self.assertEqual(
+            status_pending,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
 
 
@@ -1066,9 +1088,14 @@ class TestEditBankAccountInfo(TestCase):
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
-        self.client.force_login(self.ap_user)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer.save()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
 
         self.bank_update_url = 'bank-account-update'
@@ -1087,7 +1114,17 @@ class TestEditBankAccountInfo(TestCase):
             'taxpayer_id': self.taxpayer.id,
         }
 
+    def _make_bank_post(self):
+        return self.client.post(
+            reverse(
+                self.bank_update_url,
+                kwargs=self.kwargs
+            ),
+            data=self.BANK_ACCOUNT_POST
+        )
+
     def test_get_bank_account_edit_view_as_ap(self):
+        self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse(self.bank_update_url, kwargs=self.kwargs)
         )
@@ -1102,13 +1139,8 @@ class TestEditBankAccountInfo(TestCase):
         )
 
     def test_post_edit_bank_account_info_as_ap(self):
-        response = self.client.post(
-            reverse(
-                self.bank_update_url,
-                kwargs=self.kwargs,
-            ),
-            self.BANK_ACCOUNT_POST
-        )
+        self.client.force_login(self.ap_user)
+        response = self._make_bank_post()
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             reverse(
@@ -1116,30 +1148,26 @@ class TestEditBankAccountInfo(TestCase):
                 kwargs=self.kwargs_taxpayer_id
             ),
             response.url
+        )
+
+    def test_post_edit_bank_account_info_as_ap_dont_change_status(self):
+        self.client.force_login(self.ap_user)
+        status_approved = TAXPAYER_STATUS['Approved'].value
+        self._make_bank_post()
+        self.assertEqual(
+            status_approved,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
 
     def test_post_edit_bank_account_info_as_supplier_redirect_to_taxpayer_details(self):
-        client2 = Client()
-
-        supplier_group = Group.objects.get(name="supplier")
-        supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
-        supplier_user.groups.add(supplier_group)
-
         CompanyUserPermissionFactory(
-            user=supplier_user,
+            user=self.supplier_user,
             company=self.taxpayer.company
         )
 
-        client2.force_login(supplier_user)
+        self.client.force_login(self.supplier_user)
 
-        response = client2.post(
-            reverse(
-                self.bank_update_url,
-                kwargs=self.kwargs
-            ),
-            self.BANK_ACCOUNT_POST
-        )
-
+        response = self._make_bank_post()
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             reverse(
@@ -1147,6 +1175,19 @@ class TestEditBankAccountInfo(TestCase):
                 kwargs=self.kwargs_taxpayer_id
             ),
             response.url
+        )
+
+    def test_post_edit_bank_info_as_supplier_change_status_to_pending(self):
+        self.client.force_login(self.supplier_user)
+        status_pending = TAXPAYER_STATUS['Pending'].value
+        CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+        self._make_bank_post()
+        self.assertEqual(
+            status_pending,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
 
 
