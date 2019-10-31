@@ -52,8 +52,8 @@
                             <td>{{taxpayer.payment_term}}</td>
                             <td>
                                 <ul class="list-group list-group-flush">
-                                    {% for eb in taxpayer.taxpayerebentity_set.all %}
-                                    <li>{{eb.eb_entity}}</li>
+                                    {% for eb in taxpayer.eb_entities %}
+                                    <li>{{eb}}</li>
                                     {% endfor %}
                                 </ul>
                             </td>

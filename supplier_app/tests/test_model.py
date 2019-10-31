@@ -5,6 +5,10 @@ from django.test import TestCase
 from django.utils import timezone
 
 from supplier_app.constants.bank_info import get_bank_info_choices
+from supplier_app.constants.eb_entities_status import (
+    CURRENT_STATUS,
+    UNUSED_STATUS,
+)
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -12,14 +16,17 @@ from supplier_app.models import (
     CompanyUniqueToken,
     TaxPayer,
     TaxpayerComment,
+    TaxPayerEBEntity,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
     BankAccountFactory,
     CompanyFactory,
     CompanyUserPermissionFactory,
+    EBEntityFactory,
     TaxPayerFactory,
     TaxPayerArgentinaFactory,
+    TaxPayerEBEntityFactory,
 )
 from users_app.factory_boy import UserFactory
 
@@ -28,6 +35,16 @@ class TestTaxpayerModel(TestCase):
     def setUp(self):
         self.company = CompanyFactory()
         self.taxpayer = TaxPayerFactory(company=self.company)
+        self.taxpayer_without_eb_entities = TaxPayerArgentinaFactory()
+        self.taxpayer_with_2_eb_entities = TaxPayerArgentinaFactory()
+        self.taxpayer_eb_entity_1 = TaxPayerEBEntityFactory(
+            taxpayer=self.taxpayer_with_2_eb_entities
+        )
+        self.taxpayer_eb_entity_2 = TaxPayerEBEntityFactory(
+            taxpayer=self.taxpayer_with_2_eb_entities
+        )
+        self.eb_entity_1 = EBEntityFactory()
+        self.eb_entity_2 = EBEntityFactory()
 
     def test_tax_payer_entity_creation(self):
         taxpayer = TaxPayerFactory(
@@ -63,6 +80,83 @@ class TestTaxpayerModel(TestCase):
     def test_taxpayer_doesnt_have_workday_id(self):
         taxpayer = TaxPayerArgentinaFactory(workday_id="")
         self.assertFalse(taxpayer.has_workday_id())
+
+    def test_taxpayer_should_create_new_relation_if_eb_entity_doesnt_exists(self):
+        self.taxpayer_without_eb_entities.create_if_not_exist_taxpayer_eb_entity(
+            [self.eb_entity_1, self.eb_entity_2]
+        )
+        self.assertEqual(2, len(self.taxpayer_without_eb_entities.eb_entities))
+
+    def test_taxpayer_with_2_eb_entity_doesnt_add_this_2_eb_entity_again(self):
+        self.taxpayer_without_eb_entities.create_if_not_exist_taxpayer_eb_entity(
+            [self.eb_entity_1, self.eb_entity_2]
+        )
+        self.taxpayer_without_eb_entities.create_if_not_exist_taxpayer_eb_entity(
+            [self.eb_entity_1, self.eb_entity_2]
+        )
+        self.assertEqual(2, len(self.taxpayer_without_eb_entities.eb_entities))
+
+    def test_new_eb_entities_should_be_current(self):
+        self.taxpayer_without_eb_entities.create_if_not_exist_taxpayer_eb_entity(
+            [self.eb_entity_1, self.eb_entity_2]
+        )
+        self.assertEqual(2, len(self.taxpayer_without_eb_entities.eb_entities))
+
+    def test_taxpayer_apply_set_unused_status_should_change_2_eb_entities(self):
+
+        taxpayer_eb_entities = \
+            self.taxpayer_with_2_eb_entities.taxpayerebentity_set.all()
+
+        self.taxpayer_with_2_eb_entities.apply_function_to_all_elems(
+            taxpayer_eb_entities,
+            TaxPayerEBEntity.set_unused_status,
+        )
+        self.assertEqual(2, len(TaxPayerEBEntity.objects.filter(status=UNUSED_STATUS)))
+
+    def test_taxpayer_apply_set_unused_status_should_change_1_eb_entity(self):
+        taxpayer_eb_entities = [self.taxpayer_with_2_eb_entities.taxpayerebentity_set.last()]
+
+        self.taxpayer_with_2_eb_entities.apply_function_to_all_elems(
+            taxpayer_eb_entities,
+            TaxPayerEBEntity.set_unused_status,
+        )
+        self.assertEqual(1, len(TaxPayerEBEntity.objects.filter(status=UNUSED_STATUS)))
+
+    def test_taxpayer_apply_set_current_status_should_change_2_eb_entities(self):
+        taxpayer_eb_entities = self.taxpayer_with_2_eb_entities.taxpayerebentity_set.all()
+
+        self.taxpayer_with_2_eb_entities.apply_function_to_all_elems(
+            taxpayer_eb_entities,
+            TaxPayerEBEntity.set_current_status,
+        )
+        self.assertEqual(2, len(TaxPayerEBEntity.objects.filter(status=CURRENT_STATUS)))
+
+    def test_taxpayer_current_entities_should_be_the_selected_ones(self):
+        eb_entity_selected_1 = EBEntityFactory()
+        eb_entity_selected_2 = EBEntityFactory()
+        eb_entities = [eb_entity_selected_1, eb_entity_selected_2]
+
+        self.taxpayer_with_2_eb_entities.set_current_eb_entities(eb_entities)
+
+        taxpayer_eb_entities = self.taxpayer_with_2_eb_entities.eb_entities
+        self.assertEqual(2, len(taxpayer_eb_entities))
+        self.assertEqual(eb_entities, taxpayer_eb_entities)
+
+    def test_old_taxpayer_eb_entities_should_be_unused_after_update(self):
+        taxpayer = TaxPayerArgentinaFactory()
+        taxpayer_eb_entity_old_1 = TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        taxpayer_eb_entity_old_2 = TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        eb_entity_selected_1 = EBEntityFactory()
+        eb_entity_selected_2 = EBEntityFactory()
+        eb_entities = [eb_entity_selected_1, eb_entity_selected_2]
+
+        taxpayer.set_current_eb_entities(eb_entities)
+
+        taxpayer_eb_entity_old_1 = TaxPayerEBEntity.objects.get(pk=taxpayer_eb_entity_old_1.id)
+        taxpayer_eb_entity_old_2 = TaxPayerEBEntity.objects.get(pk=taxpayer_eb_entity_old_2.id)
+
+        self.assertEqual(str(UNUSED_STATUS), taxpayer_eb_entity_old_1.status)
+        self.assertEqual(str(UNUSED_STATUS), taxpayer_eb_entity_old_2.status)
 
 
 class TestAddressModel(TestCase):

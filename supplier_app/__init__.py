@@ -3,6 +3,10 @@ from collections import namedtuple
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+
+CURRENT_STATUS = 1
+UNUSED_STATUS = 2
+
 DBTuple = namedtuple('DBTuple', 'value verbose_name')
 
 # 25 * 1014 * 1024

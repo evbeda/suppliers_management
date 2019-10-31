@@ -15,6 +15,7 @@ from supplier_app.models import (
 
 from supplier_app.constants.bank_info import BANK_INFO
 from supplier_app import (
+    CURRENT_STATUS,
     PAYMENT_TERMS,
     PAYMENT_TYPES,
 )
@@ -78,6 +79,7 @@ class TaxPayerEBEntityFactory(factory.django.DjangoModelFactory):
 
     eb_entity = factory.SubFactory(EBEntityFactory)
     taxpayer = factory.SubFactory(TaxPayerFactory)
+    status = CURRENT_STATUS
 
 
 class TaxPayerArgentinaFactory(TaxPayerFactory):

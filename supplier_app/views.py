@@ -19,6 +19,10 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
+from supplier_app.constants.eb_entities_status import (
+    CURRENT_STATUS,
+    UNUSED_STATUS,
+)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -239,9 +243,30 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         CAN_EDIT_TAXPAYER_PERM,
     )
 
+    def post(self, request, **kwargs):
+        self.object = self.get_object()
+
+        eb_entities = EBEntity.objects.filter(
+            pk__in=request.POST.getlist('eb_entities')
+        )
+        self.object.set_current_eb_entities(eb_entities)
+        self.object.save()
+        if request.user.is_supplier:
+            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
+            taxpayer.change_to_pending_taxpayer()
+            taxpayer.save()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        form = context['form']
+        taxpayer = TaxPayer.objects.get(pk=context['taxpayer_id'])
+        form.fields['eb_entities'].initial = taxpayer.eb_entities
         return context
 
     def handle_no_permission(self):
@@ -251,12 +276,6 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         taxpayer_id = self.kwargs['taxpayer_id']
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
-    def post(self, request, *args, **kwargs):
-        if request.user.is_supplier:
-            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
-            taxpayer.change_to_pending_taxpayer()
-            taxpayer.save()
-        return super().post(request, *args, **kwargs)
 
 
 class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
