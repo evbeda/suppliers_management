@@ -68,14 +68,7 @@ class Invoice(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         verbose_name=_('Invoice File'),
     )
-
-    po_file = models.FileField(
-        upload_to='file',
-        null=True,
-        blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
-        verbose_name=_('PO file'),
-    )
+    workday_id = models.PositiveIntegerField(blank=True, null=True)
 
     invoice_eb_entity = models.ForeignKey(EBEntity, default=None)
 

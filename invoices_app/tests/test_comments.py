@@ -23,7 +23,6 @@ from utils.history import invoice_history_comments
 class CommentsTest(TestBase):
     # Feature: Generates comments when invoice state changes
     @parameterized.expand([
-        ('APPROVED',),
         ('CHANGES REQUESTED',),
         ('REJECTED'),
         ('PAID',),

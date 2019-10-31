@@ -23,6 +23,13 @@ INVOICE_STATUS = [
     ('5', _('PAID')),
 ]
 
+AVAILABLE_INVOICE_STATUS_CHANGES = [
+    '2',
+    '3',
+    '4',
+    '5',
+]
+
 ARS_INVOICE_TYPES = [
     ('A', 'A'),
     ('C', 'C'),
@@ -48,3 +55,5 @@ INVOICE_DATE_FORMAT = _("MM/DD/YYYY")
 ENGLISH_LANGUAGE_CODE = _('en')
 
 DEFAULT_NUMBER_PAGINATION = 10
+NO_WORKDAY_ID_ERROR = _("Please provide a Workday ID in order to approve an invoice")
+INVALID_WORKDAY_ID_ERROR = _("Ivalid Worday ID")
