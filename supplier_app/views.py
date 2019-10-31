@@ -264,8 +264,10 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
+        taxpayer = TaxPayerArgentina.objects.get(pk=context['taxpayer_id'])
         form = context['form']
-        taxpayer = TaxPayer.objects.get(pk=context['taxpayer_id'])
+        form.fields['afip_registration_file'].initial = taxpayer.afip_registration_file
+        form.fields['witholding_taxes_file'].initial = taxpayer.witholding_taxes_file
         form.fields['eb_entities'].initial = taxpayer.eb_entities
         return context
 
@@ -324,7 +326,10 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context = super().get_context_data(**kwargs)
         taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['taxpayer_id'] = taxpayer.id
-        get_object_or_404(BankAccount, pk=self.kwargs['bank_id'], taxpayer=taxpayer)
+        bank_account = get_object_or_404(BankAccount, pk=self.kwargs['bank_id'], taxpayer=taxpayer)
+        taxpayer = TaxPayerArgentina.objects.get(pk=context['taxpayer_id'])
+        form = context['form']
+        form.fields['bank_cbu_file'].initial = bank_account.bank_cbu_file
         return context
 
     def handle_no_permission(self):

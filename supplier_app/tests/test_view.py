@@ -2,6 +2,7 @@ from datetime import (
     date,
     timedelta,
 )
+import filecmp
 from freezegun import freeze_time
 from http import HTTPStatus
 from os import (
@@ -89,6 +90,7 @@ from supplier_app.views import (
     CompanyUserPermission,
     EditTaxpayerView,
     SupplierHome,
+    EditTaxpayerView,
 )
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
@@ -800,6 +802,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.client = Client()
         self.client_supplier = Client()
 
+        self.factory = RequestFactory()
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
@@ -825,6 +828,10 @@ class TestEditTaxPayerInfo(TestCase):
             'taxpayer_id': self.taxpayer.id,
         }
         self.taxpayer_id = self.taxpayer.id
+
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'test.pdf'
+        self.file_mock.size = 50
 
     def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
         response = self.client.get(
@@ -911,15 +918,16 @@ class TestEditTaxPayerInfo(TestCase):
             TAXPAYER_POST_UPDATE
         )
 
-        self.client.post(
-            reverse(
-                self.taxpayer_edit_url,
-                kwargs=self.kwargs
-            ),
-            data=QUERY_FORM_TAXPAYER_POST_UPDATE
+        request = self._taxpayer_edit_request(QUERY_FORM_TAXPAYER_POST_UPDATE)
+        EditTaxpayerView.as_view()(
+            request,
+            **self.kwargs,
         )
 
-        form_taxpayer = TaxPayerEditForm(data=QUERY_FORM_TAXPAYER_POST_UPDATE)
+        form_taxpayer = TaxPayerEditForm(
+            data=QUERY_FORM_TAXPAYER_POST_UPDATE,
+            files=self._get_request_FILES(),
+            )
         self.assertTrue(form_taxpayer.is_valid())
 
         after_update = len(TaxPayer.objects.all())
@@ -1012,6 +1020,90 @@ class TestEditTaxPayerInfo(TestCase):
         current_eb_entities = taxpayer.eb_entities
         self.assertEqual(2, len(current_eb_entities))
         self.assertEqual([eb_entity_1, eb_entity_2], taxpayer.eb_entities)
+    def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
+        self.taxpayer.afip_registration_file = self.file_mock
+        self.taxpayer.witholding_taxes_file = self.file_mock
+        self.taxpayer.save()
+
+        response = self.client.get(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
+            )
+        )
+
+        self.assertEqual(
+            self.taxpayer.afip_registration_file,
+            response.context_data['form'].fields['afip_registration_file'].initial
+        )
+        self.assertEqual(
+            self.taxpayer.witholding_taxes_file,
+            response.context_data['form'].fields['witholding_taxes_file'].initial
+        )
+
+    @parameterized.expand([
+        ('supplier', 'supplier@gmail.com'),
+        ('ap_admin', 'fake_ap@eventbrite.com'),
+    ])
+    def test_post_edit_taxpayer_view_should_update_taxpayer_info(self, group, user):
+        client = Client()
+
+        group = Group.objects.get(name=group)
+        user = UserFactory(email=user)
+        user.groups.add(group)
+
+        company_user_permission = CompanyUserPermissionFactory(
+            user=user,
+            company=self.taxpayer.company
+        )
+
+        client.force_login(user)
+
+        client.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
+            ),
+            self.TAXPAYER_POST
+        )
+
+        updated_taxpayer = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
+
+        self.assertEquals(self.TAXPAYER_POST['cuit'], updated_taxpayer.cuit)
+        self.assertEquals(self.TAXPAYER_POST['payment_type'], updated_taxpayer.payment_type)
+        self.assertEquals(self.TAXPAYER_POST['payment_term'], updated_taxpayer.payment_term)
+        self.assertEquals(self.TAXPAYER_POST['workday_id'], updated_taxpayer.workday_id)
+        self.assertEquals(self.TAXPAYER_POST['business_name'], updated_taxpayer.business_name)
+        self.assertEquals(self.TAXPAYER_POST['country'], updated_taxpayer.country)
+        with open(updated_taxpayer.afip_registration_file.name, "w") as file1 , open(self.TAXPAYER_POST['afip_registration_file'].name, "w") as file2 :
+            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
+        with open(updated_taxpayer.witholding_taxes_file.name, "w") as file1 , open(self.TAXPAYER_POST['witholding_taxes_file'].name, "w") as file2 :
+            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
+
+    def _taxpayer_edit_request(self, edit_data):
+        request = self.factory.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs=self.kwargs
+            ),
+            data=edit_data,
+        )
+        request.user = self.ap_user
+        return request
+
+    def _get_request_FILES(
+        self,
+        afip_file=None,
+        witholding_taxes_file=None,
+    ):
+        return MultiValueDict({
+            'afip_registration_file': [
+                afip_file or self.file_mock
+            ],
+            'witholding_taxes_file': [
+                witholding_taxes_file or self.file_mock
+            ],
+        })
 
 
 class TestEditAddressInfo(TestCase):
@@ -1131,6 +1223,11 @@ class TestEditBankAccountInfo(TestCase):
     def setUp(self):
         self.client = Client()
 
+        self.factory = RequestFactory()
+        self.file_mock = MagicMock(spec=File)
+        self.file_mock.name = 'bank_account.pdf'
+        self.file_mock.size = 50
+
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
@@ -1143,12 +1240,14 @@ class TestEditBankAccountInfo(TestCase):
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved'].value
         self.taxpayer.save()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
+        self.bank_account.bank_cbu_file = self.file_mock
 
         self.bank_update_url = 'bank-account-update'
 
         self.BANK_ACCOUNT_POST = {
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '123214',
+            'bank_cbu_file': self.file_mock,
         }
 
         self.taxpayer_detail_url = 'supplier-details'
@@ -1235,6 +1334,55 @@ class TestEditBankAccountInfo(TestCase):
             status_pending,
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
+
+    def test_edit_bank_account_view_should_populate_file_fields_with_existing_files(self):
+        self.bank_account.bank_cbu_file = self.file_mock
+        self.bank_account.save()
+
+        response = self.client.get(
+            reverse(
+                self.bank_update_url,
+                kwargs=self.kwargs
+            )
+        )
+
+        self.assertEqual(
+            self.bank_account.bank_cbu_file,
+            response.context_data['form'].fields['bank_cbu_file'].initial
+        )
+
+    @parameterized.expand([
+        ('supplier', 'supplier@gmail.com'),
+        ('ap_admin', 'fake_ap@eventbrite.com'),
+    ])
+    def test_post_edit_bank_account_view_should_update_bank_account_info(self, group, user):
+        client = Client()
+
+        group = Group.objects.get(name=group)
+        user = UserFactory(email=user)
+        user.groups.add(group)
+
+        company_user_permission = CompanyUserPermissionFactory(
+            user=user,
+            company=self.taxpayer.company
+        )
+
+        client.force_login(user)
+
+        client.post(
+            reverse(
+                self.bank_update_url,
+                kwargs=self.kwargs
+            ),
+            self.BANK_ACCOUNT_POST
+        )
+
+        updated_bank_account = BankAccount.objects.get(pk=self.kwargs['bank_id'])
+
+        self.assertEquals(self.BANK_ACCOUNT_POST['bank_account_number'], updated_bank_account.bank_account_number)
+        self.assertEquals(self.BANK_ACCOUNT_POST['bank_info'], updated_bank_account.bank_info)
+        with open(updated_bank_account.bank_cbu_file.name, "w") as file1 , open(self.file_mock.name, "w") as file2 :
+            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
 
 
 class TestCompanyCreateView(TestCase):
@@ -1865,9 +2013,14 @@ class TestTaxpayerHistory(TestCase):
             'bank_id': bank_account.id,
         }
 
+        file_mock = MagicMock(spec=File)
+        file_mock.name = 'test.pdf'
+        file_mock.size = 50
+
         BANK_ACCOUNT_POST = {
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '123214',
+            'bank_cbu_file': file_mock,
         }
 
         row_before_modification = len(bank_account.history.all())

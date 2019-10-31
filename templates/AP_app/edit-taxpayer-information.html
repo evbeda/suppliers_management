@@ -11,18 +11,15 @@
 {% else %}
 {% include 'supplier_app/navbar.html' %}
 {% endif %}
-<form method="post">
-    {% csrf_token %}
-    <div class="row m-3 justify-content-center">
-        <div class="col-md-6 form-group">
-            <h4>Taxpayer info</h4>
-        </div>
+<div class="container p-3">
+    <div class="row justify-content-center">
+        <h4>Taxpayer info</h4>
     </div>
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="POST">
+        <div class="col-md-8">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form }}
+                {{ form.as_p}}
                 <div class="row justify-content-end mt-3">
                     <input class="btn btn-success mr-3" type="submit" 
                     value="{% if request.user.is_AP %}{% trans 'Save' %}{% else %}{% trans 'Request change' %}{% endif %}">
@@ -33,5 +30,5 @@
             </form>
         </div>
     </div>
-</form>
+</div>
 {% endblock %}
