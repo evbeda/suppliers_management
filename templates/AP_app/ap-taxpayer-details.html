@@ -25,6 +25,9 @@
                 <table class="table table-hover text-center">
                     <thead class="thead-eb-dark">
                         <tr>
+                            {% if is_AP %}
+                            <th scope="col">{% trans "Workday id" %}</th>
+                            {% endif %}
                             <th scope="col">{% trans "Business name" %}</th>
                             <th scope="col">{% trans "Taxpayer Identification Number" %}</th>
                             <th scope="col">{% trans "Payment Type" %}</th>
@@ -40,6 +43,9 @@
                     </thead>
                     <tbody>
                         <tr>
+                            {% if is_AP %}
+                            <th scope="col">{{taxpayer.workday_id}}</th>
+                            {% endif %}
                             <td>{{taxpayer.business_name}}</td>
                             <td>{{taxpayer.cuit}}</td>
                             <td>{{taxpayer.payment_type}}</td>
