@@ -2,19 +2,21 @@ from datetime import date, timedelta
 from functools import reduce
 from http import HTTPStatus
 from parameterized import parameterized
+from unittest.mock import patch
 
+
+from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import Form
+from django.http import HttpRequest
 from django.urls import reverse
+from django.utils.translation import get_language
 from django.shortcuts import get_object_or_404
 from django.core import mail
 
-from supplier_app import (
-    TAXPAYER_STATUS_PENDING,
-)
-from supplier_app.tests.factory_boy import (
-    CompanyUserPermissionFactory,
-    TaxPayerEBEntityFactory,
-)
+from supplier_app import TAXPAYER_STATUS_PENDING
+from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
+from supplier_app.tests.factory_boy import TaxPayerEBEntityFactory
 from users_app.factory_boy import UserFactory
 
 from invoices_app import (
@@ -31,6 +33,11 @@ from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
 from invoices_app.tests.test_base import TestBase
+from invoices_app.views import (
+    _send_email_when_change_invoice_status,
+    _send_email_when_posting_a_comment,
+    _send_email_when_editing_invoice
+)
 
 from utils.invoice_lookup import invoice_status_lookup
 
@@ -242,7 +249,12 @@ class TestInvoice(TestBase):
         (INVOICE_STATUS_REJECTED),
         (INVOICE_STATUS_PAID,),
     ])
-    def test_invoice_change_status_in_db(self, status):
+    @patch('invoices_app.views._send_email_when_change_invoice_status')
+    def test_invoice_change_status_in_db(
+        self,
+        status,
+        _
+    ):
         self.client.force_login(self.ap_user)
         self.client.post(
             reverse(
@@ -287,7 +299,13 @@ class TestInvoice(TestBase):
         (1, 302),
         (31, 404),
     ])
-    def test_invoice_change_status_code(self, id, expected):
+    @patch('invoices_app.views._send_email_when_change_invoice_status')
+    def test_invoice_change_status_code(
+        self,
+        id,
+        expected,
+        _
+    ):
         self.client.force_login(self.ap_user)
         request = self.client.post(
             reverse(
@@ -329,7 +347,7 @@ class TestInvoice(TestBase):
             ),
             {
                 'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
-                'workday_id': 123123, 
+                'workday_id': 123123,
             },
             follow=True
         )
@@ -420,7 +438,8 @@ class TestInvoice(TestBase):
         )
         self.assertContains(res, 'This field is required.')
 
-    def test_supplier_invoice_edit_permissions(self):
+    @patch('invoices_app.views._send_email_when_editing_invoice')
+    def test_supplier_invoice_edit_permissions(self, _):
         self.client.force_login(self.user)
 
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
@@ -442,7 +461,8 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(res.status_code, HTTPStatus.OK)
 
-    def test_ap_invoice_edit_permissions(self):
+    @patch('invoices_app.views._send_email_when_editing_invoice')
+    def test_ap_invoice_edit_permissions(self, _):
         self.client.force_login(self.ap_user)
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         self.invoice.save()
@@ -463,7 +483,7 @@ class TestInvoice(TestBase):
             self.invoice_post_data['invoice_number']
         )
 
-    def test_suplier_invoice_detail_view_address(self):
+    def test_supplier_invoice_detail_view_address(self):
         self.client.force_login(self.user)
 
         response = self.client.get(
@@ -640,8 +660,8 @@ class TestInvoice(TestBase):
             ),
             self.invoice_post_data
         )
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(len(mail.outbox[0].to), 3)
+        self.assertEqual(len(mail.outbox), 3)
+        self.assertEqual(len(mail.outbox[0].to), 1)
 
     def test_do_not_send_email_when_user_edits_invoice(self):
         self.client.force_login(self.user)
@@ -656,6 +676,187 @@ class TestInvoice(TestBase):
             self.invoice_post_data
         )
         self.assertEqual(len(mail.outbox), 0)
+
+    @parameterized.expand([
+        ('en', 'PAID', 'Invoice {} changed status to {}'),
+        ('es', 'PAGADA', 'La factura {} cambió de estado a {}'),
+        ('pt-br','PAGO', 'A fatura {} alterou o status para {}'),
+    ])
+    def test_send_email_when_change_invoice_status_with_user_preferred_language(
+        self,
+        language,
+        new_status,
+        expected_subject,
+    ):
+        # Given an invoice with a state, an user with a preferred language
+        self.invoice.status = new_status
+        self.invoice.save()
+
+        self.user.preferred_language = language
+        self.user.save()
+
+        request = HttpRequest()
+        request.user = self.user
+
+        # When an email is sent when changing invoice status
+        with patch('invoices_app.views._send_email') as patch_send_email:
+            _send_email_when_change_invoice_status(request, self.invoice)
+
+        # Then an email must be sent to user in his languages preferences
+        params, _ = patch_send_email.call_args
+        subject = params[0]
+
+        self.assertEqual(
+            subject,
+            expected_subject.format(
+                self.invoice.invoice_number,
+                self.invoice.status
+            )
+        )
+
+    @parameterized.expand([
+        ('en', ),
+        ('es', ),
+        ('pt-br',),
+    ])
+    def test_session_language_remains_when_sending_email_in_change_invoice_status(
+        self,
+        language,
+    ):
+        # Given an user associated with the invoice with a preferred language
+        # And another logged user within the company
+        self.user.preferred_language = language
+        self.user.save()
+
+        self.logged_user = UserFactory()
+        supplier_group = Group.objects.get(name='supplier')
+        self.logged_user.groups.add(supplier_group)
+        self.companyuserpermission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.logged_user
+        )
+
+        request = HttpRequest()
+        request.user = self.logged_user
+
+        # When an email is sent when changing invoice status
+        with patch('invoices_app.views._send_email'):
+            _send_email_when_change_invoice_status(request, self.invoice)
+
+        # Then session language of the logged user remain
+        self.assertEqual(request.user.preferred_language, get_language())
+
+    @parameterized.expand([
+        ('en', 'Eventbrite Invoice {} commented',\
+            'You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}'),
+        ('es', 'Factura de Eventbrite {} comentada', \
+            'Tienes un nuevo comentario en la factura # {}. Por favor revise su factura. COMENTARIO:{}'),
+        ('pt-br', 'Fatura da Eventbrite {} comentada', \
+            'Você tem um novo comentário na fatura # {}. Por favor, verifique sua fatura. COMENTE:{}'),
+    ])
+    def test_send_email_when_posting_a_comment_with_user_preferred_language(
+        self,
+        language,
+        expected_subject,
+        expected_message,
+    ):
+        # Given an invoice, an user with a preferred language
+        # invoice: self.invoice
+        self.user.preferred_language = language
+        self.user.save()
+
+        message = 'Valid message'
+
+        request = HttpRequest()
+        request.POST['message'] = message
+        request.user = self.user
+
+        # When an email is sent when posting a comment
+        with patch('invoices_app.views._send_email') as patch_send_email:
+            _send_email_when_posting_a_comment(request, self.invoice)
+
+        # Then an email must be sent to user in his languages preferences
+        params, _ = patch_send_email.call_args
+        subject = params[0]
+
+        self.assertEqual(
+            subject,
+            expected_subject.format(
+                self.invoice.invoice_number,
+            )
+        )
+        self.assertTrue(
+            message.format(self.invoice.invoice_number, message) in params[1]
+        )
+
+    @parameterized.expand([
+        ('en', ),
+        ('es', ),
+        ('pt-br',),
+    ])
+    def test_session_language_remains_when_sending_email_in_posting_a_comment(
+        self,
+        language,
+    ):
+        # Given an user associated with the invoice with a preferred language
+        # And another logged user within the company
+        self.user.preferred_language = language
+        self.user.save()
+
+        self.logged_user = UserFactory()
+        supplier_group = Group.objects.get(name='supplier')
+        self.logged_user.groups.add(supplier_group)
+        self.companyuserpermission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.logged_user
+        )
+
+        request = HttpRequest()
+        request.POST['message'] = 'Valid message'
+        request.user = self.logged_user
+
+        # When an email is sent when posting a comment
+        with patch('invoices_app.views._send_email'):
+            _send_email_when_posting_a_comment(request, self.invoice)
+
+        # Then session language of the logged user remain
+        self.assertEqual(request.user.preferred_language, get_language())
+
+    @parameterized.expand([
+        ('en', 'Eventbrite Invoice Edited', "Your Invoice # {} was edited by an administrator. Please check your invoice"),
+        ('es', 'Factura de Eventbrite editada', "Tu factura # {} fue modificada por un administrador. Por favor revise su factura."),
+        ('pt-br', 'Fatura da Eventbrite editada', "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"),
+    ])
+    def test_send_email_when_editing_an_invoice_in_user_preferred_language(
+        self,
+        language,
+        expected_subject,
+        expected_message,
+    ):
+        # Given an invoice with state CHANGES REQUIRED
+        # An AP user and a supplier user with a preferred language
+
+        # ap_user: self.ap_user
+        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
+        self.user.preferred_language = language
+        self.user.save()
+
+        form = Form()
+        form.instance = self.invoice
+
+        # When an email is sent when editing an invoice
+        with patch('invoices_app.views._send_email') as patch_send_email:
+            _send_email_when_editing_invoice(form.instance, self.ap_user)
+
+        # Then an email must be sent to user in his languages preferences
+        params, _ = patch_send_email.call_args
+        subject = params[0]
+        message = params[1]
+
+        self.assertEqual(subject, expected_subject)
+        self.assertTrue(
+            expected_message.format(self.invoice.invoice_number, message) in params[1]
+        )
 
     def test_invoice_export_to_xls(self):
         self.client.force_login(self.ap_user)

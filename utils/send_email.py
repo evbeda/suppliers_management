@@ -11,8 +11,8 @@ from supplier_app.models import (
 )
 from supplier_app import email_notifications
 from celery import shared_task
+from utils import GO_TO_BRITESU
 from utils.exceptions import CouldNotSendEmailError
-
 
 @shared_task(ignore_result=True)
 def send_email_notification(subject, message, recipient_list):
@@ -78,7 +78,7 @@ def build_mail_html(
     supplier_name,
     upper_text,
     lower_text,
-    btn_text='Go to BriteSu',
+    btn_text=GO_TO_BRITESU,
     btn_url=settings.SUPPLIER_HOME_URL,
 ):
     html_message = render_to_string(

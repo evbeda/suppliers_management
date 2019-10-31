@@ -58,3 +58,10 @@ ENGLISH_LANGUAGE_CODE = _('en')
 DEFAULT_NUMBER_PAGINATION = 10
 NO_WORKDAY_ID_ERROR = _("Please provide a Workday ID in order to approve an invoice")
 INVALID_WORKDAY_ID_ERROR = _("Ivalid Worday ID")
+
+THANK_YOU = _('Thank you')
+EVENTBRITE_INVOICE_COMMENTED = _('Eventbrite Invoice {} commented')
+NEW_COMMENT_EMAIL_TEXT = _('You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}')
+INVOICE_CHANGE_STATUS_TEXT_EMAIL = _('Invoice {} changed status to {}')
+EVENTBRITE_INVOICE_EDITED = _('Eventbrite Invoice Edited')
+INVOICE_EDIT_INVOICE_UPPER_TEXT = _('Your Invoice # {} was edited by an administrator. Please check your invoice')
