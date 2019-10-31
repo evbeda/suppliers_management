@@ -28,7 +28,7 @@
         <table class="table table-sm table-hover">
             <thead class="thead-eb-dark">
                 <tr>
-                    <th scope="col">{% trans "Invoice ID"%}</th>
+                    <th scope="col">#</th>
                     <th scope="col">{% trans "Date"%}</th>
                     <th scope="col">{% trans "Invoice Number"%}</th>
                     <th scope="col">{% trans "PO Number"%}</th>
@@ -48,7 +48,7 @@
                 {% endif %}
                 {% for invoice in object_list %}
                 <tr>
-                    <th scope="row">{{invoice.id}}</th>
+                    <th scope="row">{{ forloop.counter }}</th>
                     <td>{{invoice.invoice_date_received|date:"d M, Y"}}</td>
                     <td>{{invoice.invoice_number}}</td>
                     <td>{{invoice.po_number}}</td>
