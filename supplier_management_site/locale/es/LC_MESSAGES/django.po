@@ -218,7 +218,7 @@ msgstr "30 días"
 
 #: supplier_app/__init__.py:31
 msgid "Bank"
-msgstr "Banco"
+msgstr "Transferencia Banco"
 
 #: supplier_app/__init__.py:36
 msgid "You have been invited to BriteSu"
@@ -374,15 +374,15 @@ msgstr "Comentarios adicionales"
 
 #: supplier_app/models.py:134
 msgid "Payment type"
-msgstr "Tipo de pago"
+msgstr "Forma de pago"
 
 #: supplier_app/models.py:139
 msgid "Payment term"
-msgstr "Término de pago"
+msgstr "Plazo de pago"
 
 #: supplier_app/models.py:144
 msgid "AFIP registration certificate"
-msgstr "Certificado AFIP"
+msgstr "Constancia de inscripción de AFIP"
 
 #: supplier_app/models.py:150
 msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
@@ -414,7 +414,7 @@ msgstr "Provincia"
 
 #: supplier_app/models.py:180
 msgid "Bank account number"
-msgstr "Cuenta bancaria"
+msgstr "Datos bancaria"
 
 #: supplier_app/models.py:183
 msgid "Bank name"
@@ -655,7 +655,7 @@ msgstr "Cuenta bancaria"
 
 #: templates/AP_app/taxpayer-history-list.html:87
 msgid "Bank Account Number"
-msgstr "Cuenta bancaria"
+msgstr "CBU"
 
 #: templates/AP_app/taxpayer_filter.html:51 templates/_filters.html:80
 msgid "Apply"
