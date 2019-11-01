@@ -93,8 +93,8 @@ from supplier_app.tests.factory_boy import (
 from supplier_app.views import (
     CreateTaxPayerView,
     CompanyUserPermission,
-    SupplierHome,
     EditTaxpayerView,
+    SupplierHome,
 )
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
@@ -722,7 +722,6 @@ class TestSupplierDetailsView(TestCase):
 
     def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
         response = self.client.get(self.sup_detail_url)
-        import ipdb;ipdb.set_trace(context=15)
         self.assertContains(
             response, 'Approve'
         )
@@ -876,7 +875,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.file_mock.size = 50
 
     def tearDown(self):
-        if (self.file_mock or new_afip_file or new_witholding_file) and path.exists( #  noqa
+        if (self.file_mock or new_afip_file or new_witholding_file) and path.exists(  # noqa
             'file/'
         ):
             rmtree('file')
@@ -1137,7 +1136,7 @@ class TestEditTaxPayerInfo(TestCase):
         user = UserFactory(email=user)
         user.groups.add(group)
 
-        company_user_permission = CompanyUserPermissionFactory(
+        CompanyUserPermissionFactory(
             user=user,
             company=self.taxpayer.company
         )
@@ -1348,7 +1347,7 @@ class TestEditBankAccountInfo(TestCase):
         }
 
     def tearDown(self):
-        if (self.file_mock or new_cbu_file) and path.exists(  #  noqa
+        if (self.file_mock or new_cbu_file) and path.exists(  # noqa
             'file/{}'.format(self.file_mock.name)
         ):
             rmtree('file')

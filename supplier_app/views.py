@@ -287,12 +287,9 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
             pk__in=request.POST.getlist('eb_entities')
         )
         self.object.set_current_eb_entities(eb_entities)
-        self.object.save()
-        if request.user.is_supplier:
-            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
-            taxpayer.change_to_pending_taxpayer()
-            taxpayer.save()
         form = self.get_form()
+        if request.user.is_supplier:
+            form.instance.change_to_pending_taxpayer()
         if form.is_valid():
             return self.form_valid(form)
         else:
