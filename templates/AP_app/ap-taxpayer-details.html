@@ -162,22 +162,39 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-end">
-        {% if is_AP %}
-        <div class="col text-rigth">
-            <span><a href="{% url 'taxpayer-history' pk=taxpayer.id %}" class="btn btn-primary float-right">{% trans "Taxpayer History" %}</a></span>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="col-md-12">
+        	{% if is_AP %}
+            	    {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+		    <div class="row justify-content-end">
+			<div class="col-md-6">
+			    {% include 'comments.html' %}                
+    			</div>
+            		<div class="col-md-6">
+                	    {% include 'AP_app/deny-taxpayer.html'%}
+    			</div>
+		    </div>
+               	    {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+		    <div class="row justify-content-end">
+            		<div class="col-md-9">
+			    {% include 'comments.html' %}                
+    			</div>
+            		<div class="col-md-3 d-flex justify-content-around">
+                	    {% include 'AP_app/approve-taxpayer.html'%}
+                	    {% include 'AP_app/deny-taxpayer.html'%}
+    			</div>
+		    </div>
+            	    {% endif %}       
+		{% else %}
+		    <div class="row justify-content-end">
+			    <div class="col-md-12">
+			    {% include 'comments.html' %}                
+    			</div>
+		    </div>
+        	{% endif %}
+            </div>
         </div>
-            {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-                
-                {% include 'AP_app/deny-taxpayer.html'%}
-            
-            {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-                
-                {% include 'AP_app/approve-taxpayer.html'%}
-                {% include 'AP_app/deny-taxpayer.html'%}
-            
-            {% endif %}       
-        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -29,6 +29,16 @@ class StrategyApprove(StrategyStatusChange):
         taxpayer.save()
 
 
+class StrategyChangeRequired(StrategyStatusChange):
+
+    def send_email(taxpayer):
+        taxpayer_notification(taxpayer, 'taxpayer_change_required')
+
+    def change_taxpayer_status(taxpayer):
+        taxpayer.change_required_taxpayer()
+        taxpayer.save()
+
+
 strategy = {
     "approve": StrategyApprove,
     "deny": StrategyDeny,
