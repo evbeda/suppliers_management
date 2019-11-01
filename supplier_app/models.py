@@ -14,8 +14,13 @@ from supplier_app import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices
 )
+
 from supplier_app.constants.bank_info import get_bank_info_choices
 from supplier_app.constants.countries import get_countries_choices
+from supplier_app.constants.eb_entities_status import (
+    CURRENT_STATUS,
+    UNUSED_STATUS,
+)
 
 
 class Company(models.Model):
@@ -107,6 +112,10 @@ class TaxPayer(models.Model):
     def taxpayer_identifier(self):
         return self.get_taxpayer_child().get_taxpayer_identifier()
 
+    @property
+    def eb_entities(self):
+        return [txe.eb_entity for txe in self.taxpayerebentity_set.filter(status=CURRENT_STATUS)]
+
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
@@ -125,10 +134,58 @@ class TaxPayer(models.Model):
     def has_workday_id(self):
         return True if self.workday_id else False
 
+    def set_current_eb_entities(self, eb_entities):
+        eb_entities_id = [eb_entity.id for eb_entity in eb_entities]
+
+        self.create_if_not_exist_taxpayer_eb_entity(eb_entities)
+
+        taxpayer_eb_entity_selected = self.taxpayerebentity_set.filter(
+            eb_entity__pk__in=eb_entities_id
+        )
+        taxpayer_eb_entity_non_selected = self.taxpayerebentity_set.exclude(
+            eb_entity__pk__in=eb_entities_id
+        )
+        self.apply_function_to_all_elems(
+            taxpayer_eb_entity_selected,
+            TaxPayerEBEntity.set_current_status
+        )
+        self.apply_function_to_all_elems(
+            taxpayer_eb_entity_non_selected,
+            TaxPayerEBEntity.set_unused_status
+        )
+
+    def apply_function_to_all_elems(self, default_list, function):
+        for elem in default_list:
+            function(elem)
+
+    def create_if_not_exist_taxpayer_eb_entity(self, eb_entities):
+        for eb_entity in eb_entities:
+            if not self.taxpayerebentity_set.filter(eb_entity__pk=eb_entity.id):
+                TaxPayerEBEntity.objects.create(
+                    taxpayer=self,
+                    eb_entity=eb_entity,
+                )
+
 
 class TaxPayerEBEntity(models.Model):
     eb_entity = models.ForeignKey(EBEntity)
     taxpayer = models.ForeignKey(TaxPayer)
+    status = models.CharField(
+        max_length=10,
+        choices=(
+            (1, "Current"),
+            (2, "Unused")
+        ),
+        default=1,
+    )
+
+    def set_current_status(taxpayer_eb_entity):
+        taxpayer_eb_entity.status = CURRENT_STATUS
+        taxpayer_eb_entity.save()
+
+    def set_unused_status(taxpayer_eb_entity):
+        taxpayer_eb_entity.status = UNUSED_STATUS
+        taxpayer_eb_entity.save()
 
 
 class TaxPayerArgentina(TaxPayer):

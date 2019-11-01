@@ -82,6 +82,7 @@ from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
     EBEntityFactory,
     TaxPayerArgentinaFactory,
+    TaxPayerEBEntityFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
@@ -797,7 +798,7 @@ class TestTaxpayerDetailsSupplier(TestCase):
 class TestEditTaxPayerInfo(TestCase):
     def setUp(self):
         self.client = Client()
-        self.client2 = Client()
+        self.client_supplier = Client()
 
         self.ap_group = Group.objects.get(name="ap_admin")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
@@ -807,7 +808,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.supplier_group = Group.objects.get(name="supplier")
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
-        self.client2.force_login(self.supplier_user)
+        self.client_supplier.force_login(self.supplier_user)
 
         self.taxpayer = TaxPayerArgentinaFactory()
         self.company_user_permission = CompanyUserPermissionFactory(
@@ -856,7 +857,7 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_taxpayer_info_as_supplier_should_redirect_to_supplier_home(self):
-        response = self.client2.post(
+        response = self.client_supplier.post(
             reverse(
                 self.taxpayer_edit_url,
                 kwargs=self.kwargs
@@ -936,7 +937,7 @@ class TestEditTaxPayerInfo(TestCase):
         status_approved = TAXPAYER_STATUS['Approved'].value
         status_pending = TAXPAYER_STATUS['Pending'].value
         self.taxpayer.taxpayer_state = status_approved
-        self.client2.post(
+        self.client_supplier.post(
             reverse(
                 self.taxpayer_edit_url,
                 kwargs=self.kwargs
@@ -965,6 +966,52 @@ class TestEditTaxPayerInfo(TestCase):
             edited_taxpayer_state,
             status_approved
         )
+
+    def test_taxpayer_edit_view_should_render_eb_entities_related(self):
+        taxpayer = TaxPayerArgentinaFactory(
+            company=self.taxpayer.company,
+        )
+        taxpayer_eb_entity_1 = TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        taxpayer_eb_entity_2 = TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        response = self.client_supplier.get(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs={
+                    'taxpayer_id': taxpayer.id,
+                }
+            ),
+        )
+        self.assertEqual(
+            [taxpayer_eb_entity_1.eb_entity, taxpayer_eb_entity_2.eb_entity],
+            response.context_data['form'].fields['eb_entities'].initial)
+
+    def test_form_valid_method_should_update_eb_entities(self):
+        taxpayer = TaxPayerArgentinaFactory(
+            company=self.taxpayer.company,
+        )
+        TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        TaxPayerEBEntityFactory(taxpayer=taxpayer)
+        eb_entity_1 = EBEntityFactory(eb_name="Eventbrite example")
+        eb_entity_2 = EBEntityFactory(eb_name="Eventbrite example 2")
+
+        post_data = taxpayer_edit_POST_factory()
+
+        EDIT_DATA = {}
+        EDIT_DATA.update(post_data)
+        EDIT_DATA['eb_entities'] = [str(eb_entity_1.id), str(eb_entity_2.id)]
+
+        self.client_supplier.post(
+            reverse(
+                self.taxpayer_edit_url,
+                kwargs={
+                    'taxpayer_id': taxpayer.id,
+                }
+            ),
+            data=EDIT_DATA,
+        )
+        current_eb_entities = taxpayer.eb_entities
+        self.assertEqual(2, len(current_eb_entities))
+        self.assertEqual([eb_entity_1, eb_entity_2], taxpayer.eb_entities)
 
 
 class TestEditAddressInfo(TestCase):

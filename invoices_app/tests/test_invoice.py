@@ -11,7 +11,10 @@ from django.core import mail
 from supplier_app import (
     TAXPAYER_STATUS_PENDING,
 )
-from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
+from supplier_app.tests.factory_boy import (
+    CompanyUserPermissionFactory,
+    TaxPayerEBEntityFactory,
+)
 from users_app.factory_boy import UserFactory
 
 from invoices_app import (
@@ -82,8 +85,8 @@ class TestInvoice(TestBase):
                 'invoice_file': SimpleUploadedFile(name_file, bytes(size_file)),
             }
         )
-        is_valid = form.is_valid()
-        errors = reduce(lambda a,b:a+b, form.errors.values())
+        form.is_valid()
+        errors = reduce(lambda a, b: a+b, form.errors.values())
         for message in messages:
             self.assertTrue(message in errors)
 
@@ -119,6 +122,34 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
         self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_NEW))
+
+    def test_invoice_should_only_display_eb_entities_from_the_taxpayer(self):
+        self.client.force_login(self.user)
+        taxpayer_eb_entity_1 = TaxPayerEBEntityFactory(taxpayer=self.taxpayer)
+        taxpayer_eb_entity_2 = TaxPayerEBEntityFactory(taxpayer=self.taxpayer)
+        response = self.client.get(
+            reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id})
+        )
+        taxpayer_eb_entities = \
+            [e.eb_entity for e in self.taxpayer.taxpayerebentity_set.all()]
+        self.assertEqual(
+            response.context_data['eb_entities'],
+            taxpayer_eb_entities
+        )
+        self.assertContains(response, taxpayer_eb_entity_1.eb_entity.eb_name)
+        self.assertContains(response, taxpayer_eb_entity_2.eb_entity.eb_name)
+
+    def test_invoice_create_should_be_related_with_eb_entity(self):
+        self.client.force_login(self.user)
+        taxpayer_eb_entity_1 = TaxPayerEBEntityFactory(taxpayer=self.taxpayer)
+        self.client.post(
+            reverse('invoice-create', kwargs={'taxpayer_id': self.taxpayer.id}),
+            self.get_invoice_post_data(eb_entity=taxpayer_eb_entity_1.eb_entity.id),
+        )
+        self.assertEqual(
+            taxpayer_eb_entity_1.eb_entity,
+            Invoice.objects.last().invoice_eb_entity
+        )
 
     def test_invoice_create_existing_invoice_id(self):
         self.client.force_login(self.user)

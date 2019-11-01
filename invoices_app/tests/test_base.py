@@ -15,10 +15,11 @@ from invoices_app.factory_boy import InvoiceFactory
 
 from supplier_app import TAXPAYER_STATUS_APPROVED
 from supplier_app.tests.factory_boy import (
-    TaxPayerArgentinaFactory,
+    AddressFactory,
     CompanyFactory,
     CompanyUserPermissionFactory,
-    AddressFactory
+    EBEntityFactory,
+    TaxPayerArgentinaFactory,
 )
 
 from users_app.factory_boy import UserFactory
@@ -74,18 +75,20 @@ class TestBase(TestCase):
         self.po_file_mock.name = 'test.pdf'
         self.po_file_mock.size = 50
 
+        self.eb_entity_example = EBEntityFactory()
         self.invoice_post_data = {
-                'invoice_date': '2019-10-01',
-                'invoice_type': 'A',
-                'invoice_number': '987654321',
-                'po_number': '98876',
                 'currency': 'ARS',
-                'net_amount': '4000',
-                'vat': '1200',
-                'total_amount': '5200',
-                'taxpayer': self.taxpayer.id,
-                'user': self.user.id,
+                'invoice_date': '2019-10-01',
                 'invoice_file': self.file_mock,
+                'invoice_number': '987654321',
+                'invoice_type': 'A',
+                'eb_entity': self.eb_entity_example.id,
+                'net_amount': '4000',
+                'po_number': '98876',
+                'taxpayer': self.taxpayer.id,
+                'total_amount': '5200',
+                'vat': '1200',
+                'user': self.user.id,
             }
 
         self.client = Client()
@@ -94,3 +97,25 @@ class TestBase(TestCase):
         mail.outbox = []
         if self.file_mock and path.exists('file/{}'.format(self.file_mock.name)):
             remove('file/{}'.format(self.file_mock.name))
+
+    def get_invoice_post_data(
+        self,
+        eb_entity=None,
+        invoice_file=None,
+        taxpayer=None,
+        user=None,
+    ):
+        return {
+                'currency': 'ARS',
+                'invoice_date': '2019-10-01',
+                'invoice_file': invoice_file or self.file_mock,
+                'invoice_number': '987654321',
+                'invoice_type': 'A',
+                'eb_entity': eb_entity or self.eb_entity_example.id,
+                'net_amount': '4000',
+                'po_number': '98876',
+                'taxpayer': taxpayer or self.taxpayer.id,
+                'total_amount': '5200',
+                'vat': '1200',
+                'user': user or self.user.id,
+        }

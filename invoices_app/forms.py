@@ -10,6 +10,7 @@ from utils.file_validator import validate_file
 
 
 class InvoiceForm(forms.ModelForm):
+    eb_entity = forms.CharField()
 
     class Meta:
         model = Invoice

@@ -1,6 +1,5 @@
 import factory
 from django.utils import timezone
-from random import choice
 
 from supplier_app.models import (
     Address,
@@ -11,10 +10,12 @@ from supplier_app.models import (
     EBEntity,
     TaxPayer,
     TaxPayerArgentina,
+    TaxPayerEBEntity,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO
 from supplier_app import (
+    CURRENT_STATUS,
     PAYMENT_TERMS,
     PAYMENT_TYPES,
 )
@@ -71,6 +72,16 @@ class TaxPayerFactory(factory.django.DjangoModelFactory):
     country = "AR"
 
 
+class TaxPayerEBEntityFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = TaxPayerEBEntity
+
+    eb_entity = factory.SubFactory(EBEntityFactory)
+    taxpayer = factory.SubFactory(TaxPayerFactory)
+    status = CURRENT_STATUS
+
+
 class TaxPayerArgentinaFactory(TaxPayerFactory):
 
     class Meta:
@@ -91,7 +102,7 @@ class AddressFactory(factory.django.DjangoModelFactory):
     zip_code = "5500"
     city = "Godoy Cruz"
     state = "Mendoza"
-    country = "Argentina"
+    country = "AR"
     taxpayer = factory.SubFactory(TaxPayerFactory)
 
 
