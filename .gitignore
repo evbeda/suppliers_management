@@ -115,5 +115,4 @@ setup_env.sh
 fixture.json
 htmlcov
 
-#pdf
 *.pdf
