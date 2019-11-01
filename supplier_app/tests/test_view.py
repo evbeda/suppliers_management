@@ -1123,6 +1123,7 @@ class TestEditTaxPayerInfo(TestCase):
         current_eb_entities = taxpayer.eb_entities
         self.assertEqual(2, len(current_eb_entities))
         self.assertEqual([eb_entity_1, eb_entity_2], taxpayer.eb_entities)
+
     def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
         self.taxpayer.afip_registration_file = self.file_mock
         self.taxpayer.witholding_taxes_file = self.file_mock
