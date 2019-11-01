@@ -1,6 +1,7 @@
 from django import forms
 from django.forms.models import ModelForm
 from django.http import QueryDict
+from django.utils.translation import ugettext_lazy as _
 
 from supplier_app import TAXPAYER_BANK_ACCOUNT_MAX_SIZE_FILE
 from supplier_app.models import (
@@ -87,7 +88,7 @@ class BankAccountBaseForm(ModelForm):
             'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_cbu_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control'
+                'class': 'form-control btn btn-file',
             }),
             'bank_info': forms.Select(attrs={'class': 'form-control'}),
         }
@@ -112,8 +113,10 @@ class BankAccountEditForm(BankAccountBaseForm):
 class TaxPayerArgentinaBaseForm(ModelForm):
     eb_entities = \
         forms.ModelMultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple,
+            widget=forms.SelectMultiple(attrs={"class": "form-control"}),
             queryset=EBEntity.objects.all(),
+            label=_("Eventbrite entities to bill"),
+
         )
 
     class Meta:
@@ -126,11 +129,11 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control',
+                'class': 'form-control btn btn-file',
             }),
             'witholding_taxes_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control',
+                'class': 'form-control btn btn-file',
             }),
             'taxpayer_comments': forms.Textarea(attrs={
                 'class': 'form-control',

@@ -11,190 +11,296 @@
 {% else %}
 {% include 'supplier_app/navbar.html' %}
 {% endif %}
+
 <div class="container h-100">
     {% if not workday_id_is_setted  and is_AP%}
+
     <div class="row justify-content-center alert alert-danger" role="alert">
         <h3>{% trans "You must set workday id to the taxpayer" %}</h3>
     </div>
     {% endif %}
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="col-md-12">
-                <br>
-                <h5 class="text-center"> {% trans "General Information" %}</h5>
-                <table class="table table-hover text-center">
-                    <thead class="thead-eb-dark">
-                        <tr>
-                            {% if is_AP %}
-                            <th scope="col">{% trans "Workday id" %}</th>
-                            {% endif %}
-                            <th scope="col">{% trans "Business name" %}</th>
-                            <th scope="col">{% trans "Taxpayer Identification Number" %}</th>
-                            <th scope="col">{% trans "Payment Type" %}</th>
-                            <th scope="col">{% trans "Payment Term" %}</th>
-                            <th scope="col">{% trans "EB entities" %}</th>
-                            <th scope="col">{% trans "Comments" %}</th>
-                            <th scope="col">{% trans "Country" %}</th>
-                            <th scope="col">{% trans "Files" %} </th>
-                            {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <th scope="col">{% trans "Action" %} </th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            {% if is_AP %}
-                            <th scope="col">{{taxpayer.workday_id}}</th>
-                            {% endif %}
-                            <td>{{taxpayer.business_name}}</td>
-                            <td>{{taxpayer.cuit}}</td>
-                            <td>{{taxpayer.payment_type}}</td>
-                            <td>{{taxpayer.payment_term}}</td>
-                            <td>
-                                <ul class="list-group list-group-flush">
-                                    {% for eb in taxpayer.eb_entities %}
-                                    <li>{{eb}}</li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <td>{{taxpayer.taxpayer_comments}}</td>
-                            <td>{{taxpayer.country}}</td>
-                            <td>
-                                <ul class="list-group">
-                                    <li><a target="_blank"
-                                            href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">{% trans "AFIP certificate" %}</a>
-                                    </li>
-                                    <li><a target="_blank"
-                                            href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">{% trans "Withholding taxes" %}</a>
-                                    </li>
-                                </ul>
-                            </td>
-                            {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <td>
-                                <a class='btn btn-info'
-                                    href="{% url 'taxpayer-update' taxpayer_id=taxpayer.id %}">{% trans "Edit" %}</a>
-                            </td>
-                            {% endif %}
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="col-md-12">
-                <br>
-                <h5 class='text-center'> {% trans "Address Information" %}</h5>
-                <table class="table table-hover text-center">
-                    <thead class="thead-eb-dark">
-                        <tr>
-                            <th scope="col">{% trans "Street"%}</th>
-                            <th scope="col">{% trans "Number"%}</th>
-                            <th scope="col">{% trans "Zip_Code"%}</th>
-                            <th scope="col">{% trans "City"%}</th>
-                            <th scope="col">{% trans "State"%}</th>
-                            <th scope="col">{% trans "Country"%}</th>
-                            {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <th scope="col">{% trans "Action"%}</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{taxpayer_address.street}}</td>
-                            <td>{{taxpayer_address.number}}</td>
-                            <td>{{taxpayer_address.zip_code}}</td>
-                            <td>{{taxpayer_address.city}}</td>
-                            <td>{{taxpayer_address.state}}</td>
-                            <td>{{taxpayer_address.country}}</td>
-                            {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <td>
-                                <a class='btn btn-info'
-                                    href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">{% trans "Edit" %}</a>
-                            </td>
-                            {% endif %}
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="col-md-12">
-                <br>
-                <h5 class='text-center'> {% trans "Bank Account Information" %}</h5>
-                <table class="table table-hover text-center">
-                    <thead class="thead-eb-dark">
-                        <tr>
-                            <th scope="col">{% trans "Bank Name" %}</th>
-                            <th scope="col">{% trans "Bank Code" %}</th>
-                            <th scope="col">{% trans "Account Number" %}</th>
-                            <th scope="col">{% trans "Files" %}</th>
-                            {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <th scope="col">{% trans "Action" %}</th>
-                            {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{taxpayer_bank_account.get_bank_info_display}}</td>
-                            <td>{{taxpayer_bank_account.bank_info}}</td>
-                            <td>{{taxpayer_bank_account.bank_account_number}}</td>
-                            <td>
-                                <ul class="list-group">
-                                    <a target="_blank"
+    <div class="row">
+        <div class="card col-md-8 h-100">
+            <div class="card-body">
+
+                <div class="col-md-12">
+                    <h5 class="card-title">{% trans "General information" %}</h5>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Workday id" %}</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Business name" %}</h6>
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Taxpayer Identification Number" %}</h6>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="card-text">
+                                {% if taxpayer.workday_id%}
+                                {{taxpayer.workday_id}}
+                                {% else %}
+                                {% trans "No workday id" %}
+                                {% endif%}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>{{taxpayer.business_name}}</p>
+                        </div>
+                        <div class="col-md-5">
+                            <p>{{taxpayer.cuit}}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Payment Type" %}</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Payment Term" %}</h6>
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "EB entities" %}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="card-text">{{taxpayer.payment_type}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>{{taxpayer.payment_term}}</p>
+                        </div>
+                        <div class="col-md-5">
+                            {% for eb_entity in taxpayer.eb_entities%}
+                            <p>{{eb_entity}}</p>
+                            {% endfor%}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Country" %}</h6>
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Files" %}</h6>
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Comments" %}</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p class="card-text">{{taxpayer.country}}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "AFIP certificate" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "Withholding taxes" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+
+                        </div>
+                        <div class="col-md-5">
+                            <p>{{taxpayer.taxpayer_comments}}</p>
+                        </div>
+                    </div>
+                    <br>
+                    {% if taxpayer.taxpayer_state != 'DENIED' %}
+                    <a class='card-link' href="{% url 'taxpayer-update' taxpayer_id=taxpayer.id %}">
+                        {% trans "Edit" %}
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                <hr>
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="card-title">{% trans "Bank info" %}</h5>
+                            <div class="col-md-12">
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Bank name" %}:</p>
+                                    <p class="card-subtitle pl-2">
+                                        {{taxpayer_bank_account.get_bank_info_display}}
+                                    </p>
+                                </div>
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Bank code" %}:</p>
+                                    <p class="card-subtitle pr-2 pl-3">
+                                        {{taxpayer_bank_account.bank_info}}
+                                    </p>
+                                </div>
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Account number" %}:</p>
+                                    <p class="card-subtitle pr-2 pl-3">
+                                        {{taxpayer_bank_account.bank_account_number}}
+                                    </p>
+                                </div>
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Files" %}:</p>
+                                    <a target="_blank" class="card-subtitle pr-2 pl-3"
                                         href="http://docs.google.com/gview?url={{ taxpayer_bank_account.bank_cbu_file.url }}">
-                                        {% trans "CBU" %}
+                                        <span class="badge badge-info">
+                                            {% trans "CBU" %}
+                                            <i class="fa fa-eye ml-2"></i>
+                                        </span>
                                     </a>
-                                </ul>
-                            </td>
+                                </div>
+                            </div>
+
                             {% if taxpayer.taxpayer_state != 'DENIED' %}
-                            <td>
-                                <a class='btn btn-info'
-                                    href="{% url 'bank-account-update'  taxpayer_id=taxpayer.id bank_id=taxpayer_bank_account.id%}">{% trans "Edit" %}</a>
-                            </td>
+                            <a class='card-link'
+                                href="{% url 'bank-account-update'  taxpayer_id=taxpayer.id bank_id=taxpayer_bank_account.id%}">
+                                {% trans "Edit" %}
+                                <i class="fa fa-edit"></i>
+                            </a>
                             {% endif %}
-                        </tr>
-                    </tbody>
-                </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="card-title">{% trans "Address information" %}</h5>
+                            <div class="col-md-12">
+                                    <div class="row mt-3 mb-3">
+                                        <div class="col-md-12">
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "Street"%}</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "Number"%}</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "Zip_Code"%}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.street}}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.number}}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.zip_code}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "City"%}</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "State"%}</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h6 class="card-subtitle text-muted">{% trans "Country"%}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.city}}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.state}}</p>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <p class="card-text">{{taxpayer_address.country}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+
+
+                            {% if taxpayer.taxpayer_state != 'DENIED' %}
+                            <a class='card-link'
+                                href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">
+                                {% trans "Edit" %}
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-end">
+                    {% if is_AP %}
+                    <a href="{% url 'taxpayer-history' pk=taxpayer.id %}" class="btn btn-primary">
+                        {% trans "Taxpayer History" %}
+                        <i class="fas fa-history"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card col-md-4">
+            <div class="card-body">
+                <h5 class="card-title">{% trans "Comments" %}</h5>
+                <p class="card-text"> WIP </p>
             </div>
         </div>
     </div>
-    <div class="row justify-content-center">
-        <div class="col-md-10">
+
+    <hr>
+
+    <div class="row pt-3 pb-3">
+        <div class="col-md-12">
             <div class="col-md-12">
-        	{% if is_AP %}
-            	    {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-		    <div class="row justify-content-end">
-			<div class="col-md-6">
-			    {% include 'comments.html' %}                
-    			</div>
-            		<div class="col-md-6">
-                	    {% include 'AP_app/deny-taxpayer.html'%}
-    			</div>
-		    </div>
-               	    {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
-		    <div class="row justify-content-end">
-            		<div class="col-md-9">
-			    {% include 'comments.html' %}                
-    			</div>
-            		<div class="col-md-3 d-flex justify-content-around">
-                	    {% include 'AP_app/approve-taxpayer.html'%}
-                	    {% include 'AP_app/deny-taxpayer.html'%}
-    			</div>
-		    </div>
-            	    {% endif %}       
-		{% else %}
-		    <div class="row justify-content-end">
-			    <div class="col-md-12">
-			    {% include 'comments.html' %}                
-    			</div>
-		    </div>
-        	{% endif %}
+                {% if is_AP %}
+                {% if not workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+                <div class="row justify-content-end">
+                    <div class="col-md-9">
+                        {% include 'comments.html' %}
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-end">
+                        {% include 'AP_app/deny-taxpayer.html'%}
+                    </div>
+                </div>
+                {% elif workday_id_is_setted and taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+                <div class="row">
+                    <div class="col-md-9">
+                        {% include 'comments.html' %}
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row justify-content-around">
+                            {% include 'AP_app/approve-taxpayer.html'%}
+                            {% include 'AP_app/deny-taxpayer.html'%}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="row justify-content-start">
+                    <div class="col-md-12">
+                        {% include 'comments.html' %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
