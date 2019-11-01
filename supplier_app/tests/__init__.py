@@ -80,4 +80,6 @@ def taxpayer_edit_POST_factory(
             'cuit': cuit or '20-3123214-0',
             'payment_type': get_payment_type_example(payment_type),
             'payment_term': get_payment_term_example(payment_term),
+            'afip_registration_file': file_mock,
+            'witholding_taxes_file': file_mock,
     }

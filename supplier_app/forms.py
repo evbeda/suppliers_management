@@ -101,9 +101,12 @@ class BankAccountCreateForm(BasePrefixCreateForm, BankAccountBaseForm):
 
 
 class BankAccountEditForm(BankAccountBaseForm):
+    bank_cbu_file = forms.FileField()
 
     class Meta(BankAccountBaseForm.Meta):
-        exclude = ['taxpayer', 'bank_cbu_file']
+        exclude = [
+            'taxpayer',
+        ]
 
 
 class TaxPayerArgentinaBaseForm(ModelForm):
@@ -123,11 +126,11 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control'
+                'class': 'form-control',
             }),
             'witholding_taxes_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control'
+                'class': 'form-control',
             }),
             'taxpayer_comments': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -151,13 +154,13 @@ class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
 
 
 class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
+    afip_registration_file = forms.FileField()
+    witholding_taxes_file = forms.FileField()
 
     class Meta(TaxPayerArgentinaBaseForm.Meta):
         exclude = [
             'taxpayer_state',
             'company',
-            'afip_registration_file',
-            'witholding_taxes_file',
             'taxpayer_comments',
             'taxpayer_date',
             ]

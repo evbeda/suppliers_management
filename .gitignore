@@ -114,3 +114,5 @@ setup_env.sh
 .DS_Store
 fixture.json
 htmlcov
+
+*.pdf
