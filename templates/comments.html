@@ -1,9 +1,8 @@
 {% load i18n %}
-
-<form action="{% url 'taxpayer-comment' taxpayer_id=taxpayer_id %}" method="POST" class="form-inline d-flex align-items-start justify-content-between">
-    {% csrf_token %}
-    <div class="form-group w-75"> 
-	<textarea name="message" class="form-control w-100" placeholder={% trans "write your comments here" %}></textarea>
-    </div>
-    <button type="submit" class="btn btn-success">{% if request.user.is_AP %}{% trans 'Request Change' %}{% else %}{% trans 'Make Comment' %}{% endif %}</button>
-</form>
+    <form action="{% url 'taxpayer-comment' taxpayer_id=taxpayer_id %}" method="POST" class="form-inline d-flex align-items-start justify-content-between">
+        {% csrf_token %}
+        <div class="form-group w-75"> 
+        <textarea name="message" class="form-control w-100" placeholder={% trans "write your comments here" %}></textarea>
+        </div>
+        <button type="submit" class="btn btn-warning">{% if request.user.is_AP %}{% trans 'Request Change' %}{% else %}{% trans 'Make Comment' %}{% endif %}</button>
+    </form>
