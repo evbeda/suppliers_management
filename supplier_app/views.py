@@ -279,7 +279,6 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
 
-
 class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
     template_name = 'AP_app/edit-address-information.html'
     model = Address
