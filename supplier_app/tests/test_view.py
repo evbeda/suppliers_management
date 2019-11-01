@@ -643,6 +643,7 @@ class TestSupplierDetailsView(TestCase):
         self.company_user_permission = CompanyUserPermissionFactory()
 
         self.taxpayer = TaxPayerArgentinaFactory(
+            workday_id='1234',
             company=self.company_user_permission.company,
             afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
@@ -721,7 +722,7 @@ class TestSupplierDetailsView(TestCase):
 
     def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
         response = self.client.get(self.sup_detail_url)
-
+        import ipdb;ipdb.set_trace(context=15)
         self.assertContains(
             response, 'Approve'
         )

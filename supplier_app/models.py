@@ -343,3 +343,6 @@ class TaxpayerComment(models.Model):
     comment_date_received = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-comment_date_received']

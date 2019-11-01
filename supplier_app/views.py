@@ -266,7 +266,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
-        # context['comments'] = context['taxpayer'].taxpayercomment_set.get()
+        context['comments'] = context['taxpayer'].taxpayercomment_set.all()
         context['is_AP'] = self.request.user.is_AP
         return context
 
