@@ -49,6 +49,7 @@ EXPORT_TO_XLS_FULL = {
     'Net Amount': 'net_amount',
     'VAT': 'vat',
     'Total Amount': 'total_amount',
+    'Workday ID': 'workday_id'
 }
 
 INVOICE_DATE_FORMAT = _("MM/DD/YYYY")
