@@ -6,11 +6,8 @@
 {% endblock %}
 
 {% block content %}
-{% if request.user.is_AP %}
-{% include 'AP_app/navbar.html' %}
-{% else %}
-{% include 'supplier_app/navbar.html' %}
-{% endif %}
+
+{% include 'navbar.html' %}
 
 <div class="container h-100">
     {% if not workday_id_is_setted  and is_AP%}
