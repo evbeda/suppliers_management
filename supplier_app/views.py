@@ -19,6 +19,8 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
+from supplier_app import EXPORT_TO_XLS_FULL
+
 from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
     UNUSED_STATUS,
@@ -75,6 +77,11 @@ from users_app import (
     SUPPLIER_ROLE_PERM,
 )
 from utils.exceptions import CouldNotSendEmailError
+from utils.reports import (
+    ExcelReportInputParams,
+    generate_response_xls,
+    generate_xls,
+)
 from utils.send_email import (
     company_invitation_notification,
 )
@@ -464,3 +471,16 @@ def change_taxpayer_status(request, taxpayer_id):
         messages.error(request, EMAIL_ERROR_MESSAGE)
     finally:
         return redirect('ap-taxpayers')
+
+
+@permission_required(CAN_VIEW_ALL_TAXPAYERS_PERM)
+def export_taxpayer_history_to_xlsx(request):
+
+    queryset = TaxPayerArgentina.history.all()
+    params = ExcelReportInputParams(
+        model=queryset,
+        tab_name='Taxpayer',
+        headers_attrs=EXPORT_TO_XLS_FULL,
+    )
+    xls_file = generate_xls(params)
+    return generate_response_xls(xls_file, 'Taxpayer History')

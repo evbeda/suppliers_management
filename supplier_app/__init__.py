@@ -90,3 +90,16 @@ email_notifications = {
 
 def get_taxpayer_status_choices():
     return TAXPAYER_STATUS.values()
+
+
+EXPORT_TO_XLS_FULL = {
+    'Taxpayer Identification Number': 'cuit',
+    'Workday Id': 'workday_id',
+    'Business Name': 'business_name',
+    'Paymetn Type': 'payment_type',
+    'Payment Term': 'payment_term',
+    'Status': 'taxpayer_state',
+    'Country': 'country',
+    'Taxpayer Creation': 'taxpayer_date',
+    'Taxpayer Modification': 'history_date',
+}
