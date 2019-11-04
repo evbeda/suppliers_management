@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from simple_history.models import HistoricalRecords
 
+
 from supplier_app import (
     BANK_ACCOUNT_MAX_SIZE_FILE,
     PAYMENT_TERMS,

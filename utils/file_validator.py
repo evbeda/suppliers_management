@@ -1,7 +1,4 @@
-import os
-
 from django.core.exceptions import ValidationError
-from django.utils.deconstruct import deconstructible
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -12,11 +9,9 @@ from invoices_app import (
 
 
 class FileSizeValidator(object):
-    # message = _(
-    #     "File size '%(size)d' is not allowed."
-    #     "Limit size: '%(limit_size)d'."
-    # )
-    message = _("File size {} is not allowed.\n Limit size: {}.")
+
+    message = _("File size {}MB is not allowed.\n Limit size: {}MB.")
+    divisor = 1048576
 
     code = 'invalid_size'
 
@@ -31,7 +26,7 @@ class FileSizeValidator(object):
         size = value.size
         if self.limit_size is not None and size > self.limit_size:
             raise ValidationError(
-                self.message.format(size, self.limit_size),
+                self.message.format(int(size/self.divisor), int(self.limit_size/self.divisor)),
                 code=self.code,
                 params={
                     'size': size,
