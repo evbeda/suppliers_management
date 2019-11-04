@@ -45,7 +45,7 @@ def add_group_permissions(*args, **kwargs):
         'ap_reporter': [
             ('can_view_invoices', 'Can view invoices', content_type),
             ('can_view_all_invoices', 'Can view all invoices', content_type),
-            ('can_view_all_taxpayer', 'Can view all taxpayers', content_type),
+            ('can_view_all_taxpayers', 'Can view all taxpayers', content_type),
             ('can_view_reports', 'Can view reports', content_type),
             ('ap_role', 'Is ap', content_type),
         ],

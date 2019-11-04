@@ -6,11 +6,9 @@
 {% endblock %}
 
 {% block content %}
-{% if request.user.is_AP %}
-{% include 'AP_app/navbar.html' %}
-{% else %}
-{% include 'supplier_app/navbar.html' %}
-{% endif %}
+
+{% include 'navbar.html' %}
+
 <div class="container p-3">
     <div class="row justify-content-center">
         <h4>Bank account info</h4>

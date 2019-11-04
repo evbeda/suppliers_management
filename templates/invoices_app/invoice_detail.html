@@ -2,11 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-{% if is_AP %}
-{% include 'AP_app/navbar.html' %}
-{% else %}
-{% include 'supplier_app/navbar.html' %}
-{% endif %}
+
+{% include 'navbar.html' %}
+
 {{ block.super }}
 {% csrf_token %}
 
