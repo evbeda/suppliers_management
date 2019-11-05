@@ -3,14 +3,29 @@
 <form action="{% url 'set_user_language' %}" method="POST">
     {% csrf_token %}
     <input name="next" type="hidden" value="{{ request.path }}" />
-    <select name="language" class="dropdown-toggle" onChange="this.form.submit()">
-        {% get_current_language as LANGUAGE_CODE %}
-        {% get_available_languages as LANGUAGES %}
-        {% get_language_info_list for LANGUAGES as languages %}
-        {% for language in languages %}
-            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                {{ language.code }}
-            </option>
-        {% endfor %}
-    </select>
+    <div class="dropdown pull-left">
+        <a id="language-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          {% if request.user.preferred_language == 'en' or LANGUAGE_CODE == 'en' %}
+          <span class="flag-icon flag-icon-us mr-2"></span>
+          {% endif %}
+          {% if request.user.preferred_language == 'es' or LANGUAGE_CODE == 'es' %}
+          <span class="flag-icon flag-icon-ar mr-2"></span>
+          {% endif %}
+          {% if request.user.preferred_language == 'pt-br' or LANGUAGE_CODE == 'pt-br' %}
+          <span class="flag-icon flag-icon-br mr-2"></span>
+          {% endif %}
+
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="language-button">
+          <button class="dropdown-item" type="submit" name="language" value="en">
+              <span class="flag-icon flag-icon-us mr-2"></span>English
+          </button>
+          <button class="dropdown-item" type="submit" name="language" value="es">
+              <span class="flag-icon flag-icon-ar mr-2"></span>Español
+          </button>
+          <button class="dropdown-item" type="submit" name="language" value="pt-br">
+              <span class="flag-icon flag-icon-br mr-2"></span>Português
+          </button>
+        </ul>
+    </div>
 </form>
