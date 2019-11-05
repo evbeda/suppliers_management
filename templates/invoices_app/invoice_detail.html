@@ -10,7 +10,7 @@
 
 <div class="row m-2">
   <div class="col-md-2"></div>
-  <div class="col-md-8">  
+  <div class="col-md-8">
     {% if messages %}
       {% for message in messages %}
           <div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">
@@ -189,16 +189,17 @@
             {% else %}
             <span class="font-weight-bold">{% trans "Administrator" %}</span>
             {% endif %}
-            <p class="font-italic">{{ comment.comment_date_received }}</p>
-            <p class="my-3">{{ comment.message | linebreaksbr }}</p>
+            <p class="font-italic mb-0">{{ comment.comment_date_received }}</p>
             {% if comment.comment_file %}
             <div class="row ml-0 mb-0">
-              <p class="mb-0">{% trans "Attachment: " %}</p>
+              <p class="mr-1 mb-0">{% trans "Attachment: " %}</p>
               <a target="_blank" href="http://docs.google.com/gview?url={{ comment.comment_file.url }}">
                 <i class="fas fa-paperclip"></i>
               </a>
             </div>
             {% endif %}
+            <p class="mb-0">{{ comment.message | linebreaksbr }}</p>
+
           </div>
         </div>
         {% endfor %}

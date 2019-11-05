@@ -17,8 +17,8 @@
         <ul class="nav flex-column text-center">
             <li class="nav-item">
                 {% if taxpayer.taxpayer_state == "APPROVED" %}
-                <a class='text-success' href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">
-                    <i class="fa fa-plus"></i>{% trans "New Invoice" %}
+                <a class='btn btn-primary' href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">
+                    <i class="fa fa-plus"></i> {% trans "New Invoice" %}
                 </a>
                 {% endif %}
             </li>
@@ -42,7 +42,7 @@
                 <tr>
                     <td class="table-danger text-center" colspan="7">{% trans "No invoices" %}
                         {% if taxpayer.taxpayer_state == "APPROVED" %}
-                        <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">{% trans "Create one?" %}</a></td>
+                          <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}">{% trans "Create one?" %}</a></td>
                         {% endif %}
                 </tr>
                 {% endif %}

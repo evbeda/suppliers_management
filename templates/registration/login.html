@@ -8,7 +8,7 @@
 
 {% block content %}
   <div class="row d-flex flex-row-reverse">
-    <div class="col-1 py-2 mx-2">
+    <div class="pr-4 mr-1 py-2">
         {% include 'language_selector.html' %}
     </div>
   </div>
@@ -22,8 +22,8 @@
           <div class="card-body">
             <h5 class="card-title text-center">{% trans "Sign In" %}</h5>
             <hr class="my-4">
-            <div class="py-3">
-              <a class="btn btn-eb btn-block text-white text-uppercase" href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
+            <div>
+              <a class="btn btn-eb btn-block text-white text-capitalize" href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
                   {% trans "Login with Eventbrite" %}
               </a>
             </div>
@@ -38,15 +38,15 @@
       <div class="col">
         </div>
         <div class="col">
-            <p class="footer-copyright text-center text-white">
+            <p class="footer-copyright text-center text-white mb-0 mt-1">
                 © 2019 Copyright:
                 <a href="https://eventbrite.com"> Eventbrite.com</a>
             </p>
         </div>
         <div class="col">
             <p class="footer-copyright text-center">
-                <a class="text-uppercase float-right text-white pr-3" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
-                    {% trans "AP login" %}             
+                <a class="btn btn-primary text-capitalize float-right text-white mr-3 mb-3 btn-sm" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
+                    {% trans "AP login" %}
                 </a>
             </p>
         </div>
