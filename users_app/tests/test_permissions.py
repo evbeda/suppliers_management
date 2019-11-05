@@ -1,3 +1,7 @@
+from os import (
+    path,
+)
+from shutil import rmtree
 from parameterized import parameterized
 from unittest.mock import (
     MagicMock,
@@ -240,6 +244,12 @@ class TestSupplierPermissions(TestCase):
         self.taxpayer_update_url = 'taxpayer-update'
         self.address_update_url = 'address-update'
         self.bank_update_url = 'bank-account-update'
+
+    def tearDown(self):
+        if self.file_mock and path.exists(
+            'file/{}'.format(self.file_mock.name)
+        ):
+            rmtree('file')
 
     def test_supplier_cant_access_to_another_supplier_taxpayer_details(self):
         kwargs = {

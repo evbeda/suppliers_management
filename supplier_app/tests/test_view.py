@@ -2,7 +2,6 @@ from datetime import (
     date,
     timedelta,
 )
-import filecmp
 from freezegun import freeze_time
 from http import HTTPStatus
 from os import (
@@ -19,6 +18,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.files import File
 from django.core.urlresolvers import (
     reverse,
@@ -66,9 +66,10 @@ from supplier_app.models import (
     TaxpayerComment,
 )
 from supplier_app.tests import (
+    file_mock,
+    get_bank_info_example,
     taxpayer_creation_POST_factory,
     taxpayer_edit_POST_factory,
-    get_bank_info_example,
     STATUS_CHANGE_REQUIRED,
     STATUS_PENDING,
     BUSINESS_EXAMPLE_NAME_1,
@@ -267,13 +268,52 @@ class TestCreateTaxPayer(TestCase):
         self.assertIn(eb_1, eb_entities_related_with_taxpayer)
         self.assertIn(eb_2, eb_entities_related_with_taxpayer)
 
-    @parameterized([
-        ('','', []),
+    @parameterized.expand([
+        (
+            'taxpayer_form-country',
+            'ARG',
+            'country',
+            "Select a valid choice. ARG is not one of the available choices.",
+            'taxpayer_form',
+        ),
+        (
+            'taxpayer_form-afip_registration_file',
+            SimpleUploadedFile('test.xml', bytes(2),),
+            'afip_registration_file',
+            "File extension 'xml' is not allowed. Allowed extensions are: 'pdf'.",
+            'taxpayer_form',
+        ),
+        (
+            'address_form-country',
+            'BRAzil',
+            'country',
+            "Select a valid choice. BRAzil is not one of the available choices.",
+            'address_form',
+        ),
+        (
+            'taxpayer_form-witholding_taxes_file',
+            SimpleUploadedFile('test.PDF', bytes(26214450),),
+            'witholding_taxes_file',
+            "File size 25MB is not allowed.\n Limit size: 25MB.",
+            'taxpayer_form',
+        ),
     ])
-    def test_invalid_form_should_render_error_msg(self, attr, value, error_msg):
+    def test_invalid_form_should_render_error_msg(
+        self, attr, value, field, error_msg, form
+    ):
+        taxpayer_creation_url = 'taxpayer-create'
         eb_entity_example = EBEntityFactory()
         POST = taxpayer_creation_POST_factory(eb_entity=eb_entity_example.id)
-        pass
+        POST.update(
+            {
+                attr: value
+            }
+        )
+        response = self.client.post(
+            reverse(taxpayer_creation_url),
+            data=POST,
+        )
+        self.assertIn(error_msg, response.context_data[form].errors[field])
 
     def test_logged_in_supplier_can_create_taxpayer(self):
 
@@ -618,6 +658,12 @@ class TestSupplierDetailsView(TestCase):
             kwargs=self.kwargs
         )
 
+    def tearDown(self):
+        if self.file_mock and path.exists(
+            'file/{}'.format(self.file_mock.name)
+        ):
+            rmtree('file')
+
     def test_get_taxpayers_details_in_ap_site(self):
         response = self.client.get(
             self.sup_detail_url,
@@ -786,6 +832,12 @@ class TestTaxpayerDetailsSupplier(TestCase):
             'taxpayer_id': self.taxpayer_example.id
         }
 
+    def tearDown(self):
+        if self.file_mock and path.exists(
+            'file/{}'.format(self.file_mock.name)
+        ):
+            rmtree('file')
+
     def _get_taxpayer_detail_response(self):
         return self.client.get(
             reverse(
@@ -839,6 +891,12 @@ class TestEditTaxPayerInfo(TestCase):
         self.file_mock = MagicMock(spec=File)
         self.file_mock.name = 'test.pdf'
         self.file_mock.size = 50
+
+    def tearDown(self):
+        if (self.file_mock or new_afip_file or new_witholding_file) and path.exists( #  noqa
+            'file/'
+        ):
+            rmtree('file')
 
     def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
         response = self.client.get(
@@ -1066,6 +1124,12 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
         client.force_login(user)
+        new_afip_file = SimpleUploadedFile('afip_file.pdf', bytes(100),)
+        new_witholding_file = SimpleUploadedFile('witholding_file.pdf', bytes(35),)
+        self.TAXPAYER_POST.update({
+            'afip_registration_file': new_afip_file,
+            'witholding_taxes_file': new_witholding_file,
+        })
 
         client.post(
             reverse(
@@ -1083,10 +1147,8 @@ class TestEditTaxPayerInfo(TestCase):
         self.assertEquals(self.TAXPAYER_POST['workday_id'], updated_taxpayer.workday_id)
         self.assertEquals(self.TAXPAYER_POST['business_name'], updated_taxpayer.business_name)
         self.assertEquals(self.TAXPAYER_POST['country'], updated_taxpayer.country)
-        with open(updated_taxpayer.afip_registration_file.name, "w") as file1 , open(self.TAXPAYER_POST['afip_registration_file'].name, "w") as file2 :
-            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
-        with open(updated_taxpayer.witholding_taxes_file.name, "w") as file1 , open(self.TAXPAYER_POST['witholding_taxes_file'].name, "w") as file2 :
-            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
+        self.assertEqual('file/afip_file.pdf', updated_taxpayer.afip_registration_file.name)
+        self.assertEqual('file/witholding_file.pdf', updated_taxpayer.witholding_taxes_file.name)
 
     def _taxpayer_edit_request(self, edit_data):
         request = self.factory.post(
@@ -1267,6 +1329,12 @@ class TestEditBankAccountInfo(TestCase):
             'taxpayer_id': self.taxpayer.id,
         }
 
+    def tearDown(self):
+        if (self.file_mock or new_cbu_file) and path.exists(  #  noqa
+            'file/{}'.format(self.file_mock.name)
+        ):
+            rmtree('file')
+
     def _make_bank_post(self):
         return self.client.post(
             reverse(
@@ -1360,22 +1428,29 @@ class TestEditBankAccountInfo(TestCase):
         )
 
     @parameterized.expand([
-        ('supplier', 'Supplier@gmail.com'),
-        ('ap_admin', 'Ap@eventbrite.com'),
+        ('supplier', 'Supplier@gmail.com', 'new_cbu_file_sup.PDF'),
+        ('ap_admin', 'Ap@eventbrite.com', 'new_cbu_file_ap.PDF'),
     ])
-    def test_post_edit_bank_account_view_should_update_bank_account_info(self, group, user):
+    def test_post_edit_bank_account_view_should_update_bank_account_info(
+        self, group, user, new_cbu_file_name
+    ):
         client = Client()
 
         group = Group.objects.get(name=group)
         user = UserFactory(email=user)
         user.groups.add(group)
 
-        company_user_permission = CompanyUserPermissionFactory(
+        CompanyUserPermissionFactory(
             user=user,
             company=self.taxpayer.company
         )
 
         client.force_login(user)
+
+        new_cbu_file = SimpleUploadedFile(new_cbu_file_name, bytes(123))
+        self.BANK_ACCOUNT_POST.update({
+            'bank_cbu_file': new_cbu_file,
+        })
 
         client.post(
             reverse(
@@ -1389,8 +1464,7 @@ class TestEditBankAccountInfo(TestCase):
 
         self.assertEquals(self.BANK_ACCOUNT_POST['bank_account_number'], updated_bank_account.bank_account_number)
         self.assertEquals(self.BANK_ACCOUNT_POST['bank_info'], updated_bank_account.bank_info)
-        with open(updated_bank_account.bank_cbu_file.name, "w") as file1 , open(self.file_mock.name, "w") as file2 :
-            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
+        self.assertEqual(f'file/{new_cbu_file_name}', updated_bank_account.bank_cbu_file.name)
 
 
 class TestCompanyCreateView(TestCase):
@@ -1897,6 +1971,12 @@ class TestNotifyMessages(TestCase):
         self.eb_entity = EBEntityFactory()
         self.POST = taxpayer_creation_POST_factory(self.eb_entity.id)
 
+    def tearDown(self):
+        if file_mock and path.exists(
+            'file/{}'.format(file_mock.name)
+        ):
+            rmtree('file')
+
     def _make_email_invitation_post(self):
         return self.client.post(
             reverse(self.email_invitation_url),
@@ -1957,6 +2037,12 @@ class TestTaxpayerHistory(TestCase):
         self.client.force_login(self.ap_user)
 
         self.taxpayer = TaxPayerArgentinaFactory(business_name="SupraSA")
+
+    def tearDown(self):
+        if file_mock and path.exists(
+            'file/{}'.format(file_mock.name)
+        ):
+            rmtree('file')
 
     def test_create_new_row_in_history_taxpayer_table(self):
         kwargs = {
@@ -2190,6 +2276,12 @@ class TestTaxpayerCommentView(TestCase):
             'user': self.supplier_user.id,
             'taxpayer': self.taxpayer_example.id
         }
+
+    def tearDown(self):
+        if self.file_mock and path.exists(
+            'file/{}'.format(self.file_mock.name)
+        ):
+            rmtree('file')
 
     def _make_comment_post(self):
         return self.client.post(

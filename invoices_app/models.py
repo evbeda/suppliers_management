@@ -68,7 +68,6 @@ class Invoice(models.Model):
     )
     invoice_file = models.FileField(
         upload_to='file',
-        blank=True,
         verbose_name=_('Invoice File'),
         validators=[
             FileExtensionValidator(allowed_extensions=['pdf']),

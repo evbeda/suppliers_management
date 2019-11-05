@@ -11,10 +11,12 @@ from simple_history.models import HistoricalRecords
 
 from supplier_app import (
     BANK_ACCOUNT_MAX_SIZE_FILE,
+    BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS,
     PAYMENT_TERMS,
     PAYMENT_TYPES,
     TAXPAYER_STATUS,
     TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+    TAXPAYER_ALLOWED_FILE_EXTENSIONS,
     get_taxpayer_status_choices,
 )
 
@@ -211,8 +213,11 @@ class TaxPayerArgentina(TaxPayer):
         blank=False,
         verbose_name=_('AFIP registration certificate'),
         validators=[
-            FileExtensionValidator(allowed_extensions=['pdf']),
-            FileSizeValidator(limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE),
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),
+                ),
             ],
         )
     witholding_taxes_file = models.FileField(
@@ -221,8 +226,11 @@ class TaxPayerArgentina(TaxPayer):
         null=True,
         verbose_name=_('Certificate of no tax withholding of Tax liens, income or SUSS'),
         validators=[
-            FileExtensionValidator(allowed_extensions=['pdf']),
-            FileSizeValidator(limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE),
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),    
+                ),
             ],
         )
 
@@ -267,8 +275,11 @@ class BankAccount(models.Model):
         blank=False,
         verbose_name=_('Bank account certificate'),
         validators=[
-            FileExtensionValidator(allowed_extensions=['pdf']),
-            FileSizeValidator(limit_size=BANK_ACCOUNT_MAX_SIZE_FILE),
+            FileExtensionValidator(allowed_extensions=BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=BANK_ACCOUNT_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),    
+            ),
         ],
     )
 

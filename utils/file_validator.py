@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.deconstruct import deconstructible
 
 from invoices_app import (
     INVOICE_MAX_SIZE_FILE,
@@ -8,6 +9,7 @@ from invoices_app import (
 )
 
 
+@deconstructible
 class FileSizeValidator(object):
 
     message = _("File size {}MB is not allowed.\n Limit size: {}MB.")
