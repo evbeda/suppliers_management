@@ -890,6 +890,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.user)
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_PENDING
         self.taxpayer.save()
+
         response = self.client.get(
             reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}),
             self.invoice_post_data,
