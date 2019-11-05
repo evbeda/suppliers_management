@@ -2138,6 +2138,47 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(new_bank_account_number, bank_account.history.latest().bank_account_number)
         self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
 
+    def test_taxpayer_export_to_xls(self):
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-history-to-xls',
+                kwargs=kwargs,
+                ),
+        )
+        self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))
+
+    def test_taxpayer_address_export_to_xls(self):
+        AddressFactory(taxpayer=self.taxpayer)
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-address-history-to-xls',
+                kwargs=kwargs,
+                ),
+        )
+        self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))
+
+    def test_taxpayer_bank_account_export_to_xls(self):
+        BankAccountFactory(taxpayer=self.taxpayer)
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-bank-account-history-to-xls',
+                kwargs=kwargs,
+                ),
+        )
+        self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))
+
 
 class TestTaxpayerCommentView(TestCase):
     def setUp(self):
