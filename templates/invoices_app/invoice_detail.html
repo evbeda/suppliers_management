@@ -184,7 +184,11 @@
         {% for comment in comments %}
         <div class="row media-body pt-3 pb-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
           <div class="col">
+            {% if not comment.user.is_ap_account or perms.users_app.ap_role %}
             <span class="font-weight-bold">{{ comment.user }}</span>
+            {% else %}
+            <span class="font-weight-bold">{% trans "Administrator" %}</span>
+            {% endif %}
             <p class="font-italic">{{ comment.comment_date_received }}</p>
             <p class="my-3">{{ comment.message | linebreaksbr }}</p>
             {% if comment.comment_file %}

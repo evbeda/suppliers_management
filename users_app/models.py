@@ -58,6 +58,10 @@ class User(AbstractUser):
         return self.email
 
     @property
+    def is_ap_account(self):
+        return self.has_perm('users_app.ap_role')
+
+    @property
     def is_AP(self):
         return self.groups.filter(name='ap_admin').exists()
 
