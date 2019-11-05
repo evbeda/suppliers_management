@@ -438,3 +438,30 @@ class CommentsTest(TestBase):
         )
         # Then no comment should be created
         self.assertFalse(Comment.objects.all())
+
+    def test_ap_email_is_not_shown_to_supplier(self):
+        self.client.force_login(self.user)
+        Comment.objects.create(
+            user=self.ap_user,
+            invoice=self.invoice,
+            message='test',
+        )
+        response = self.client.get(
+            reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': self.invoice.id}),
+        )
+        self.assertNotContains(response, self.ap_user.email)
+        self.assertContains(response, 'Administrator')
+
+    def test_ap_email_is_shown_to_other_aps(self):
+        user = UserFactory()
+        user.groups.add(self.ap_group)
+        self.client.force_login(user)
+        Comment.objects.create(
+            user=self.ap_user,
+            invoice=self.invoice,
+            message='test',
+        )
+        response = self.client.get(
+            reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': self.invoice.id}),
+        )
+        self.assertContains(response, self.ap_user.email)

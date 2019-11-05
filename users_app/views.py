@@ -65,6 +65,7 @@ def change_ap_permission(request, pk):
         user.groups.add(group)
     return redirect('manage-admins')
 
+
 def set_user_language(request):
     if not request.POST.get('language'):
         return HttpResponseBadRequest()
