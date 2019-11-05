@@ -6,13 +6,13 @@
     <div class="dropdown pull-left">
         <a id="language-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           {% if request.user.preferred_language == 'en' or LANGUAGE_CODE == 'en' %}
-          <span class="flag-icon flag-icon-us mr-2"></span>
+          <span class="flag-icon flag-icon-us"></span>
           {% endif %}
           {% if request.user.preferred_language == 'es' or LANGUAGE_CODE == 'es' %}
-          <span class="flag-icon flag-icon-ar mr-2"></span>
+          <span class="flag-icon flag-icon-ar"></span>
           {% endif %}
           {% if request.user.preferred_language == 'pt-br' or LANGUAGE_CODE == 'pt-br' %}
-          <span class="flag-icon flag-icon-br mr-2"></span>
+          <span class="flag-icon flag-icon-br"></span>
           {% endif %}
 
         </a>
