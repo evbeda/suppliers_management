@@ -250,7 +250,7 @@ class TestCreateTaxPayer(TestCase):
         self.assertEqual(3, len(taxpayer_created.taxpayerebentity_set.all()))
 
     @patch('supplier_app.views.messages.add_message')
-    def test_multiple_equal_eb_entities_when_create_taxpayer_should_fail(self, msg_mocked):
+    def test_multiple_equal_eb_entities_when_create_taxpayer_should_not_create_repeated(self, msg_mocked):
         eb_1 = EBEntityFactory()
         eb_2 = EBEntityFactory()
         eb_entities = [eb_1, eb_2, eb_1]
@@ -266,6 +266,14 @@ class TestCreateTaxPayer(TestCase):
         self.assertEqual(2, len(taxpayer_created.taxpayerebentity_set.all()))
         self.assertIn(eb_1, eb_entities_related_with_taxpayer)
         self.assertIn(eb_2, eb_entities_related_with_taxpayer)
+
+    @parameterized([
+        ('','', []),
+    ])
+    def test_invalid_form_should_render_error_msg(self, attr, value, error_msg):
+        eb_entity_example = EBEntityFactory()
+        POST = taxpayer_creation_POST_factory(eb_entity=eb_entity_example.id)
+        pass
 
     def test_logged_in_supplier_can_create_taxpayer(self):
 

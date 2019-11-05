@@ -30,11 +30,6 @@ class BasePrefixCreateForm(ModelForm):
             files=files_query_dict,
             *args, **kwargs)
 
-    def _get_file_fields(self):
-        return [
-            k for k, v in self.fields.items() if k.endswith('file') and v.required
-            ]
-
     def _create_query_dict_filter_by_prefix(self, generic_data):
         query_dict = QueryDict('', mutable=True)
         for data_key, data_value in generic_data.lists():
@@ -114,17 +109,17 @@ class TaxPayerArgentinaBaseForm(ModelForm):
                 'accept': 'application/pdf',
                 'class': 'form-control btn btn-file',
             }),
-            'taxpayer_comments': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': '3'
-            }),
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(
                 attrs={
                     'class': 'form-control',
                     'type': 'hidden',
                     'value': 'AR'
-                })
+                }),
+            'taxpayer_comments': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': '3'
+            }),
         }
 
 
