@@ -92,7 +92,7 @@ def get_taxpayer_status_choices():
     return TAXPAYER_STATUS.values()
 
 
-EXPORT_TO_XLS_FULL = {
+EXPORT_TAXPAYER_TO_XLS_FULL = {
     'Taxpayer Identification Number': 'cuit',
     'Workday Id': 'workday_id',
     'Business Name': 'business_name',
@@ -101,5 +101,21 @@ EXPORT_TO_XLS_FULL = {
     'Status': 'taxpayer_state',
     'Country': 'country',
     'Taxpayer Creation': 'taxpayer_date',
+    'Taxpayer Modification': 'history_date',
+}
+
+EXPORT_ADDRESS_TO_XLS_FULL = {
+    'Street': 'street',
+    'Number': 'number',
+    'Zip Code': 'zip_code',
+    'City': 'city',
+    'State': 'state',
+    'Country': 'country',
+    'Modification': 'history_date',
+}
+
+EXPORT_BANK_ACCOUNT_TO_XLS_FULL = {
+    'Bank Account Number': 'bank_account_number',
+    'Bank name': 'get_bank_info_display',
     'Taxpayer Modification': 'history_date',
 }

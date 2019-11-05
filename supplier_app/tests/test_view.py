@@ -2073,7 +2073,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': self.taxpayer.id}
+                kwargs={'taxpayer_id': self.taxpayer.id}
                 ),
         )
         self.assertContains(response, old_name)
@@ -2097,7 +2097,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': address.taxpayer.id}
+                kwargs={'taxpayer_id': address.taxpayer.id}
                 ),
         )
 
@@ -2125,7 +2125,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': bank_account.taxpayer.id}
+                kwargs={'taxpayer_id': bank_account.taxpayer.id}
                 ),
         )
 

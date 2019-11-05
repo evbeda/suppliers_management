@@ -76,6 +76,8 @@ class EBEntity(models.Model):
         default=None,
     )
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return self.eb_name
 

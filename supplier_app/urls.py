@@ -11,6 +11,8 @@ from supplier_app.views import (
     EditAddressView,
     EditBankAccountView,
     EditTaxpayerView,
+    export_taxpayer_address_history_to_xlsx,
+    export_taxpayer_bank_account_history_to_xlsx,
     export_taxpayer_history_to_xlsx,
     SupplierDetailsView,
     SupplierHome,
@@ -45,6 +47,9 @@ urlpatterns = [
         EditBankAccountView.as_view(),
         name='bank-account-update'
     ),
-    url(r'^taxpayer/history/(?P<pk>[0-9]+)/$', TaxpayerHistory.as_view(), name='taxpayer-history'),
-    url(r'^xls/$', export_taxpayer_history_to_xlsx, name='taxpayer-history-to-xls'),
+    url(r'^taxpayer/history/(?P<taxpayer_id>[0-9]+)/$', TaxpayerHistory.as_view(), name='taxpayer-history'),
+
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/xls/$', export_taxpayer_history_to_xlsx, name='taxpayer-history-to-xls'),
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/address/xls/$', export_taxpayer_address_history_to_xlsx, name='taxpayer-address-history-to-xls'),
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/bank_account/xls/$', export_taxpayer_bank_account_history_to_xlsx, name='taxpayer-bank-account-history-to-xls'),
 ]

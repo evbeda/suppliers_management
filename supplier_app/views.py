@@ -19,7 +19,11 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
-from supplier_app import EXPORT_TO_XLS_FULL
+from supplier_app import (
+    EXPORT_ADDRESS_TO_XLS_FULL,
+    EXPORT_BANK_ACCOUNT_TO_XLS_FULL,
+    EXPORT_TAXPAYER_TO_XLS_FULL,
+)
 
 from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
@@ -373,8 +377,9 @@ class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer_history'] = TaxPayerArgentina.history.filter(id=self.kwargs['pk'])
+        context['taxpayer_id'] = self.kwargs['taxpayer_id']
         context['is_AP'] = self.request.user.is_AP
+        context['taxpayer_history'] = TaxPayerArgentina.history.filter(id=self.kwargs['taxpayer_id'])
         for taxpayer in context['taxpayer_history'].values():
             context['address_history'] = Address.history.filter(taxpayer_id=taxpayer.get('id'))
             context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))
@@ -474,13 +479,48 @@ def change_taxpayer_status(request, taxpayer_id):
 
 
 @permission_required(CAN_VIEW_ALL_TAXPAYERS_PERM)
-def export_taxpayer_history_to_xlsx(request):
+def export_taxpayer_history_to_xlsx(request, **kwargs):
 
-    queryset = TaxPayerArgentina.history.all()
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['taxpayer'] = TaxPayerArgentina.objects.get(id=self.kwargs['taxpayer_id'])
+    #     return context
+    taxpayer = TaxPayerArgentina.objects.get(id=kwargs['taxpayer_id'])
+    queryset = taxpayer.history.all()
     params = ExcelReportInputParams(
         model=queryset,
         tab_name='Taxpayer',
-        headers_attrs=EXPORT_TO_XLS_FULL,
+        headers_attrs=EXPORT_TAXPAYER_TO_XLS_FULL,
     )
     xls_file = generate_xls(params)
-    return generate_response_xls(xls_file, 'Taxpayer History')
+    return generate_response_xls(xls_file, 'Taxpayer {} History'.format(taxpayer.business_name))
+
+
+@permission_required(CAN_VIEW_ALL_TAXPAYERS_PERM)
+def export_taxpayer_address_history_to_xlsx(request, **kwargs):
+    taxpayer = TaxPayerArgentina.objects.get(id=kwargs['taxpayer_id'])
+    address = Address.objects.get(taxpayer=taxpayer)
+
+    queryset = address.history.all()
+    params = ExcelReportInputParams(
+        model=queryset,
+        tab_name='Address',
+        headers_attrs=EXPORT_ADDRESS_TO_XLS_FULL,
+    )
+    xls_file = generate_xls(params)
+    return generate_response_xls(xls_file, 'Taxpayer {} Address History'.format(taxpayer.business_name))
+
+
+@permission_required(CAN_VIEW_ALL_TAXPAYERS_PERM)
+def export_taxpayer_bank_account_history_to_xlsx(request, **kwargs):
+    taxpayer = TaxPayerArgentina.objects.get(id=kwargs['taxpayer_id'])
+    bank_account = BankAccount.objects.get(taxpayer=taxpayer)
+
+    queryset = bank_account.history.all()
+    params = ExcelReportInputParams(
+        model=queryset,
+        tab_name='Bank Account',
+        headers_attrs=EXPORT_BANK_ACCOUNT_TO_XLS_FULL
+    )
+    xls_file = generate_xls(params)
+    return generate_response_xls(xls_file, 'Taxpayer {} Bank Account History'.format(taxpayer.business_name))

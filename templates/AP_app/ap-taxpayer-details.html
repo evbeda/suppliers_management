@@ -242,7 +242,7 @@
 
                 <div class="row justify-content-end">
                     {% if is_AP %}
-                    <a href="{% url 'taxpayer-history' pk=taxpayer.id %}" class="btn btn-primary">
+                    <a href="{% url 'taxpayer-history' taxpayer_id=taxpayer.id %}" class="btn btn-primary">
                         {% trans "Taxpayer History" %}
                         <i class="fas fa-history"></i>
                     </a>
