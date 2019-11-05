@@ -123,20 +123,24 @@ class TaxPayer(models.Model):
     def eb_entities(self):
         return [txe.eb_entity for txe in self.taxpayerebentity_set.filter(status=CURRENT_STATUS)]
 
+    @property
+    def get_badge(self):
+        return TAXPAYER_STATUS[self.taxpayer_state.title()]['css-class']
+
     def get_taxpayer_child(self):
         return COUNTRIES[self.country].objects.get(pk=self.id)
 
     def approve_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
 
     def deny_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Denied'].value
+        self.taxpayer_state = TAXPAYER_STATUS['Denied']['choices'].value
 
     def change_required_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Change required'].value
+        self.taxpayer_state = TAXPAYER_STATUS['Change Required']['choices'].value
 
     def change_to_pending_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Pending'].value
+        self.taxpayer_state = TAXPAYER_STATUS['Pending']['choices'].value
 
     def has_workday_id(self):
         return True if self.workday_id else False

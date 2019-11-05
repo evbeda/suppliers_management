@@ -21,7 +21,19 @@
             <div class="card-body">
 
                 <div class="col-md-12">
-                    <h5 class="card-title">{% trans "General information" %}</h5>
+                    <div class="row justify-content-between">
+                        <h5 class="card-title col-md-4">{% trans "General information" %}</h5>
+                        <div class="col-md-4">
+                            <div class="row justify-content-around">
+                                <strong>{% trans "Status" %}:</strong>
+                                <p>
+                                    <span class="{{taxpayer.get_badge}}">
+                                        {{ taxpayer.get_taxpayer_state_display}}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>    
+                    </div>
 
                     <div class="row">
                         <div class="col-md-3">

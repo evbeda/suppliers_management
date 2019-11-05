@@ -765,7 +765,7 @@ class TestSupplierDetailsView(TestCase):
         )
 
     @parameterized.expand([
-        ("APPROVE", "1"),
+        ("APPROVED", "1"),
         ("DENIED", "2"),
         ("DENIED", ""),
     ])
@@ -790,13 +790,12 @@ class TestSupplierDetailsView(TestCase):
         response = self.client.get(
             reverse("supplier-details", kwargs={'taxpayer_id': taxpayer.id})
         )
-
         self.assertNotContains(
-            response, 'Approve'
+            response, '<input class=\'btn btn-danger\' type="submit" value="Deny"/>'
         )
 
         self.assertNotContains(
-            response, 'Deny'
+            response, '<input class=\'btn btn-success\' type="submit" value="Approve" id="approve"/>'
         )
 
 
@@ -1007,8 +1006,8 @@ class TestEditTaxPayerInfo(TestCase):
             )
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
-        status_approved = TAXPAYER_STATUS['Approved'].value
-        status_pending = TAXPAYER_STATUS['Pending'].value
+        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
         self.taxpayer.taxpayer_state = status_approved
         self.client_supplier.post(
             reverse(
@@ -1024,7 +1023,7 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_active_taxpayer_as_ap_dont_chang_state(self):
-        status_approved = TAXPAYER_STATUS['Approved'].value
+        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
         self.taxpayer.taxpayer_state = status_approved
         self.taxpayer.save()
         self.client.post(
@@ -1189,7 +1188,7 @@ class TestEditAddressInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
         self.taxpayer.save()
         self.address = AddressFactory(taxpayer=self.taxpayer)
 
@@ -1249,7 +1248,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_address_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved'].value
+        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
         self._make_address_post()
         self.assertEqual(
             status_approved,
@@ -1276,7 +1275,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_addres_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending'].value
+        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
 
         CompanyUserPermissionFactory(
             user=self.supplier_user,
@@ -1307,7 +1306,7 @@ class TestEditBankAccountInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
         self.taxpayer.save()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
         self.bank_account.bank_cbu_file = self.file_mock
@@ -1373,7 +1372,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_account_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved'].value
+        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
         self._make_bank_post()
         self.assertEqual(
             status_approved,
@@ -1400,7 +1399,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending'].value
+        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
         CompanyUserPermissionFactory(
             user=self.supplier_user,
             company=self.taxpayer.company
@@ -2341,5 +2340,5 @@ class TestTaxpayerCommentView(TestCase):
         # taxpayer state changes to change required
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
-            TAXPAYER_STATUS['Change required'].value
+            TAXPAYER_STATUS['Change Required']['choices'].value
         )
