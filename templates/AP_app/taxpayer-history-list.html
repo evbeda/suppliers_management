@@ -3,98 +3,96 @@
 
 
 {% block content %}
-
 {% include 'navbar.html' %}
-
-<br/>
-<h1 class="text-center"> {% trans "Taxpayer History"%}</h1>
-<br/>
-<div class="container">
-    <table class="table table-hover table-sm">
-        <thead class="thead-eb-dark">
-            <tr>
-                <th scope="col">{% trans "User" %}</th>
-                <th scope="col">{% trans "Modified" %}</th>
-                <th scope="col">{% trans "Business name" %}</th>
-                <th scope="col">{% trans "Taxpayer identification number" %}</th>
-                <th scope="col">{% trans "Payment Type" %}</th>
-                <th scope="col">{% trans "Payment Term" %}</th>
-                <th scope="col">{% trans "Comments" %}</th>
-                <th scope="col">{% trans "Country" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for taxpayer in taxpayer_history %}
-            <tr>
-                <td>{{taxpayer.history_user}}</td>
-                <td>{{taxpayer.history_date}}</td>
-                <td>{{taxpayer.business_name}}</td>
-                <td>{{taxpayer.cuit}}</td>
-                <td>{{taxpayer.payment_type}}</td>
-                <td>{{taxpayer.payment_term}}</td>
-                <td>{{taxpayer.taxpayer_comments}}</td>
-                <td>{{taxpayer.country}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br/>
-<h1 class="text-center"> {% trans "Address History"%}</h1>
-<br/>
-<div class="container">
-    <table class="table table-hover table-sm">
-        <thead class="thead-eb-dark">
-            <tr>
-                <th scope="col">{% trans "User" %}</th>
-                <th scope="col">{% trans "Modified" %}</th>
-                <th scope="col">{% trans "Street" %}</th>
-                <th scope="col">{% trans "Number" %}</th>
-                <th scope="col">{% trans "Zip code" %}</th>
-                <th scope="col">{% trans "City" %}</th>
-                <th scope="col">{% trans "State" %}</th>
-                <th scope="col">{% trans "Country" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for address in address_history %}
-            <tr>
-                <td>{{address.history_user}}</td>
-                <td>{{address.history_date}}</td>
-                <th>{{address.street}}</th>
-                <td>{{address.number}}</td>
-                <td>{{address.zip_code}}</td>
-                <td>{{address.city}}</td>
-                <td>{{address.state}}</td>
-                <td>{{address.country}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
-<br/>
-<h1 class="text-center"> {% trans "Bank Account History"%}</h1>
-<br/>
-<div class="container">
-    <table class="table table-hover table-sm">
-        <thead class="thead-eb-dark">
-            <tr>
-                <th scope="col">{% trans "User" %}</th>
-                <th scope="col">{% trans "Modified" %}</th>
-                <th scope="col">{% trans "Bank Name" %}</th>
-                <th scope="col">{% trans "Bank Account Number" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for bank_account in bank_history %}
-            <tr>
-                <td>{{bank_account.history_user}}</td>
-                <td>{{bank_account.history_date}}</td>
-                <td>{{bank_account.get_bank_info_display}}</td>
-                <td>{{bank_account.bank_account_number}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <br/>
+    <h1 class="text-center"> {% trans "Taxpayer History"%}</h1>
+    <br/>
+    <div class="container">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "User" %}</th>
+                    <th scope="col">{% trans "Modified" %}</th>
+                    <th scope="col">{% trans "Business name" %}</th>
+                    <th scope="col">{% trans "Taxpayer identification number" %}</th>
+                    <th scope="col">{% trans "Payment Type" %}</th>
+                    <th scope="col">{% trans "Payment Term" %}</th>
+                    <th scope="col">{% trans "Comments" %}</th>
+                    <th scope="col">{% trans "Country" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for taxpayer in taxpayer_history %}
+                <tr>
+                    <td>{{taxpayer.history_user}}</td>
+                    <td>{{taxpayer.history_date|date:'d/m/Y'}}</td>
+                    <td>{{taxpayer.business_name}}</td>
+                    <td>{{taxpayer.cuit}}</td>
+                    <td>{{taxpayer.payment_type}}</td>
+                    <td>{{taxpayer.payment_term}}</td>
+                    <td>{{taxpayer.taxpayer_comments}}</td>
+                    <td>{{taxpayer.country}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <h1 class="text-center"> {% trans "Address History"%}</h1>
+    <br/>
+    <div class="container">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "User" %}</th>
+                    <th scope="col">{% trans "Modified" %}</th>
+                    <th scope="col">{% trans "Street" %}</th>
+                    <th scope="col">{% trans "Number" %}</th>
+                    <th scope="col">{% trans "Zip code" %}</th>
+                    <th scope="col">{% trans "City" %}</th>
+                    <th scope="col">{% trans "State" %}</th>
+                    <th scope="col">{% trans "Country" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for address in address_history %}
+                <tr>
+                    <td>{{address.history_user}}</td>
+                    <td>{{address.history_date|date:'d/m/Y'}}</td>
+                    <th>{{address.street}}</th>
+                    <td>{{address.number}}</td>
+                    <td>{{address.zip_code}}</td>
+                    <td>{{address.city}}</td>
+                    <td>{{address.state}}</td>
+                    <td>{{address.country}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <h1 class="text-center"> {% trans "Bank Account History"%}</h1>
+    <br/>
+    <div class="container">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "User" %}</th>
+                    <th scope="col">{% trans "Modified" %}</th>
+                    <th scope="col">{% trans "Bank Name" %}</th>
+                    <th scope="col">{% trans "Bank Account Number" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for bank_account in bank_history %}
+                <tr>
+                    <td>{{bank_account.history_user}}</td>
+                    <td>{{bank_account.history_date|date:'d/m/Y'}}</td>
+                    <td>{{bank_account.get_bank_info_display}}</td>
+                    <td>{{bank_account.bank_account_number}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock%}
