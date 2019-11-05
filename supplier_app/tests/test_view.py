@@ -2316,6 +2316,13 @@ class TestTaxpayerCommentView(TestCase):
         }
         self.comment_post = {
             'message': 'Testing comment',
+            'action': '0',
+            'user': self.supplier_user.id,
+            'taxpayer': self.taxpayer_example.id
+        }
+        self.request_change_post = {
+            'message': 'requesting change comment',
+            'action': TAXPAYER_STATUS['Change required'].value,
             'user': self.supplier_user.id,
             'taxpayer': self.taxpayer_example.id
         }
@@ -2333,6 +2340,16 @@ class TestTaxpayerCommentView(TestCase):
                 kwargs=self.kwargs
             ),
             data=self.comment_post,
+            follow=True
+        )
+
+    def _make_request_change_post(self):
+        return self.client.post(
+            reverse(
+                self.comment_post_url,
+                kwargs=self.kwargs
+            ),
+            data=self.request_change_post,
             follow=True
         )
 
@@ -2375,11 +2392,11 @@ class TestTaxpayerCommentView(TestCase):
 
     def test_ap_make_comment(self):
         self.client.force_login(self.ap_user)
-        self._make_comment_post()
+        self._make_request_change_post()
         # comment persist
         self.assertEqual(
             TaxpayerComment.objects.last().message,
-            self.comment_post['message']
+            self.request_change_post['message']
         )
         # taxpayer state changes to change required
         self.assertEqual(

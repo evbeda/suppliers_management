@@ -57,6 +57,11 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+    def get_username(self):
+        if self.username is None:
+            return self.email.split('@')[0]
+        return self.username
+
     @property
     def is_ap_account(self):
         return self.has_perm('users_app.ap_role')
