@@ -417,6 +417,29 @@ class TestInvoice(TestBase):
             invoice_status_lookup(INVOICE_STATUS_PENDING)
         )
 
+    @patch('invoices_app.views._send_email_when_editing_invoice')
+    def test_ap_invoice_edit(self, _):
+        self.client.force_login(self.ap_user)
+        res = self.client.post(
+            reverse(
+                'invoice-update',
+                kwargs={
+                    'pk': self.invoice.id
+                }
+            ),
+            self.invoice_post_data,
+        )
+        self.assertEqual(res.status_code, HTTPStatus.FOUND)
+        self.invoice.refresh_from_db()
+        self.assertEqual(
+            self.invoice.invoice_number,
+            self.invoice_post_data['invoice_number']
+        )
+        self.assertEqual(
+            self.invoice.status,
+            invoice_status_lookup(INVOICE_STATUS_PENDING)
+        )
+
     def test_supplier_invalid_invoice_edit_request(self):
         self.client.force_login(self.user)
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
@@ -602,7 +625,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.ap_user)
 
         response = self.client.get(
-            '{}?{}'.format(reverse('invoices-list'), 'taxpayer={}'.format(self.taxpayer.id))
+            '{}?{}'.format(reverse('invoices-list'), 'taxpayer__business_name={}'.format(self.taxpayer.business_name))
         )
         self.assertContains(
             response,

@@ -9,7 +9,32 @@
         <div class="col-md-11">
             <form id="filter-form" method="get" class="form-check">
                 <div class="row">
-                    <div class="form-group col-sm-3 mr-2">
+                    <div class="form-group col-sm-2">
+                        {{ filter.form.taxpayer__country.label_tag }}
+                        {{ filter.form.taxpayer__country }}
+                        <small class="text-danger">
+                            {{ filter.form.taxpayer__country.errors }}
+                        </small>
+                        {% if filter.form.taxpayer__country.help_text %}
+                        <p class="help">{{ filter.form.taxpayer__country.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.taxpayer__business_name.label_tag }}
+                        {{ filter.form.taxpayer__business_name }}
+                        <datalist id="taxpayers">
+                            {% for taxpayer in all_taxpayers %}
+                                <option value={{taxpayer.business_name}}>
+                            {% endfor %}
+                        </datalist>
+                        <small class="text-danger">
+                            {{ filter.form.taxpayer__business_name.errors }}
+                        </small>
+                        {% if filter.form.taxpayer__business_name.help_text %}
+                        <p class="help">{{ filter.form.taxpayer__business_name.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-sm-3">
                         {{ filter.form.invoice_date.label_tag }}
                         {{ filter.form.invoice_date }}
                         <small class="text-danger">
@@ -20,38 +45,6 @@
                         {% endif %}
                         {{ filter.form.select_example }}
                     </div>
-                    <div class="form-group col-sm-3 mr-2">
-                        {{ filter.form.status.label_tag }}
-                        {{ filter.form.status }}
-                        <small class="text-danger">
-                            {{ filter.form.status.errors }}
-                        </small>
-                        {% if filter.form.status.help_text %}
-                        <p class="help">{{ filter.form.status.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="form-group mr-2">
-                        {{ filter.form.total_amount.label_tag }}
-                        {{ filter.form.total_amount }}
-                        <small class="text-danger">
-                            {{ filter.form.total_amount.errors }}
-                        </small>
-                        {% if filter.form.total_amount.help_text %}
-                        <p class="help">{{ filter.form.total_amount.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
-                    <div class="form-group col-sm-3">
-                        {{ filter.form.taxpayer.label_tag }}
-                        {{ filter.form.taxpayer }}
-                        <small class="text-danger">
-                            {{ filter.form.taxpayer.errors }}
-                        </small>
-                        {% if filter.form.taxpayer.help_text %}
-                        <p class="help">{{ filter.form.taxpayer.help_text|safe }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row">
                     <div class="form-group col-sm-3">
                         {{ filter.form.invoice_due_date.label_tag }}
                         {{ filter.form.invoice_due_date }}
@@ -62,18 +55,29 @@
                         <p class="help">{{ filter.form.invoice_due_date.help_text|safe }}</p>
                         {% endif %}
                     </div>
+                </div>
+                <div class="row">
                     <div class="form-group col-sm-3">
-                        {{ filter.form.taxpayer__country.label_tag }}
-                        {{ filter.form.taxpayer__country }}
+                            {{ filter.form.total_amount.label_tag }}
+                            {{ filter.form.total_amount }}
+                            <small class="text-danger">
+                                {{ filter.form.total_amount.errors }}
+                            </small>
+                            {% if filter.form.total_amount.help_text %}
+                            <p class="help">{{ filter.form.total_amount.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.status.label_tag }}
+                        {{ filter.form.status }}
                         <small class="text-danger">
-                            {{ filter.form.taxpayer__country.errors }}
+                            {{ filter.form.status.errors }}
                         </small>
-                        {% if filter.form.taxpayer__country.help_text %}
-                        <p class="help">{{ filter.form.taxpayer__country.help_text|safe }}</p>
+                        {% if filter.form.status.help_text %}
+                        <p class="help">{{ filter.form.status.help_text|safe }}</p>
                         {% endif %}
                     </div>
                 </div>
-                
                 <div class="row pr-5">
                     <div class="col-sm-12 text-right">
                         <button id="submit-btn" type="submit" class="btn btn-success">
@@ -81,6 +85,7 @@
                         </button>
                     </div>
                 </div>
+                
             </form>
         </div>
         <div class="col-md-1"> 

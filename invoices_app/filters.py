@@ -1,9 +1,12 @@
-from django.forms import CheckboxSelectMultiple, Select
+from django.forms import (
+    CheckboxSelectMultiple,
+    Select,
+    TextInput,
+)
 from django_filters import (
     CharFilter,
     DateFromToRangeFilter,
     FilterSet,
-    ModelChoiceFilter,
     MultipleChoiceFilter,
     RangeFilter
 )
@@ -11,24 +14,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Invoice
-from supplier_app.models import TaxPayer
-from users_app import CAN_VIEW_ALL_TAXPAYERS_PERM
 from utils.custom_filters import (
     NumericRangeWidget,
     DateRangeWidget
 )
-
-
-def taxpayer_qs(request):
-    user = getattr(request, 'user', None)
-    if not user:
-        return TaxPayer.objects.none()
-    elif user.has_perm(CAN_VIEW_ALL_TAXPAYERS_PERM):
-        return TaxPayer.objects.all()
-    else:
-        return TaxPayer.objects.filter(
-            company__companyuserpermission__user=user
-        )
 
 
 class InvoiceFilter(FilterSet):
@@ -41,10 +30,12 @@ class InvoiceFilter(FilterSet):
     invoice_due_date = DateFromToRangeFilter(label=_('Due Date'))
 
     total_amount = RangeFilter(widget=NumericRangeWidget(), label=_('Total Amount'))
-    taxpayer = ModelChoiceFilter(
-        queryset=taxpayer_qs,
-        empty_label=_('All'),
-        widget=Select(attrs={'class': 'custom-select'}),
+    taxpayer__business_name = CharFilter(
+        lookup_expr='icontains',
+        widget=TextInput(attrs={
+            'class': 'form-control',
+            "list": "taxpayers",
+            }),
         label=_('Taxpayer'),
     )
 
@@ -58,7 +49,7 @@ class InvoiceFilter(FilterSet):
 
     class Meta:
         model = Invoice
-        fields = ('invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer', 'taxpayer__country')
+        fields = ('invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer__business_name', 'taxpayer__country')
 
     def get_form_class(self):
         form = super(FilterSet, self).get_form_class()
