@@ -93,6 +93,19 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_companies'] = Company.objects.values('name')
+        return context
+
+    def get_queryset(self):
+        company_name = self.request.GET.get('company')
+        if company_name:
+            queryset = Company.objects.filter(name__icontains=company_name)
+        else:
+            queryset = Company.objects.all()
+        return queryset
+
 
 class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
     model = TaxPayer
