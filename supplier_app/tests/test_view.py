@@ -36,6 +36,12 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
+from supplier_app import (
+    email_notifications,
+    TAXPAYER_STATUS_APPROVED,
+    TAXPAYER_STATUS_CHANGE_REQUIRED,
+    TAXPAYER_STATUS_PENDING,
+)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -49,10 +55,6 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_APPROVE_MESSAGE,
     TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
-)
-from supplier_app import (
-    email_notifications,
-    TAXPAYER_STATUS,
 )
 from supplier_app.forms import (
     AddressCreateForm,
@@ -1025,8 +1027,8 @@ class TestEditTaxPayerInfo(TestCase):
         self.assertTrue(form_taxpayer.is_valid())
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
+        status_pending = TAXPAYER_STATUS_PENDING
         self.taxpayer.taxpayer_state = status_approved
         self.client_supplier.post(
             reverse(
@@ -1042,7 +1044,7 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_active_taxpayer_as_ap_dont_chang_state(self):
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self.taxpayer.taxpayer_state = status_approved
         self.taxpayer.save()
         self.client.post(
@@ -1206,7 +1208,7 @@ class TestEditAddressInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
         self.address = AddressFactory(taxpayer=self.taxpayer)
 
@@ -1266,7 +1268,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_address_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self._make_address_post()
         self.assertEqual(
             status_approved,
@@ -1293,7 +1295,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_addres_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_pending = TAXPAYER_STATUS_PENDING
 
         CompanyUserPermissionFactory(
             user=self.supplier_user,
@@ -1324,7 +1326,7 @@ class TestEditBankAccountInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
         self.bank_account.bank_cbu_file = self.file_mock
@@ -1390,7 +1392,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_account_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self._make_bank_post()
         self.assertEqual(
             status_approved,
@@ -1417,7 +1419,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_pending = TAXPAYER_STATUS_PENDING
         CompanyUserPermissionFactory(
             user=self.supplier_user,
             company=self.taxpayer.company
@@ -2322,7 +2324,7 @@ class TestTaxpayerCommentView(TestCase):
         }
         self.request_change_post = {
             'message': 'requesting change comment',
-            'action': TAXPAYER_STATUS['Change required'].value,
+            'action': TAXPAYER_STATUS_CHANGE_REQUIRED,
             'user': self.supplier_user.id,
             'taxpayer': self.taxpayer_example.id
         }
@@ -2401,7 +2403,7 @@ class TestTaxpayerCommentView(TestCase):
         # taxpayer state changes to change required
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
-            TAXPAYER_STATUS['Change Required']['choices'].value
+            TAXPAYER_STATUS_CHANGE_REQUIRED
         )
 
     def test_ap_request_change_should_redirect_to_supplier_detail_with_succes_msg(self):
