@@ -35,6 +35,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
+    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
 )
 from supplier_app.change_status_strategy import (
     get_strategy,
@@ -47,6 +48,9 @@ from supplier_app.forms import (
     BankAccountEditForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
+)
+from supplier_app.exceptions.taxpayer_exceptions import (
+    NoWorkdayIDException,
 )
 from supplier_app.models import (
     Address,
@@ -399,7 +403,6 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
     model = TaxpayerComment
     fields = ['message']
     template_name = 'comments.html'
-    success_url = reverse_lazy('ap-taxpayers')
     permission_required = CAN_EDIT_TAXPAYER_PERM
 
     def handle_no_permission(self):
@@ -410,6 +413,7 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
             taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
             StrategyChangeRequired.change_taxpayer_status(taxpayer)
             StrategyChangeRequired.send_email(taxpayer)
+            StrategyChangeRequired.show_message(request)
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -421,6 +425,14 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         form.instance.taxpayer = taxpayer
         form.instance.user = self.request.user
         return form
+
+    def get_success_url(self, **kwargs):
+        return reverse(
+            'supplier-details',
+            kwargs={
+                'taxpayer_id': self.kwargs['taxpayer_id']
+            }
+        )
 
 
 @transaction.atomic
@@ -477,11 +489,19 @@ def change_taxpayer_status(request, taxpayer_id):
         taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
         action = request.POST['action']
         strategy = get_strategy(action)
-        strategy.change_taxpayer_status(taxpayer)
+        strategy.change_taxpayer_status(taxpayer, request)
         strategy.send_email(taxpayer)
+        strategy.show_message(request)
     except ObjectDoesNotExist:
         messages.error(request, TAXPAYER_NOT_EXISTS_MESSAGE)
     except CouldNotSendEmailError:
         messages.error(request, EMAIL_ERROR_MESSAGE)
+    except NoWorkdayIDException:
+        messages.error(request, TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE)
     finally:
-        return redirect('ap-taxpayers')
+        return redirect(reverse(
+            'supplier-details',
+            kwargs={
+                'taxpayer_id': taxpayer_id
+            }
+        ))

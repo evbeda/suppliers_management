@@ -14,6 +14,7 @@ omit =
     supplier_management_site/*
     *apps.py*
     *admin.py*
+    env.py
 
 [report]
 exclude_lines =

@@ -154,4 +154,5 @@ class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
             'taxpayer_state',
             'company',
             'taxpayer_date',
+            'workday_id',
             ]

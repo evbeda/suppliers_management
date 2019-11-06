@@ -1,5 +1,7 @@
 import factory
+from unittest.mock import MagicMock
 from django.utils import timezone
+from django.core.files import File
 
 from supplier_app.models import (
     Address,
@@ -22,6 +24,10 @@ from supplier_app import (
 from users_app.factory_boy import (
     UserFactory,
 )
+
+file_mock = MagicMock(spec=File)
+file_mock.name = 'test.pdf'
+file_mock.size = 50
 
 
 class CompanyFactory(factory.django.DjangoModelFactory):
@@ -87,9 +93,11 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     class Meta:
         model = TaxPayerArgentina
 
+    afip_registration_file = file_mock
     cuit = factory.Sequence(lambda n: "{}".format(n))
     payment_type = PAYMENT_TYPES[0][0]
     payment_term = PAYMENT_TERMS[0][0]
+    witholding_taxes_file = file_mock
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
@@ -110,5 +118,6 @@ class BankAccountFactory(factory.django.DjangoModelFactory):
         model = BankAccount
 
     bank_account_number = factory.Sequence(lambda n: "{}".format(n))
-    taxpayer = factory.SubFactory(TaxPayerFactory)
     bank_info = BANK_INFO["BANCO DE LA NACION ARGENTINA"]
+    bank_cbu_file = file_mock
+    taxpayer = factory.SubFactory(TaxPayerFactory)
