@@ -12,13 +12,17 @@ from invoices_app import (
     CURRENCIES,
     INVOICE_STATUS,
     INVOICE_STATUS_NEW,
+    INVOICE_ALLOWED_FILE_EXTENSIONS,
+    INVOICE_MAX_SIZE_FILE,
 )
+
 from supplier_app.models import (
     EBEntity,
     TaxPayer,
 )
 
 from utils.invoice_lookup import invoice_status_lookup
+from utils.file_validator import FileSizeValidator
 
 
 class Invoice(models.Model):
@@ -64,8 +68,11 @@ class Invoice(models.Model):
     )
     invoice_file = models.FileField(
         upload_to='file',
-        blank=True,
         verbose_name=_('Invoice File'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=['pdf']),
+            FileSizeValidator(limit_size=INVOICE_MAX_SIZE_FILE),
+        ]
     )
     workday_id = models.PositiveIntegerField(blank=True, null=True)
 

@@ -4,27 +4,84 @@
 {% block content %}
 {% include 'navbar.html' %}
 {% include 'messages_notification.html' %}
-<form class="p-3"method="post" enctype="multipart/form-data">
+<form class="p-3" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row m-3">
         <div class="col-md-6 form-group">
             <h4>{% trans "Taxpayer info" %}</h4>
-            {{taxpayer_form}}
+            {% for field in taxpayer_form.visible_fields %}
+            {{ field.label_tag }}
+            {{ field }}
+            {{ field.help_text }}
+            {% for error in field.errors %}
+            <div>
+                <small class="text-danger">{{ error }}</small>
+            </div>
+            {% endfor %}
+            {% endfor %}
         </div>
         <div class="col-md-6 form-group">
-            <h4>{% trans "Address info" %}</h4>
-            {{address_form}}
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>{% trans "Address info" %}</h4>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            {{address_form.street.label_tag}}
+                            {{address_form.street}}
+                            <small class="text-danger">{{address_form.street.errors}}</small>
+                        </div>
+                        <div class="form-group col-md-2">
+                            {{address_form.number.label_tag}}
+                            {{address_form.number}}
+                            <small class="text-danger">{{address_form.number.errors}}</small>
+                        </div>
+                        <div class="form-group col-md-5">
+                            {{address_form.city.label_tag}}
+                            {{address_form.city}}
+                            <small class="text-danger">{{address_form.city.errors}}</small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{address_form.state.label_tag}}
+                            {{address_form.state}}
+                            <small class="text-danger">{{address_form.state.errors}}</small>
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{address_form.country.label_tag}}
+                            {{address_form.country}}
+                            <small class="text-danger">{{address_form.country.errors}}</small>
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{address_form.zip_code.label_tag}}
+                            {{address_form.zip_code}}
+                            <small class="text-danger">{{address_form.zip_code.errors}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <h4>{% trans "Bank account" %}</h4>
+                    {% for field in bank_account_form.visible_fields %}
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.help_text }}
+                    {% for error in field.errors %}
+                    <div>
+                        <small class="text-danger">{{ error }}</small>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
     </div>
     <hr>
-    <div class="row m-3">
-        <div class="col-md-12 form-group">
-            <h4>{% trans "Bank account" %}</h4>
-            {{bank_account_form}}
-        </div>
-    </div>
     <div class="row justify-content-end pr-5">
-        <input class="btn btn-success mr-3" type="submit" value="{% trans 'Create taxpayer' %}"/>
+        <input class="btn btn-success mr-3" type="submit" value="{% trans 'Create taxpayer' %}" />
         <a class="btn btn-danger" href="{% url 'supplier-home' %}">{% trans "Cancel" %}</a>
     </div>
 </form>

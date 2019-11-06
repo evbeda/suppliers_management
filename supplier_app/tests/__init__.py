@@ -58,9 +58,9 @@ def taxpayer_creation_POST_factory(
         'address_form-city': 'Mendoza',
         'address_form-state': 'Mendoza',
         'address_form-country': 'AR',
-        'bankaccount_form-bank_cbu_file': bank_cbu_file or file_mock,
-        'bankaccount_form-bank_info': bank_info or get_bank_info_example(),
-        'bankaccount_form-bank_account_number': '123214',
+        'bank_account_form-bank_cbu_file': bank_cbu_file or file_mock,
+        'bank_account_form-bank_info': bank_info or get_bank_info_example(),
+        'bank_account_form-bank_account_number': '123214',
     }
 
 

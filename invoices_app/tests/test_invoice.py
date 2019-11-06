@@ -76,11 +76,14 @@ class TestInvoice(TestBase):
         self.assertEqual(form.is_valid(), expected)
 
     @parameterized.expand([
-        ('test.xml', 20, ['Only .pdf allowed']),
+        ('test.xml', 20, ["File extension 'xml' is not allowed. Allowed extensions are: 'pdf'."]),
         ('test.pdf', 5242881, [
-            'The file size is greater than {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))]),
+            'File size 5MB is not allowed.\n Limit size: {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))
+            ]),
         ('test.xml', 5242881, [
-            'Only .pdf allowed', 'The file size is greater than {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))])
+            "File extension 'xml' is not allowed. Allowed extensions are: 'pdf'.",
+            'File size 5MB is not allowed.\n Limit size: {}MB.'.format(int(INVOICE_MAX_SIZE_FILE/(1024*1024)))
+        ])
     ])
     def test_invoice_file_is_valid_message(
         self,

@@ -69,7 +69,7 @@ class TestBase(TestCase):
 
         self.invoice_creation_empty_data = {}
         self.file_mock = MagicMock(spec=File)
-        self.file_mock.name = 'test.pdf'
+        self.file_mock.name = 'lalaland.pdf'
         self.file_mock.size = 50
 
         self.eb_entity_example = EBEntityFactory()

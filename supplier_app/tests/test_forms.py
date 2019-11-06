@@ -113,7 +113,7 @@ class TestTaxPayerFormValidation(TestCase):
         )
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
-            'bankaccount_form': BankAccountCreateForm(
+            'bank_account_form': BankAccountCreateForm(
                 data=FORM_POST,
                 files=self._get_request_FILES()
             ),
@@ -137,7 +137,7 @@ class TestTaxPayerFormValidation(TestCase):
             'taxpayer_form-witholding_taxes_file': [
                 witholding_taxes_file or self.file_mock
             ],
-            'bankaccount_form-bank_cbu_file': [
+            'bank_account_form-bank_cbu_file': [
                 bank_cbu_file or self.file_mock
             ],
         })
@@ -158,8 +158,8 @@ class TestTaxPayerFormValidation(TestCase):
     @parameterized.expand([
         (5000000000000000, 'bank_cbu_file'),
         (26214500, 'bank_cbu_file'),
-        (27214400, 'afip_file'),
-        (26214401, 'witholding_taxes_file')
+        (27214502, 'afip_file'),
+        (26214503, 'witholding_taxes_file')
     ])
     def test_form_with_a_file_greater_than_25MB_should_be_invalid(
         self,

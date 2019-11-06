@@ -8,11 +8,16 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from simple_history.models import HistoricalRecords
 
+
 from supplier_app import (
+    BANK_ACCOUNT_MAX_SIZE_FILE,
+    BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS,
     PAYMENT_TERMS,
     PAYMENT_TYPES,
     TAXPAYER_STATUS,
-    get_taxpayer_status_choices
+    TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+    TAXPAYER_ALLOWED_FILE_EXTENSIONS,
+    get_taxpayer_status_choices,
 )
 
 from supplier_app.constants.bank_info import get_bank_info_choices
@@ -21,6 +26,8 @@ from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
     UNUSED_STATUS,
 )
+
+from utils.file_validator import FileSizeValidator
 
 
 class Company(models.Model):
@@ -205,14 +212,26 @@ class TaxPayerArgentina(TaxPayer):
         upload_to='file',
         blank=False,
         verbose_name=_('AFIP registration certificate'),
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),
+                ),
+            ],
         )
     witholding_taxes_file = models.FileField(
         upload_to='file',
         blank=True,
         null=True,
         verbose_name=_('Certificate of no tax withholding of Tax liens, income or SUSS'),
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),    
+                ),
+            ],
         )
 
     def get_taxpayer_identifier(self):
@@ -255,7 +274,13 @@ class BankAccount(models.Model):
         upload_to='file',
         blank=False,
         verbose_name=_('Bank account certificate'),
-        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
+        validators=[
+            FileExtensionValidator(allowed_extensions=BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=BANK_ACCOUNT_MAX_SIZE_FILE,
+                code=_('invalid_file_size'),    
+            ),
+        ],
     )
 
     history = HistoricalRecords()
