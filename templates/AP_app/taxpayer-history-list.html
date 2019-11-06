@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
+{% load l10n %}
+{% load tz %}
 
 {% block content %}
 {% include 'navbar.html' %}
@@ -12,7 +13,7 @@
             <thead class="thead-eb-dark">
                 <tr>
                     <th scope="col">{% trans "User" %}</th>
-                    <th scope="col">{% trans "Modified" %}</th>
+                    <th scope="col" style="width:120px">{% trans "Modified" %}</th>
                     <th scope="col">{% trans "Business name" %}</th>
                     <th scope="col">{% trans "Taxpayer identification number" %}</th>
                     <th scope="col">{% trans "Payment Type" %}</th>
@@ -25,7 +26,7 @@
             {% for taxpayer in taxpayer_history %}
                 <tr>
                     <td>{{taxpayer.history_user}}</td>
-                    <td>{{taxpayer.history_date|date:'d/m/Y'}}</td>
+                    <td>{{taxpayer.history_date|date:date_format}}</td>
                     <td>{{taxpayer.business_name}}</td>
                     <td>{{taxpayer.cuit}}</td>
                     <td>{{taxpayer.payment_type}}</td>
@@ -58,7 +59,7 @@
             {% for address in address_history %}
                 <tr>
                     <td>{{address.history_user}}</td>
-                    <td>{{address.history_date|date:'d/m/Y'}}</td>
+                    <td>{{address.history_date|date:date_format}}</td>
                     <th>{{address.street}}</th>
                     <td>{{address.number}}</td>
                     <td>{{address.zip_code}}</td>
@@ -87,7 +88,7 @@
             {% for bank_account in bank_history %}
                 <tr>
                     <td>{{bank_account.history_user}}</td>
-                    <td>{{bank_account.history_date|date:'d/m/Y'}}</td>
+                    <td>{{bank_account.history_date|date:date_format}}</td>
                     <td>{{bank_account.get_bank_info_display}}</td>
                     <td>{{bank_account.bank_account_number}}</td>
                 </tr>

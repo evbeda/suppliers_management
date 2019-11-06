@@ -19,6 +19,12 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
+from supplier_app import DATE_FORMAT
+
+from supplier_app.constants.eb_entities_status import (
+    CURRENT_STATUS,
+    UNUSED_STATUS,
+)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -382,6 +388,7 @@ class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['taxpayer_history'] = TaxPayerArgentina.history.filter(id=self.kwargs['pk'])
         context['is_AP'] = self.request.user.is_AP
+        context['date_format'] = str(DATE_FORMAT)
         for taxpayer in context['taxpayer_history'].values():
             context['address_history'] = Address.history.filter(taxpayer_id=taxpayer.get('id'))
             context['bank_history'] = BankAccount.history.filter(taxpayer_id=taxpayer.get('id'))

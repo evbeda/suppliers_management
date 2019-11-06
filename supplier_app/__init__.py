@@ -103,3 +103,6 @@ email_notifications = {
 
 def get_taxpayer_status_choices():
     return [value['choices'] for value in TAXPAYER_STATUS.values()]
+
+
+DATE_FORMAT = _("M d, Y")

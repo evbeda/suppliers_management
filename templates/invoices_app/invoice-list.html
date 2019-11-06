@@ -45,11 +45,11 @@
                 {% for invoice in object_list %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{invoice.invoice_date_received|date:"d M, Y" }}</td>
+                        <td>{{invoice.invoice_date_received|date:date_format }}</td>
                         <td>{{invoice.taxpayer.business_name}}</td>
                         <td>{{invoice.taxpayer.country}}</td>
-                        <td>{{invoice.invoice_date|date:"d M, Y" }}</td>
-                        <td>{{invoice.invoice_due_date|date:"d M, Y" }}</td>
+                        <td>{{invoice.invoice_date|date:date_format }}</td>
+                        <td>{{invoice.invoice_due_date|date:date_format }}</td>
                         <td>{{invoice.invoice_number}}</td>
                         <td>{{invoice.po_number}}</td>
                         <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>

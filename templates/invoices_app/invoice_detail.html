@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load l10n %}
+{% load tz %}
 
 {% block content %}
 
@@ -28,7 +30,7 @@
         <strong>{% trans "Invoice #" %}</strong>
         {{invoice.invoice_number}}
         <strong>{% trans "Date:" %}</strong>
-        {{invoice.invoice_date}}
+        {{invoice.invoice_date|date:date_format}}
         {% if not taxpayer and invoice.status == INVOICE_STATUS_CHANGES_REQUEST or is_AP %}
         <a href="{% url 'invoice-update' pk=invoice.id %}" class="btn btn-outline-primary btn-sm mx-2">
           {% trans "Edit info" %}

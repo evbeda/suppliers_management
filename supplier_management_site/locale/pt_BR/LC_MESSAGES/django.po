@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 12:59+0000\n"
+"POT-Creation-Date: 2019-11-06 15:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,8 +122,8 @@ msgstr "Contribuinte"
 #: supplier_app/models.py:74 supplier_app/models.py:95
 #: supplier_app/models.py:236 templates/AP_app/ap-taxpayer-details.html:83
 #: templates/AP_app/ap-taxpayer-details.html:211
-#: templates/AP_app/taxpayer-history-list.html:23
-#: templates/AP_app/taxpayer-history-list.html:56
+#: templates/AP_app/taxpayer-history-list.html:22
+#: templates/AP_app/taxpayer-history-list.html:55
 #: templates/invoices_app/invoice-list.html:30
 msgid "Country"
 msgstr "País"
@@ -290,6 +290,10 @@ msgid "Please contact the Eventbrite employee that hired you, Thank you!"
 msgstr ""
 "Entre em contato com o funcionário da eventbrite que o contratou, Obrigado!"
 
+#: supplier_app/__init__.py:95
+msgid "M d, Y"
+msgstr "d M, Y"
+
 #: supplier_app/constants/countries.py:7
 msgid "Argentina"
 msgstr "Argentina"
@@ -351,7 +355,7 @@ msgid "Eventbrite entities to bill"
 msgstr "Nome da entidade da Eventbrite"
 
 #: supplier_app/models.py:27 templates/AP_app/company_creation.html:14
-#: templates/supplier_app/company_list.html:19
+#: templates/supplier_app/company_list.html:35
 msgid "Name"
 msgstr "Nome"
 
@@ -361,7 +365,7 @@ msgstr "Nome da entidade da Eventbrite"
 
 #: supplier_app/models.py:86 templates/AP_app/ap-taxpayer-details.html:31
 #: templates/AP_app/ap-taxpayers.html:23
-#: templates/AP_app/taxpayer-history-list.html:18
+#: templates/AP_app/taxpayer-history-list.html:17
 #: templates/supplier_app/supplier-home.html:26
 msgid "Business name"
 msgstr "Nome da empresa"
@@ -372,7 +376,7 @@ msgstr "Data de criação"
 
 #: supplier_app/models.py:103 templates/AP_app/ap-taxpayer-details.html:89
 #: templates/AP_app/ap-taxpayer-details.html:257
-#: templates/AP_app/taxpayer-history-list.html:22
+#: templates/AP_app/taxpayer-history-list.html:21
 msgid "Comments"
 msgstr "Comentários"
 
@@ -393,26 +397,26 @@ msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgstr "Certificado sem retenção na fonte de IVA, renda ou SUSS"
 
 #: supplier_app/models.py:228 templates/AP_app/ap-taxpayer-details.html:177
-#: templates/AP_app/taxpayer-history-list.html:51
+#: templates/AP_app/taxpayer-history-list.html:50
 msgid "Street"
 msgstr "Rua"
 
 #: supplier_app/models.py:229 templates/AP_app/ap-taxpayer-details.html:180
-#: templates/AP_app/taxpayer-history-list.html:52
+#: templates/AP_app/taxpayer-history-list.html:51
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:230 templates/AP_app/taxpayer-history-list.html:53
+#: supplier_app/models.py:230 templates/AP_app/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Código postal"
 
 #: supplier_app/models.py:231 templates/AP_app/ap-taxpayer-details.html:205
-#: templates/AP_app/taxpayer-history-list.html:54
+#: templates/AP_app/taxpayer-history-list.html:53
 msgid "City"
 msgstr "Cidade"
 
 #: supplier_app/models.py:232 templates/AP_app/ap-taxpayer-details.html:208
-#: templates/AP_app/taxpayer-history-list.html:55
+#: templates/AP_app/taxpayer-history-list.html:54
 msgid "State"
 msgstr "Estado"
 
@@ -429,12 +433,12 @@ msgid "Bank account certificate"
 msgstr "Certificado de conta bancária"
 
 #: supplier_management_site/settings/base.py:146
-#: templates/supplier_app/company_list.html:40
+#: templates/supplier_app/company_list.html:56
 msgid "English"
 msgstr "Inglês"
 
 #: supplier_management_site/settings/base.py:147
-#: templates/supplier_app/company_list.html:43
+#: templates/supplier_app/company_list.html:59
 msgid "Spanish"
 msgstr "espanhol"
 
@@ -493,12 +497,12 @@ msgid "No workday id"
 msgstr ""
 
 #: templates/AP_app/ap-taxpayer-details.html:58
-#: templates/AP_app/taxpayer-history-list.html:20
+#: templates/AP_app/taxpayer-history-list.html:19
 msgid "Payment Type"
 msgstr "Tipo de pagamento"
 
 #: templates/AP_app/ap-taxpayer-details.html:61
-#: templates/AP_app/taxpayer-history-list.html:21
+#: templates/AP_app/taxpayer-history-list.html:20
 msgid "Payment Term"
 msgstr "Termo de pagamento"
 
@@ -550,7 +554,7 @@ msgid "Zip_Code"
 msgstr "Código postal"
 
 #: templates/AP_app/ap-taxpayer-details.html:246
-#: templates/AP_app/taxpayer-history-list.html:10
+#: templates/AP_app/taxpayer-history-list.html:9
 msgid "Taxpayer History"
 msgstr "História do Contribuinte"
 
@@ -567,7 +571,7 @@ msgid "Create a new company"
 msgstr "Crie uma nova empresa"
 
 #: templates/AP_app/company_creation.html:20
-#: templates/supplier_app/company_list.html:20
+#: templates/supplier_app/company_list.html:36
 msgid "Description"
 msgstr "Descrição"
 
@@ -597,38 +601,38 @@ msgstr "Solicitar alteração"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/AP_app/taxpayer-history-list.html:16
-#: templates/AP_app/taxpayer-history-list.html:49
-#: templates/AP_app/taxpayer-history-list.html:82
+#: templates/AP_app/taxpayer-history-list.html:15
+#: templates/AP_app/taxpayer-history-list.html:48
+#: templates/AP_app/taxpayer-history-list.html:81
 #: templates/invoices_app/history-list.html:17
 msgid "User"
 msgstr "Do utilizador"
 
-#: templates/AP_app/taxpayer-history-list.html:17
-#: templates/AP_app/taxpayer-history-list.html:50
-#: templates/AP_app/taxpayer-history-list.html:83
+#: templates/AP_app/taxpayer-history-list.html:16
+#: templates/AP_app/taxpayer-history-list.html:49
+#: templates/AP_app/taxpayer-history-list.html:82
 #: templates/invoices_app/history-list.html:18
 msgid "Modified"
 msgstr "Modificado"
 
-#: templates/AP_app/taxpayer-history-list.html:19
+#: templates/AP_app/taxpayer-history-list.html:18
 #: templates/supplier_app/supplier-home.html:27
 msgid "Taxpayer identification number"
 msgstr "Número de Identificação Fiscal"
 
-#: templates/AP_app/taxpayer-history-list.html:43
+#: templates/AP_app/taxpayer-history-list.html:42
 msgid "Address History"
 msgstr "Histórico de Endereços"
 
-#: templates/AP_app/taxpayer-history-list.html:76
+#: templates/AP_app/taxpayer-history-list.html:75
 msgid "Bank Account History"
 msgstr "Histórico da conta bancária"
 
-#: templates/AP_app/taxpayer-history-list.html:84
+#: templates/AP_app/taxpayer-history-list.html:83
 msgid "Bank Name"
 msgstr "Nome do banco"
 
-#: templates/AP_app/taxpayer-history-list.html:85
+#: templates/AP_app/taxpayer-history-list.html:84
 msgid "Bank Account Number"
 msgstr "Número da conta de banco"
 
@@ -765,7 +769,7 @@ msgstr "Escolha um arquivo"
 msgid "Administrator"
 msgstr "Administrador"
 
-#: templates/invoices_app/invoice_detail.html:196
+#: templates/invoices_app/invoice_detail.html:195
 msgid "Attachment: "
 msgstr "Anexo: "
 
@@ -862,15 +866,19 @@ msgstr ""
 msgid "Company List"
 msgstr "Lista de empresas"
 
-#: templates/supplier_app/company_list.html:21
+#: templates/supplier_app/company_list.html:19
+msgid "Search by name"
+msgstr ""
+
+#: templates/supplier_app/company_list.html:37
 msgid "Email Invitation"
 msgstr "Convite por e-mail"
 
-#: templates/supplier_app/company_list.html:46
+#: templates/supplier_app/company_list.html:62
 msgid "Portuguese"
 msgstr "Português"
 
-#: templates/supplier_app/company_list.html:49
+#: templates/supplier_app/company_list.html:65
 msgid "Invite"
 msgstr "Convite"
 
