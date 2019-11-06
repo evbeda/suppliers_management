@@ -29,7 +29,7 @@ class InvoiceForm(forms.ModelForm):
         widgets = {
             'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
-            'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Purchase Order')}),
+            'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
             'invoice_file': forms.FileInput(
                 attrs={
                     'type': 'file',
@@ -67,7 +67,7 @@ class InvoiceForm(forms.ModelForm):
             'invoice_number': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
-                    'placeholder': _('Invoice Number'),
+                    'placeholder': _('e.g. 124246346'),
                 }
             ),
             'workday_id': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Workday ID')}),

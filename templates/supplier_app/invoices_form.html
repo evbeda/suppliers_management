@@ -63,17 +63,19 @@
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-md-5">
+            <div class="form-group col-md-6">
               {{ form.po_number.label_tag }} {{ form.po_number }}
               <small class="text-danger">
                 {{ form.po_number.errors }}
               </small>
-              {% if form.po_number.help_text %}
-              <small class="text-muted">{{ form.po_number.help_text|safe }}</small>
-              {% endif %}
             </div>
-            <div class="form-group col-md-5">
-              <label for="eb-entity">{% trans "Eventbrite entity" %}</label>
+            <div class="form-group col-md-6">
+              <label for="eb-entity">
+                {% trans "Eventbrite entity" %}
+                <a data-toggle="tooltip" data-placement="right" title="{% trans 'Eventbrite company to which you bill' %}">
+                  <i class="fas fa-info-circle"></i>
+                </a>
+              </label>
               <select class="form-control" name="eb_entity" id="eb-entity">
                 {% for eb_entity in eb_entities%}
                 <option value="{{eb_entity.id}}">{{eb_entity}}</option>
@@ -103,7 +105,7 @@
               {% endif %}
             </div>
             <div class="form-group col-md-3">
-                {{ form.net_amount.label_tag }} 
+                {{ form.net_amount.label_tag }}
               {{ form.net_amount }}
               <small class="text-danger">
                 {{ form.net_amount.errors }}
@@ -154,7 +156,7 @@
           {% endif %}
         </div>
         <div class="col-md-12 text-right mt-3">
-          <button id="submitBtn" type="submit" class="btn btn-primary">
+          <button id="submitBtn" type="submit" class="btn btn-primary mr-1">
             {% trans "Submit" %}
           </button>
           {% if invoice %}
@@ -186,6 +188,10 @@
 
   $('#inputGroupFile02').change(function(e) {
     $(this).next('#id-custom-file-label2').html(e.target.files[0].name);
+  });
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
   });
 
 function calculate_total_amount() {
