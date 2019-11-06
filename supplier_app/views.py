@@ -263,6 +263,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
         context['comments'] = context['taxpayer'].taxpayercomment_set.all()
         context['change_required'] = TAXPAYER_STATUS_CHANGE_REQUIRED
+        context['make_comment'] = 'make comment'
         context['is_AP'] = self.request.user.is_AP
         return context
 

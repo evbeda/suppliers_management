@@ -47,14 +47,15 @@ from supplier_app.constants.custom_messages import (
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
     JOIN_COMPANY_ERROR_MESSAGE,
-    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
+    TAXPAYER_APPROVE_MESSAGE,
+    TAXPAYER_COMMENT_EMPTY,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
+    TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
-    TAXPAYER_APPROVE_MESSAGE,
-    TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
+    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
 )
 from supplier_app.forms import (
     AddressCreateForm,
@@ -2318,7 +2319,7 @@ class TestTaxpayerCommentView(TestCase):
         }
         self.comment_post = {
             'message': 'Testing comment',
-            'action': '0',
+            'action': 'make comment',
             'user': self.supplier_user.id,
             'taxpayer': self.taxpayer_example.id
         }
@@ -2365,6 +2366,16 @@ class TestTaxpayerCommentView(TestCase):
         )
         self.assertContains(response, 'Request Change')
 
+    def test_make_comment_btn_for_ap_in_comment_submit_form(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertContains(response, 'Make Comment')
+
     def test_make_comment_btn_for_supplier_in_comment_submit_form(self):
         self.client.force_login(self.supplier_user)
         response = self.client.get(
@@ -2375,6 +2386,16 @@ class TestTaxpayerCommentView(TestCase):
         )
         self.assertContains(response, 'Make Comment')
 
+    def test_no_request_change_btn_for_supplier_in_comment_submit_form(self):
+        self.client.force_login(self.supplier_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertNotContains(response, 'Request Change')
+
     def test_supplier_make_comment(self):
         self.client.force_login(self.supplier_user)
         self._make_comment_post()
@@ -2383,8 +2404,22 @@ class TestTaxpayerCommentView(TestCase):
             self.comment_post['message']
         )
 
-    def test_supplier_without_taxpayer_ownership_cant_make_comment(self):
+    def test_supplier_make_invalid_comment_fails_with_error_message(self):
+        self.client.force_login(self.supplier_user)
+        response = self.client.post(
+            reverse(
+                self.comment_post_url,
+                kwargs=self.kwargs
+            ),
+            data={
+                'message': "",
+                'action': "make comment",
+            },
+            follow=True,
+        )
+        self.assertContains(response, TAXPAYER_COMMENT_EMPTY.encode('utf-8'))
 
+    def test_supplier_without_taxpayer_ownership_cant_make_comment(self):
         user = UserFactory(email='supplier@gmail.com')
         user.groups.add(self.supplier_group)
 
@@ -2393,6 +2428,20 @@ class TestTaxpayerCommentView(TestCase):
         self.assertEqual(HTTPStatus.NOT_FOUND, response.status_code)
 
     def test_ap_make_comment(self):
+        self.client.force_login(self.ap_user)
+        self._make_comment_post()
+        # comment persist
+        self.assertEqual(
+            TaxpayerComment.objects.last().message,
+            self.comment_post['message']
+        )
+        # taxpayer state does not change remains pending
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
+            TAXPAYER_STATUS_PENDING
+        )
+
+    def test_ap_make_request_change(self):
         self.client.force_login(self.ap_user)
         self._make_request_change_post()
         # comment persist
@@ -2408,7 +2457,7 @@ class TestTaxpayerCommentView(TestCase):
 
     def test_ap_request_change_should_redirect_to_supplier_detail_with_succes_msg(self):
         self.client.force_login(self.ap_user)
-        response = self._make_comment_post()
+        response = self._make_request_change_post()
         self.assertIn(
             reverse(
                 self.supplier_detail_url,
@@ -2416,5 +2465,4 @@ class TestTaxpayerCommentView(TestCase):
             ),
             [redirect[0] for redirect in response.redirect_chain],
         )
-
         self.assertContains(response, TAXPAYER_REQUEST_CHANGE_MESSAGE)
