@@ -21,10 +21,22 @@ TAXPAYER_STATUS_PENDING = "PENDING"
 TAXPAYER_STATUS_DENIED = "DENIED"
 
 TAXPAYER_STATUS = {
-    "Approved": DBTuple(TAXPAYER_STATUS_APPROVED, _("Approved")),
-    "Change required": DBTuple(TAXPAYER_STATUS_CHANGE_REQUIRED, _("Change required")),
-    "Pending": DBTuple(TAXPAYER_STATUS_PENDING, _("Pending")),
-    "Denied": DBTuple(TAXPAYER_STATUS_DENIED, _("Denied")),
+    "Approved": {
+        "css-class": "badge badge-success",
+        "choices": DBTuple(TAXPAYER_STATUS_APPROVED, _("Approved"))
+    },
+    "Change Required": {
+        "css-class": "badge badge-warning",
+        "choices": DBTuple(TAXPAYER_STATUS_CHANGE_REQUIRED, _("Change required"))
+    },
+    "Pending": {
+        "css-class": "badge badge-primary",
+        "choices": DBTuple(TAXPAYER_STATUS_PENDING, _("Pending"))
+    },
+    "Denied": {
+        "css-class": "badge badge-danger",
+        "choices": DBTuple(TAXPAYER_STATUS_DENIED, _("Denied"))
+    },
 }
 
 PAYMENT_TERMS = [
@@ -90,4 +102,4 @@ email_notifications = {
 
 
 def get_taxpayer_status_choices():
-    return TAXPAYER_STATUS.values()
+    return [value['choices'] for value in TAXPAYER_STATUS.values()]
