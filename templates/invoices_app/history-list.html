@@ -39,7 +39,7 @@
                     <td>{{invoice.net_amount}}</td>
                     <td>{{invoice.vat}}</td>
                     <td>{{invoice.total_amount}}</td>
-                    <td>{% if invoice.status == INVOICE_STATUS_NEW %}
+                    <td>{% if invoice.status == INVOICE_STATUS_PENDING %}
                         <span class="badge badge-primary">{{invoice.get_status_display}}</span>
                         {% endif %}
                         {% if invoice.status == INVOICE_STATUS_REJECTED %}

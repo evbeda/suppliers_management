@@ -39,7 +39,7 @@ from invoices_app import (
     DEFAULT_NUMBER_PAGINATION,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_CHANGES_REQUEST,
-    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PENDING,
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED,
     ENGLISH_LANGUAGE_CODE,
@@ -112,7 +112,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['filter_to_xls'] = urllib.parse.urlparse(self.request.get_raw_uri()).query
         context['is_AP'] = self.request.user.is_AP
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
-        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_PENDING'] = invoice_status_lookup(INVOICE_STATUS_PENDING)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
@@ -151,7 +151,7 @@ class SupplierInvoiceListView(
         context = super().get_context_data(**kwargs)
         context['taxpayer'] = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
-        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_PENDING'] = invoice_status_lookup(INVOICE_STATUS_PENDING)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
@@ -240,7 +240,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
             )
 
     def form_valid(self, form):
-        form.instance.status = invoice_status_lookup(INVOICE_STATUS_NEW)
+        form.instance.status = invoice_status_lookup(INVOICE_STATUS_PENDING)
 
         if self.request.user.is_AP:
             user = self.request.user
@@ -293,7 +293,7 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
-        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_PENDING'] = invoice_status_lookup(INVOICE_STATUS_PENDING)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
@@ -392,7 +392,7 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
         context['taxpayer'] = father_taxpayer.get_taxpayer_child()
         context['address'] = Address.objects.get(taxpayer=father_taxpayer.get_taxpayer_child())
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
-        context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
+        context['INVOICE_STATUS_PENDING'] = invoice_status_lookup(INVOICE_STATUS_PENDING)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)

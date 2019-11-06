@@ -2,7 +2,7 @@ from django.urls import reverse
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PENDING,
     INVOICE_STATUS_REJECTED
 )
 
@@ -30,11 +30,11 @@ class TestAP(TestBase):
             '{}?{}'.format(
                 reverse('invoices-list'),
                 'status={}'.format(
-                    invoice_status_lookup(INVOICE_STATUS_NEW)
+                    invoice_status_lookup(INVOICE_STATUS_PENDING)
                 )
             )
         )
-        # Only the invoice with NEW status should be listed
+        # Only the invoice with PENDING status should be listed
         self.assertNotContains(
             response,
             self.invoice_from_other_user.invoice_number

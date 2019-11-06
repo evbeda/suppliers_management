@@ -64,7 +64,7 @@ class InvoiceForm(forms.ModelForm):
                     'onChange': 'calculate_total_amount()',
                     }
                 ),
-            'invoice_number': forms.NumberInput(
+            'invoice_number': forms.TextInput(
                 attrs={
                     'class': 'form-control',
                     'placeholder': _('Invoice Number'),

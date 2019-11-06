@@ -8,7 +8,7 @@ from django.test import (
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PENDING,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PAID,
     INVOICE_STATUS_REJECTED
@@ -144,7 +144,7 @@ class TestInvoiceStatusLookup(TestCase):
 
     @parameterized.expand([
         ('1', INVOICE_STATUS_APPROVED,),
-        ('2', INVOICE_STATUS_NEW,),
+        ('2', INVOICE_STATUS_PENDING,),
         ('3', INVOICE_STATUS_CHANGES_REQUEST,),
         ('4', INVOICE_STATUS_REJECTED),
         ('5', INVOICE_STATUS_PAID,),

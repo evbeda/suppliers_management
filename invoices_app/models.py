@@ -11,7 +11,7 @@ from invoices_app import (
     ARS_INVOICE_TYPES,
     CURRENCIES,
     INVOICE_STATUS,
-    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PENDING,
     INVOICE_ALLOWED_FILE_EXTENSIONS,
     INVOICE_MAX_SIZE_FILE,
 )
@@ -35,7 +35,7 @@ class Invoice(models.Model):
     status = models.CharField(
         max_length=40,
         choices=INVOICE_STATUS,
-        default=invoice_status_lookup(INVOICE_STATUS_NEW),
+        default=invoice_status_lookup(INVOICE_STATUS_PENDING),
         verbose_name=_('Status')
     )
     po_number = models.CharField(max_length=200, help_text="ex: 12341234", verbose_name=_('PO number'))
