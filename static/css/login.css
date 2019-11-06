@@ -4,10 +4,7 @@ a:hover{
 
 .btn-eb{
     background-color: #F05537
-}
-
-.btn-eb:hover{
-    background-color: rgb(223, 79, 51)
+    color: white
 }
 
 .btn-google{
