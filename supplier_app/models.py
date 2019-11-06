@@ -2,7 +2,12 @@ import hashlib
 import uuid
 
 from django.conf import settings
-from django.core.validators import FileExtensionValidator
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxLengthValidator,
+    MinLengthValidator,
+    RegexValidator,
+)
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -103,12 +108,6 @@ class TaxPayer(models.Model):
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     taxpayer_date = models.DateField(auto_now_add=True, verbose_name=_("Creation date"))
-    taxpayer_comments = models.CharField(
-        max_length=200,
-        blank=True,
-        null=True,
-        verbose_name=_("Comments"),
-    )
 
     history = HistoricalRecords(inherit=True)
 
@@ -200,7 +199,19 @@ class TaxPayerEBEntity(models.Model):
 
 
 class TaxPayerArgentina(TaxPayer):
-    cuit = models.CharField(max_length=20)
+    cuit = models.CharField(
+        max_length=20,
+        unique=True,
+        validators=[
+            RegexValidator(
+                r'^[0-9]+$',
+                message=_('CUIT must only have numbers'),
+                code='invalid_cuit'
+            ),
+            MaxLengthValidator(11),
+            MinLengthValidator(11),
+        ]
+    )
     payment_type = models.CharField(
         max_length=20,
         choices=PAYMENT_TYPES,
@@ -248,11 +259,27 @@ COUNTRIES = {
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=100, verbose_name=_("Street"))
-    number = models.CharField(max_length=10, verbose_name=_("Number"))
+    street = models.CharField(
+        max_length=100,
+        verbose_name=_("Street"),
+    )
+    number = models.IntegerField(verbose_name=_("Number"))
     zip_code = models.CharField(max_length=10, verbose_name=_("Zip code"))
-    city = models.CharField(max_length=50, verbose_name=_("City"))
-    state = models.CharField(max_length=50, verbose_name=_("State"))
+    city = models.CharField(
+        max_length=50,
+        verbose_name=_("City"),
+    )
+    state = models.CharField(
+        max_length=50,
+        verbose_name=_("State"),
+        validators=[
+            RegexValidator(
+                r'\D',
+                message=_('City name must only have letters'),
+                code='invalid_city'
+            ),
+        ],
+    )
     country = models.CharField(
         max_length=50,
         choices=get_countries_choices(),
@@ -264,7 +291,19 @@ class Address(models.Model):
 
 
 class BankAccount(models.Model):
-    bank_account_number = models.CharField(max_length=60, unique=True, verbose_name=_("Bank account number"))
+    bank_account_number = models.CharField(
+        max_length=60,
+        unique=True,
+        verbose_name=_("Bank account number"),
+        validators=[
+            RegexValidator(
+                r'^[0-9]+$',
+                message=_('Bank account must only have numbers'),
+                code='invalid_bank_number',),
+            MinLengthValidator(22),
+            MaxLengthValidator(22),
+        ]
+    )
     bank_info = models.IntegerField(
         choices=get_bank_info_choices(),
         verbose_name=_('Bank name')

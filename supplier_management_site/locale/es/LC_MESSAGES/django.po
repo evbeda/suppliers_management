@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 12:55+0000\n"
+"POT-Creation-Date: 2019-11-06 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,11 +48,11 @@ msgstr "es"
 
 #: invoices_app/__init__.py:59
 msgid "Please provide a Workday ID in order to approve an invoice"
-msgstr "Por favor ingresa un ID de Workday para aprobar la factura"
+msgstr "Por favor setea un workday ID para poder aprobar la factura"
 
 #: invoices_app/__init__.py:60
 msgid "Ivalid Worday ID"
-msgstr "ID de Workday Inválido"
+msgstr "Workday ID invalido"
 
 #: invoices_app/__init__.py:62
 msgid "Thank you"
@@ -121,9 +121,9 @@ msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:56 supplier_app/filters.py:28
-#: supplier_app/models.py:74 supplier_app/models.py:95
-#: supplier_app/models.py:236 templates/AP_app/ap-taxpayer-details.html:83
-#: templates/AP_app/ap-taxpayer-details.html:211
+#: supplier_app/models.py:84 supplier_app/models.py:105
+#: supplier_app/models.py:285 templates/AP_app/ap-taxpayer-details.html:95
+#: templates/AP_app/ap-taxpayer-details.html:223
 #: templates/AP_app/taxpayer-history-list.html:23
 #: templates/AP_app/taxpayer-history-list.html:56
 #: templates/invoices_app/invoice-list.html:30
@@ -220,7 +220,7 @@ msgstr "30 días"
 
 #: supplier_app/__init__.py:35
 msgid "Bank"
-msgstr "Transferencia de banco"
+msgstr "Transferencia bancaria"
 
 #: supplier_app/__init__.py:40
 msgid "You have been invited to BriteSu"
@@ -349,85 +349,105 @@ msgstr "La entidad fiscal que estás tratando de acceder/modificar no existe"
 msgid "Taxpayer state"
 msgstr "Estados de la entidad fiscal"
 
-#: supplier_app/forms.py:118
+#: supplier_app/forms.py:51
+msgid "e.g. Adolfo sourdeaux"
+msgstr "ej Adolfo sourdeaux"
+
+#: supplier_app/forms.py:57
+msgid "e.g. Tigre"
+msgstr "ej Tigre"
+
+#: supplier_app/forms.py:63
+msgid "e.g. Buenos aires"
+msgstr "ej Buenos aires"
+
+#: supplier_app/forms.py:111
 msgid "Eventbrite entities to bill"
 msgstr "Entidades de Eventbrite a Facturar"
 
-#: supplier_app/models.py:27 templates/AP_app/company_creation.html:14
+#: supplier_app/models.py:37 templates/AP_app/company_creation.html:14
 #: templates/supplier_app/company_list.html:19
 msgid "Name"
 msgstr "Nombre"
 
-#: supplier_app/models.py:70
+#: supplier_app/models.py:80
 msgid "Eventbrite entity name"
 msgstr "Entidad de Eventbrite"
 
-#: supplier_app/models.py:86 templates/AP_app/ap-taxpayer-details.html:31
+#: supplier_app/models.py:96 templates/AP_app/ap-taxpayer-details.html:43
 #: templates/AP_app/ap-taxpayers.html:23
 #: templates/AP_app/taxpayer-history-list.html:18
 #: templates/supplier_app/supplier-home.html:26
 msgid "Business name"
 msgstr "Razón social"
 
-#: supplier_app/models.py:98
+#: supplier_app/models.py:108
 msgid "Creation date"
 msgstr "Fecha de creación"
 
-#: supplier_app/models.py:103 templates/AP_app/ap-taxpayer-details.html:89
-#: templates/AP_app/ap-taxpayer-details.html:257
-#: templates/AP_app/taxpayer-history-list.html:22
-msgid "Comments"
-msgstr "Comentarios adicionales"
+#: supplier_app/models.py:206
+msgid "CUIT must only have numbers"
+msgstr "El CUIT solo debe tener numeros"
 
-#: supplier_app/models.py:197
+#: supplier_app/models.py:217
 msgid "Payment type"
 msgstr "Forma de pago"
 
-#: supplier_app/models.py:202
+#: supplier_app/models.py:222
 msgid "Payment term"
 msgstr "Plazo de pago"
 
-#: supplier_app/models.py:207
+#: supplier_app/models.py:227
 msgid "AFIP registration certificate"
 msgstr "Constancia de inscripción de AFIP"
 
-#: supplier_app/models.py:214
+#: supplier_app/models.py:237
 msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgstr "Certificado de no retención de gravámenes, SUSS"
 
-#: supplier_app/models.py:228 templates/AP_app/ap-taxpayer-details.html:177
+#: supplier_app/models.py:256 templates/AP_app/ap-taxpayer-details.html:189
 #: templates/AP_app/taxpayer-history-list.html:51
 msgid "Street"
 msgstr "Calle"
 
-#: supplier_app/models.py:229 templates/AP_app/ap-taxpayer-details.html:180
+#: supplier_app/models.py:258 templates/AP_app/ap-taxpayer-details.html:192
 #: templates/AP_app/taxpayer-history-list.html:52
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:230 templates/AP_app/taxpayer-history-list.html:53
+#: supplier_app/models.py:259 templates/AP_app/taxpayer-history-list.html:53
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:231 templates/AP_app/ap-taxpayer-details.html:205
+#: supplier_app/models.py:262 templates/AP_app/ap-taxpayer-details.html:217
 #: templates/AP_app/taxpayer-history-list.html:54
 msgid "City"
 msgstr "Cíudad"
 
-#: supplier_app/models.py:232 templates/AP_app/ap-taxpayer-details.html:208
+#: supplier_app/models.py:266 supplier_app/models.py:277
+#, fuzzy
+msgid "City name must only have letters"
+msgstr "La ciudad solo debe tener letras"
+
+#: supplier_app/models.py:273 templates/AP_app/ap-taxpayer-details.html:220
 #: templates/AP_app/taxpayer-history-list.html:55
 msgid "State"
 msgstr "Provincia"
 
-#: supplier_app/models.py:244
+#: supplier_app/models.py:296
 msgid "Bank account number"
 msgstr "CBU"
 
-#: supplier_app/models.py:247 templates/AP_app/ap-taxpayer-details.html:133
+#: supplier_app/models.py:300
+#| msgid "Bank account number"
+msgid "Bank account must only have numbers"
+msgstr "La cuenta bancaria solo debe tener numeros"
+
+#: supplier_app/models.py:308 templates/AP_app/ap-taxpayer-details.html:145
 msgid "Bank name"
 msgstr "Banco"
 
-#: supplier_app/models.py:257
+#: supplier_app/models.py:318
 msgid "Bank account certificate"
 msgstr "Certificado de la cuenta bancaria"
 
@@ -491,7 +511,7 @@ msgstr "Workday id"
 msgid "Taxpayer Identification Number"
 msgstr "Identificador de entidad fiscal"
 
-#: templates/AP_app/ap-taxpayer-details.html:44
+#: templates/AP_app/ap-taxpayer-details.html:56
 msgid "No workday id"
 msgstr "Workday ID no especificado"
 
@@ -509,53 +529,58 @@ msgstr "Período de pago"
 msgid "EB entities"
 msgstr "Entidades Eventbrite"
 
-#: templates/AP_app/ap-taxpayer-details.html:86
-#: templates/AP_app/ap-taxpayer-details.html:151
+#: templates/AP_app/ap-taxpayer-details.html:98
+#: templates/AP_app/ap-taxpayer-details.html:163
 msgid "Files"
 msgstr "Archivos"
 
-#: templates/AP_app/ap-taxpayer-details.html:100
+#: templates/AP_app/ap-taxpayer-details.html:111
 msgid "AFIP certificate"
 msgstr "Cerificado AFIP"
 
-#: templates/AP_app/ap-taxpayer-details.html:107
+#: templates/AP_app/ap-taxpayer-details.html:119
 msgid "Withholding taxes"
 msgstr "Impuesto a las ganancias"
 
-#: templates/AP_app/ap-taxpayer-details.html:120
-#: templates/AP_app/ap-taxpayer-details.html:165
-#: templates/AP_app/ap-taxpayer-details.html:235
+#: templates/AP_app/ap-taxpayer-details.html:132
+#: templates/AP_app/ap-taxpayer-details.html:177
+#: templates/AP_app/ap-taxpayer-details.html:247
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/AP_app/ap-taxpayer-details.html:130
+#: templates/AP_app/ap-taxpayer-details.html:142
 msgid "Bank info"
 msgstr "Informacíon Bancaria"
 
-#: templates/AP_app/ap-taxpayer-details.html:139
+#: templates/AP_app/ap-taxpayer-details.html:151
 msgid "Bank code"
 msgstr "Código Bancario"
 
-#: templates/AP_app/ap-taxpayer-details.html:145
+#: templates/AP_app/ap-taxpayer-details.html:157
 msgid "Account number"
 msgstr "Número de cuenta"
 
-#: templates/AP_app/ap-taxpayer-details.html:155
+#: templates/AP_app/ap-taxpayer-details.html:167
 msgid "CBU"
 msgstr "CBU"
 
-#: templates/AP_app/ap-taxpayer-details.html:171
+#: templates/AP_app/ap-taxpayer-details.html:183
 msgid "Address information"
 msgstr "Domicilio"
 
-#: templates/AP_app/ap-taxpayer-details.html:183
+#: templates/AP_app/ap-taxpayer-details.html:195
 msgid "Zip_Code"
 msgstr "Código postal"
 
-#: templates/AP_app/ap-taxpayer-details.html:246
+#: templates/AP_app/ap-taxpayer-details.html:258
 #: templates/AP_app/taxpayer-history-list.html:10
 msgid "Taxpayer History"
 msgstr "Historial del proveedor"
+
+#: templates/AP_app/ap-taxpayer-details.html:269
+#: templates/AP_app/taxpayer-history-list.html:22
+msgid "Comments"
+msgstr "Comentarios adicionales"
 
 #: templates/AP_app/ap-taxpayers.html:26
 msgid "Action"
@@ -596,7 +621,7 @@ msgstr "Solicitud de cambio"
 #: templates/supplier_app/invoices_form.html:161
 #: templates/supplier_app/invoices_form.html:163
 #: templates/supplier_app/invoices_form.html:165
-#: templates/supplier_app/taxpayer-creation.html:28
+#: templates/supplier_app/taxpayer-creation.html:111
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -645,7 +670,7 @@ msgstr "Filtros"
 
 #: templates/comments.html:5
 msgid "write your comments here"
-msgstr ""
+msgstr "Comentar"
 
 #: templates/comments.html:7
 msgid "Request Change"
@@ -909,7 +934,19 @@ msgstr "Cargar"
 msgid "Create a new taxpayer"
 msgstr "Crear entidad fiscal"
 
-#: templates/supplier_app/supplier-home.html:45
+#: templates/supplier_app/supplier-home.html:29
+msgid "Options"
+msgstr "Opciones"
+
+#: templates/supplier_app/supplier-home.html:35
+msgid "No taxpayers please: "
+msgstr "No existe ninguna entidad fiscal por favor: "
+
+#: templates/supplier_app/supplier-home.html:36
+msgid "create a new taxpayer"
+msgstr "crea una nueva"
+
+#: templates/supplier_app/supplier-home.html:53
 msgid "Details"
 msgstr "Detalles"
 
@@ -921,11 +958,11 @@ msgstr "Información de la entidad fiscal"
 msgid "Address info"
 msgstr "Domicilio"
 
-#: templates/supplier_app/taxpayer-creation.html:22
+#: templates/supplier_app/taxpayer-creation.html:92
 msgid "Bank account"
 msgstr "Cuenta bancaria"
 
-#: templates/supplier_app/taxpayer-creation.html:27
+#: templates/supplier_app/taxpayer-creation.html:110
 msgid "Create taxpayer"
 msgstr "Crear entidad fiscal"
 
@@ -952,6 +989,14 @@ msgstr "Desde"
 #: utils/custom_filters.py:41
 msgid "To Date"
 msgstr "Hasta"
+
+#: utils/file_validator.py:15
+msgid ""
+"File size {}MB is not allowed.\n"
+" Limit size: {}MB."
+msgstr ""
+"El tamaño de tu archivo {}MB no esta permitido.\n"
+" Tamaño limite: {}MB."
 
 #: utils/history.py:28
 msgid "Changed: \n"

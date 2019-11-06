@@ -519,14 +519,14 @@ class TestApTaxpayers(TestCase):
             business_name=BUSINESS_EXAMPLE_NAME_1,
             workday_id='1',
             taxpayer_state=STATUS_PENDING,
-            cuit='20-31789965-3',
+            cuit='20317899653',
             company=self.company1,
         )
         self.taxpayer_ar2 = TaxPayerArgentinaFactory(
             business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
             taxpayer_state=STATUS_CHANGE_REQUIRED,
-            cuit='20-39237968-5',
+            cuit='20392379685',
             company=self.company2,
         )
 
@@ -948,17 +948,17 @@ class TestEditTaxPayerInfo(TestCase):
             taxpayer_edit_POST_factory(
                 workday_id="1",
                 business_name="EB US",
-                cuit="20-3123214-1",
+                cuit="20312321462",
             ),
             ["workday_id", "business_name", "cuit"],
-            ["1", "EB US", "20-3123214-1"]
+            ["1", "EB US", "20312321462"]
         ),
         (
             taxpayer_edit_POST_factory(
-                cuit="20-3123214-1",
+                cuit="20312321492",
             ),
             ["cuit", "business_name"],
-            ["20-3123214-1", "EB ARG"]
+            ["20312321492", "EB ARG"]
         ),
         (
             taxpayer_edit_POST_factory(
@@ -987,13 +987,6 @@ class TestEditTaxPayerInfo(TestCase):
             request,
             **self.kwargs,
         )
-
-        form_taxpayer = TaxPayerEditForm(
-            data=QUERY_FORM_TAXPAYER_POST_UPDATE,
-            files=self._get_request_FILES(),
-            )
-        self.assertTrue(form_taxpayer.is_valid())
-
         after_update = len(TaxPayer.objects.all())
 
         taxpayer = TaxPayerArgentina.objects.get(pk=self.taxpayer_id)
@@ -1004,6 +997,52 @@ class TestEditTaxPayerInfo(TestCase):
             self.assertEqual(
                 getattr(taxpayer, attribute), value_expected[index]
             )
+
+    @parameterized.expand([
+        (
+            taxpayer_edit_POST_factory(
+                workday_id="1",
+                business_name="EB US",
+                cuit="20312321468",
+            ),
+            ["workday_id", "business_name", "cuit"],
+            ["1", "EB US", "20312321468"]
+        ),
+        (
+            taxpayer_edit_POST_factory(
+                cuit="20312321491",
+            ),
+            ["cuit", "business_name"],
+            ["20312321491", "EB ARG"]
+        ),
+        (
+            taxpayer_edit_POST_factory(
+                payment_term=1,
+            ),
+            ["payment_term"],
+            [30]
+        )
+    ])
+    def test_form_is_valid_should_be_true_with_valid_request(
+        self,
+        taxpayer_post_update,
+        fields_changed,
+        value_expected
+    ):
+
+        TAXPAYER_POST_UPDATE = taxpayer_post_update
+        QUERY_FORM_TAXPAYER_POST_UPDATE = QueryDict('', mutable=True)
+        QUERY_FORM_TAXPAYER_POST_UPDATE.update(
+            TAXPAYER_POST_UPDATE
+        )
+
+        form_taxpayer = TaxPayerEditForm(
+            data=QUERY_FORM_TAXPAYER_POST_UPDATE,
+            files=self._get_request_FILES(),
+            )
+
+        self.assertTrue(form_taxpayer.is_valid())
+
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
         status_approved = TAXPAYER_STATUS['Approved']['choices'].value
@@ -1315,7 +1354,7 @@ class TestEditBankAccountInfo(TestCase):
 
         self.BANK_ACCOUNT_POST = {
             'bank_info': get_bank_info_example("CITIBANK N.A."),
-            'bank_account_number': '123214',
+            'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': self.file_mock,
         }
 
@@ -2077,7 +2116,6 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(updated_taxpayer.business_name, last_row_taxpayer_history.business_name)
         self.assertEqual(updated_taxpayer.taxpayer_state, last_row_taxpayer_history.taxpayer_state)
         self.assertEqual(updated_taxpayer.country, last_row_taxpayer_history.country)
-        self.assertEqual(updated_taxpayer.taxpayer_comments, last_row_taxpayer_history.taxpayer_comments)
 
     def test_create_new_row_in_history_address_table(self):
         address = AddressFactory(taxpayer=self.taxpayer)
@@ -2132,7 +2170,7 @@ class TestTaxpayerHistory(TestCase):
 
         BANK_ACCOUNT_POST = {
             'bank_info': get_bank_info_example("CITIBANK N.A."),
-            'bank_account_number': '123214',
+            'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': file_mock,
         }
 

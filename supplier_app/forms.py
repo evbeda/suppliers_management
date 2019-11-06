@@ -45,12 +45,31 @@ class AddressCreateForm(BasePrefixCreateForm):
         model = Address
         exclude = ['taxpayer']
         widgets = {
-             'street': forms.TextInput(attrs={'class': 'form-control'}),
-             'number': forms.TextInput(attrs={'class': 'form-control'}),
+             'street': forms.TextInput(
+                 attrs={
+                     'class': 'form-control',
+                     'placeholder': _('e.g. Adolfo sourdeaux'),
+                     }
+                 ),
+             'city': forms.TextInput(
+                 attrs={
+                     'class': 'form-control',
+                     'placeholder': _('e.g. Tigre')
+                     }
+                ),
+             'state': forms.TextInput(
+                 attrs={
+                     'class': 'form-control',
+                     'placeholder': _('e.g. Buenos aires')
+                     }
+                 ),
+             'country': forms.Select(
+                 attrs={
+                     'class': 'form-control',
+                    }
+                ),
+             'number': forms.NumberInput(attrs={'class': 'form-control'}),
              'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
-             'city': forms.TextInput(attrs={'class': 'form-control'}),
-             'state': forms.TextInput(attrs={'class': 'form-control'}),
-             'country': forms.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -116,10 +135,6 @@ class TaxPayerArgentinaBaseForm(ModelForm):
                     'type': 'hidden',
                     'value': 'AR'
                 }),
-            'taxpayer_comments': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': '3'
-            }),
         }
 
 
@@ -138,6 +153,5 @@ class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
         exclude = [
             'taxpayer_state',
             'company',
-            'taxpayer_comments',
             'taxpayer_date',
             ]

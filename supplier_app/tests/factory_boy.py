@@ -87,8 +87,7 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     class Meta:
         model = TaxPayerArgentina
 
-    cuit = "1234569"
-    taxpayer_comments = "Justificacion falsa"
+    cuit = factory.Sequence(lambda n: "{}".format(n))
     payment_type = PAYMENT_TYPES[0][0]
     payment_term = PAYMENT_TERMS[0][0]
 
