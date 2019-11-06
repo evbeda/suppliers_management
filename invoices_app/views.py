@@ -72,7 +72,10 @@ from invoices_app.models import (
     Comment
 )
 
-from supplier_app import TAXPAYER_STATUS_APPROVED
+from supplier_app import (
+    DATE_FORMAT,
+    TAXPAYER_STATUS_APPROVED,
+)
 from supplier_app.models import (
     Address,
     EBEntity,
@@ -116,6 +119,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['date_format'] = DATE_FORMAT
         return context
 
     def get_queryset(self):
@@ -155,6 +159,7 @@ class SupplierInvoiceListView(
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['date_format'] = DATE_FORMAT
         return context
 
 
@@ -292,6 +297,7 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['date_format'] = str(DATE_FORMAT)
         context['INVOICE_STATUS_APPROVED'] = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         context['INVOICE_STATUS_NEW'] = invoice_status_lookup(INVOICE_STATUS_NEW)
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
@@ -397,6 +403,7 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         context['comments'] = self.get_comments(invoice)
+        context['date_format'] = DATE_FORMAT
         return context
 
 

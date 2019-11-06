@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
+{% load l10n %}
+{% load tz %}
 
 {% block content %}
 
@@ -31,7 +32,7 @@
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{invoice.history_user}}</td>
-                    <td>{{invoice.history_date}}</td>
+                    <td>{{invoice.history_date|date:date_format}}</td>
                     <td>{{invoice.currency}}</td>
                     <td>{{invoice.taxpayer.business_name}}</td>
                     <td>{{invoice.invoice_number}}</td>

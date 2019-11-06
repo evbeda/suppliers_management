@@ -49,7 +49,7 @@
                 {% for invoice in object_list %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{invoice.invoice_date_received|date:"d M, Y"}}</td>
+                    <td>{{invoice.invoice_date_received|date:date_format}}</td>
                     <td>{{invoice.invoice_number}}</td>
                     <td>{{invoice.po_number}}</td>
                     <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>
