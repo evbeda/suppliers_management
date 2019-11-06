@@ -21,6 +21,7 @@ from users_app.factory_boy import (
 )
 
 LANGUAGES = [
+    ('en',),
     ('es',),
     ('pt-br',),
 ]

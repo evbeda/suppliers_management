@@ -2,25 +2,42 @@
 {% load i18n %}
 
 {% block styles %}
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
 {% endblock %}
 
 {% block content %}
-
+<div class="row d-flex flex-row-reverse">
+  <div class="pr-4 mr-1 py-2">
+    {% include 'language_selector.html' %}
+  </div>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <div class="card card-signin my-5">
+      <div class="card card-signin mt-5">
         <div class="card-body">
           <h4 class="card-title text-danger text-center">{% trans "ERROR" %}</h4>
-              <h5 class="text-center">{% trans "If you are a supplier please:" %}</h5>
-              <a class="btn btn-eb btn-block text-uppercase" href="{% url 'social:begin' 'eventbrite' %}"> Sign in with Eventbrite</a>
-          </div>
+          <h5 class="text-center">{% trans "If you are a supplier please:" %}</h5>
+          <a class="btn btn-eb btn-block text-capitalize text-white" href="{% url 'social:begin' 'eventbrite' %}"> {% trans "Login with Eventbrite" %}</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col pt-2 text-center">
+          <a class='btn btn-primary' href="{% url 'login' %}"> {% trans "Login home" %} </a>
         </div>
       </div>
     </div>
   </div>
 </div>
-<a href="{% url 'login' %}"> {% trans "Login home" %} </a>
+<footer class="page-footer fixed-bottom font-small blue-eb pt-3">
+  <div class="row">
+    <div class="col pb-3">
+      <p class="footer-copyright text-center text-white mb-0 mt-1">
+        © 2019 Copyright:
+        <a href="https://eventbrite.com"> Eventbrite.com</a>
+      </p>
+    </div>
+  </div>
+</footer>
 {% endblock %}
