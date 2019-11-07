@@ -149,11 +149,11 @@ class TestCreateTaxPayer(TestCase):
             'address_form': AddressCreateForm(data=FORM_POST),
             'bank_account_form': BankAccountCreateForm(
                 data=FORM_POST,
-                files=self._get_request_FILES()
+                files=self._get_request_FILES(),
             ),
             'taxpayer_form': TaxPayerCreateForm(
                 data=FORM_POST,
-                files=self._get_request_FILES()
+                files=self._get_request_FILES(),
                 )
         }
         return forms
@@ -1123,91 +1123,6 @@ class TestEditTaxPayerInfo(TestCase):
         current_eb_entities = taxpayer.eb_entities
         self.assertEqual(2, len(current_eb_entities))
         self.assertEqual([eb_entity_1, eb_entity_2], taxpayer.eb_entities)
-
-    def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
-        self.taxpayer.afip_registration_file = self.file_mock
-        self.taxpayer.witholding_taxes_file = self.file_mock
-        self.taxpayer.save()
-
-        response = self.client.get(
-            reverse(
-                self.taxpayer_edit_url,
-                kwargs=self.kwargs
-            )
-        )
-
-        self.assertEqual(
-            self.taxpayer.afip_registration_file,
-            response.context_data['form'].fields['afip_registration_file'].initial
-        )
-        self.assertEqual(
-            self.taxpayer.witholding_taxes_file,
-            response.context_data['form'].fields['witholding_taxes_file'].initial
-        )
-
-    @parameterized.expand([
-        ('supplier', 'supplier@gmail.com'),
-        ('ap_admin', 'fake_ap@eventbrite.com'),
-    ])
-    def test_post_edit_taxpayer_view_should_update_taxpayer_info(self, group, user):
-        client = Client()
-
-        group = Group.objects.get(name=group)
-        user = UserFactory(email=user)
-        user.groups.add(group)
-
-        company_user_permission = CompanyUserPermissionFactory(
-            user=user,
-            company=self.taxpayer.company
-        )
-
-        client.force_login(user)
-
-        client.post(
-            reverse(
-                self.taxpayer_edit_url,
-                kwargs=self.kwargs
-            ),
-            self.TAXPAYER_POST
-        )
-
-        updated_taxpayer = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
-
-        self.assertEquals(self.TAXPAYER_POST['cuit'], updated_taxpayer.cuit)
-        self.assertEquals(self.TAXPAYER_POST['payment_type'], updated_taxpayer.payment_type)
-        self.assertEquals(self.TAXPAYER_POST['payment_term'], updated_taxpayer.payment_term)
-        self.assertEquals(self.TAXPAYER_POST['workday_id'], updated_taxpayer.workday_id)
-        self.assertEquals(self.TAXPAYER_POST['business_name'], updated_taxpayer.business_name)
-        self.assertEquals(self.TAXPAYER_POST['country'], updated_taxpayer.country)
-        with open(updated_taxpayer.afip_registration_file.name, "w") as file1 , open(self.TAXPAYER_POST['afip_registration_file'].name, "w") as file2 :
-            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
-        with open(updated_taxpayer.witholding_taxes_file.name, "w") as file1 , open(self.TAXPAYER_POST['witholding_taxes_file'].name, "w") as file2 :
-            self.assertTrue(filecmp.cmp(file1.name, file2.name, shallow=True))
-
-    def _taxpayer_edit_request(self, edit_data):
-        request = self.factory.post(
-            reverse(
-                self.taxpayer_edit_url,
-                kwargs=self.kwargs
-            ),
-            data=edit_data,
-        )
-        request.user = self.ap_user
-        return request
-
-    def _get_request_FILES(
-        self,
-        afip_file=None,
-        witholding_taxes_file=None,
-    ):
-        return MultiValueDict({
-            'afip_registration_file': [
-                afip_file or self.file_mock
-            ],
-            'witholding_taxes_file': [
-                witholding_taxes_file or self.file_mock
-            ],
-        })
 
     def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
         self.taxpayer.afip_registration_file = self.file_mock
