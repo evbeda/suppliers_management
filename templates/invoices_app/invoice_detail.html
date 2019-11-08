@@ -43,7 +43,7 @@
         <span class="float-right">
           <a class='btn btn-primary btn-sm mr-2 d-inline' href="{{ invoice.invoice_file.url }}">{% trans "Download Invoice" %}</a>
           <strong>{% trans "Status" %}:</strong>
-          {% if invoice.status == INVOICE_STATUS_NEW %}
+          {% if invoice.status == INVOICE_STATUS_PENDING %}
           <span class="badge badge-primary">{{invoice.get_status_display}}</span>
           {% endif %}
           {% if invoice.status == INVOICE_STATUS_REJECTED %}

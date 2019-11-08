@@ -21,7 +21,7 @@ from users_app.factory_boy import UserFactory
 
 from invoices_app import (
     INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_NEW,
+    INVOICE_STATUS_PENDING,
     INVOICE_STATUS_REJECTED,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PAID,
@@ -116,7 +116,7 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
-        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_NEW))
+        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_PENDING))
 
     def test_invoice_should_only_display_eb_entities_from_the_taxpayer(self):
         self.client.force_login(self.user)
@@ -414,7 +414,7 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(
             self.invoice.status,
-            invoice_status_lookup(INVOICE_STATUS_NEW)
+            invoice_status_lookup(INVOICE_STATUS_PENDING)
         )
 
     def test_supplier_invalid_invoice_edit_request(self):

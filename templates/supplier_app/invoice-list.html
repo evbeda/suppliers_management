@@ -53,7 +53,7 @@
                     <td>{{invoice.invoice_number}}</td>
                     <td>{{invoice.po_number}}</td>
                     <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>
-                    <td>{% if invoice.status == INVOICE_STATUS_NEW %}
+                    <td>{% if invoice.status == INVOICE_STATUS_PENDING %}
                         <span class="badge badge-primary">{{invoice.get_status_display}}</span>
                         {% endif %}
                         {% if invoice.status == INVOICE_STATUS_REJECTED %}
