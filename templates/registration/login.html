@@ -7,24 +7,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="row d-flex flex-row-reverse">
-  <div class="pr-4 mr-1 py-2">
-    {% include 'language_selector.html' %}
-  </div>
-</div>
-<div class="container">
-  <div class="row align-items-center">
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <h1 class="text-center"> {% trans "Welcome to BriteSU" %} </h1>
+<div class="h-100 login-bg">
+  <div class="row justify-content-between">
+    <div class="col-md-3">
+      <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
     </div>
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <div class="card card-signin my-5">
+    <div class="col-md-2">
+      <div class="row">
+        <p class="mr-1">{% trans "Language" %}:</p>
+        {% include 'language_selector.html' %}
+      </div>
+    </div>
+  </div>
+  <div class="row h-75 align-items-center justify-content-center">
+    <div class="col-md-4 h-50 ">
+      <div class="card card-signin h-100">
         <div class="card-body">
-          <h5 class="card-title text-center">{% trans "Sign In" %}</h5>
+          <h5 class="card-title text-center text-white">{% trans "Sign In" %}</h5>
           <hr class="my-4">
-          <div>
-            <a class="btn btn-eb btn-block text-white text-capitalize" href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
-              {% trans "Login with Eventbrite" %}
+          <div class="row h-25 align-items-end">
+            <a class="btn btn-eb btn-block text-black text-capitalize"
+              href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
+              {% trans "Login with" %}<img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
+
             </a>
           </div>
         </div>
@@ -45,12 +50,22 @@
     </div>
     <div class="col">
       <p class="footer-copyright text-center">
+<<<<<<< HEAD
         <a class="btn btn-primary text-capitalize float-right text-white mr-3 mb-3 btn-sm" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
+=======
+        <a class="btn btn-primary text-capitalize float-right text-white mr-3 mb-3 btn-sm"
+          href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
+>>>>>>> WIP
           {% trans "AP login" %}
         </a>
       </p>
     </div>
   </div>
 </footer>
+
+{% endblock %}
+
+{% block comment %}
+<h1 class="text-center"> {% trans "Welcome to BriteSU" %} </h1>
 
 {% endblock %}

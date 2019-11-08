@@ -3,9 +3,11 @@ a:hover{
 }
 
 .btn-eb{
-    background-color: #F05537
+    background-color: #F05537;
     color: white
 }
+
+ /* background-color: rgb(223, 79, 51) */
 
 .btn-google{
     background-color: #4285F4
@@ -13,4 +15,15 @@ a:hover{
 
 .btn-google:hover{
     background-color: rgb(64, 129, 235)
+}
+
+.login-bg{
+    background-image: url('../images/supplier.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-signin{
+    background-color: rgba(0, 0, 0, .7) !important;
 }

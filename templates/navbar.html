@@ -19,10 +19,10 @@
                     <a class="dropdown-item" href="{% url 'invoices-list' %}?status=2"><i
                             class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
                     <a class="dropdown-item" href="{% url 'ap-taxpayers' %}"><i
-                            class="fa fa-building mr-2"></i>{% trans "Taxpayers" %}</a>
+                            class="fa fa-store mr-2"></i>{% trans "Taxpayers" %}</a>
                     {% if perms.users_app.can_manage_aps %}
                     <a class="dropdown-item" href="{% url 'manage-admins' %}"><i
-                            class="fa fa-building mr-2"></i>{% trans "Manage Admins" %}</a>
+                            class="fa fa-user mr-2"></i>{% trans "Manage Admins" %}</a>
                     {% endif %}
             </li>
             {% if perms.users_app.can_create_company or perms.users_app.can_send_company_invite %}
