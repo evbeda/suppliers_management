@@ -1,5 +1,10 @@
 from django.contrib import messages
 
+from supplier_app import (
+    TAXPAYER_STATUS_APPROVED,
+    TAXPAYER_STATUS_CHANGE_REQUIRED,
+    TAXPAYER_STATUS_DENIED,
+)
 from supplier_app.exceptions.taxpayer_exceptions import NoWorkdayIDException
 from supplier_app.constants.custom_messages import (
     TAXPAYER_APPROVE_MESSAGE,
@@ -7,7 +12,6 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
 )
 from utils.send_email import taxpayer_notification
-
 
 
 class StrategyStatusChange():
@@ -62,14 +66,18 @@ class StrategyChangeRequired(StrategyStatusChange):
         taxpayer.save()
 
     def show_message(request):
-        messages.success(request, TAXPAYER_REQUEST_CHANGE_MESSAGE)        
+        messages.success(request, TAXPAYER_REQUEST_CHANGE_MESSAGE)
 
 
 strategy = {
-    "approve": StrategyApprove,
-    "deny": StrategyDeny,
+    TAXPAYER_STATUS_APPROVED: StrategyApprove,
+    TAXPAYER_STATUS_CHANGE_REQUIRED: StrategyChangeRequired,
+    TAXPAYER_STATUS_DENIED: StrategyDeny,
 }
 
 
-def get_strategy(action):
-    return strategy[action]
+def run_strategy_taxpayer_status(action, taxpayer, request):
+    strategy_type = strategy[action]
+    strategy_type.change_taxpayer_status(taxpayer, request)
+    strategy_type.send_email(taxpayer)
+    strategy_type.show_message(request)

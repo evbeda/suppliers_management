@@ -36,23 +36,27 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
+from supplier_app import (
+    email_notifications,
+    TAXPAYER_STATUS_APPROVED,
+    TAXPAYER_STATUS_CHANGE_REQUIRED,
+    TAXPAYER_STATUS_DENIED,
+    TAXPAYER_STATUS_PENDING,
+)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
     JOIN_COMPANY_ERROR_MESSAGE,
-    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
+    TAXPAYER_APPROVE_MESSAGE,
+    TAXPAYER_COMMENT_EMPTY,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
+    TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
-    TAXPAYER_APPROVE_MESSAGE,
-    TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
-)
-from supplier_app import (
-    email_notifications,
-    TAXPAYER_STATUS,
+    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
 )
 from supplier_app.forms import (
     AddressCreateForm,
@@ -93,8 +97,8 @@ from supplier_app.tests.factory_boy import (
 from supplier_app.views import (
     CreateTaxPayerView,
     CompanyUserPermission,
-    SupplierHome,
     EditTaxpayerView,
+    SupplierHome,
 )
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
@@ -643,6 +647,7 @@ class TestSupplierDetailsView(TestCase):
         self.company_user_permission = CompanyUserPermissionFactory()
 
         self.taxpayer = TaxPayerArgentinaFactory(
+            workday_id='1234',
             company=self.company_user_permission.company,
             afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
@@ -721,7 +726,6 @@ class TestSupplierDetailsView(TestCase):
 
     def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
         response = self.client.get(self.sup_detail_url)
-
         self.assertContains(
             response, 'Approve'
         )
@@ -875,7 +879,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.file_mock.size = 50
 
     def tearDown(self):
-        if (self.file_mock or new_afip_file or new_witholding_file) and path.exists( #  noqa
+        if (self.file_mock or new_afip_file or new_witholding_file) and path.exists(  # noqa
             'file/'
         ):
             rmtree('file')
@@ -1025,8 +1029,8 @@ class TestEditTaxPayerInfo(TestCase):
         self.assertTrue(form_taxpayer.is_valid())
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
+        status_pending = TAXPAYER_STATUS_PENDING
         self.taxpayer.taxpayer_state = status_approved
         self.client_supplier.post(
             reverse(
@@ -1042,7 +1046,7 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
     def test_post_edit_active_taxpayer_as_ap_dont_chang_state(self):
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self.taxpayer.taxpayer_state = status_approved
         self.taxpayer.save()
         self.client.post(
@@ -1136,7 +1140,7 @@ class TestEditTaxPayerInfo(TestCase):
         user = UserFactory(email=user)
         user.groups.add(group)
 
-        company_user_permission = CompanyUserPermissionFactory(
+        CompanyUserPermissionFactory(
             user=user,
             company=self.taxpayer.company
         )
@@ -1206,7 +1210,7 @@ class TestEditAddressInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
         self.address = AddressFactory(taxpayer=self.taxpayer)
 
@@ -1266,7 +1270,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_address_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self._make_address_post()
         self.assertEqual(
             status_approved,
@@ -1293,7 +1297,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_addres_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_pending = TAXPAYER_STATUS_PENDING
 
         CompanyUserPermissionFactory(
             user=self.supplier_user,
@@ -1324,7 +1328,7 @@ class TestEditBankAccountInfo(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
-        self.taxpayer.taxpayer_state = TAXPAYER_STATUS['Approved']['choices'].value
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
         self.bank_account = BankAccountFactory(taxpayer=self.taxpayer)
         self.bank_account.bank_cbu_file = self.file_mock
@@ -1347,7 +1351,7 @@ class TestEditBankAccountInfo(TestCase):
         }
 
     def tearDown(self):
-        if (self.file_mock or new_cbu_file) and path.exists(  #  noqa
+        if (self.file_mock or new_cbu_file) and path.exists(  # noqa
             'file/{}'.format(self.file_mock.name)
         ):
             rmtree('file')
@@ -1390,7 +1394,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_account_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
-        status_approved = TAXPAYER_STATUS['Approved']['choices'].value
+        status_approved = TAXPAYER_STATUS_APPROVED
         self._make_bank_post()
         self.assertEqual(
             status_approved,
@@ -1417,7 +1421,7 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS['Pending']['choices'].value
+        status_pending = TAXPAYER_STATUS_PENDING
         CompanyUserPermissionFactory(
             user=self.supplier_user,
             company=self.taxpayer.company
@@ -1847,6 +1851,9 @@ class TestApprovalRefuse(TestCase):
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
+        self.approve = TAXPAYER_STATUS_APPROVED
+        self.change_required = TAXPAYER_STATUS_CHANGE_REQUIRED
+        self.deny = TAXPAYER_STATUS_DENIED
 
     def _handle_taxpayer_status_request(self, action, follow=False):
 
@@ -1864,11 +1871,11 @@ class TestApprovalRefuse(TestCase):
 
     def test_redirect_to_supplier_home_when_supplier_tries_to_approve_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
-        response = self._handle_taxpayer_status_request("approve")
+        response = self._handle_taxpayer_status_request(self.approve)
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_change_taxpayer_status_to_active_when_clicking_aprove_button(self):
-        self._handle_taxpayer_status_request("approve")
+        self._handle_taxpayer_status_request(self.approve)
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
             'APPROVED'
@@ -1879,7 +1886,7 @@ class TestApprovalRefuse(TestCase):
             user=UserFactory(),
             company=self.taxpayer.company
         )
-        self._handle_taxpayer_status_request("approve")
+        self._handle_taxpayer_status_request(self.approve)
         self.assertEqual(
             mail.outbox[0].subject,
             email_notifications['taxpayer_approval']['subject']
@@ -1891,7 +1898,7 @@ class TestApprovalRefuse(TestCase):
         )
 
     def test_redirect_to_supplier_detail_with_approve_success_msg(self):
-        response = self._handle_taxpayer_status_request("approve", follow=True)
+        response = self._handle_taxpayer_status_request(self.approve, follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertIn(
@@ -1904,7 +1911,7 @@ class TestApprovalRefuse(TestCase):
         self.assertContains(response, TAXPAYER_APPROVE_MESSAGE)
 
     def test_redirect_to_supplier_detail_with_denied_success_msg(self):
-        response = self._handle_taxpayer_status_request("deny", follow=True)
+        response = self._handle_taxpayer_status_request(self.deny, follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(
@@ -1923,7 +1930,7 @@ class TestApprovalRefuse(TestCase):
                 kwargs=self.kwargs
             ),
             {
-                "action": "approve",
+                "action": self.approve,
             },
             follow=True,
         )
@@ -1935,7 +1942,7 @@ class TestApprovalRefuse(TestCase):
         side_effect=CouldNotSendEmailError
     )
     def test_error_sending_mail_should_display_error_msg_in_taxpayer_approval(self, send_mail_mocked):
-        response = self._handle_taxpayer_status_request("approve", True)
+        response = self._handle_taxpayer_status_request(self.approve, True)
         self.assertContains(response, EMAIL_ERROR_MESSAGE)
 
     @patch(
@@ -1943,7 +1950,7 @@ class TestApprovalRefuse(TestCase):
         side_effect=CouldNotSendEmailError
     )
     def test_error_sending_mail_should_display_error_msg_in_taxpayer_denial(self, send_mail_mocked):
-        response = self._handle_taxpayer_status_request("deny", True)
+        response = self._handle_taxpayer_status_request(self.deny, True)
         self.assertContains(response, EMAIL_ERROR_MESSAGE)
 
     @patch(
@@ -1951,7 +1958,7 @@ class TestApprovalRefuse(TestCase):
         side_effect=ObjectDoesNotExist
     )
     def test_nonexistent_taxpayer_should_display_error_message_on_approve(self, send_mail_mocked):
-        response = self._handle_taxpayer_status_request("approve", True)
+        response = self._handle_taxpayer_status_request(self.approve, True)
         self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
 
     @patch(
@@ -1959,16 +1966,16 @@ class TestApprovalRefuse(TestCase):
         side_effect=ObjectDoesNotExist
     )
     def test_nonexistent_taxpayer_should_display_error_message_on_denial(self, send_mail_mocked):
-        response = self._handle_taxpayer_status_request("deny", True)
+        response = self._handle_taxpayer_status_request(self.deny, True)
         self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE)
 
     def test_redirect_to_supplier_home_when_supplier_tries_to_deny_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
-        response = self._handle_taxpayer_status_request("deny")
+        response = self._handle_taxpayer_status_request(self.deny)
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_change_taxpayer_status_to_DENIED_when_clicking_deny_button(self):
-        self._handle_taxpayer_status_request("deny")
+        self._handle_taxpayer_status_request(self.deny)
 
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
@@ -1980,7 +1987,7 @@ class TestApprovalRefuse(TestCase):
             user=UserFactory(),
             company=self.taxpayer.company
         )
-        self._handle_taxpayer_status_request("deny")
+        self._handle_taxpayer_status_request(self.deny)
 
         self.assertEqual(
             mail.outbox[0].subject,
@@ -2316,6 +2323,13 @@ class TestTaxpayerCommentView(TestCase):
         }
         self.comment_post = {
             'message': 'Testing comment',
+            'action': 'make comment',
+            'user': self.supplier_user.id,
+            'taxpayer': self.taxpayer_example.id
+        }
+        self.request_change_post = {
+            'message': 'requesting change comment',
+            'action': TAXPAYER_STATUS_CHANGE_REQUIRED,
             'user': self.supplier_user.id,
             'taxpayer': self.taxpayer_example.id
         }
@@ -2336,6 +2350,16 @@ class TestTaxpayerCommentView(TestCase):
             follow=True
         )
 
+    def _make_request_change_post(self):
+        return self.client.post(
+            reverse(
+                self.comment_post_url,
+                kwargs=self.kwargs
+            ),
+            data=self.request_change_post,
+            follow=True
+        )
+
     def test_request_change_btn_for_ap_in_comment_submit_form(self):
         self.client.force_login(self.ap_user)
         response = self.client.get(
@@ -2345,6 +2369,16 @@ class TestTaxpayerCommentView(TestCase):
             ),
         )
         self.assertContains(response, 'Request Change')
+
+    def test_make_comment_btn_for_ap_in_comment_submit_form(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertContains(response, 'Make Comment')
 
     def test_make_comment_btn_for_supplier_in_comment_submit_form(self):
         self.client.force_login(self.supplier_user)
@@ -2356,6 +2390,16 @@ class TestTaxpayerCommentView(TestCase):
         )
         self.assertContains(response, 'Make Comment')
 
+    def test_no_request_change_btn_for_supplier_in_comment_submit_form(self):
+        self.client.force_login(self.supplier_user)
+        response = self.client.get(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+        )
+        self.assertNotContains(response, 'Request Change')
+
     def test_supplier_make_comment(self):
         self.client.force_login(self.supplier_user)
         self._make_comment_post()
@@ -2364,8 +2408,22 @@ class TestTaxpayerCommentView(TestCase):
             self.comment_post['message']
         )
 
-    def test_supplier_without_taxpayer_ownership_cant_make_comment(self):
+    def test_supplier_make_invalid_comment_fails_with_error_message(self):
+        self.client.force_login(self.supplier_user)
+        response = self.client.post(
+            reverse(
+                self.comment_post_url,
+                kwargs=self.kwargs
+            ),
+            data={
+                'message': "",
+                'action': "make comment",
+            },
+            follow=True,
+        )
+        self.assertContains(response, TAXPAYER_COMMENT_EMPTY.encode('utf-8'))
 
+    def test_supplier_without_taxpayer_ownership_cant_make_comment(self):
         user = UserFactory(email='supplier@gmail.com')
         user.groups.add(self.supplier_group)
 
@@ -2381,15 +2439,29 @@ class TestTaxpayerCommentView(TestCase):
             TaxpayerComment.objects.last().message,
             self.comment_post['message']
         )
+        # taxpayer state does not change remains pending
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
+            TAXPAYER_STATUS_PENDING
+        )
+
+    def test_ap_make_request_change(self):
+        self.client.force_login(self.ap_user)
+        self._make_request_change_post()
+        # comment persist
+        self.assertEqual(
+            TaxpayerComment.objects.last().message,
+            self.request_change_post['message']
+        )
         # taxpayer state changes to change required
         self.assertEqual(
             TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
-            TAXPAYER_STATUS['Change Required']['choices'].value
+            TAXPAYER_STATUS_CHANGE_REQUIRED
         )
 
     def test_ap_request_change_should_redirect_to_supplier_detail_with_succes_msg(self):
         self.client.force_login(self.ap_user)
-        response = self._make_comment_post()
+        response = self._make_request_change_post()
         self.assertIn(
             reverse(
                 self.supplier_detail_url,
@@ -2397,5 +2469,4 @@ class TestTaxpayerCommentView(TestCase):
             ),
             [redirect[0] for redirect in response.redirect_chain],
         )
-
         self.assertContains(response, TAXPAYER_REQUEST_CHANGE_MESSAGE)
