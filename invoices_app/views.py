@@ -61,6 +61,7 @@ from users_app import (
     CAN_CHANGE_INVOICE_STATUS_PERM,
     CAN_CREATE_INVOICES_PERM,
     CAN_VIEW_ALL_INVOICES_PERM,
+    CAN_VIEW_ALL_TAXPAYERS_PERM,
     CAN_VIEW_INVOICES_PERM,
     CAN_VIEW_INVOICES_HISTORY_PERM,
     CAN_VIEW_SUPPLIER_INVOICES_PERM,
@@ -110,6 +111,15 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
     filterset_class = InvoiceFilter
     permission_required = CAN_VIEW_INVOICES_PERM
 
+    def get_taxpayers(self):
+        user = getattr(self.request, 'user', None)
+        if user.has_perm(CAN_VIEW_ALL_TAXPAYERS_PERM):
+            return TaxPayer.objects.values('business_name')
+        else:
+            return TaxPayer.objects.filter(
+                company__companyuserpermission__user=user
+            ).values('business_name')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filter_to_xls'] = urllib.parse.urlparse(self.request.get_raw_uri()).query
@@ -120,6 +130,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         context['date_format'] = DATE_FORMAT
+        context['all_taxpayers'] = self.get_taxpayers()
         return context
 
     def get_queryset(self):
@@ -320,7 +331,12 @@ def change_invoice_status(request, pk):
 
     _send_email_when_change_invoice_status(request, invoice)
 
-    return redirect('invoices-list')
+    return redirect(
+        '{}?status={}'.format(
+            reverse('invoices-list'),
+            invoice_status_lookup(INVOICE_STATUS_PENDING)
+        )
+    )
 
 
 @permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
@@ -469,6 +485,7 @@ def export_to_xlsx_invoice(request):
 
     return generate_response_xls(xls_file, 'Invoices')
 
+
 def _send_email_when_posting_a_comment(request, invoice):
     recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
     users = User.objects.filter(email__in=recipient_list)
@@ -490,6 +507,7 @@ def _send_email_when_posting_a_comment(request, invoice):
         _send_email(subject, message, [user.email])
 
     activate(request.user.preferred_language)
+
 
 def _send_email_when_change_invoice_status(request, invoice):
     recipient_list = get_user_emails_by_tax_payer_id(invoice.taxpayer.id)
@@ -515,11 +533,11 @@ def _send_email_when_change_invoice_status(request, invoice):
 
     activate(request.user.preferred_language)
 
+
 def _send_email_when_editing_invoice(instance, ap_user):
     recipient_list = get_user_emails_by_tax_payer_id(instance.taxpayer.id)
 
     users = User.objects.filter(email__in=recipient_list)
-
     for user in users:
         activate(user.preferred_language)
 
@@ -534,6 +552,7 @@ def _send_email_when_editing_invoice(instance, ap_user):
         _send_email(subject, message, [user.email])
 
     activate(ap_user.preferred_language)
+
 
 def _send_email(
     subject,
