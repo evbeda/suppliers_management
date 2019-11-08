@@ -3,9 +3,9 @@ a:hover{
 }
 
 .btn-eb{
-    background-color: #F05537;
-    color: white
+    background-color: rgb(250, 250, 250)
 }
+
 
  /* background-color: rgb(223, 79, 51) */
 
@@ -25,5 +25,5 @@ a:hover{
 }
 
 .card-signin{
-    background-color: rgba(0, 0, 0, .7) !important;
+    background-color: rgba(20, 2, 54, .9) !important;
 }
