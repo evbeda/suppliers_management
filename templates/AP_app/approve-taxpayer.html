@@ -2,7 +2,7 @@
     {% csrf_token %}
     <div class="input-group">
         <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
-        <input type="hidden" name="action" value="approve">                
+	<input type="hidden" name="action" value="{{approve}}">                
         <input class='btn btn-success' type="submit" value="Approve" id="approve"/>
     </div>                
 </form>

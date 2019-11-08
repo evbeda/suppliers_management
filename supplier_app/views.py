@@ -18,12 +18,13 @@ from django.utils import translation
 from django_filters.views import FilterView
 
 from supplier_app import (
+        TAXPAYER_STATUS_APPROVED,
         TAXPAYER_STATUS_CHANGE_REQUIRED,
+        TAXPAYER_STATUS_DENIED,
         DATE_FORMAT,
 )
 from supplier_app.change_status_strategy import (
-    get_strategy,
-    StrategyChangeRequired,
+    run_strategy_taxpayer_status,
 )
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
@@ -262,7 +263,9 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
         context['comments'] = context['taxpayer'].taxpayercomment_set.all()
+        context['approve'] = TAXPAYER_STATUS_APPROVED
         context['change_required'] = TAXPAYER_STATUS_CHANGE_REQUIRED
+        context['deny'] = TAXPAYER_STATUS_DENIED
         context['make_comment'] = 'make comment'
         context['is_AP'] = self.request.user.is_AP
         return context
@@ -407,9 +410,7 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         action = self.request.POST['action']
         if self.request.user.is_AP and action == TAXPAYER_STATUS_CHANGE_REQUIRED:
             taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
-            StrategyChangeRequired.change_taxpayer_status(taxpayer)
-            StrategyChangeRequired.send_email(taxpayer)
-            StrategyChangeRequired.show_message(self.request)
+            run_strategy_taxpayer_status(action, taxpayer, self.request)
         return super().form_valid(form)
 
     def form_invalid(self, forms):
@@ -482,10 +483,7 @@ def change_taxpayer_status(request, taxpayer_id):
     try:
         taxpayer = TaxPayer.objects.get(pk=taxpayer_id)
         action = request.POST['action']
-        strategy = get_strategy(action)
-        strategy.change_taxpayer_status(taxpayer, request)
-        strategy.send_email(taxpayer)
-        strategy.show_message(request)
+        run_strategy_taxpayer_status(action, taxpayer, request)
     except ObjectDoesNotExist:
         messages.error(request, TAXPAYER_NOT_EXISTS_MESSAGE)
     except CouldNotSendEmailError:
