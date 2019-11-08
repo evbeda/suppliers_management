@@ -1,16 +1,23 @@
 {% load i18n %}
-    <form action="{% url 'taxpayer-comment' taxpayer_id=taxpayer_id %}" method="POST" class="form-inline d-flex align-items-start">
-        {% csrf_token %}
-        <div class="form-group flex-grow-1 mr-3"> 
-            <textarea name="message" class="form-control w-100" placeholder="{% trans "write your comments here" %}"></textarea>
-        </div>
-	<button type="submit" class="btn btn-primary mr-3" name="action" value="{{make_comment}}">
- 	    {% trans 'Make Comment' %}
-	</button>
-	{% if request.user.is_AP %}
-	<button type="submit" class="btn btn-warning" name="action" value="{{ change_required}}">
-	    	{% trans 'Request Change' %}
-	    </button>
+<form action="{% url 'taxpayer-comment' taxpayer_id=taxpayer_id %}" method="POST"
+	class="form-inline d-flex justify-content-end">
+	{% csrf_token %}
+	<div class="row w-100">
+		<div class="col-md-8">
+			<div class="form-group">
+				<textarea name="message" class="form-control w-100"
+					placeholder="{% trans 'write your comments here' %}" rows="3"></textarea>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<button type="submit" class="btn btn-primary m-1" name="action" value="{{make_comment}}">
+				{% trans 'Make Comment' %}
+			</button>
+			{% if request.user.is_AP %}
+			<button type="submit" class="btn btn-warning m-1" name="action" value="{{ change_required}}">
+				{% trans 'Request Change' %}
+			</button>
+		</div>
+	</div>
 	{% endif %}
-    </form>
-
+</form>
