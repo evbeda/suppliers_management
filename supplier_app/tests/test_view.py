@@ -58,6 +58,12 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
 )
+from supplier_app import (
+    email_notifications,
+    TAXPAYER_STATUS,
+    SUPPLIER_HOME_URL,
+    COMPANY_INVITATION_URL,
+)
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
@@ -1892,7 +1898,7 @@ class TestApprovalRefuse(TestCase):
         )
 
         self.assertIn(
-            settings.SUPPLIER_HOME_URL,
+            SUPPLIER_HOME_URL,
             mail.outbox[0].alternatives[0][0]
         )
 
@@ -1994,7 +2000,7 @@ class TestApprovalRefuse(TestCase):
         )
 
         self.assertIn(
-            settings.SUPPLIER_HOME_URL,
+            SUPPLIER_HOME_URL,
             mail.outbox[0].alternatives[0][0]
         )
 

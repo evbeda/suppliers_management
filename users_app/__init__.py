@@ -30,3 +30,6 @@ CAN_EDIT_TAXPAYER_ADDRESS_PERM = 'users_app.can_edit_taxpayer_address'
 CAN_EDIT_TAXPAYER_BANK_ACCOUNT_PERM = 'users_app.can_edit_taxpayer_bank_account'
 COMPANY_USER_CAN_APPROVE_PERM = 'users_app.can_approve'
 SUPPLIER_ROLE_PERM = 'users_app.supplier_role'
+
+EVENTBRITE_OAUTH_SOCIAL_DJANGO_BACKEND = 'eventbrite'
+GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND = 'google-oauth2'

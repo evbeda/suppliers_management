@@ -15,6 +15,7 @@ from supplier_app.tests.factory_boy import (
 from users_app.factory_boy import (
     UserFactory,
 )
+from users_app.forms import UserAdminForm
 
 SUPPLIER_HOME = '/suppliersite/supplier'
 AP_HOME = reverse('ap-taxpayers')
@@ -215,3 +216,47 @@ class TestAdmin(TestCase):
             {'group_name': 'bad_group'}
         )
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_create_ap_user_valid_email(self):
+        self.client.force_login(self.ap_user)
+        group = Group.objects.get(name='ap_manager')
+        response = self.client.post(
+            reverse('create-admin'),
+            {
+                'email': 'testing@eventbrite.com',
+                'groups': group.id,
+            },
+        )
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+
+    def test_create_ap_user_form_valid_email(self):
+        self.client.force_login(self.ap_user)
+        group = Group.objects.get(name='ap_manager')
+        form = UserAdminForm(
+            data={
+                'email': 'testing@eventbrite.com',
+                'groups': [group.id],
+            },
+        )
+        self.assertTrue(form.is_valid())
+
+    def test_create_ap_user_form_invalid_email(self):
+        self.client.force_login(self.ap_user)
+        group = Group.objects.get(name='ap_manager')
+        form = UserAdminForm(
+            data={
+                'email': 'testing@test.com',
+                'groups': [group.id],
+            },
+        )
+        self.assertFalse(form.is_valid())
+
+    def test_create_ap_user_form_invalid_group(self):
+        self.client.force_login(self.ap_user)
+        form = UserAdminForm(
+            data={
+                'email': 'testing@test.com',
+                'groups': [312],
+            },
+        )
+        self.assertFalse(form.is_valid())

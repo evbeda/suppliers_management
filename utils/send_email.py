@@ -13,6 +13,10 @@ from supplier_app import email_notifications
 from celery import shared_task
 from utils import GO_TO_BRITESU
 from utils.exceptions import CouldNotSendEmailError
+from supplier_app import (
+    SUPPLIER_HOME_URL,
+)
+
 
 @shared_task(ignore_result=True)
 def send_email_notification(subject, message, recipient_list):
@@ -79,7 +83,7 @@ def build_mail_html(
     upper_text,
     lower_text,
     btn_text=GO_TO_BRITESU,
-    btn_url=settings.SUPPLIER_HOME_URL,
+    btn_url='{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL)
 ):
     html_message = render_to_string(
         'mail_template.html',

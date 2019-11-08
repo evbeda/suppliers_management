@@ -48,6 +48,9 @@ PAYMENT_TYPES = [
     DBTuple("BANK", _("Bank")),
 ]
 
+COMPANY_INVITATION_URL = '/suppliersite/company/join'
+SUPPLIER_HOME_URL = '/suppliersite/supplier'
+
 email_notifications = {
     'company_invitation': {
         'subject': _('You have been invited to BriteSu'),
@@ -58,7 +61,7 @@ email_notifications = {
             ),
             'lower_text': _('Thank you!'),
             'btn_text': _('Join'),
-            'btn_url': settings.COMPANY_INVITATION_URL,
+            'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, COMPANY_INVITATION_URL),
         },
     },
     'taxpayer_approval': {
@@ -70,7 +73,7 @@ email_notifications = {
             ),
             'lower_text': _('Thank you!'),
             'btn_text': _('Go to BriteSu'),
-            'btn_url': settings.SUPPLIER_HOME_URL,
+            'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
     },
     'taxpayer_change_required': {
@@ -83,7 +86,7 @@ email_notifications = {
             ),
             'lower_text': _('Thank you!'),
             'btn_text': _('Go to BriteSu'),
-            'btn_url': settings.SUPPLIER_HOME_URL,
+            'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
     },
     'taxpayer_denial': {
@@ -95,7 +98,7 @@ email_notifications = {
             ),
             'lower_text': _('Please contact the Eventbrite employee that hired you, Thank you!'),
             'btn_text': _('Go to BriteSu'),
-            'btn_url': settings.SUPPLIER_HOME_URL,
+            'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
     },
 }
