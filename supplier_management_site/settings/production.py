@@ -84,7 +84,7 @@ DEBUG = False
 # EMAIL NOTIFICATION URLS
 COMPANY_INVITATION_URL = os.environ.get('COMPANY_INVITATION_URL')
 SUPPLIER_HOME_URL = os.environ.get('SUPPLIER_HOME_URL')
-
+BRITESU_BASE_URL = os.environ.get('BASE_URL')
 # CELERY REDIS CONFIG
 BROKER_URL = 'redis://:{}@{}'.format(get_env_variable('REDISLAB_PASSWORD'), get_env_variable('REDISLAB_ENDPOINT'))
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}

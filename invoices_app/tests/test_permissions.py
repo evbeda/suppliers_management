@@ -71,9 +71,9 @@ class TestPermissions(TestBase):
         self.assertEqual(user.has_perm(view.permission_required), has_access)
 
     @parameterized.expand([
-        (InvoiceDetailView, False),
+        (InvoiceDetailView, True),
         (InvoiceHistory, False),
-        (InvoiceListView, False),
+        (InvoiceListView, True),
         (InvoiceUpdateView, False),
         (SupplierInvoiceCreateView, False),
         (SupplierInvoiceListView, False),

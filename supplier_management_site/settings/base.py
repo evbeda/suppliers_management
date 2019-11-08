@@ -51,6 +51,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.mail.mail_validation',
+    'users_app.pipeline.pipeline.check_user_backend',
     'social_core.pipeline.user.create_user',
     'users_app.pipeline.pipeline.add_user_to_group',
     'social_core.pipeline.social_auth.associate_user',
@@ -164,8 +165,7 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL NOTIFICATION URLS
-COMPANY_INVITATION_URL = 'http://127.0.0.1:8000/suppliersite/company/join'
-SUPPLIER_HOME_URL = 'http://127.0.0.1:8000/suppliersite/supplier'
+BRITESU_BASE_URL = 'http://127.0.0.1:8000'
 # CELERY REDIS CONFIG
 BROKER_URL = 'redis://:{}@{}'.format(get_env_variable('REDISLAB_PASSWORD'), get_env_variable('REDISLAB_ENDPOINT'))
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}

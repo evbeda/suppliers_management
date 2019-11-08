@@ -5,57 +5,84 @@
 {% block content %}
 
 {% include 'navbar.html' %}
-<br/>
+<br />
 <h1 class="text-center"> {% trans "Admins List"%}</h1>
-<br/>
-<div class="container  min-height">
-    <table class="table table-hover table-sm">
-        <thead class="thead-eb-dark">
-            <tr>
-                <th scope="col">{% trans "User ID"%}</th>
-                <th scope="col">{% trans "Email"%}</th>
-                <th class="text-center"scope= "col">{% trans "AP Admin"%}</th>
-                <th class="text-center" scope="col">{% trans "AP Reporter"%}</th>
-                <th class="text-center" scope="col">{% trans "AP Manager"%}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in object_list %}
-            <tr>
-                <th scope="row">{{user.id}}</th>
-                <td>{{user.email}}</td>
-                <td colspan="3">
-                    <form method="POST" class="form-grid" action='{% url "change-ap-permission" pk=user.id %}'>
-                        <div class="row justify-content-around">
-                            {% csrf_token %}
-                            <div class="col text-center">
-                                {% if user.is_AP %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i class="fas fa-check text-success"></i></button>
-                                {% else %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i class="fas fa-times text-danger"></i></button>
-                                {% endif %}
+
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <ul class="nav flex-column text-center">
+            <li class="nav-item">
+                <a class='btn btn-primary' href="{% url 'create-admin' %}">
+                    <i class="fa fa-plus"></i> {% trans "New Admin" %}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th scope="col">{% trans "User ID"%}</th>
+                    <th scope="col">{% trans "Email"%}</th>
+                    <th scope="col">{% trans "Registred"%}</th>
+                    <th class="text-center" scope="col">{% trans "AP Admin"%}</th>
+                    <th class="text-center" scope="col">{% trans "AP Reporter"%}</th>
+                    <th class="text-center" scope="col">{% trans "AP Manager"%}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                <tr>
+                    <th scope="row">{{user.id}}</th>
+                    <td>{{user.email}}</td>
+                    <td>{% if user.social_auth.all %}
+                        <i class="text-success fas fa-circle"></i>
+                        {% else %}
+                        <i class="text-danger fas fa-circle"></i>
+                        {% endif %}
+                    </td>
+                    <td colspan="3">
+                        <form method="POST" class="form-grid" action='{% url "change-ap-permission" pk=user.id %}'>
+                            <div class="row justify-content-around">
+                                {% csrf_token %}
+                                <div class="col text-center">
+                                    {% if user.is_AP %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i
+                                            class="fas fa-check text-success"></i></button>
+                                    {% else %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i
+                                            class="fas fa-times text-danger"></i></button>
+                                    {% endif %}
+                                </div>
+                                <div class="col text-center">
+                                    {% if user.is_ap_reporter %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_reporter"><i
+                                            class="fas fa-check text-success"></i></button>
+                                    {% else %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_reporter"><i
+                                            class="fas fa-times text-danger"></i></button>
+                                    {% endif %}
+                                </div>
+                                <div class="col text-center">
+                                    {% if user.is_ap_manager %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_manager"><i
+                                            class="fas fa-check text-success"></i></button>
+                                    {% else %}
+                                    <button type="submit" name='group_name' class="btn" value="ap_manager"><i
+                                            class="fas fa-times text-danger"></i></button>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="col text-center">
-                                {% if user.is_ap_reporter %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_reporter"><i class="fas fa-check text-success"></i></button>
-                                {% else %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_reporter"><i class="fas fa-times text-danger"></i></button>
-                                {% endif %}
-                            </div>
-                            <div class="col text-center">                                
-                                {% if user.is_ap_manager %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_manager"><i class="fas fa-check text-success"></i></button>
-                                {% else %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_manager"><i class="fas fa-times text-danger"></i></button>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
+
 {% include "_pagination.html" %}
 {% endblock%}

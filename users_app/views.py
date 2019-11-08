@@ -6,19 +6,35 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import (
+    Group,
+    Permission,
+)
 from django.http import (
     HttpResponseBadRequest,
     HttpResponseRedirect,
 )
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.views.i18n import set_language
-from django.views.generic import TemplateView
+from django.views.generic import (
+    CreateView,
+    TemplateView,
+)
+from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.utils.translation import activate
 from django.urls import reverse
+from pure_pagination.mixins import PaginationMixin
 from users_app import ALLOWED_AP_ACCOUNTS, CAN_MANAGE_APS_PERM
 from users_app.models import User
+from users_app.forms import UserAdminForm
+from utils.send_email import (
+    send_email_notification,
+    build_mail_html,
+)
+from django.conf import settings
 
 
 class LoginView(TemplateView):
@@ -50,13 +66,16 @@ class IsApUser(UserPassesTestMixin):
         return self.request.user.email in ALLOWED_AP_ACCOUNTS
 
 
-class AdminList(PermissionRequiredMixin, ListView):
+class AdminList(PaginationMixin, PermissionRequiredMixin, ListView):
     model = User
     template_name = 'AP_app/admins-list.html'
     permission_required = CAN_MANAGE_APS_PERM
+    paginate_by = 10
 
     def get_queryset(self):
-        queryset = User.objects.filter(email__endswith='@eventbrite.com')
+        perm = Permission.objects.get(codename='ap_role')
+        queryset = User.objects.filter(
+            Q(groups__permissions=perm)).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -105,3 +124,25 @@ def set_user_language(request):
     activate(request.POST['language'])
 
     return response
+
+
+class CreateAdmin(PermissionRequiredMixin, CreateView):
+    model = User
+    form_class = UserAdminForm
+    template_name = 'AP_app/admin_create.html'
+    success_url = reverse_lazy('manage-admins')
+    permission_required = CAN_MANAGE_APS_PERM
+
+    def form_valid(self, form):
+        subject = _('You have been invited to BriteSu as AP')
+        upper_text = _('Please Login as AP with the link below')
+        message = build_mail_html(
+            'AP',
+            upper_text,
+            _('Thank you'),
+            'AP Login',
+            '{}/login/google-oauth2/?next='.format(settings.BRITESU_BASE_URL)
+        )
+        recipient_list = [form.cleaned_data['email']]
+        send_email_notification.apply_async([subject, message, recipient_list])
+        return super().form_valid(form)
