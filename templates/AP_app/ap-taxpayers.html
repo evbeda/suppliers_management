@@ -9,12 +9,12 @@
 {% include 'navbar.html' %}
 <div class="container h-100 w-100 mt-3">
     {% include 'messages_notification.html'%}
+        <div class="row justify-content-center">
+            <h1>
+                {% trans "Taxpayers" %}
+            </h1>
+        </div>
     {% include 'AP_app/taxpayer_filter.html' %}
-    <div class="row justify-content-center">
-        <h1>
-            {% trans "Taxpayer" %}
-        </h1>
-    </div>
     <div class="row justify-content-center">
         <table class="table table-hover table-striped table-sm">
             <thead class="thead-eb-dark text-center">
