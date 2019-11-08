@@ -2,22 +2,37 @@ from http import HTTPStatus
 
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
-from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    PermissionRequiredMixin,
+    UserPassesTestMixin,
+)
 from django.contrib.auth.models import Group
 from django.http import (
     HttpResponseBadRequest,
+    HttpResponseRedirect,
 )
 from django.shortcuts import get_object_or_404, redirect
 from django.views.i18n import set_language
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.utils.translation import activate
+from django.urls import reverse
 from users_app import ALLOWED_AP_ACCOUNTS, CAN_MANAGE_APS_PERM
 from users_app.models import User
 
 
 class LoginView(TemplateView):
     template_name = 'registration/login.html'
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        if user.is_authenticated():
+            if user.is_AP:
+                return HttpResponseRedirect(reverse('ap-taxpayers'))
+            else:
+                return HttpResponseRedirect(reverse('supplier-home'))
+        else:
+            return super().get(request, args, kwargs)
 
 
 class LogoutView(LogoutView):

@@ -417,7 +417,6 @@ class TestSupplierHome(TestCase):
             company=self.company,
             user=self.user_with_social_evb
         )
-        self.fail("SOY UN LIMONASOOOOOOOO!!!! XD XD XD")
         self.client = Client()
         self.supplier_user = UserFactory(email='nahuel.valencia21@gmail.com')
         self.supplier_group = Group.objects.get(name='supplier')

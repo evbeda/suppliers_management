@@ -82,10 +82,11 @@ class TestLoginRedirect(TestCase):
         self.client = Client()
 
         self.supplier_group = Group.objects.get(name='supplier')
-
+        self.ap_group = Group.objects.get(name='ap_admin')
         self.user_with_eb_social = UserFactory(email='nicolas@gmail.com')
         self.user_with_eb_social.groups.add(self.supplier_group)
         self.user_with_google_social = UserFactory(email='ap@eventbrite.com')
+        self.user_with_google_social.groups.add(self.ap_group)
 
     def test_login_fail_should_redirect_to_loginfailview(self):
         response_supplier = self.client.get(SUPPLIER_HOME, follow=True)
@@ -157,6 +158,22 @@ class TestLoginRedirect(TestCase):
             'supplier_app/supplier-home.html',
             response.template_name,
         )
+
+    def test_ap_authenticated_access_login_view_should_redirect_to_ap_home(self):
+        self.client.force_login(self.user_with_google_social)
+        response = self.client.get(
+            reverse('login'),
+            follow=True,
+        )
+        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain] )
+
+    def test_supplier_authenticated_access_login_view_should_redirect_to_supplier_home(self):
+        self.client.force_login(self.user_with_eb_social)
+        response = self.client.get(
+            reverse('login'),
+            follow=True,
+        )
+        self.assertIn(SUPPLIER_HOME, [red[0] for red in response.redirect_chain])
 
 
 class TestAdmin(TestCase):
