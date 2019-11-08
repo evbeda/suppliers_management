@@ -6,8 +6,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
 from invoices_app import (
+    INVOICE_MAX_SIZE_FILE,
     INVOICE_STATUS_CHANGES_REQUEST,
-    INVOICE_MAX_SIZE_FILE
+    INVOICE_STATUS_PENDING,
+    NO_COMMENT_ERROR,
 )
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.models import Comment
@@ -24,7 +26,6 @@ from utils.history import invoice_history_comments
 class CommentsTest(TestBase):
     # Feature: Generates comments when invoice state changes
     @parameterized.expand([
-        ('CHANGES REQUESTED',),
         ('REJECTED'),
         ('PAID',),
     ])
@@ -465,3 +466,51 @@ class CommentsTest(TestBase):
             reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': self.invoice.id}),
         )
         self.assertContains(response, self.ap_user.email)
+
+    def test_invoice_request_changes_comment_with_reason(self):
+        self.client.force_login(self.ap_user)
+        message = 'test reason'
+        response = self.client.post(
+            reverse(
+                'change-invoice-status',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST),
+                'message': message,
+            }
+        )
+        comment = invoice_history_comments(self.invoice)[-1]
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertIn(
+            '{} from {} to {}'.format(
+                'Status',
+                INVOICE_STATUS_PENDING,
+                INVOICE_STATUS_CHANGES_REQUEST,
+            ),
+            comment.message,
+        )
+        self.assertIn(
+            message,
+            comment.message,
+        )
+        self.assertEqual(comment.user, self.ap_user)
+
+    def test_invoice_request_changes_without_comment(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.post(
+            reverse(
+                'change-invoice-status',
+                kwargs={
+                    'pk': self.invoice.id,
+                }
+            ),
+            {
+                'status': invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST),
+            },
+            follow=True
+        )
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertContains(response, NO_COMMENT_ERROR)

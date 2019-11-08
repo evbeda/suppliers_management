@@ -1,4 +1,4 @@
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Comment, Invoice
@@ -38,6 +38,9 @@ def invoice_history_comments(invoice):
                 old_value,
                 new_value,
             )
+        if next_record.history_change_reason:
+            message += gettext('\nChange reason:\n')
+            message += next_record.history_change_reason
         comment = Comment(
             user=next_record.history_user,
             invoice=next_record.instance,

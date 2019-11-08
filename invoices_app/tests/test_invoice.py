@@ -248,7 +248,6 @@ class TestInvoice(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     @parameterized.expand([
-        (INVOICE_STATUS_CHANGES_REQUEST,),
         (INVOICE_STATUS_REJECTED),
         (INVOICE_STATUS_PAID,),
     ])
@@ -318,7 +317,7 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST),
+                'status': invoice_status_lookup(INVOICE_STATUS_REJECTED),
             }
         )
         self.assertEqual(request.status_code, expected)

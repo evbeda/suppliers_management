@@ -46,6 +46,7 @@ from invoices_app import (
     EXPORT_TO_XLS_FULL,
     INVOICE_DATE_FORMAT,
     INVOICE_MAX_SIZE_FILE,
+    NO_COMMENT_ERROR,
     NO_WORKDAY_ID_ERROR,
     INVALID_WORKDAY_ID_ERROR,
     AVAILABLE_INVOICE_STATUS_CHANGES,
@@ -371,6 +372,40 @@ def approve_invoice(request, pk):
         )
     invoice.status = status
     invoice.workday_id = workday_id
+    invoice.save()
+
+    _send_email_when_change_invoice_status(request, invoice)
+
+    return redirect(
+        reverse(
+            'invoices-detail',
+            kwargs={
+                'taxpayer_id': invoice.taxpayer.id,
+                'pk': pk,
+            }
+        )
+    )
+
+
+@permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
+def request_changes_invoice(request, pk):
+    status = request.POST.get('status')
+    message = request.POST.get('message')
+    invoice = get_object_or_404(Invoice, pk=pk)
+    if status == invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST) and not message:
+        messages.error(request, NO_COMMENT_ERROR)
+        return redirect(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': invoice.taxpayer.id,
+                    'pk': pk,
+                }
+            )
+        )
+
+    invoice.status = status
+    invoice.changeReason = message
     invoice.save()
 
     _send_email_when_change_invoice_status(request, invoice)

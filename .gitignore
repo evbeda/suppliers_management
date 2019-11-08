@@ -110,6 +110,7 @@ setup_env.sh
 # mypy
 .mypy_cache/
 
+.idea
 .vscode
 .DS_Store
 fixture.json

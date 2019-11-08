@@ -25,7 +25,6 @@ INVOICE_STATUS = [
 
 AVAILABLE_INVOICE_STATUS_CHANGES = [
     '2',
-    '3',
     '4',
     '5',
 ]
@@ -57,6 +56,7 @@ ENGLISH_LANGUAGE_CODE = _('en')
 
 DEFAULT_NUMBER_PAGINATION = 10
 NO_WORKDAY_ID_ERROR = _("Please provide a Workday ID in order to approve an invoice")
+NO_COMMENT_ERROR = _('Please add a comment to request changes')
 INVALID_WORKDAY_ID_ERROR = _("Ivalid Worday ID")
 
 THANK_YOU = _('Thank you')
