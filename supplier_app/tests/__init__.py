@@ -65,14 +65,12 @@ def taxpayer_creation_POST_factory(
 
 def taxpayer_edit_POST_factory(
     eb_entity=None,
-    workday_id=None,
     business_name=None,
     cuit=None,
     payment_type=None,
     payment_term=None
 ):
     return {
-            'workday_id': workday_id or '1',
             'business_name': business_name or 'EB ARG',
             'eb_entities': eb_entity or "1",
             'country': 'AR',

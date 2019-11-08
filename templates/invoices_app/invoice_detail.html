@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load l10n %}
+{% load tz %}
 
 {% block content %}
 
@@ -28,7 +30,7 @@
         <strong>{% trans "Invoice #" %}</strong>
         {{invoice.invoice_number}}
         <strong>{% trans "Date:" %}</strong>
-        {{invoice.invoice_date}}
+        {{invoice.invoice_date|date:date_format}}
         {% if not taxpayer and invoice.status == INVOICE_STATUS_CHANGES_REQUEST or is_AP %}
         <a href="{% url 'invoice-update' pk=invoice.id %}" class="btn btn-outline-primary btn-sm mx-2">
           {% trans "Edit info" %}
@@ -68,7 +70,7 @@
             <div>{{address.zip_code}} {{address.city}}</div>
             <div>{{address.country}}</div>
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-8">
             <h6 class="mb-3">{% trans "Details:" %}</h6>
             <div><strong>{% trans "Taxpayer Identification Number:" %}</strong> {{taxpayer.cuit}}</div>
             <div><strong>{% trans "Payment Option:" %}</strong> {{taxpayer.get_payment_term_display}}</div>
@@ -79,7 +81,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4 col-sm-5 ml-auto">
+          <div class="col-lg-5 col-sm-5 ml-auto">
             <table class="table table-clear">
               <tbody>
                 <tr>
@@ -115,33 +117,34 @@
      {% if is_AP %}
      <div class="card-footer">
        <div class="row">
-         <div class="col">
+         <div class="col-6 pl-0">
            <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
              {% csrf_token %}
              {% if invoice.status != INVOICE_STATUS_APPROVED %}
-             <button type="submit" name='status' class="ml-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">{% trans "Request Changes" %}</button>
-             <button type="submit" name='status' class="ml-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">{% trans "Reject" %}</button>
+             <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">{% trans "Request Changes" %}</button>
+             <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">{% trans "Reject" %}</button>
              {% endif %}
             {% if invoice.status == INVOICE_STATUS_APPROVED %}
                 <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">{% trans "Pay" %}</button>
             {% endif %}
             </form>
           </div>
-          <div class="col">
-              {% if invoice.status != INVOICE_STATUS_APPROVED and not invoice.workday_id %}
-              <form method='POST' class="form-inline" action='{% url 'approve-invoice' pk=invoice.id %}' enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                    <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
-                    <div class="input-group-append">
-                        <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
-                      </div>
-                  </div>
-               </form>
-               {% endif %}
-          </div>
-         <div class="col text-rigth">
-           <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary float-right">{% trans "Invoice History" %}</a></span>
+          {% if invoice.status != INVOICE_STATUS_APPROVED and not invoice.workday_id %}
+            <div class="col">
+                <form method='POST' class="form-inline" action='{% url 'approve-invoice' pk=invoice.id %}' enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="input-group mb-3">
+                      <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
+                      <div class="input-group-append">
+                          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
+                        </div>
+                    </div>
+                 </form>
+
+            </div>
+         {% endif %}
+         <div class="col">
+           <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary p-2 float-right">{% trans "Invoice History" %}</a></span>
          </div>
        </div>
      </div>
@@ -156,7 +159,9 @@
       <h6 class="border-bottom border-gray pb-2 mb-0">{% trans "Recent updates" %}</h6>
       <div>
         <div class="container">
+          {% if invoice.status != INVOICE_STATUS_PAID %}
           <div class="row mt-2 pb-2 border-bottom border-gray ">
+
             <div class="col mb-2">
               <h6>{% trans "Make a comment" %}</h6>
               <form method='POST' action='{% url 'post-comment' pk=invoice.id %}' enctype="multipart/form-data">
@@ -179,6 +184,7 @@
               </div>
               </form>
             </div>
+            {% endif %}
           </div>
         </div>
         {% for comment in comments %}

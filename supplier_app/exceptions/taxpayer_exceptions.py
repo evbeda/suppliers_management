@@ -1,0 +1,2 @@
+class NoWorkdayIDException(Exception):
+    pass

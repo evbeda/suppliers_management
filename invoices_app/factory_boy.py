@@ -10,6 +10,7 @@ file_mock = MagicMock(spec=File)
 file_mock.name = 'test.pdf'
 file_mock.size = 50
 
+
 def get_due_date():
     return datetime.now() + timedelta(days=15)
 

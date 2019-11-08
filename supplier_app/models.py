@@ -231,7 +231,7 @@ class TaxPayerArgentina(TaxPayer):
             FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(
                 limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
-                code=_('invalid_file_size'),
+                code='invalid_file_size',
                 ),
             ],
         )
@@ -244,7 +244,7 @@ class TaxPayerArgentina(TaxPayer):
             FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(
                 limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
-                code=_('invalid_file_size'),    
+                code='invalid_file_size',
                 ),
             ],
         )
@@ -321,7 +321,7 @@ class BankAccount(models.Model):
             FileExtensionValidator(allowed_extensions=BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(
                 limit_size=BANK_ACCOUNT_MAX_SIZE_FILE,
-                code=_('invalid_file_size'),    
+                code='invalid_file_size',    
             ),
         ],
     )

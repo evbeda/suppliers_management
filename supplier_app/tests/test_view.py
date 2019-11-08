@@ -41,10 +41,14 @@ from supplier_app.constants.custom_messages import (
     EMAIL_ERROR_MESSAGE,
     EMAIL_SUCCESS_MESSAGE,
     JOIN_COMPANY_ERROR_MESSAGE,
+    TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_CREATION_SUCCESS_MESSAGE,
     TAXPAYER_CREATION_ERROR_MESSAGE,
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
+    TAXPAYER_APPROVE_MESSAGE,
+    TAXPAYER_DENIED_MESSAGE,
+    TAXPAYER_REQUEST_CHANGE_MESSAGE,
 )
 from supplier_app import (
     email_notifications,
@@ -149,11 +153,11 @@ class TestCreateTaxPayer(TestCase):
             'address_form': AddressCreateForm(data=FORM_POST),
             'bank_account_form': BankAccountCreateForm(
                 data=FORM_POST,
-                files=self._get_request_FILES()
+                files=self._get_request_FILES(),
             ),
             'taxpayer_form': TaxPayerCreateForm(
                 data=FORM_POST,
-                files=self._get_request_FILES()
+                files=self._get_request_FILES(),
                 )
         }
         return forms
@@ -722,27 +726,6 @@ class TestSupplierDetailsView(TestCase):
             response, 'Approve'
         )
 
-    def test_details_view_doesnt_have_approve_button_when_AP_hasnt_set_workday_id(self):
-        taxpayer = TaxPayerArgentinaFactory(
-            workday_id="",
-            afip_registration_file=self.file_mock,
-            witholding_taxes_file=self.file_mock,
-        )
-        AddressFactory(taxpayer=taxpayer)
-        BankAccountFactory(
-            taxpayer=taxpayer,
-            bank_cbu_file=self.file_mock
-        )
-        self.client.force_login(self.ap_user)
-
-        response = self.client.get(
-            reverse("supplier-details", kwargs={'taxpayer_id': taxpayer.id})
-        )
-
-        self.assertNotContains(
-            response, 'Approve',
-        )
-
     def test_taxpayer_details_view_doesnt_show_edit_button_when_the_taxpayer_has_status_denied(self):
         taxpayer = TaxPayerArgentinaFactory(
             taxpayer_state="DENIED",
@@ -946,12 +929,11 @@ class TestEditTaxPayerInfo(TestCase):
     @parameterized.expand([
         (
             taxpayer_edit_POST_factory(
-                workday_id="1",
                 business_name="EB US",
                 cuit="20312321462",
             ),
-            ["workday_id", "business_name", "cuit"],
-            ["1", "EB US", "20312321462"]
+            ["business_name", "cuit"],
+            ["EB US", "20312321462"]
         ),
         (
             taxpayer_edit_POST_factory(
@@ -1001,12 +983,11 @@ class TestEditTaxPayerInfo(TestCase):
     @parameterized.expand([
         (
             taxpayer_edit_POST_factory(
-                workday_id="1",
                 business_name="EB US",
                 cuit="20312321468",
             ),
-            ["workday_id", "business_name", "cuit"],
-            ["1", "EB US", "20312321468"]
+            ["business_name", "cuit"],
+            ["EB US", "20312321468"]
         ),
         (
             taxpayer_edit_POST_factory(
@@ -1042,7 +1023,6 @@ class TestEditTaxPayerInfo(TestCase):
             )
 
         self.assertTrue(form_taxpayer.is_valid())
-
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
         status_approved = TAXPAYER_STATUS['Approved']['choices'].value
@@ -1182,7 +1162,6 @@ class TestEditTaxPayerInfo(TestCase):
         self.assertEquals(self.TAXPAYER_POST['cuit'], updated_taxpayer.cuit)
         self.assertEquals(self.TAXPAYER_POST['payment_type'], updated_taxpayer.payment_type)
         self.assertEquals(self.TAXPAYER_POST['payment_term'], updated_taxpayer.payment_term)
-        self.assertEquals(self.TAXPAYER_POST['workday_id'], updated_taxpayer.workday_id)
         self.assertEquals(self.TAXPAYER_POST['business_name'], updated_taxpayer.business_name)
         self.assertEquals(self.TAXPAYER_POST['country'], updated_taxpayer.country)
         self.assertEqual('file/afip_file.pdf', updated_taxpayer.afip_registration_file.name)
@@ -1852,6 +1831,8 @@ class TestCompanyJoin(TestCase):
 class TestApprovalRefuse(TestCase):
     def setUp(self):
         self.taxpayer = TaxPayerArgentinaFactory()
+        AddressFactory(taxpayer=self.taxpayer)
+        BankAccountFactory(taxpayer=self.taxpayer)
         self.client = Client()
 
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
@@ -1862,6 +1843,7 @@ class TestApprovalRefuse(TestCase):
         self.app_home_url = 'ap-taxpayers'
         self.supplier_home_url = 'supplier-home'
         self.handle_taxpayer_status_url = 'handle-taxpayer-status'
+        self.supplier_detail_url = "supplier-details"
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
@@ -1875,19 +1857,10 @@ class TestApprovalRefuse(TestCase):
             ),
             {
                 "action": action,
+                "workday_id": "1234",
             },
             follow=follow,
         )
-
-    def test_redirect_to_ap_home_when_approve_a_supplier(self):
-        response = self._handle_taxpayer_status_request("approve")
-
-        self.assertEqual(response.status_code, 302)
-
-        self.assertEqual(
-            response.url,
-            reverse(self.app_home_url)
-            )
 
     def test_redirect_to_supplier_home_when_supplier_tries_to_approve_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
@@ -1917,12 +1890,45 @@ class TestApprovalRefuse(TestCase):
             mail.outbox[0].alternatives[0][0]
         )
 
-    def test_redirect_to_ap_home_when_deny_a_supplier(self):
-        response = self._handle_taxpayer_status_request("deny")
+    def test_redirect_to_supplier_detail_with_approve_success_msg(self):
+        response = self._handle_taxpayer_status_request("approve", follow=True)
+        self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.status_code, 302)
+        self.assertIn(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+            [redirect[0] for redirect in response.redirect_chain],
+        )
+        self.assertContains(response, TAXPAYER_APPROVE_MESSAGE)
 
-        self.assertEqual(response.url, '/suppliersite/ap')
+    def test_redirect_to_supplier_detail_with_denied_success_msg(self):
+        response = self._handle_taxpayer_status_request("deny", follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+            [redirect[0] for redirect in response.redirect_chain],
+        )
+        self.assertContains(response, TAXPAYER_DENIED_MESSAGE)
+
+    def test_approve_without_workday_id_set_shows_msg_error(self):
+        response = self.client.post(
+            reverse(
+                self.handle_taxpayer_status_url,
+                kwargs=self.kwargs
+            ),
+            {
+                "action": "approve",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE)
 
     @patch(
         'supplier_app.change_status_strategy.StrategyApprove.send_email',
@@ -1954,7 +1960,7 @@ class TestApprovalRefuse(TestCase):
     )
     def test_nonexistent_taxpayer_should_display_error_message_on_denial(self, send_mail_mocked):
         response = self._handle_taxpayer_status_request("deny", True)
-        self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
+        self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE)
 
     def test_redirect_to_supplier_home_when_supplier_tries_to_deny_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
@@ -2380,3 +2386,16 @@ class TestTaxpayerCommentView(TestCase):
             TaxPayer.objects.get(pk=self.taxpayer_example.id).taxpayer_state,
             TAXPAYER_STATUS['Change Required']['choices'].value
         )
+
+    def test_ap_request_change_should_redirect_to_supplier_detail_with_succes_msg(self):
+        self.client.force_login(self.ap_user)
+        response = self._make_comment_post()
+        self.assertIn(
+            reverse(
+                self.supplier_detail_url,
+                kwargs=self.kwargs
+            ),
+            [redirect[0] for redirect in response.redirect_chain],
+        )
+
+        self.assertContains(response, TAXPAYER_REQUEST_CHANGE_MESSAGE)
