@@ -16,13 +16,17 @@
                     {% trans "Management" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'invoices-list' %}?status=2"><i
-                            class="fa fa-file-invoice mr-2"></i>{% trans "Invoices" %}</a>
-                    <a class="dropdown-item" href="{% url 'ap-taxpayers' %}"><i
-                            class="fa fa-store mr-2"></i>{% trans "Taxpayers" %}</a>
+                    <a class="dropdown-item" href="{% url 'invoices-list' %}?status=2">
+                            <i class="fa fa-file-invoice mr-1"></i>
+                            {% trans "Invoices" %}
+                    </a>
+                    <a class="dropdown-item" href="{% url 'ap-taxpayers' %}">
+                        <i class="fa fa-store"></i>{% trans "Taxpayers" %}
+                    </a>
                     {% if perms.users_app.can_manage_aps %}
                     <a class="dropdown-item" href="{% url 'manage-admins' %}">
-                            <i class="fas fa-user-shield"></i>{% trans "Manage Admins" %}</a>
+                            <i class="fas fa-user-shield mr-1"></i>{% trans "Manage Admins" %}
+                    </a>
                     {% endif %}
             </li>
             {% if perms.users_app.can_create_company or perms.users_app.can_send_company_invite %}
