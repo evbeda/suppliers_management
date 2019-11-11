@@ -68,7 +68,7 @@ class IsApUser(UserPassesTestMixin):
 
 class AdminList(PaginationMixin, PermissionRequiredMixin, ListView):
     model = User
-    template_name = 'AP_app/admins-list.html'
+    template_name = 'registration/admins-list.html'
     permission_required = CAN_MANAGE_APS_PERM
     paginate_by = 10
 
@@ -129,7 +129,7 @@ def set_user_language(request):
 class CreateAdmin(PermissionRequiredMixin, CreateView):
     model = User
     form_class = UserAdminForm
-    template_name = 'AP_app/admin_create.html'
+    template_name = 'registration/admin_create.html'
     success_url = reverse_lazy('manage-admins')
     permission_required = CAN_MANAGE_APS_PERM
 

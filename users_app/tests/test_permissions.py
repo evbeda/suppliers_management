@@ -140,7 +140,7 @@ class TestSupplierPermissions(TestCase):
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn(
-            "AP_app/ap-taxpayer-details.html",
+            "supplier_app/taxpayer-details.html",
             response.template_name,
         )
 

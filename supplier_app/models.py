@@ -23,6 +23,10 @@ from supplier_app import (
     TAXPAYER_ALLOWED_FILE_EXTENSIONS,
 )
 
+from supplier_app.constants.taxpayer_status import (
+    TAXPAYER_STATUS,
+    get_taxpayer_status_choices,
+)
 from supplier_app.constants.bank_info import get_bank_info_choices
 from supplier_app.constants.countries import get_countries_choices
 from supplier_app.constants.eb_entities_status import (
