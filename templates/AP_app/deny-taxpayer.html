@@ -1,5 +1,5 @@
 <form method="POST" action="{% url 'handle-taxpayer-status' taxpayer_id=taxpayer.id %}">
     {% csrf_token %}
-    <input type="hidden" name="action" value="deny">                
+    <input type="hidden" name="action" value="{{deny}}">                
     <input class='btn btn-danger' type="submit" value="Deny"/>
 </form>

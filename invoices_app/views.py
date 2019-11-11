@@ -75,8 +75,9 @@ from invoices_app.models import (
 
 from supplier_app import (
     DATE_FORMAT,
-    TAXPAYER_STATUS_APPROVED,
 )
+
+from supplier_app.constants.taxpayer_status import TAXPAYER_STATUS_APPROVED
 from supplier_app.models import (
     Address,
     EBEntity,

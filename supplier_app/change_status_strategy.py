@@ -1,17 +1,28 @@
 from django.contrib import messages
 
-from supplier_app import (
+from supplier_app.models import TaxPayer
+
+from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
     TAXPAYER_STATUS_CHANGE_REQUIRED,
     TAXPAYER_STATUS_DENIED,
 )
-from supplier_app.exceptions.taxpayer_exceptions import NoWorkdayIDException
+from supplier_app.exceptions.taxpayer_exceptions import (
+    NoWorkdayIDException,
+    TaxpayerUniqueWorkdayId,
+)
 from supplier_app.constants.custom_messages import (
     TAXPAYER_APPROVE_MESSAGE,
     TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
 )
 from utils.send_email import taxpayer_notification
+
+
+def _taxpayer_exists_with_workday_id(workday_id):
+
+    if TaxPayer.objects.filter(workday_id=workday_id).exists():
+        raise TaxpayerUniqueWorkdayId()
 
 
 class StrategyStatusChange():
@@ -46,7 +57,10 @@ class StrategyApprove(StrategyStatusChange):
     def change_taxpayer_status(taxpayer, request=None):
         try:
             workday_id = request.POST['workday_id']
-            taxpayer.workday_id = workday_id
+            _taxpayer_exists_with_workday_id(workday_id)
+            if workday_id == "" and not taxpayer.workday_id:
+                raise NoWorkdayIDException()
+            taxpayer.workday_id = workday_id or taxpayer.workday_id
         except KeyError:
             raise NoWorkdayIDException()
         taxpayer.approve_taxpayer()

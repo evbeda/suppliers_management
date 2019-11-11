@@ -14,7 +14,6 @@ from unittest.mock import (
     patch,
 )
 
-from django.conf import settings
 from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,10 +35,14 @@ from django.test import (
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDict
 
-from supplier_app import (
+from supplier_app.constants.email_notifications import (
     email_notifications,
+    SUPPLIER_HOME_URL,
+)
+from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
     TAXPAYER_STATUS_CHANGE_REQUIRED,
+    TAXPAYER_STATUS_CHANGES_PENDING,
     TAXPAYER_STATUS_DENIED,
     TAXPAYER_STATUS_PENDING,
 )
@@ -57,13 +60,9 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_NOT_EXISTS_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
+    TAXPAYER_WORKDAY_UNIQUE_ERROR,
 )
-from supplier_app import (
-    email_notifications,
-    TAXPAYER_STATUS,
-    SUPPLIER_HOME_URL,
-    COMPANY_INVITATION_URL,
-)
+
 from supplier_app.forms import (
     AddressCreateForm,
     BankAccountCreateForm,
@@ -1035,7 +1034,7 @@ class TestEditTaxPayerInfo(TestCase):
 
     def test_post_edit_active_taxpayer_as_supplier_changes_state_to_pending(self):
         status_approved = TAXPAYER_STATUS_APPROVED
-        status_pending = TAXPAYER_STATUS_PENDING
+        status_changes_pending = TAXPAYER_STATUS_CHANGES_PENDING
         self.taxpayer.taxpayer_state = status_approved
         self.client_supplier.post(
             reverse(
@@ -1047,7 +1046,7 @@ class TestEditTaxPayerInfo(TestCase):
         edited_taxpayer_state = TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         self.assertEqual(
             edited_taxpayer_state,
-            status_pending,
+            status_changes_pending,
         )
 
     def test_post_edit_active_taxpayer_as_ap_dont_chang_state(self):
@@ -1302,7 +1301,7 @@ class TestEditAddressInfo(TestCase):
 
     def test_post_edit_addres_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS_PENDING
+        status_changes_pending = TAXPAYER_STATUS_CHANGES_PENDING
 
         CompanyUserPermissionFactory(
             user=self.supplier_user,
@@ -1310,7 +1309,7 @@ class TestEditAddressInfo(TestCase):
         )
         self._make_address_post()
         self.assertEqual(
-            status_pending,
+            status_changes_pending,
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
 
@@ -1426,14 +1425,14 @@ class TestEditBankAccountInfo(TestCase):
 
     def test_post_edit_bank_info_as_supplier_change_status_to_pending(self):
         self.client.force_login(self.supplier_user)
-        status_pending = TAXPAYER_STATUS_PENDING
+        status_changes_pending = TAXPAYER_STATUS_CHANGES_PENDING
         CompanyUserPermissionFactory(
             user=self.supplier_user,
             company=self.taxpayer.company
         )
         self._make_bank_post()
         self.assertEqual(
-            status_pending,
+            status_changes_pending,
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
 
@@ -1941,6 +1940,45 @@ class TestApprovalRefuse(TestCase):
         )
 
         self.assertContains(response, TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE)
+
+    def test_taxpayer_approve_with_existent_workday_id_should_maintain_taxpayer_status(self):
+        TaxPayerArgentinaFactory(workday_id="451")
+
+        self.client.post(
+            reverse(
+                self.handle_taxpayer_status_url,
+                kwargs=self.kwargs
+            ),
+            {
+                "action": self.approve,
+                "workday_id": "451",
+            },
+            follow=True,
+        )
+
+        taxpayer_fail_approved = \
+            TaxPayerArgentina.objects.get(pk=self.taxpayer.id)
+        self.assertEqual(
+            taxpayer_fail_approved.taxpayer_state,
+            TAXPAYER_STATUS_PENDING
+        )
+
+    def test_approve_with_existent_workday_id_should_render_error_msg(self):
+        TaxPayerArgentinaFactory(workday_id="451")
+
+        response = self.client.post(
+            reverse(
+                self.handle_taxpayer_status_url,
+                kwargs=self.kwargs
+            ),
+            {
+                "action": self.approve,
+                "workday_id": "451",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, TAXPAYER_WORKDAY_UNIQUE_ERROR)
 
     @patch(
         'supplier_app.change_status_strategy.StrategyApprove.send_email',

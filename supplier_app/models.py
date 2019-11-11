@@ -19,10 +19,8 @@ from supplier_app import (
     BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS,
     PAYMENT_TERMS,
     PAYMENT_TYPES,
-    TAXPAYER_STATUS,
     TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
     TAXPAYER_ALLOWED_FILE_EXTENSIONS,
-    get_taxpayer_status_choices,
 )
 
 from supplier_app.constants.bank_info import get_bank_info_choices
@@ -30,6 +28,10 @@ from supplier_app.constants.countries import get_countries_choices
 from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
     UNUSED_STATUS,
+)
+from supplier_app.constants.taxpayer_status import (
+    TAXPAYER_STATUS,
+    get_taxpayer_status_choices,
 )
 
 from utils.file_validator import FileSizeValidator
@@ -94,7 +96,7 @@ class EBEntity(models.Model):
 
 class TaxPayer(models.Model):
 
-    workday_id = models.CharField(max_length=200)
+    workday_id = models.CharField(max_length=50, unique=True)
     business_name = models.CharField(max_length=200, verbose_name=_("Business name"))
     taxpayer_state = models.CharField(
         max_length=200,
@@ -140,6 +142,9 @@ class TaxPayer(models.Model):
 
     def change_to_pending_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Pending']['choices'].value
+
+    def set_changes_pending_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS['Changes Pending']['choices'].value
 
     def has_workday_id(self):
         return True if self.workday_id else False

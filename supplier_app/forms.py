@@ -147,7 +147,7 @@ class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
 
 class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
     afip_registration_file = forms.FileField()
-    witholding_taxes_file = forms.FileField()
+    witholding_taxes_file = forms.FileField(required=False)
 
     class Meta(TaxPayerArgentinaBaseForm.Meta):
         exclude = [

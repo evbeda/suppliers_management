@@ -285,7 +285,7 @@
                 {% for comment in comments %}
                 <div class="row media-body pt-3 pb-3 ml-1 mr-1 mb-0 small lh-125 border-bottom border-gray">
                     <div class="col">
-                        <span class="font-weight-bold">{{ comment.user.get_username  }}</span>
+                        <span class="font-weight-bold">{{ comment.user.get_name  }}</span>
                         <p class="font-italic">{{ comment.comment_date_received  }}</p>
                         <p class="my-3">{{ comment.message | linebreaksbr  }}</p>
                     </div>
@@ -298,7 +298,7 @@
     <div class="row pt-3 pb-3">
         <div class="col-md-12">
             {% if is_AP %}
-            {% if taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGE REQUIRED' %}
+            {% if taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGES PENDING' %}
             <div class="row">
                 <div class="col-md-8">
                     {% include 'comments.html' %}

@@ -7,7 +7,7 @@ from django_filters import (
 )
 from django.utils.translation import ugettext_lazy as _
 
-from supplier_app import get_taxpayer_status_choices
+from supplier_app.constants.taxpayer_status import get_taxpayer_status_choices
 from supplier_app.models import TaxPayer
 from utils.custom_filters import DateRangeWidget
 

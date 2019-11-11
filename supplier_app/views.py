@@ -17,12 +17,7 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
-from supplier_app import (
-        TAXPAYER_STATUS_APPROVED,
-        TAXPAYER_STATUS_CHANGE_REQUIRED,
-        TAXPAYER_STATUS_DENIED,
-        DATE_FORMAT,
-)
+from supplier_app import DATE_FORMAT
 from supplier_app.change_status_strategy import (
     run_strategy_taxpayer_status,
 )
@@ -38,6 +33,12 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_FORM_INVALID_MESSAGE,
     TAXPAYER_NOT_EXISTS_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
+    TAXPAYER_WORKDAY_UNIQUE_ERROR,
+)
+from supplier_app.constants.taxpayer_status import (
+        TAXPAYER_STATUS_APPROVED,
+        TAXPAYER_STATUS_CHANGE_REQUIRED,
+        TAXPAYER_STATUS_DENIED,
 )
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
@@ -49,7 +50,9 @@ from supplier_app.forms import (
 )
 from supplier_app.exceptions.taxpayer_exceptions import (
     NoWorkdayIDException,
+    TaxpayerUniqueWorkdayId,
 )
+
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -289,7 +292,7 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         self.object.set_current_eb_entities(eb_entities)
         form = self.get_form()
         if request.user.is_supplier:
-            form.instance.change_to_pending_taxpayer()
+            form.instance.set_changes_pending_taxpayer()
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -340,7 +343,7 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
     def post(self, request, *args, **kwargs):
         if request.user.is_supplier:
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
-            taxpayer.change_to_pending_taxpayer()
+            taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
         return super().post(request, *args, **kwargs)
 
@@ -375,7 +378,7 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
     def post(self, request, *args, **kwargs):
         if request.user.is_supplier:
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
-            taxpayer.change_to_pending_taxpayer()
+            taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
         return super().post(request, *args, **kwargs)
 
@@ -490,6 +493,8 @@ def change_taxpayer_status(request, taxpayer_id):
         messages.error(request, EMAIL_ERROR_MESSAGE)
     except NoWorkdayIDException:
         messages.error(request, TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE)
+    except TaxpayerUniqueWorkdayId:
+        messages.error(request, TAXPAYER_WORKDAY_UNIQUE_ERROR)
     finally:
         return redirect(reverse(
             'supplier-details',

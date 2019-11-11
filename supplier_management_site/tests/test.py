@@ -14,7 +14,7 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED
 )
 
-from supplier_app import email_notifications
+from supplier_app.constants.email_notifications import email_notifications
 
 from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,

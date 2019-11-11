@@ -14,7 +14,7 @@ from django.utils.translation import get_language
 from django.shortcuts import get_object_or_404
 from django.core import mail
 
-from supplier_app import TAXPAYER_STATUS_PENDING
+from supplier_app.constants.taxpayer_status import TAXPAYER_STATUS_PENDING
 from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
 from supplier_app.tests.factory_boy import TaxPayerEBEntityFactory
 from users_app.factory_boy import UserFactory

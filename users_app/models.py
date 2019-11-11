@@ -57,6 +57,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+    @property
     def get_name(self):
         if self.username is None:
             return self.email.split('@')[0]

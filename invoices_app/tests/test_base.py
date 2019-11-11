@@ -13,7 +13,7 @@ from django.test import (
 from django.core import mail
 from invoices_app.factory_boy import InvoiceFactory
 
-from supplier_app import TAXPAYER_STATUS_APPROVED
+from supplier_app.constants.taxpayer_status import TAXPAYER_STATUS_APPROVED
 from supplier_app.tests.factory_boy import (
     AddressFactory,
     CompanyFactory,

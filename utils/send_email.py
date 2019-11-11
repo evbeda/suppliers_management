@@ -9,11 +9,11 @@ from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
 )
-from supplier_app import email_notifications
+from supplier_app.constants.email_notifications import email_notifications
 from celery import shared_task
 from utils import GO_TO_BRITESU
 from utils.exceptions import CouldNotSendEmailError
-from supplier_app import (
+from supplier_app.constants.email_notifications import (
     SUPPLIER_HOME_URL,
 )
 
