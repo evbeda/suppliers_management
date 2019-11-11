@@ -22,6 +22,7 @@
                     <textarea name="description" cols="40" rows="10" required="" id="id_description" class='form-control'></textarea>
             </div>
             <input type="submit" value="{% trans 'Create Company' %}" class='btn btn-success m-2'>
+            <a class="btn btn-danger" href="{% url 'company-list' %}">{% trans "Cancel" %}</a>
         </form>
     </div>
     
