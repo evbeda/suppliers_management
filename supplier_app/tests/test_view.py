@@ -335,7 +335,7 @@ class TestCreateTaxPayer(TestCase):
         )
 
         self.assertIn(
-            'supplier_app/taxpayer-creation.html',
+            'supplier_app/Supplier/taxpayer-creation.html',
             response.template_name,
         )
         self.assertEqual(
@@ -360,7 +360,7 @@ class TestCreateTaxPayer(TestCase):
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/taxpayer-creation.html',
+            'supplier_app/Supplier/taxpayer-creation.html',
             response.template_name
         )
         self.assertEqual(
@@ -383,11 +383,11 @@ class TestCreateTaxPayer(TestCase):
             follow=True,
         )
         self.assertIn(
-            'AP_app/ap-taxpayers.html',
+            'supplier_app/ap-taxpayers.html',
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/taxpayer-creation.html',
+            'supplier_app/Supplier/taxpayer-creation.html',
             response.template_name
         )
         self.assertEqual(
@@ -495,7 +495,7 @@ class TestSupplierHome(TestCase):
             follow=True,
         )
         self.assertIn(
-            'AP_app/ap-taxpayers.html',
+            'supplier_app/ap-taxpayers.html',
             response.template_name,
         )
         self.assertNotIn(
@@ -622,7 +622,7 @@ class TestApTaxpayers(TestCase):
         self.client.force_login(self.user_ap)
         response = self.client.get(reverse(self.ap_home_url))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual('AP_app/ap-taxpayers.html', response.template_name[0])
+        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
 
     def test_get_all_taxpayers_list_as_supplier_redirects_to_supplier_home(self):
         self.client.force_login(self.user_with_social_evb1)
@@ -838,7 +838,7 @@ class TestTaxpayerDetailsSupplier(TestCase):
 
     def test_taxpayer_detail_view_as_supplier_render_correct_html(self):
         response = self._get_taxpayer_detail_response()
-        self.assertIn('AP_app/ap-taxpayer-details.html', response.template_name)
+        self.assertIn('supplier_app/taxpayer-details.html', response.template_name)
 
     def test_taxpayer_detail_view_as_supplier_dont_show_approve_denied_btn(self):
         response = self._get_taxpayer_detail_response()
@@ -897,7 +897,7 @@ class TestEditTaxPayerInfo(TestCase):
         )
 
         self.assertEqual(
-            'AP_app/edit-taxpayer-information.html',
+            'supplier_app/edit-taxpayer-information.html',
             response.template_name[0]
         )
 
@@ -1254,7 +1254,7 @@ class TestEditAddressInfo(TestCase):
             )
         )
         self.assertEqual(
-            'AP_app/edit-address-information.html',
+            'supplier_app/edit-address-information.html',
             response.template_name[0]
         )
 
@@ -1380,7 +1380,7 @@ class TestEditBankAccountInfo(TestCase):
             response.status_code
         )
         self.assertEqual(
-            'AP_app/edit-bank-account-information.html',
+            'supplier_app/edit-bank-account-information.html',
             response.template_name[0]
         )
 
@@ -1519,7 +1519,7 @@ class TestCompanyCreateView(TestCase):
         response = self.client.get('/suppliersite/ap/company/create')
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
-            'AP_app/company_creation.html',
+            'supplier_app/AP/company_creation.html',
             response.template_name[0]
         )
 
@@ -1528,7 +1528,7 @@ class TestCompanyCreateView(TestCase):
         response = self.client.get(reverse('company-create'))
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
-            'AP_app/company_creation.html',
+            'supplier_app/AP/company_creation.html',
             response.template_name[0]
         )
 
@@ -1571,7 +1571,7 @@ class TestCompanyListView(TestCase):
 
     def test_company_list_template(self):
         response = self.client.get(reverse('company-list'))
-        self.assertTemplateUsed(response, 'supplier_app/company_list.html')
+        self.assertTemplateUsed(response, 'supplier_app/AP/company_list.html')
 
     def test_company_search(self):
         company_list = [
@@ -1749,7 +1749,7 @@ class TestCompanyJoinView(TestCase):
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/taxpayer-create.html',
+            'supplier_app/Supplier/taxpayer-create.html',
             response.template_name
         )
         self.assertEqual(
@@ -1772,11 +1772,11 @@ class TestCompanyJoinView(TestCase):
             follow=True,
         )
         self.assertIn(
-            'AP_app/ap-taxpayers.html',
+            'supplier_app/ap-taxpayers.html',
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/taxpayer-creat.html',
+            'supplier_app/Supplier/taxpayer-create.html',
             response.template_name
         )
         self.assertEqual(
@@ -2269,7 +2269,7 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(old_name, self.taxpayer.history.last().business_name)
         # latest: means that is updated data
         self.assertEqual(new_name, self.taxpayer.history.latest().business_name)
-        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+        self.assertEqual(response.template_name[0], 'supplier_app/AP/taxpayer-history-list.html')
 
     def test_history_address_should_contain_old_and_new_values(self):
         address = AddressFactory(taxpayer=self.taxpayer)
@@ -2294,7 +2294,7 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(old_street, address.history.last().street)
         # latest: means that is updated data
         self.assertEqual(new_street, address.history.latest().street)
-        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+        self.assertEqual(response.template_name[0], 'supplier_app/AP/taxpayer-history-list.html')
 
     def test_history_bank_account_should_contain_old_and_new_values(self):
         bank_account = BankAccountFactory(
@@ -2322,7 +2322,7 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(old_bank_account_number, bank_account.history.last().bank_account_number)
         # latest: means that is updated data
         self.assertEqual(new_bank_account_number, bank_account.history.latest().bank_account_number)
-        self.assertEqual(response.template_name[0], 'AP_app/taxpayer-history-list.html')
+        self.assertEqual(response.template_name[0], 'supplier_app/AP/taxpayer-history-list.html')
 
 
 class TestTaxpayerCommentView(TestCase):

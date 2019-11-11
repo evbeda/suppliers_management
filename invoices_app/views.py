@@ -152,7 +152,7 @@ class SupplierInvoiceListView(
     ListView
 ):
 
-    template_name = 'supplier_app/invoice-list.html'
+    template_name = 'invoices_app/supplier-invoice-list.html'
     model = Invoice
     paginate_by = 10
     fields = ['id', 'invoice_date', 'invoice_number', 'po_number', 'currency', 'total_amount', 'status']
@@ -178,7 +178,7 @@ class SupplierInvoiceListView(
 class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin, CreateView):
     model = Invoice
     form_class = InvoiceForm
-    template_name = 'supplier_app/invoices_form.html'
+    template_name = 'invoices_app/invoices_form.html'
     permission_required = CAN_CREATE_INVOICES_PERM
     raise_exception = True
 
@@ -230,7 +230,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
 class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPassesTestMixin, UpdateView):
     model = Invoice
     form_class = InvoiceForm
-    template_name = 'supplier_app/invoices_form.html'
+    template_name = 'invoices_app/invoices_form.html'
     redirect_field_name = None
     permission_required = CAN_EDIT_INVOICES_PERM
 

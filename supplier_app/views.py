@@ -88,7 +88,7 @@ from utils.send_email import company_invitation_notification
 class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
-    template_name = 'AP_app/company_creation.html'
+    template_name = 'supplier_app/AP/company_creation.html'
     success_url = reverse_lazy('ap-taxpayers')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
@@ -97,6 +97,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
+    template_name = 'supplier_app/AP/company_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -142,7 +143,7 @@ class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
 
 
 class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
-    template_name = 'supplier_app/taxpayer-creation.html'
+    template_name = 'supplier_app/Supplier/taxpayer-creation.html'
     permission_required = (SUPPLIER_ROLE_PERM, CAN_VIEW_TAXPAYER_PERM, CAN_CREATE_TAXPAYER_PERM)
 
     def get(self, request, *args, **kwargs):
@@ -237,7 +238,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
 
 class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayerArgentina
-    template_name = 'AP_app/ap-taxpayers.html'
+    template_name = 'supplier_app/ap-taxpayers.html'
     filterset_class = TaxPayerFilter
     permission_required = (
         CAN_VIEW_ALL_TAXPAYERS_PERM,
@@ -253,7 +254,7 @@ class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
 
 
 class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
-    template_name = 'AP_app/ap-taxpayer-details.html'
+    template_name = 'supplier_app/taxpayer-details.html'
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
     def handle_no_permission(self):
@@ -275,7 +276,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
 
 
 class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
-    template_name = 'AP_app/edit-taxpayer-information.html'
+    template_name = 'supplier_app/edit-taxpayer-information.html'
     model = TaxPayerArgentina
     form_class = TaxPayerEditForm
     pk_url_kwarg = "taxpayer_id"
@@ -317,7 +318,7 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
 
 
 class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
-    template_name = 'AP_app/edit-address-information.html'
+    template_name = 'supplier_app/edit-address-information.html'
     model = Address
     form_class = AddressCreateForm
     pk_url_kwarg = "address_id"
@@ -349,7 +350,7 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
 
 
 class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
-    template_name = 'AP_app/edit-bank-account-information.html'
+    template_name = 'supplier_app/edit-bank-account-information.html'
     model = BankAccount
     form_class = BankAccountEditForm
     pk_url_kwarg = "bank_id"
@@ -385,7 +386,7 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
 
 class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
     model = TaxPayerArgentina
-    template_name = 'AP_app/taxpayer-history-list.html'
+    template_name = 'supplier_app/AP/taxpayer-history-list.html'
     permission_required = CAN_VIEW_TAXPAYER_HISTORY_PERM
 
     def get_context_data(self, **kwargs):
@@ -402,7 +403,7 @@ class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
 class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, CreateView):
     model = TaxpayerComment
     fields = ['message']
-    template_name = 'comments.html'
+    template_name = 'supplier_app/comments.html'
     permission_required = CAN_EDIT_TAXPAYER_PERM
 
     def handle_no_permission(self):

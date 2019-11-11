@@ -121,7 +121,7 @@ class TestLoginRedirect(TestCase):
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
-        self.assertEqual('AP_app/ap-taxpayers.html', response.template_name[0])
+        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
 
     def test_ap_site_permission_invoice_list(self):
         self.client.force_login(self.user_with_google_social)
