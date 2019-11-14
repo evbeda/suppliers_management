@@ -288,7 +288,7 @@ class CommentsTest(TestBase):
         # Then it redirects to InvoiceDetailView
         self.assertRedirects(
             response,
-            '/invoices/taxpayer/{}/detail/{}/'.format(
+            '/users/taxpayer/{}/invoice/{}/'.format(
                 self.invoice.taxpayer.id,
                 self.invoice.id,
             )

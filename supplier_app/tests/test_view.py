@@ -138,6 +138,8 @@ class TestCreateTaxPayer(TestCase):
             afip_file=self.file_mock,
             bank_info=self.bank_info,
         )
+        self.supplier_home_url = reverse('supplier-home')
+        self.taxpayer_create_url = reverse('taxpayer-create')
 
     def tearDown(self):
         if self.file_mock and path.exists(
@@ -191,14 +193,14 @@ class TestCreateTaxPayer(TestCase):
 
     def test_get_success_url_should_redirect_to_home(self):
         self.assertEqual(
-            '/suppliersite/supplier',
+            self.supplier_home_url,
             self.create_taxpayer_view.get_success_url()
             )
 
     def _taxpayer_creation_request(self):
         eb_entity = EBEntityFactory()
         request = self.factory.post(
-            '/suppliersite/supplier/taxpayer/create',
+            self.taxpayer_create_url,
             data=taxpayer_creation_POST_factory(eb_entity.id),
             )
         request.user = self.user_with_eb_social
@@ -331,7 +333,7 @@ class TestCreateTaxPayer(TestCase):
     def test_logged_in_supplier_can_create_taxpayer(self):
 
         response = self.client.get(
-            reverse('taxpayer-create'),
+            self.taxpayer_create_url,
         )
 
         self.assertIn(
@@ -352,7 +354,7 @@ class TestCreateTaxPayer(TestCase):
         supplier_user.groups.add(self.supplier_group)
 
         response = client.get(
-            reverse('taxpayer-create'),
+            self.taxpayer_create_url,
             follow=True
         )
         self.assertIn(
@@ -379,7 +381,7 @@ class TestCreateTaxPayer(TestCase):
 
         client.force_login(user_without_supplier_permission)
         response = client.get(
-            reverse('taxpayer-create'),
+            self.taxpayer_create_url,
             follow=True,
         )
         self.assertIn(
@@ -1516,7 +1518,7 @@ class TestCompanyCreateView(TestCase):
 
     def test_get_template_as_ap(self):
         self.client.force_login(self.ap_user)
-        response = self.client.get('/suppliersite/ap/company/create')
+        response = self.client.get(reverse('company-create'))
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
             'supplier_app/AP/company_creation.html',
@@ -1796,6 +1798,7 @@ class TestCompanyJoin(TestCase):
         self.user.groups.add(self.supplier_group)
         self.client.force_login(self.user)
         self.url_company_join = 'company-join'
+        self.supplier_home_url = 'supplier-home'
 
     def test_user_has_company_once_he_access_to_the_page_by_mail(self):
         company_unique_token = CompanyUniqueTokenFactory()
@@ -1820,7 +1823,7 @@ class TestCompanyJoin(TestCase):
         )
         self.assertEqual(
             response.url,
-            '/suppliersite/supplier'
+            reverse(self.supplier_home_url)
         )
 
     def test_compnay_unique_token_is_deleted_once_user_joins_company(self):
@@ -2259,7 +2262,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': self.taxpayer.id}
+                kwargs={'taxpayer_id': self.taxpayer.id}
                 ),
         )
         self.assertContains(response, old_name)
@@ -2283,7 +2286,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': address.taxpayer.id}
+                kwargs={'taxpayer_id': address.taxpayer.id}
                 ),
         )
 
@@ -2311,7 +2314,7 @@ class TestTaxpayerHistory(TestCase):
         response = self.client.get(
             reverse(
                 'taxpayer-history',
-                kwargs={'pk': bank_account.taxpayer.id}
+                kwargs={'taxpayer_id': bank_account.taxpayer.id}
                 ),
         )
 

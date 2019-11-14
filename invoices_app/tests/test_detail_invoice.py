@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from invoices_app.tests.test_base import TestBase
 
+
 class DetailInvoiceTest(TestBase):
 
     def test_click_in_row_invoice_redirects_to_detail_invoice(self):
@@ -33,7 +34,7 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             response.url,
-            '/?next=/invoices/taxpayer/{}/detail/{}/'.format(
+            '/?next=/users/taxpayer/{}/invoice/{}/'.format(
                 self.invoice.taxpayer.id,
                 self.invoice.id
             ),
@@ -55,7 +56,7 @@ class DetailInvoiceTest(TestBase):
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
         self.assertEqual(
             response.url,
-            '/?next=/invoices/taxpayer/{}/detail/{}/'.format(
+            '/?next=/users/taxpayer/{}/invoice/{}/'.format(
                 self.invoice_from_other_user.taxpayer.id,
                 self.invoice_from_other_user.id
             ),

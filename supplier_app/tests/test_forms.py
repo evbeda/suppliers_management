@@ -167,7 +167,7 @@ class TestTaxPayerFormValidation(TestCase):
         attr
     ):
         request = self.factory.post(
-            '/suppliersite/supplier/taxpayer/create',
+            reverse(self.taxpayer_creation_url),
             data=self.POST
         )
         request.user = self.user_with_eb_social
@@ -194,7 +194,7 @@ class TestTaxPayerFormValidation(TestCase):
         attr
     ):
         request = self.factory.post(
-            'suppliersite/supplier/taxpayer/create',
+            reverse(self.taxpayer_creation_url),
             data=self.POST
         )
         request.user = self.user_with_eb_social
@@ -218,7 +218,7 @@ class TestTaxPayerFormValidation(TestCase):
         mocked_valid_form,
     ):
         request = self.factory.post(
-            '/suppliersite/supplier/taxpayer/create',
+            reverse(self.taxpayer_creation_url),
             data=self.POST,
         )
         request.user = self.user_with_eb_social
@@ -235,7 +235,7 @@ class TestTaxPayerFormValidation(TestCase):
         mocked_invalid_form
     ):
         self.client.post(
-            '/suppliersite/supplier/taxpayer/create',
+            reverse(self.taxpayer_creation_url),
             {'asda': 'asd'}
         )
         mocked_invalid_form.assert_called()
