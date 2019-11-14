@@ -103,7 +103,6 @@ from supplier_app.views import (
     CreateTaxPayerView,
     CompanyUserPermission,
     EditTaxpayerView,
-    SupplierHome,
 )
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
@@ -430,20 +429,21 @@ class TestSupplierHome(TestCase):
         self.supplier_user.groups.add(self.supplier_group)
 
         self.supplier_home_url = 'supplier-home'
+        self.supplier_home_template = 'supplier_app/ap-taxpayers.html'
 
-    def test_get_taxpayers_child(self):
-        request = self.factory.get('/suppliersite/home')
-        request.user = self.user_with_social_evb
+    # def test_get_taxpayers_child(self):
+    #     request = self.factory.get(self.supplier_home_url)
+    #     request.user = self.user_with_social_evb
 
-        supplier_home = SupplierHome()
-        supplier_home.request = request
-        taxpayer_list = supplier_home.get_taxpayers()
+    #     supplier_home = SupplierHome()
+    #     supplier_home.request = request
+    #     taxpayer_list = supplier_home.get_taxpayers()
 
-        self.assertEqual(
-            type(taxpayer_list[0]),
-            TaxPayerArgentina
-        )
-        self.assertGreaterEqual(len(taxpayer_list), 1)
+    #     self.assertEqual(
+    #         type(taxpayer_list[0]),
+    #         TaxPayerArgentina
+    #     )
+    #     self.assertGreaterEqual(len(taxpayer_list), 1)
 
     def test_logged_in_supplier_can_access_supplier_home(self):
 
@@ -453,7 +453,7 @@ class TestSupplierHome(TestCase):
         )
 
         self.assertIn(
-            'supplier_app/supplier-home.html',
+            self.supplier_home_template,
             response.template_name,
         )
         self.assertEqual(
@@ -475,7 +475,7 @@ class TestSupplierHome(TestCase):
             response.template_name,
         )
         self.assertNotIn(
-            'supplier_app/supplier-home.html',
+            self.supplier_home_template,
             response.template_name
         )
         self.assertEqual(
@@ -484,32 +484,6 @@ class TestSupplierHome(TestCase):
         )
         self.assertTrue(
             self.supplier_user.groups.filter(name='supplier').exists()
-        )
-
-    def test_users_without_required_permission_cant_access_supplier_home(self):
-        user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
-        ap_group = Group.objects.get(name='ap_admin')
-        user_without_supplier_permission.groups.add(ap_group)
-
-        self.client.force_login(user_without_supplier_permission)
-        response = self.client.get(
-            reverse(self.supplier_home_url),
-            follow=True,
-        )
-        self.assertIn(
-            'supplier_app/ap-taxpayers.html',
-            response.template_name,
-        )
-        self.assertNotIn(
-            'supplier_app/supplier-home.html',
-            response.template_name
-        )
-        self.assertEqual(
-            response.status_code,
-            HTTPStatus.OK
-        )
-        self.assertFalse(
-            user_without_supplier_permission.groups.filter(name='supplier').exists()
         )
 
 
@@ -632,7 +606,7 @@ class TestApTaxpayers(TestCase):
             reverse(self.ap_home_url),
             follow=True
         )
-        self.assertEqual('supplier_app/supplier-home.html', response.template_name[0])
+        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
 
@@ -1656,6 +1630,7 @@ class TestCompanyJoinView(TestCase):
         self.url_company_select = 'company-selection'
         self.url_company_join = 'company-join'
         self.client.force_login(self.user)
+        self.supplier_home_template = 'supplier_app/ap-taxpayers.html'
 
     def _get_company_join_response(self, token=None):
 
@@ -1676,9 +1651,9 @@ class TestCompanyJoinView(TestCase):
             response.status_code,
             HTTPStatus.OK
         )
-        self.assertEqual(
+        self.assertIn(
+            self.supplier_home_template,
             response.template_name,
-            ['supplier_app/supplier-home.html']
         )
 
     @patch(
@@ -1710,7 +1685,10 @@ class TestCompanyJoinView(TestCase):
     def test_database_error_on_join_company_should_redirect_to_home_with_error_msg(self, db_error):
         company_unique_token = CompanyUniqueTokenFactory()
         response = self._get_company_join_response(company_unique_token.token)
-        self.assertIn('supplier_app/supplier-home.html', response.template_name)
+        self.assertIn(
+            self.supplier_home_template,
+            response.template_name,
+        )
         self.assertContains(response, JOIN_COMPANY_ERROR_MESSAGE)
 
     def test_join_is_invalid_once_toke_is_used_by_user(self):
@@ -1726,7 +1704,7 @@ class TestCompanyJoinView(TestCase):
         company_unique_token = CompanyUniqueTokenFactory()
         response = self._get_company_join_response(company_unique_token.token)
         self.assertIn(
-            'supplier_app/supplier-home.html',
+            self.supplier_home_template,
             response.template_name,
         )
         self.assertEqual(

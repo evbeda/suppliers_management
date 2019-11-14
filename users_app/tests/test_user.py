@@ -112,7 +112,7 @@ class TestLoginRedirect(TestCase):
         response = self.client.get(SUPPLIER_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
-            'supplier_app/supplier-home.html',
+            'supplier_app/ap-taxpayers.html',
             response.template_name[0]
         )
 
@@ -145,18 +145,16 @@ class TestLoginRedirect(TestCase):
         user.groups.add(self.supplier_group)
         self.client.force_login(user)
         response = self.client.get(
-            reverse('ap-taxpayers'),
+            reverse('company-create'),
             follow=True,
         )
         self.assertIn(
-            (
-                (reverse('supplier-home'), 302)
-            ),
+            (reverse('supplier-home'), 302),
             response.redirect_chain
             )
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn(
-            'supplier_app/supplier-home.html',
+            'supplier_app/ap-taxpayers.html',
             response.template_name,
         )
 
@@ -166,7 +164,7 @@ class TestLoginRedirect(TestCase):
             reverse('login'),
             follow=True,
         )
-        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain] )
+        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain])
 
     def test_supplier_authenticated_access_login_view_should_redirect_to_supplier_home(self):
         self.client.force_login(self.user_with_eb_social)

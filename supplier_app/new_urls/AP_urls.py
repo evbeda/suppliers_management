@@ -1,9 +1,9 @@
 from django.conf.urls import url, include
 
 from supplier_app.views import (
-    ApTaxpayers,
     CompanyCreatorView,
     CompanyListView,
+    SupplierHome,
     TaxpayerHistory,
     change_taxpayer_status,
     company_invite,
@@ -34,7 +34,7 @@ admins_pattern = [
 ]
 
 urlpatterns = [
-    url(r'^$', ApTaxpayers.as_view(), name='ap-taxpayers'),
+    url(r'^$', SupplierHome.as_view(), name='ap-taxpayers'),
     url(r'^admin/', include(admins_pattern)),
     url(r'^company/', include(company_pattern)),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern)),

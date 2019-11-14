@@ -115,7 +115,7 @@ class CompanyListView(LoginRequiredMixin, ListView):
 
 class SupplierHome(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayer
-    template_name = 'AP_app/ap-taxpayers.html'
+    template_name = 'supplier_app/ap-taxpayers.html'
     filterset_class = TaxPayerFilter
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
