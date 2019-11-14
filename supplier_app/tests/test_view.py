@@ -1598,8 +1598,9 @@ class TestCompanyListView(TestCase):
 
 class TestCompanyInvite(TestCase):
     def setUp(self):
-        CompanyFactory()
+        self.company = CompanyFactory()
         self.client = Client()
+        self.user = UserFactory(email='abcd@abcd.com')
 
     def _make_post(self, language='en'):
         response = self.client.post(
@@ -1611,6 +1612,20 @@ class TestCompanyInvite(TestCase):
             },
         )
         return response
+
+    def test_list_sent_email_from_registered_users_in_list_company(
+        self,
+    ):
+        self.client.force_login(self.user)
+        CompanyUserPermissionFactory(
+            user=self.user,
+            company=self.company
+        )
+        response = self.client.get(
+            reverse('company-list'),
+            follow=True,
+        )
+        self.assertContains(response, f'{self.user.email}')
 
     def test_company_invite_sends_email_notification_in_spanish(self,):
         self._make_post("es")

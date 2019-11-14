@@ -101,7 +101,24 @@ class CompanyListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_companies'] = Company.objects.values('name')
+
+        all_companies_user_emails = []
+
+        for company in context['object_list']:
+            emails = CompanyUserPermission.objects\
+                .filter(company=company) \
+                .select_related('user') \
+                .values('user__email') \
+                .distinct()
+
+            all_companies_user_emails.append({
+                'name': company.name,
+                'description': company.description,
+                'users_email': '\n'.join([email['user__email'] for email in emails])
+            })
+
+        context['all_companies_user_emails'] = all_companies_user_emails
+
         return context
 
     def get_queryset(self):
