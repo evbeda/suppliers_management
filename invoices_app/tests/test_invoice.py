@@ -27,7 +27,6 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
     INVOICE_MAX_SIZE_FILE,
     NO_WORKDAY_ID_ERROR,
-    INVALID_WORKDAY_ID_ERROR,
 )
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
@@ -326,7 +325,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.ap_user)
         request = self.client.post(
             reverse(
-                'approve-invoice',
+                'change-invoice-status',
                 kwargs={
                     'pk': self.invoice.id,
                 }
@@ -342,7 +341,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.ap_user)
         self.client.post(
             reverse(
-                'approve-invoice',
+                'change-invoice-status',
                 kwargs={
                     'pk': self.invoice.id,
                 }
@@ -362,7 +361,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.ap_user)
         request = self.client.post(
             reverse(
-                'approve-invoice',
+                'change-invoice-status',
                 kwargs={
                     'pk': self.invoice.id,
                 }
@@ -378,7 +377,7 @@ class TestInvoice(TestBase):
         self.client.force_login(self.ap_user)
         response = self.client.post(
             reverse(
-                'approve-invoice',
+                'change-invoice-status',
                 kwargs={
                     'pk': self.invoice.id,
                 }
@@ -389,7 +388,7 @@ class TestInvoice(TestBase):
             },
             follow=True
         )
-        self.assertContains(response, INVALID_WORKDAY_ID_ERROR)
+        self.assertContains(response, 'Enter a valid integer.')
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)

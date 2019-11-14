@@ -21,7 +21,6 @@ from django.urls import (
     reverse,
     reverse_lazy
 )
-from django.core.validators import validate_integer
 from django.utils.translation import (
     ugettext_lazy as _,
     activate,
@@ -35,49 +34,9 @@ from bootstrap_datepicker_plus import DatePickerInput
 from django_filters.views import FilterView
 from pure_pagination.mixins import PaginationMixin
 
-from invoices_app import (
-    DEFAULT_NUMBER_PAGINATION,
-    INVOICE_STATUS_APPROVED,
-    INVOICE_STATUS_CHANGES_REQUEST,
-    INVOICE_STATUS_PENDING,
-    INVOICE_STATUS_PAID,
-    INVOICE_STATUS_REJECTED,
-    ENGLISH_LANGUAGE_CODE,
-    EXPORT_TO_XLS_FULL,
-    INVOICE_DATE_FORMAT,
-    INVOICE_MAX_SIZE_FILE,
-    NO_COMMENT_ERROR,
-    NO_WORKDAY_ID_ERROR,
-    INVALID_WORKDAY_ID_ERROR,
-    AVAILABLE_INVOICE_STATUS_CHANGES,
-    THANK_YOU,
-    EVENTBRITE_INVOICE_COMMENTED,
-    NEW_COMMENT_EMAIL_TEXT,
-    INVOICE_CHANGE_STATUS_TEXT_EMAIL,
-    EVENTBRITE_INVOICE_EDITED,
-    INVOICE_EDIT_INVOICE_UPPER_TEXT
-)
-from users_app import (
-    CAN_EDIT_INVOICES_PERM,
-    CAN_CHANGE_INVOICE_STATUS_PERM,
-    CAN_CREATE_INVOICES_PERM,
-    CAN_VIEW_ALL_INVOICES_PERM,
-    CAN_VIEW_ALL_TAXPAYERS_PERM,
-    CAN_VIEW_INVOICES_PERM,
-    CAN_VIEW_INVOICES_HISTORY_PERM,
-    CAN_VIEW_SUPPLIER_INVOICES_PERM,
-)
-from invoices_app.filters import InvoiceFilter
-from invoices_app.forms import InvoiceForm
-from invoices_app.models import (
-    Invoice,
-    Comment
-)
-
 from supplier_app import (
     DATE_FORMAT,
 )
-
 from supplier_app.constants.taxpayer_status import TAXPAYER_STATUS_APPROVED
 from supplier_app.models import (
     Address,
@@ -85,10 +44,23 @@ from supplier_app.models import (
     TaxPayer,
 )
 
+from users_app import (
+    CAN_CHANGE_INVOICE_STATUS_PERM,
+    CAN_CREATE_INVOICES_PERM,
+    CAN_EDIT_INVOICES_PERM,
+    CAN_VIEW_ALL_INVOICES_PERM,
+    CAN_VIEW_ALL_TAXPAYERS_PERM,
+    CAN_VIEW_INVOICES_PERM,
+    CAN_VIEW_INVOICES_HISTORY_PERM,
+    CAN_VIEW_SUPPLIER_INVOICES_PERM,
+)
 from users_app.decorators import (
     is_invoice_for_user,
 )
-from users_app.mixins import IsUserCompanyInvoice, TaxPayerPermissionMixin
+from users_app.mixins import (
+    IsUserCompanyInvoice,
+    TaxPayerPermissionMixin
+)
 from users_app.models import User
 
 from utils.file_validator import validate_file
@@ -103,6 +75,36 @@ from utils.send_email import (
     build_mail_html,
     get_user_emails_by_tax_payer_id,
     send_email_notification
+)
+
+from invoices_app import (
+    DEFAULT_NUMBER_PAGINATION,
+    ENGLISH_LANGUAGE_CODE,
+    EVENTBRITE_INVOICE_COMMENTED,
+    EVENTBRITE_INVOICE_EDITED,
+    EXPORT_TO_XLS_FULL,
+    INVOICE_CHANGE_STATUS_TEXT_EMAIL,
+    INVOICE_DATE_FORMAT,
+    INVOICE_EDIT_INVOICE_UPPER_TEXT,
+    INVOICE_STATUS,
+    INVOICE_STATUS_APPROVED,
+    INVOICE_STATUS_CHANGES_REQUEST,
+    INVOICE_STATUS_PENDING,
+    INVOICE_STATUS_PAID,
+    INVOICE_STATUS_REJECTED,
+    INVOICE_MAX_SIZE_FILE,
+    NEW_COMMENT_EMAIL_TEXT,
+    NO_COMMENT_ERROR,
+    NO_WORKDAY_ID_ERROR,
+    THANK_YOU,
+)
+
+from invoices_app.change_status_strategy import get_change_status_strategy
+from invoices_app.filters import InvoiceFilter
+from invoices_app.forms import InvoiceForm
+from invoices_app.models import (
+    Invoice,
+    Comment
 )
 
 
@@ -322,101 +324,36 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
 @permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
 @is_invoice_for_user()
 def change_invoice_status(request, pk):
+
     status = request.POST.get('status')
 
-    if status not in AVAILABLE_INVOICE_STATUS_CHANGES:
+    if status not in [status for status, _ in INVOICE_STATUS]:
         return HttpResponseBadRequest()
 
+    strategy = get_change_status_strategy(status)
     invoice = get_object_or_404(Invoice, pk=pk)
-    invoice.status = status
-    invoice.save()
 
+    try:
+        strategy(invoice, status, request)
+    except ValidationError as err:
+        messages.error(request, err.message)
+        return redirect(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': invoice.taxpayer.id,
+                    'pk': pk,
+                }
+            )
+        )
+
+    invoice.save()
     _send_email_when_change_invoice_status(request, invoice)
 
     return redirect(
         '{}?status={}'.format(
             reverse('invoices-list'),
             invoice_status_lookup(INVOICE_STATUS_PENDING)
-        )
-    )
-
-
-@permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
-def approve_invoice(request, pk):
-    status = request.POST.get('status')
-    workday_id = request.POST.get('workday_id')
-    invoice = get_object_or_404(Invoice, pk=pk)
-    if status == invoice_status_lookup(INVOICE_STATUS_APPROVED) and not request.POST.get('workday_id'):
-        messages.error(request, NO_WORKDAY_ID_ERROR)
-        return redirect(
-            reverse(
-                'invoices-detail',
-                kwargs={
-                    'taxpayer_id': invoice.taxpayer.id,
-                    'pk': pk,
-                }
-            )
-        )
-    try:
-        validate_integer(workday_id)
-    except ValidationError:
-        messages.error(request, INVALID_WORKDAY_ID_ERROR)
-        return redirect(
-            reverse(
-                'invoices-detail',
-                kwargs={
-                    'taxpayer_id': invoice.taxpayer.id,
-                    'pk': pk,
-                }
-            )
-        )
-    invoice.status = status
-    invoice.workday_id = workday_id
-    invoice.save()
-
-    _send_email_when_change_invoice_status(request, invoice)
-
-    return redirect(
-        reverse(
-            'invoices-detail',
-            kwargs={
-                'taxpayer_id': invoice.taxpayer.id,
-                'pk': pk,
-            }
-        )
-    )
-
-
-@permission_required_decorator(CAN_CHANGE_INVOICE_STATUS_PERM, raise_exception=True)
-def request_changes_invoice(request, pk):
-    status = request.POST.get('status')
-    message = request.POST.get('message')
-    invoice = get_object_or_404(Invoice, pk=pk)
-    if status == invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST) and not message:
-        messages.error(request, NO_COMMENT_ERROR)
-        return redirect(
-            reverse(
-                'invoices-detail',
-                kwargs={
-                    'taxpayer_id': invoice.taxpayer.id,
-                    'pk': pk,
-                }
-            )
-        )
-
-    invoice.status = status
-    invoice.changeReason = message
-    invoice.save()
-
-    _send_email_when_change_invoice_status(request, invoice)
-
-    return redirect(
-        reverse(
-            'invoices-detail',
-            kwargs={
-                'taxpayer_id': invoice.taxpayer.id,
-                'pk': pk,
-            }
         )
     )
 
