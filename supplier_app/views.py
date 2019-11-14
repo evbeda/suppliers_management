@@ -113,25 +113,25 @@ class CompanyListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
+class SupplierHome(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayer
-    template_name = 'supplier_app/supplier-home.html'
-    permission_required = (SUPPLIER_ROLE_PERM, CAN_VIEW_TAXPAYER_PERM)
+    template_name = 'AP_app/ap-taxpayers.html'
+    filterset_class = TaxPayerFilter
+    permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayers'] = self.get_taxpayers()
-        context['user_has_company'] = self._user_has_company()
+        if self.request.user.is_supplier:
+            context['taxpayer_list'] = self.get_supplier_taxpayers()
+            context['user_has_company'] = self._user_has_company()
         return context
 
-    def get_taxpayers(self):
+    def get_supplier_taxpayers(self):
         user = self.request.user
         taxpayer_list = TaxPayer.objects.filter(
             company__companyuserpermission__user=user
         )
-        taxpayer_child = [tax.get_taxpayer_child() for tax in taxpayer_list]
-
-        return taxpayer_child
+        return taxpayer_list
 
     def _user_has_company(self):
         user = self.request.user
@@ -140,6 +140,23 @@ class SupplierHome(UserLoginPermissionRequiredMixin, TemplateView):
             return False
         else:
             return True
+
+
+class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
+    model = TaxPayerArgentina
+    template_name = 'AP_app/ap-taxpayers.html'
+    filterset_class = TaxPayerFilter
+    permission_required = (
+        CAN_VIEW_ALL_TAXPAYERS_PERM,
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        queryset = TaxPayer.objects.filter()
+        return queryset
 
 
 class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
@@ -234,23 +251,6 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             )
         finally:
             return HttpResponseRedirect(self.get_success_url())
-
-
-class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
-    model = TaxPayerArgentina
-    template_name = 'supplier_app/ap-taxpayers.html'
-    filterset_class = TaxPayerFilter
-    permission_required = (
-        CAN_VIEW_ALL_TAXPAYERS_PERM,
-    )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-    def get_queryset(self):
-        queryset = TaxPayer.objects.filter()
-        return queryset
 
 
 class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
