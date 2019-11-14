@@ -17,7 +17,7 @@ from users_app.factory_boy import (
 )
 from users_app.forms import UserAdminForm
 
-SUPPLIER_HOME = '/suppliersite/supplier'
+SUPPLIER_HOME = reverse('supplier-home')
 AP_HOME = reverse('ap-taxpayers')
 
 
