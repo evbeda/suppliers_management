@@ -17,8 +17,7 @@ from users_app.factory_boy import (
 )
 from users_app.forms import UserAdminForm
 
-SUPPLIER_HOME = reverse('supplier-home')
-AP_HOME = reverse('ap-taxpayers')
+HOME = reverse('home')
 
 
 class TestUser(TestCase):
@@ -90,14 +89,14 @@ class TestLoginRedirect(TestCase):
         self.user_with_google_social.groups.add(self.ap_group)
 
     def test_login_fail_should_redirect_to_loginfailview(self):
-        response_supplier = self.client.get(SUPPLIER_HOME, follow=True)
-        response_ap = self.client.get(AP_HOME, follow=True)
+        response_supplier = self.client.get(HOME, follow=True)
+        response_ap = self.client.get(HOME, follow=True)
         url_ap, status_code_ap = response_ap.redirect_chain[0]
         url_sup, status_code_sup = response_supplier.redirect_chain[0]
         self.assertEqual(HTTPStatus.FOUND, status_code_ap)
-        self.assertEqual('/?next={}'.format(AP_HOME), url_ap)
+        self.assertEqual('/?next={}'.format(HOME), url_ap)
         self.assertEqual(HTTPStatus.FOUND, status_code_sup)
-        self.assertEqual('/?next={}'.format(SUPPLIER_HOME), url_sup)
+        self.assertEqual('/?next={}'.format(HOME), url_sup)
 
     def test_login_success_with_EB_should_redirect_to_supplier(self):
         company = CompanyFactory(
@@ -109,19 +108,19 @@ class TestLoginRedirect(TestCase):
             company=company
         )
         self.client.force_login(self.user_with_eb_social)
-        response = self.client.get(SUPPLIER_HOME, follow=True)
+        response = self.client.get(HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
-            'supplier_app/ap-taxpayers.html',
+            'supplier_app/home.html',
             response.template_name[0]
         )
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
         self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.user_with_google_social)
-        response = self.client.get(AP_HOME, follow=True)
+        response = self.client.get(HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
-        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
+        self.assertEqual('supplier_app/home.html', response.template_name[0])
 
     def test_ap_site_permission_invoice_list(self):
         self.client.force_login(self.user_with_google_social)
@@ -135,7 +134,7 @@ class TestLoginRedirect(TestCase):
         self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(
-            reverse('ap-taxpayers'),
+            reverse('home'),
             follow=True,
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
@@ -149,12 +148,12 @@ class TestLoginRedirect(TestCase):
             follow=True,
         )
         self.assertIn(
-            (reverse('supplier-home'), 302),
+            (reverse('home'), 302),
             response.redirect_chain
             )
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertIn(
-            'supplier_app/ap-taxpayers.html',
+            'supplier_app/home.html',
             response.template_name,
         )
 
@@ -164,15 +163,15 @@ class TestLoginRedirect(TestCase):
             reverse('login'),
             follow=True,
         )
-        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain])
+        self.assertIn(HOME, [red[0] for red in response.redirect_chain])
 
-    def test_supplier_authenticated_access_login_view_should_redirect_to_supplier_home(self):
+    def test_supplier_authenticated_access_login_view_should_redirect_to__home(self):
         self.client.force_login(self.user_with_eb_social)
         response = self.client.get(
             reverse('login'),
             follow=True,
         )
-        self.assertIn(SUPPLIER_HOME, [red[0] for red in response.redirect_chain])
+        self.assertIn(HOME, [red[0] for red in response.redirect_chain])
 
 
 class TestAdmin(TestCase):

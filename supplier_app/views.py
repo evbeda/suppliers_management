@@ -75,7 +75,6 @@ from users_app import (
     CAN_EDIT_TAXPAYER_ADDRESS_PERM,
     CAN_EDIT_TAXPAYER_BANK_ACCOUNT_PERM,
     CAN_EDIT_TAXPAYER_PERM,
-    CAN_VIEW_ALL_TAXPAYERS_PERM,
     CAN_VIEW_TAXPAYER_HISTORY_PERM,
     CAN_VIEW_TAXPAYER_PERM,
     COMPANY_USER_CAN_APPROVE_PERM,
@@ -89,7 +88,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'supplier_app/AP/company_creation.html'
-    success_url = reverse_lazy('ap-taxpayers')
+    success_url = reverse_lazy('company-list')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
     )
@@ -115,7 +114,7 @@ class CompanyListView(LoginRequiredMixin, ListView):
 
 class SupplierHome(UserLoginPermissionRequiredMixin, FilterView):
     model = TaxPayer
-    template_name = 'supplier_app/ap-taxpayers.html'
+    template_name = 'supplier_app/home.html'
     filterset_class = TaxPayerFilter
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
@@ -140,23 +139,6 @@ class SupplierHome(UserLoginPermissionRequiredMixin, FilterView):
             return False
         else:
             return True
-
-
-class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
-    model = TaxPayerArgentina
-    template_name = 'AP_app/ap-taxpayers.html'
-    filterset_class = TaxPayerFilter
-    permission_required = (
-        CAN_VIEW_ALL_TAXPAYERS_PERM,
-    )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-    def get_queryset(self):
-        queryset = TaxPayer.objects.filter()
-        return queryset
 
 
 class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormView):
@@ -196,7 +178,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         }
 
     def get_success_url(self):
-        return reverse('supplier-home')
+        return reverse('home')
 
     def forms_are_valid(self, forms):
         return all([form.is_valid() for form in forms.values()])
@@ -470,7 +452,7 @@ def company_join(request, *args, **kwargs):
         except DatabaseError:
             messages.error(request, JOIN_COMPANY_ERROR_MESSAGE)
         finally:
-            return redirect('supplier-home')
+            return redirect('home')
     return HttpResponseRedirect(Http404)
 
 

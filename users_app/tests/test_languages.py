@@ -53,7 +53,7 @@ class TestLanguageSelection(TestCase):
             email='sup@gmail.com',
         )
         self.user.groups.add(Group.objects.get(name='supplier'))
-        self.home = 'supplier-home'
+        self.home = 'home'
         self.taxpayer_create = 'taxpayer-create'
 
     def tearDown(self):

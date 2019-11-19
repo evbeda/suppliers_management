@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block styles %}
+{% load static %}
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="row w-100">
+    <div class="col-md-11">
+    	{% include 'messages_notification.html'%}
+    	<h1 class="text-center">
+    	    {% trans "Taxpayers" %}
+        </h1>
+    </div>
+    <div class="col-md-11 mt-3">
+	{% if user.is_AP %}
+    	    {% include 'supplier_app/AP/taxpayer_filter.html' %}
+    	{% endif %}
+    </div>
+    <div class="col-md-11 d-flex">
+    	<div class="col-md-2">
+    	    {% if user_has_company %}
+    		<a class='btn btn-primary' href="{% url 'taxpayer-create' %}">
+    	    	    <i class="fa fa-plus"></i> {% trans "new taxpayer" %}
+    	   	</a>
+    	    {% endif %}
+    	</div>
+    	<div class="col-md-10  min-height">
+	    <table class="table table-hover table-striped table-sm">
+	    	<thead class="thead-eb-dark text-center">
+		    <tr>
+		    	<th scope="col">{% trans "Business name"%}</th>
+		    	<th scope="col">{% trans "Taxpayer Identification Number"%}</th>
+		    	<th scope="col">{% trans "Status"%}</th>
+		    	<th scope="col">{% trans "Options" %}</th>
+		    </tr>
+	    	</thead>
+	    	<tbody class="text-center">
+		    {% for taxpayer in taxpayer_list %}
+			<tr>
+		    	    <td>{{taxpayer.business_name}}</td>
+		    	    <td>{{taxpayer.taxpayer_identifier}}</td>
+		    	    <td>
+			    <span class="{{taxpayer.get_badge}}">
+			        {{taxpayer.get_taxpayer_state_display}}
+			    </span>
+		            </td>
+		    	    <td>
+    	    			{% if user_has_company %}
+			       	    <a class='btn btn-info' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">
+			            	{% trans "Invoices" %}
+			    	    </a>
+    	    			{% endif %}
+			    	<a class='btn btn-info' href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">
+			    	    {% trans "Details" %}
+			    	</a>
+		            </td>
+			</tr>
+		    {% endfor %}
+	    	</tbody>
+	    </table>
+    	</div>
+    </div>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark justify-content-between blue-eb">
 
     {% if perms.users_app.ap_role %}
-    <a class="navbar navbar-brand text-white" href="{% url 'ap-taxpayers' %}">
+    <a class="navbar navbar-brand text-white" href="{% url 'home' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
         AP
     </a>
@@ -20,7 +20,7 @@
                             <i class="fa fa-file-invoice mr-1"></i>
                             {% trans "Invoices" %}
                     </a>
-                    <a class="dropdown-item" href="{% url 'ap-taxpayers' %}">
+                    <a class="dropdown-item" href="{% url 'home' %}">
                         <i class="fa fa-store"></i>{% trans "Taxpayers" %}
                     </a>
                     {% if perms.users_app.can_manage_aps %}
@@ -50,7 +50,7 @@
         </ul>
     </div>
     {% else %}
-    <a class="navbar navbar-brand" href="{% url 'supplier-home' %}">
+    <a class="navbar navbar-brand" href="{% url 'home' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
         {% trans "Supplier" %}
     </a>
@@ -63,7 +63,7 @@
                     {% trans "Taxpayers" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'supplier-home' %}"><i
+                    <a class="dropdown-item" href="{% url 'home' %}"><i
                             class="fas fa-building mr-2"></i>{% trans "My Taxpayers" %}</a>
                     <a class="dropdown-item" href="{% url 'taxpayer-create' %}"> <i
                             class="fa fa-plus mr-2"></i>{% trans "New Taxpayer" %}</a>

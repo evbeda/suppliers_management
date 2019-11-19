@@ -84,7 +84,7 @@ msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 
 #: invoices_app/filters.py:38 invoices_app/models.py:39
 #: templates/AP_app/ap-taxpayer-details.html:28
-#: templates/AP_app/ap-taxpayers.html:25
+#: templates/AP_app/home.html:25
 #: templates/invoices_app/history-list.html:27
 #: templates/invoices_app/invoice-list.html:36
 #: templates/invoices_app/invoice_detail.html:45
@@ -113,7 +113,7 @@ msgstr "Valor total"
 msgid "All"
 msgstr "Tudo"
 
-#: invoices_app/filters.py:48 templates/AP_app/ap-taxpayers.html:16
+#: invoices_app/filters.py:48 templates/AP_app/home.html:16
 #: templates/invoices_app/history-list.html:21
 #: templates/invoices_app/invoice-list.html:29
 msgid "Taxpayer"
@@ -376,7 +376,7 @@ msgid "Eventbrite entity name"
 msgstr "Nome da entidade da Eventbrite"
 
 #: supplier_app/models.py:98 templates/AP_app/ap-taxpayer-details.html:43
-#: templates/AP_app/ap-taxpayers.html:23
+#: templates/AP_app/home.html:23
 #: templates/AP_app/taxpayer-history-list.html:17
 #: templates/supplier_app/supplier-home.html:26
 msgid "Business name"
@@ -511,7 +511,7 @@ msgid "Workday id"
 msgstr ""
 
 #: templates/AP_app/ap-taxpayer-details.html:46
-#: templates/AP_app/ap-taxpayers.html:24
+#: templates/AP_app/home.html:24
 msgid "Taxpayer Identification Number"
 msgstr "Número de Identificação Fiscal"
 
@@ -586,11 +586,11 @@ msgstr "História do Contribuinte"
 msgid "Comments"
 msgstr "Comentários"
 
-#: templates/AP_app/ap-taxpayers.html:26
+#: templates/AP_app/home.html:26
 msgid "Action"
 msgstr "Açao"
 
-#: templates/AP_app/ap-taxpayers.html:37
+#: templates/AP_app/home.html:37
 msgid "More details"
 msgstr "Mais detalhes"
 

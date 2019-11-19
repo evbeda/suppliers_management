@@ -137,7 +137,7 @@ class TestCreateTaxPayer(TestCase):
             afip_file=self.file_mock,
             bank_info=self.bank_info,
         )
-        self.supplier_home_url = reverse('supplier-home')
+        self.home_url = reverse('home')
         self.taxpayer_create_url = reverse('taxpayer-create')
 
     def tearDown(self):
@@ -192,7 +192,7 @@ class TestCreateTaxPayer(TestCase):
 
     def test_get_success_url_should_redirect_to_home(self):
         self.assertEqual(
-            self.supplier_home_url,
+            self.home_url,
             self.create_taxpayer_view.get_success_url()
             )
 
@@ -384,7 +384,7 @@ class TestCreateTaxPayer(TestCase):
             follow=True,
         )
         self.assertIn(
-            'supplier_app/ap-taxpayers.html',
+            'supplier_app/home.html',
             response.template_name,
         )
         self.assertNotIn(
@@ -428,32 +428,18 @@ class TestSupplierHome(TestCase):
         self.supplier_group = Group.objects.get(name='supplier')
         self.supplier_user.groups.add(self.supplier_group)
 
-        self.supplier_home_url = 'supplier-home'
-        self.supplier_home_template = 'supplier_app/ap-taxpayers.html'
+        self.home_url = 'home'
+        self.home_template = 'supplier_app/home.html'
 
-    # def test_get_taxpayers_child(self):
-    #     request = self.factory.get(self.supplier_home_url)
-    #     request.user = self.user_with_social_evb
-
-    #     supplier_home = SupplierHome()
-    #     supplier_home.request = request
-    #     taxpayer_list = supplier_home.get_taxpayers()
-
-    #     self.assertEqual(
-    #         type(taxpayer_list[0]),
-    #         TaxPayerArgentina
-    #     )
-    #     self.assertGreaterEqual(len(taxpayer_list), 1)
-
-    def test_logged_in_supplier_can_access_supplier_home(self):
+    def test_logged_in_supplier_can_access_home(self):
 
         self.client.force_login(self.supplier_user)
         response = self.client.get(
-            reverse(self.supplier_home_url),
+            reverse(self.home_url),
         )
 
         self.assertIn(
-            self.supplier_home_template,
+            self.home_template,
             response.template_name,
         )
         self.assertEqual(
@@ -464,10 +450,10 @@ class TestSupplierHome(TestCase):
             self.supplier_user.groups.filter(name='supplier').exists()
         )
 
-    def test_not_logged_in_supplier_cant_access_supplier_home(self):
+    def test_not_logged_in_supplier_cant_access_home(self):
 
         response = self.client.get(
-            reverse(self.supplier_home_url),
+            reverse(self.home_url),
             follow=True
         )
         self.assertIn(
@@ -475,7 +461,7 @@ class TestSupplierHome(TestCase):
             response.template_name,
         )
         self.assertNotIn(
-            self.supplier_home_template,
+            self.home_template,
             response.template_name
         )
         self.assertEqual(
@@ -493,7 +479,7 @@ class TestApTaxpayers(TestCase):
         self.factory = RequestFactory()
         self.client = Client()
 
-        self.ap_home_url = 'ap-taxpayers'
+        self.ap_home_url = 'home'
 
         self.company1 = CompanyFactory(
             name='Empresa 1',
@@ -598,16 +584,24 @@ class TestApTaxpayers(TestCase):
         self.client.force_login(self.user_ap)
         response = self.client.get(reverse(self.ap_home_url))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
+        self.assertEqual('supplier_app/home.html', response.template_name[0])
 
-    def test_get_all_taxpayers_list_as_supplier_redirects_to_supplier_home(self):
+    def test_get_all_taxpayers_list_as_supplier_redirects_to_home_with_suppliers_taxpayers(self):
         self.client.force_login(self.user_with_social_evb1)
         response = self.client.get(
             reverse(self.ap_home_url),
             follow=True
         )
-        self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
+        self.assertEqual('supplier_app/home.html', response.template_name[0])
         self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertIn(
+            self.taxpayer_ar1.business_name,
+            [taxpayer.business_name for taxpayer in response.context_data['taxpayer_list']]
+        )
+        self.assertNotIn(
+            self.taxpayer_ar2.business_name,
+            [taxpayer.business_name for taxpayer in response.context_data['taxpayer_list']]
+        )
 
 
 class TestSupplierDetailsView(TestCase):
@@ -894,7 +888,7 @@ class TestEditTaxPayerInfo(TestCase):
             response.url
         )
 
-    def test_post_edit_taxpayer_info_as_supplier_should_redirect_to_supplier_home(self):
+    def test_post_edit_taxpayer_info_as_supplier_should_redirect_to_home(self):
         response = self.client_supplier.post(
             reverse(
                 self.taxpayer_edit_url,
@@ -1499,7 +1493,7 @@ class TestCompanyCreateView(TestCase):
             response.template_name[0]
         )
 
-    def test_get_template_as_supplier_redirects_to_supplier_home(self):
+    def test_get_template_as_supplier_redirects_to_home(self):
         self.client.force_login(self.ap_user)
         response = self.client.get(reverse('company-create'))
         self.assertEqual(HTTPStatus.OK, response.status_code)
@@ -1522,7 +1516,7 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0],
-            (reverse('ap-taxpayers'), HTTPStatus.FOUND)
+            (reverse('company-list'), HTTPStatus.FOUND)
         )
 
 
@@ -1630,7 +1624,7 @@ class TestCompanyJoinView(TestCase):
         self.url_company_select = 'company-selection'
         self.url_company_join = 'company-join'
         self.client.force_login(self.user)
-        self.supplier_home_template = 'supplier_app/ap-taxpayers.html'
+        self.home_template = 'supplier_app/home.html'
 
     def _get_company_join_response(self, token=None):
 
@@ -1652,7 +1646,7 @@ class TestCompanyJoinView(TestCase):
             HTTPStatus.OK
         )
         self.assertIn(
-            self.supplier_home_template,
+            self.home_template,
             response.template_name,
         )
 
@@ -1686,7 +1680,7 @@ class TestCompanyJoinView(TestCase):
         company_unique_token = CompanyUniqueTokenFactory()
         response = self._get_company_join_response(company_unique_token.token)
         self.assertIn(
-            self.supplier_home_template,
+            self.home_template,
             response.template_name,
         )
         self.assertContains(response, JOIN_COMPANY_ERROR_MESSAGE)
@@ -1704,7 +1698,7 @@ class TestCompanyJoinView(TestCase):
         company_unique_token = CompanyUniqueTokenFactory()
         response = self._get_company_join_response(company_unique_token.token)
         self.assertIn(
-            self.supplier_home_template,
+            self.home_template,
             response.template_name,
         )
         self.assertEqual(
@@ -1752,7 +1746,7 @@ class TestCompanyJoinView(TestCase):
             follow=True,
         )
         self.assertIn(
-            'supplier_app/ap-taxpayers.html',
+            'supplier_app/home.html',
             response.template_name,
         )
         self.assertNotIn(
@@ -1776,7 +1770,7 @@ class TestCompanyJoin(TestCase):
         self.user.groups.add(self.supplier_group)
         self.client.force_login(self.user)
         self.url_company_join = 'company-join'
-        self.supplier_home_url = 'supplier-home'
+        self.home_url = 'home'
 
     def test_user_has_company_once_he_access_to_the_page_by_mail(self):
         company_unique_token = CompanyUniqueTokenFactory()
@@ -1801,7 +1795,7 @@ class TestCompanyJoin(TestCase):
         )
         self.assertEqual(
             response.url,
-            reverse(self.supplier_home_url)
+            reverse(self.home_url)
         )
 
     def test_compnay_unique_token_is_deleted_once_user_joins_company(self):
@@ -1829,8 +1823,8 @@ class TestApprovalRefuse(TestCase):
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
         self.client.force_login(self.ap_user)
-        self.app_home_url = 'ap-taxpayers'
-        self.supplier_home_url = 'supplier-home'
+        self.app_home_url = 'home'
+        self.home_url = 'home'
         self.handle_taxpayer_status_url = 'handle-taxpayer-status'
         self.supplier_detail_url = "supplier-details"
         self.kwargs = {
@@ -1854,7 +1848,7 @@ class TestApprovalRefuse(TestCase):
             follow=follow,
         )
 
-    def test_redirect_to_supplier_home_when_supplier_tries_to_approve_a_supplier(self):
+    def test_redirect_to_home_when_supplier_tries_to_approve_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
         response = self._handle_taxpayer_status_request(self.approve)
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
@@ -1993,7 +1987,7 @@ class TestApprovalRefuse(TestCase):
         response = self._handle_taxpayer_status_request(self.deny, True)
         self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE)
 
-    def test_redirect_to_supplier_home_when_supplier_tries_to_deny_a_supplier(self):
+    def test_redirect_to_home_when_supplier_tries_to_deny_a_supplier(self):
         self.client.force_login(self.user_with_social_evb1)
         response = self._handle_taxpayer_status_request(self.deny)
         self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
@@ -2037,7 +2031,7 @@ class TestNotifyMessages(TestCase):
         self.client.force_login(self.supplier_user)
         self.taxpayer_creation_url = 'taxpayer-create'
         self.email_invitation_url = 'company-invite'
-        self.supplier_home_url = 'supplier-home'
+        self.home_url = 'home'
         self.company_constants = {
             'email': 'something@eventbrite.com',
             'company_id': '1',
@@ -2070,7 +2064,7 @@ class TestNotifyMessages(TestCase):
     def test_supplier_without_company_should_see_notification_message_in_home(self):
         self.client.force_login(self.supplier_without_company)
         response = self.client.get(
-            reverse(self.supplier_home_url),
+            reverse(self.home_url),
         )
         self.assertContains(response, COMPANY_ERROR_MESSAGE)
 

@@ -43,10 +43,7 @@ class LoginView(TemplateView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         if user.is_authenticated():
-            if user.is_AP:
-                return HttpResponseRedirect(reverse('ap-taxpayers'))
-            else:
-                return HttpResponseRedirect(reverse('supplier-home'))
+            return HttpResponseRedirect(reverse('home'))
         else:
             return super().get(request, args, kwargs)
 
@@ -60,7 +57,7 @@ class ErrorLoginView(TemplateView):
 
 
 class IsApUser(UserPassesTestMixin):
-    login_url = 'supplier-home'
+    login_url = 'home'
 
     def test_func(self):
         return self.request.user.email in ALLOWED_AP_ACCOUNTS

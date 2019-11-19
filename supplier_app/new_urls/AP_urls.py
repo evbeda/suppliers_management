@@ -34,7 +34,6 @@ admins_pattern = [
 ]
 
 urlpatterns = [
-    url(r'^$', SupplierHome.as_view(), name='ap-taxpayers'),
     url(r'^admin/', include(admins_pattern)),
     url(r'^company/', include(company_pattern)),
     url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern)),

@@ -5,6 +5,7 @@ from supplier_app.views import (
     EditBankAccountView,
     EditTaxpayerView,
     SupplierDetailsView,
+    SupplierHome,
     TaxpayerCommentView,
 )
 
@@ -29,5 +30,6 @@ taxpayer_pattern = [
 ]
 
 urlpatterns = [
-   url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern))
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern)),
+    url(r'^me', SupplierHome.as_view(), name='home'),
 ]

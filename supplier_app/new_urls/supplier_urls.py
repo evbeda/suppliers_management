@@ -6,7 +6,6 @@ from supplier_app.views import (
 )
 
 urlpatterns = [
-    url(r'^$', SupplierHome.as_view(), name='supplier-home'),
     url(r'^taxpayer/$', CreateTaxPayerView.as_view(), name='taxpayer-create'),
     url(
         r'^company/join/(?P<token>[a-f0-9]{64})$',

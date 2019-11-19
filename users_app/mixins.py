@@ -64,7 +64,4 @@ class UserLoginPermissionRequiredMixin(LoginRequiredMixin, PermissionRequiredMix
         return super().dispatch(request, *args, **kwargs)
 
     def handle_no_authorization(self):
-        if self.request.user.email.endswith('@eventbrite.com'):
-            return redirect(reverse_lazy('ap-taxpayers'))
-        else:
-            return redirect(reverse_lazy('supplier-home'))
+        return redirect(reverse_lazy('home'))
