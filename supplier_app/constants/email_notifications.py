@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
-
-COMPANY_INVITATION_URL = '/suppliersite/company/join'
-SUPPLIER_HOME_URL = '/suppliersite/supplier'
+COMPANY_INVITATION_URL = '/users/supplier/company/join'
+SUPPLIER_HOME_URL = '/users/supplier/'
 
 email_notifications = {
     'company_invitation': {

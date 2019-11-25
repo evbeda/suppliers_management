@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block styles %}
+{% load static %}
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="container h-100 w-100">
+    {% include 'messages_notification.html' %}
+    <div class="row justify-content-center m-3">
+        <h1 class='text-center'> {% trans "Company List" %}</h1>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form class="form-inline py-2" action='{% url "company-list" %}' method="get">
+                <div class="form-group">
+                    <label for="search">{% trans "Search by name" %}</label>
+                    <input id="search" class="form-control mx-3" list="companies" name="company">
+                    <datalist id="companies">
+                    {% for company in all_companies %}
+                      <option value={{company.name}}>
+                    {% endfor %}
+                    </datalist>
+                    <input class="btn btn-primary" type="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+                <tr>
+                    <th>{% trans "Name"%}</th>
+                    <th>{% trans "Description"%}</th>
+                    <th>{% trans "Email Invitation"%}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in object_list %}
+                <tr>
+                    <td>
+                        <h6 class="p-2">{{company.name}}</h6>
+                    </td>
+                    <td>
+                        <h6 class="p-2">{{company.description}}</h6>
+                    </td>
+                    <td>
+                        <form class="form-row" action="{% url 'company-invite' %}" method="post">
+                            {% csrf_token %}
+                            <input class="form-control form-control-sm col-md-6 m-1 " type="email" name="email" placeholder="Email">
+                            <input type="hidden" name="company_id" value="{{ company.id }}">
+                            <select class="form-control form-control-sm col-md-2 m-1" name="language" class="selectpicker" data-width="fit">
+                                <option value="en" data-content="<span class='flag-icon flag-icon-us'></span> English">
+                                    {% trans "English" %}
+                                </option>
+                                <option value="es" data-content='<span class="flag-icon flag-icon-br"></span> Español'>
+                                    {% trans "Spanish" %}
+                                </option>
+                                <option value="pt-br"data-content='<span class="flag-icon flag-icon-br"></span> Portuguese'>
+                                    {% trans "Portuguese" %}
+                                </option>
+                            </select>
+                            <input class="btn btn-primary form-control form-control-sm col-md-1 ml-1"type="submit" value="{% trans 'Invite' %}">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

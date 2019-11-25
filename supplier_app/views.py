@@ -455,7 +455,6 @@ def company_invite(request):
         translation.activate(old_language)
         return redirect('company-list')
 
-
 def company_join(request, *args, **kwargs):
     company_unique_token = _get_company_unique_token_from_token(kwargs['token'])
     if not request.user.is_authenticated:
@@ -464,7 +463,9 @@ def company_join(request, *args, **kwargs):
         try:
             user = request.user
             company = company_unique_token.company
-            CompanyUserPermission.objects.create(user=user, company=company)
+            cup = CompanyUserPermission.objects.filter(user=user, company=company)
+            if not cup:
+                CompanyUserPermission.objects.create(user=user, company=company)
             company_unique_token.delete()
             messages.success(request, JOIN_COMPANY_SUCCESS_MESSAGE)
         except DatabaseError:

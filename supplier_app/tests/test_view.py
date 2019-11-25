@@ -1826,7 +1826,7 @@ class TestCompanyJoin(TestCase):
             reverse(self.supplier_home_url)
         )
 
-    def test_compnay_unique_token_is_deleted_once_user_joins_company(self):
+    def test_company_unique_token_is_deleted_once_user_joins_company(self):
         company_unique_token = CompanyUniqueTokenFactory()
         kwargs = {'token': company_unique_token.token}
         self.client.post(
@@ -1838,6 +1838,29 @@ class TestCompanyJoin(TestCase):
         with self.assertRaises(CompanyUniqueToken.DoesNotExist):
             CompanyUniqueToken.objects.get(token=company_unique_token.token)
 
+    def test_only_one_company_user_permission_is_created_when_joining_a_company_several_times(
+        self,
+    ):
+        company = CompanyFactory()
+        company_unique_token1 = CompanyUniqueTokenFactory(company=company)
+        kwargs1 = {'token': company_unique_token1.token}
+        response1 = self.client.post(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs1
+            )
+        )
+
+        company_unique_token2 = CompanyUniqueTokenFactory(company=company)
+        kwargs2 = {'token': company_unique_token2.token}
+        response2 = self.client.post(
+            reverse(
+                self.url_company_join,
+                kwargs=kwargs2
+            )
+        )
+
+        self.assertEqual(len(CompanyUserPermission.objects.filter(user=self.user)), 1)
 
 class TestApprovalRefuse(TestCase):
     def setUp(self):
