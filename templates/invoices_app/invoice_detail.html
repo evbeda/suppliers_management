@@ -14,15 +14,15 @@
   <div class="col-md-2"></div>
   <div class="col-md-8">
     {% if messages %}
-      {% for message in messages %}
-          <div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        {% endfor %}
-      {% endif %}</div>
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show mt-1" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}</div>
   <div class="col-md-2"></div>
   <div class="col-md-8">
     <div class="card">
@@ -114,41 +114,43 @@
           </div>
         </div>
       </div>
-     {% if is_AP %}
-     <div class="card-footer">
-       <div class="row">
-         <div class="col-6 pl-0">
-           <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
-             {% csrf_token %}
-             {% if invoice.status != INVOICE_STATUS_APPROVED %}
-             <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">{% trans "Request Changes" %}</button>
-             <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">{% trans "Reject" %}</button>
-             {% endif %}
-            {% if invoice.status == INVOICE_STATUS_APPROVED %}
+      {% if is_AP %}
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-6 pl-0">
+            <form method='POST' class="form-inline" action='{% url 'change-invoice-status' pk=invoice.id %}' enctype="multipart/form-data">
+              {% csrf_token %}
+              {% if invoice.status != INVOICE_STATUS_PAID %}
+                {% if invoice.status != INVOICE_STATUS_APPROVED %}
+                <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-warning" value="{{ INVOICE_STATUS_CHANGES_REQUEST }}">{% trans "Request Changes" %}</button>
+                <button type="submit" name='status' class="ml-2 pt-2 pb-2 btn btn-danger" value="{{ INVOICE_STATUS_REJECTED }}">{% trans "Reject" %}</button>
+                {% endif %}
+                {% if invoice.status == INVOICE_STATUS_APPROVED %}
                 <button type="submit" name='status' class="ml-2 btn btn-dark" value="{{ INVOICE_STATUS_PAID }}">{% trans "Pay" %}</button>
-            {% endif %}
+                {% endif %}
+              {% endif %}
             </form>
           </div>
           {% if invoice.status != INVOICE_STATUS_APPROVED and not invoice.workday_id %}
-            <div class="col">
-                <form method='POST' class="form-inline" action='{% url 'approve-invoice' pk=invoice.id %}' enctype="multipart/form-data">
-                  {% csrf_token %}
-                  <div class="input-group mb-3">
-                      <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
-                      <div class="input-group-append">
-                          <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
-                        </div>
-                    </div>
-                 </form>
+          <div class="col">
+            <form method='POST' class="form-inline" action='{% url 'approve-invoice' pk=invoice.id %}' enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="input-group mb-3">
+                <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
+                <div class="input-group-append">
+                  <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
+                </div>
+              </div>
+            </form>
 
-            </div>
-         {% endif %}
-         <div class="col">
-           <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary p-2 float-right">{% trans "Invoice History" %}</a></span>
-         </div>
-       </div>
-     </div>
-    {% endif %}
+          </div>
+          {% endif %}
+          <div class="col">
+            <span><a href="{% url 'invoice-history' pk=invoice.id %}" class="btn btn-primary p-2 float-right">{% trans "Invoice History" %}</a></span>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
   <div class="col-md-4">
@@ -170,18 +172,18 @@
                   <textarea class="form-control" name="message" required rows="3"></textarea>
                 </div>
                 <div class="row pl-3">
-                <div class="pl-0 pr-0 col-md-3">
-                  <button type="submit" name="status" class="btn btn-success">{% trans "Post a comment" %}</button>
-                </div>
-                <div class="col-md-9">
+                  <div class="pl-0 pr-0 col-md-3">
+                    <button type="submit" name="status" class="btn btn-success">{% trans "Post a comment" %}</button>
+                  </div>
+                  <div class="col-md-9">
                     <div class="input-group">
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" name="invoice_file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
-                      <label class="custom-file-label" for="inputGroupFile01">{% trans "Choose a file" %}</label>
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="invoice_file" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" accept="application/pdf">
+                        <label class="custom-file-label" for="inputGroupFile01">{% trans "Choose a file" %}</label>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </form>
             </div>
             {% endif %}
@@ -214,10 +216,8 @@
   </div>
 </div>
 <script type="text/javascript">
-
-    $('.custom-file input').change(function (e) {
-        $(this).next('.custom-file-label').html(e.target.files[0].name);
-    });
-
+  $('.custom-file input').change(function(e) {
+    $(this).next('.custom-file-label').html(e.target.files[0].name);
+  });
 </script>
 {% endblock %}
