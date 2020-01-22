@@ -65,3 +65,7 @@ html, body{
 #filter-form{
     display: None;
 }
+
+#request-changes-form{
+    display: None;
+}
