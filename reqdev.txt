@@ -17,7 +17,7 @@ cryptography==2.7
 decorator==4.4.0
 defusedxml==0.6.0
 dj-database-url==0.5.0
-Django==1.11.24
+Django==1.11.28
 django-appconf==1.0.3
 django-bootstrap-datepicker-plus==3.0.5
 django-celery==3.3.1
