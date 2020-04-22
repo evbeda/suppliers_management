@@ -200,8 +200,9 @@ class TestSupplierPermissions(TestCase):
         backend = Mock()
         backend.name = 'google-oauth2'
         details = {'email': 'admin2@eventbrite.com'}
-        with self.assertRaises(AuthException):
-            check_user_backend(True, user, details=details, backend=backend)
+        response = Mock()
+        response.hd = "eventbrite.com"
+        self.assertEqual(check_user_backend(True, user, details=details, backend=backend, response=response)['user'].get_name, "admin2")
 
     def test_add_user_to_group_supplier(self):
         user = UserFactory(email='supplier@supplier.com')
@@ -209,3 +210,10 @@ class TestSupplierPermissions(TestCase):
         backend.name = 'eventbrite'
         add_user_to_group(True, user, backend=backend)
         self.assertTrue(user.groups.filter(name='supplier').exists())
+
+    def test_add_user_to_group_buyer(self):
+        user = UserFactory(email='buyer@buyer.com')
+        backend = Mock()
+        backend.name = 'google-oauth2'
+        add_user_to_group(True, user, backend=backend)
+        self.assertTrue(user.groups.filter(name='ap_buyer').exists())
