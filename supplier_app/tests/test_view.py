@@ -1548,7 +1548,7 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0],
-            (reverse('ap-taxpayers'), HTTPStatus.FOUND)
+            (reverse('company-list'), HTTPStatus.FOUND)
         )
 
 
