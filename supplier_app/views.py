@@ -89,7 +89,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'supplier_app/AP/company_creation.html'
-    success_url = reverse_lazy('ap-taxpayers')
+    success_url = reverse_lazy('company-list')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
     )
