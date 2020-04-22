@@ -7,19 +7,18 @@
 {% endblock %}
 
 {% block content %}
-<div class="row d-flex flex-row-reverse">
-  <div class="pr-4 mr-1 py-2">
-    {% include 'language_selector.html' %}
-  </div>
-</div>
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
       <div class="card card-signin mt-5">
-        <div class="card-body">
+        <div class="card-body text-center">
           <h4 class="card-title text-danger text-center">{% trans "ERROR" %}</h4>
-          <h5 class="text-center">{% trans "If you are a supplier please:" %}</h5>
-          <a class="btn btn-eb btn-block text-capitalize text-white" href="{% url 'social:begin' 'eventbrite' %}"> {% trans "Login with Eventbrite" %}</a>
+          <h5 class="text-center text-white">{% trans "If you are a supplier please:" %}</h5>
+          <a class="btn btn-eb text-black"
+              href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
+              {% trans "Login with" %}
+              <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
+          </a>
         </div>
       </div>
       <div class="row">
@@ -32,10 +31,24 @@
 </div>
 <footer class="page-footer fixed-bottom font-small blue-eb pt-3">
   <div class="row">
-    <div class="col pb-3">
+    <div class="col ml-4">
+      <div class="row">
+          <p class="mr-1 text-white">{% trans "Language" %}:</p>
+          {% include 'language_selector.html' %}
+      </div>
+    </div>
+    <div class="col">
       <p class="footer-copyright text-center text-white mb-0 mt-1">
         © 2019 Copyright:
         <a href="https://eventbrite.com"> Eventbrite.com</a>
+      </p>
+    </div>
+    <div class="col">
+      <p class="footer-copyright text-center">
+        <a class="btn btn-primary text-capitalize float-right text-white mr-3 mb-3 btn-sm"
+          href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
+          {% trans "AP login" %}
+        </a>
       </p>
     </div>
   </div>
