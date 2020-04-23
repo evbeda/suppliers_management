@@ -200,9 +200,7 @@ class TestSupplierPermissions(TestCase):
         backend = Mock()
         backend.name = 'google-oauth2'
         details = {'email': 'admin2@eventbrite.com'}
-        response = Mock()
-        response.hd = "eventbrite.com"
-        self.assertEqual(check_user_backend(True, user, details=details, backend=backend, response=response)['user'].get_name, "admin2")
+        self.assertEqual(check_user_backend(True, user, details=details, backend=backend)['user'].get_name, "admin2")
 
     def test_add_user_to_group_supplier(self):
         user = UserFactory(email='supplier@supplier.com')
@@ -216,4 +214,4 @@ class TestSupplierPermissions(TestCase):
         backend = Mock()
         backend.name = 'google-oauth2'
         add_user_to_group(True, user, backend=backend)
-        self.assertTrue(user.groups.filter(name='ap_buyer').exists())
+        self.assertTrue(user.groups.filter(name='buyer').exists())

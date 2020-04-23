@@ -84,8 +84,8 @@ class User(AbstractUser):
         return self.groups.filter(name='supplier').exists()
 
     @property
-    def is_ap_buyer(self):
-        return self.groups.filter(name='ap_buyer').exists()
+    def is_buyer(self):
+        return self.groups.filter(name='buyer').exists()
 
     class Meta:
         index_together = ["email"]

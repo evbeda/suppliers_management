@@ -12,8 +12,8 @@ def add_user_to_group(is_new, user, *args, **kwargs):
     if is_new and backend == EVENTBRITE_OAUTH_SOCIAL_DJANGO_BACKEND:
         supplier_group = Group.objects.get(name='supplier')
         user.groups.add(supplier_group)
-    if backend == GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND and not user.is_ap_buyer:
-        buyer_group = Group.objects.get(name='ap_buyer')
+    if backend == GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND and not user.is_buyer:
+        buyer_group = Group.objects.get(name='buyer')
         user.groups.add(buyer_group)
     return {
             'is_new': is_new,

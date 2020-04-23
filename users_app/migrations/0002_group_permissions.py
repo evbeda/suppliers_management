@@ -56,7 +56,7 @@ def add_group_permissions(*args, **kwargs):
             ('can_manage_aps', 'Can manage ap permissions', content_type),
             ('ap_role', 'Is ap', content_type),
         ],
-        'ap_buyer': [
+        'buyer': [
             ('can_create_company', 'Can create company', content_type),
             ('can_send_company_invite', 'Can send company invite', content_type),
         ],
