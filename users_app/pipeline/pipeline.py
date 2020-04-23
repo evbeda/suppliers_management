@@ -25,7 +25,8 @@ def check_user_backend(is_new, user, *args, **kwargs):
     backend = kwargs['backend'].name
     user_email = kwargs['details']['email']
     if backend == GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND and not User.objects.filter(email=user_email).exists():
-        if kwargs["response"].hd == 'eventbrite.com':
+        user_email_domain = user_email.split("@")[1]
+        if user_email_domain == 'eventbrite.com':
             user = User.objects.create_user(user_email)
         else:
             raise AuthException(backend, 'Invalid Login')
