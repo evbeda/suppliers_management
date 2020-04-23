@@ -19,6 +19,7 @@ from users_app.forms import UserAdminForm
 
 SUPPLIER_HOME = reverse('supplier-home')
 AP_HOME = reverse('ap-taxpayers')
+BUYER_HOME = reverse('company-list')
 
 
 class TestUser(TestCase):
@@ -122,6 +123,13 @@ class TestLoginRedirect(TestCase):
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
+
+    def test_login_success_with_Google_should_redirect_to_buyersite(self):
+        self.user_with_google_social.groups.add(Group.objects.get(name='buyer'))
+        self.client.force_login(self.user_with_google_social)
+        response = self.client.get(BUYER_HOME, follow=True)
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertEqual('supplier_app/AP/company_list.html', response.template_name[0])
 
     def test_ap_site_permission_invoice_list(self):
         self.client.force_login(self.user_with_google_social)
