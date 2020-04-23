@@ -37,9 +37,9 @@
 </body>
 <script>
     $(document).ready(function(){
-      $("#myInput").on("keyup", function() {
+      $("#searchInput").on("keyup", function() {
         var value = $(this).val().toLowerCase();
-        $("#myTable tr").filter(function() {
+        $("#tableToFilter tr").filter(function() {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
       });
