@@ -89,6 +89,9 @@ class TestLoginRedirect(TestCase):
         self.user_with_eb_social.groups.add(self.supplier_group)
         self.user_with_google_social = UserFactory(email='ap@eventbrite.com')
         self.user_with_google_social.groups.add(self.ap_group)
+        self.user_buyer_with_google_social = UserFactory(email='buyer@eventbrite.com')
+        self.buyer_group = Group.objects.get(name='buyer')
+        self.user_buyer_with_google_social.groups.add(self.buyer_group)
 
     def test_login_fail_should_redirect_to_loginfailview(self):
         response_supplier = self.client.get(SUPPLIER_HOME, follow=True)
@@ -123,13 +126,6 @@ class TestLoginRedirect(TestCase):
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
-
-    def test_login_success_with_Google_should_redirect_to_buyersite(self):
-        self.user_with_google_social.groups.add(Group.objects.get(name='buyer'))
-        self.client.force_login(self.user_with_google_social)
-        response = self.client.get(BUYER_HOME, follow=True)
-        self.assertEqual(HTTPStatus.OK, response.status_code)
-        self.assertEqual('supplier_app/AP/company_list.html', response.template_name[0])
 
     def test_ap_site_permission_invoice_list(self):
         self.client.force_login(self.user_with_google_social)
@@ -174,7 +170,15 @@ class TestLoginRedirect(TestCase):
             reverse('login'),
             follow=True,
         )
-        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain] )
+        self.assertIn(AP_HOME, [red[0] for red in response.redirect_chain])
+
+    def test_ap_authenticated_access_login_view_should_redirect_to_buyer_home(self):
+        self.client.force_login(self.user_buyer_with_google_social)
+        response = self.client.get(
+            reverse('login'),
+            follow=True,
+        )
+        self.assertIn(BUYER_HOME, [red[0] for red in response.redirect_chain])
 
     def test_supplier_authenticated_access_login_view_should_redirect_to_supplier_home(self):
         self.client.force_login(self.user_with_eb_social)
