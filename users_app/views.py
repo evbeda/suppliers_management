@@ -43,8 +43,10 @@ class LoginView(TemplateView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         if user.is_authenticated():
-            if user.is_AP:
+            if user.is_AP :
                 return HttpResponseRedirect(reverse('ap-taxpayers'))
+            elif user.is_buyer:
+                return HttpResponseRedirect(reverse('company-list'))
             else:
                 return HttpResponseRedirect(reverse('supplier-home'))
         else:
