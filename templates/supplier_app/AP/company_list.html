@@ -17,13 +17,7 @@
             <form class="form-inline py-2" action='{% url "company-list" %}' method="get">
                 <div class="form-group">
                     <label for="search">{% trans "Search by name" %}</label>
-                    <input id="search" class="form-control mx-3" list="companies" name="company">
-                    <datalist id="companies">
-                    {% for company in all_companies %}
-                      <option value={{company.name}}>
-                    {% endfor %}
-                    </datalist>
-                    <input class="btn btn-primary" type="submit">
+                    <input id="myInput" class="form-control mx-3">
                 </div>
             </form>
         </div>
@@ -37,7 +31,7 @@
                     <th>{% trans "Email Invitation"%}</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
                 {% for company in object_list %}
                 <tr>
                     <td>
@@ -71,4 +65,14 @@
         </table>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
 {% endblock %}
