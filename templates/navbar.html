@@ -50,13 +50,16 @@
         </ul>
     </div>
 
+    
     {% elif  perms.users_app.buyer_role%}
-    <a class="navbar navbar-brand" href="{% url 'supplier-home' %}">
+    <a class="navbar navbar-brand text-white" href="{% url 'company-list' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
         {% trans "Buyer" %}
     </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class='navbar-nav'>
 
-    {% if perms.users_app.can_create_company or perms.users_app.can_send_company_invite %}
+        {% if perms.users_app.can_create_company or perms.users_app.can_send_company_invite %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -73,7 +76,10 @@
                     {% endif %}
                 </div>
             </li>
-            {% endif %}
+        {% endif %}
+        </ul>
+    </div>
+        
     {% else %}
     <a class="navbar navbar-brand" href="{% url 'supplier-home' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
