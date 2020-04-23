@@ -49,6 +49,31 @@
             {% endif %}
         </ul>
     </div>
+
+    {% elif  perms.users_app.buyer_role%}
+    <a class="navbar navbar-brand" href="{% url 'supplier-home' %}">
+        <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
+        {% trans "Buyer" %}
+    </a>
+
+    {% if perms.users_app.can_create_company or perms.users_app.can_send_company_invite %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    {% trans "Companies" %}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% if perms.users_app.can_send_company_invite %}
+                    <a class="dropdown-item" href="{% url 'company-list' %}"><i
+                        class="fa fa-building mr-2"></i>{% trans "See all" %}</a>
+                    {% endif %}
+                    {% if perms.users_app.can_create_company %}
+                    <a class="dropdown-item" href="{% url 'company-create' %}"><i
+                            class="fa fa-plus mr-2"></i>{% trans "Create one" %}</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endif %}
     {% else %}
     <a class="navbar navbar-brand" href="{% url 'supplier-home' %}">
         <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
