@@ -1507,6 +1507,9 @@ class TestCompanyCreateView(TestCase):
         self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
+        self.user_buyer_with_google_social = UserFactory(email='buyer@eventbrite.com')
+        self.buyer_group = Group.objects.get(name='buyer')
+        self.user_buyer_with_google_social.groups.add(self.buyer_group)
 
     def _make_post(self):
         self.client.force_login(self.ap_user)
@@ -1518,6 +1521,15 @@ class TestCompanyCreateView(TestCase):
 
     def test_get_template_as_ap(self):
         self.client.force_login(self.ap_user)
+        response = self.client.get(reverse('company-create'))
+        self.assertEqual(HTTPStatus.OK, response.status_code)
+        self.assertEqual(
+            'supplier_app/AP/company_creation.html',
+            response.template_name[0]
+        )
+
+    def test_get_template_as_buyer(self):
+        self.client.force_login(self.user_buyer_with_google_social)
         response = self.client.get(reverse('company-create'))
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertEqual(
@@ -1542,8 +1554,25 @@ class TestCompanyCreateView(TestCase):
             self.company_constants['name']
         )
 
+    def test_valid_company_creation_as_buyer(self):
+        self.client.force_login(self.user_buyer_with_google_social)
+        self._make_post()
+        self.assertEqual(
+            Company.objects.last().name,
+            self.company_constants['name']
+        )
+
     def test_valid_redirection_after_company_creation(self):
         self.client.force_login(self.ap_user)
+        response = self._make_post()
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(
+            response.redirect_chain[0],
+            (reverse('company-list'), HTTPStatus.FOUND)
+        )
+
+    def test_valid_redirection_after_company_creation_as_buyer(self):
+        self.client.force_login(self.user_buyer_with_google_social)
         response = self._make_post()
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
