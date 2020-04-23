@@ -18,28 +18,14 @@
       <div class="card card-signin h-100">
         <div class="card-body">
           <h5 class="card-title text-center text-white">{% trans "Supplier Sign in" %}</h5>
-          <div class="row h-50 align-items-center justify-content-center">
+          <div class="row h-75 align-items-center justify-content-center">
             <a class="btn btn-eb btn-block text-black mr-5 ml-5"
               href="{% url 'social:begin' 'eventbrite' %}?next={{ request.GET.next }}">
               {% trans "Login with" %}
               <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
             </a>
           </div>
-          <div class="row h-50 " style="border-top:1px solid; border-top-color:rgb(255, 128, 0);">
-            <div class="col mt-2">
-              <div class="row justify-content-center">
-                <small class="text-white">- Or if you are an Employee-</small>
-              </div>
-              <div class="row justify-content-center mt-2">
-                <a class="btn btn-sm btn-block btn-eb text-capitalize text-black w-50"
-                  href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
-                  {% trans "Login as Employee" %}
-                </a>
-              </div>
-            </div>
-            
-            
-          </div>
+          
         </div>
       </div>
     </div>
@@ -60,13 +46,11 @@
         <a href="https://eventbrite.com"> Eventbrite.com</a>
       </p>
     </div>
-    <div class="col">
-      <p class="footer-copyright text-center">
-        <a class="btn btn-primary text-capitalize float-right text-white mr-3 mb-3 btn-sm"
+    <div class="col text-center d-flex align-items-start justify-content-end">
+        <a class="btn btn-sm text-capitalize text-white mr-3" style="border-style:1px solid; border-color:rgb(255, 128, 0);"
           href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.GET.next }}">
-          {% trans "AP login" %}
+          {% trans "Login as Employee" %}
         </a>
-      </p>
     </div>
   </div>
 </footer>

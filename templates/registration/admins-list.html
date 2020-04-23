@@ -11,13 +11,15 @@
 <br />
 <div class="row">
     <div class="col-md-2">
-        <ul class="nav flex-column text-center">
-            <li class="nav-item">
-                <a class='btn btn-success' href="{% url 'create-admin' %}">
-                    <i class="fa fa-plus"></i> {% trans "New Admin" %}
-                </a>
-            </li>
-        </ul>
+        <div class="row">
+            <a class='btn btn-success ml-5' href="{% url 'create-admin' %}">
+                <i class="fa fa-plus"></i> {% trans "New Admin" %}
+            </a>
+        </div>
+        <div class="row mt-3">
+            <input id="searchInput" class="form-control mx-3" placeholder="Search User...">
+        </div>
+        
     </div>
     <div class="col-md-9">
         <table class="table table-hover table-sm">
@@ -31,7 +33,7 @@
                     <th class="text-center" scope="col">{% trans "AP Manager"%}</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableToFilter">
                 {% for user in object_list %}
                 <tr>
                     <th scope="row">{{user.id}}</th>
