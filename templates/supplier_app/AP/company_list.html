@@ -23,29 +23,32 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <table class="table table-hover table-sm">
-            <thead class="thead-eb-dark">
-                <tr>
-                    <th>{% trans "Name"%}</th>
-                    <th>{% trans "Description"%}</th>
-                    <th>{% trans "Email Invitation"%}</th>
+        <table class="table table-hover table-sm ">
+            <thead class="">
+                <tr class="row thead-eb-dark">
+                    <th class="col-4">{% trans "Name"%}</th>
+                    <th class="col-4">{% trans "Description"%}</th>
+                    <th class="col-4">{% trans "Email Invitation"%}</th>
                 </tr>
             </thead>
             <tbody id="tableToFilter">
                 {% for company in object_list %}
-                <tr>
-                    <td>
-                        <h6 class="p-2">{{company.name}}</h6>
+                <tr class="row ">
+                    <td class="col-4 ">
+                        <div class="">
+                            <h6 class="p-2 ">{{company.name}}</h6>
+                        </div>
+                        
                     </td>
-                    <td>
+                    <td class="col-4">
                         <h6 class="p-2">{{company.description}}</h6>
                     </td>
-                    <td>
+                    <td class="col-4 text-center">
                         <form class="form-row" action="{% url 'company-invite' %}" method="post">
                             {% csrf_token %}
-                            <input class="form-control form-control-sm col-md-6 m-1 " type="email" name="email" placeholder="Email">
+                            <input class="form-control form-control-sm col-md-5 m-1 " type="email" name="email" placeholder="Email">
                             <input type="hidden" name="company_id" value="{{ company.id }}">
-                            <select class="form-control form-control-sm col-md-2 m-1" name="language" class="selectpicker" data-width="fit">
+                            <select class="form-control form-control-sm col-md-3 m-1" name="language" class="selectpicker" data-width="fit">
                                 <option value="en" data-content="<span class='flag-icon flag-icon-us'></span> English">
                                     {% trans "English" %}
                                 </option>
@@ -56,7 +59,7 @@
                                     {% trans "Portuguese" %}
                                 </option>
                             </select>
-                            <input class="btn btn-primary form-control form-control-sm col-md-1 ml-1"type="submit" value="{% trans 'Invite' %}">
+                            <input class="btn btn-sm btn-primary form-control form-control-sm col-md-3 ml-1"type="submit" value="{% trans 'Invite' %}">
                         </form>
                     </td>
                 </tr>
