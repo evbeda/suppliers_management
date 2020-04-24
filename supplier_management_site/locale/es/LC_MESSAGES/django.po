@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-06 18:56+0000\n"
+"POT-Creation-Date: 2020-04-24 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,116 +18,1930 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: invoices_app/__init__.py:19
+#: env/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
+msgid "Messages"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
+msgid "Site Maps"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:7
+msgid "Static Files"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:43
+msgid "That page number is not an integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:45
+msgid "That page number is less than 1"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:50
+msgid "That page contains no results"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:34
+msgid "Enter a valid value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:107
+#: env/lib/python3.7/site-packages/django/forms/fields.py:671
+msgid "Enter a valid URL."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:160
+msgid "Enter a valid integer."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:171
+#, fuzzy
+#| msgid "email address"
+msgid "Enter a valid email address."
+msgstr "Email"
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:245
+msgid ""
+"Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:252
+msgid ""
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:257
+#: env/lib/python3.7/site-packages/django/core/validators.py:277
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:262
+#: env/lib/python3.7/site-packages/django/core/validators.py:278
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:272
+#: env/lib/python3.7/site-packages/django/core/validators.py:276
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:308
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1131
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:314
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:345
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:354
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:364
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:379
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:399
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:404
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:409
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:463
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/base.py:1209
+#: env/lib/python3.7/site-packages/django/forms/models.py:749
+msgid "and"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/base.py:1211
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:116
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:117
+msgid "This field cannot be null."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:118
+msgid "This field cannot be blank."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:119
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:123
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:140
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:901
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1809
+msgid "Integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:905
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1807
+#, python-format
+msgid "'%(value)s' value must be an integer."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:978
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1878
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:990
+#, python-format
+msgid "'%(value)s' value must be either True or False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:992
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1058
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1115
+msgid "Comma-separated integers"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1172
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1174
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1319
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1177
+msgid "Date (without time)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1317
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1321
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1325
+msgid "Date (with time)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1475
+#, python-format
+msgid "'%(value)s' value must be a decimal number."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1477
+#, fuzzy
+#| msgid "PO number"
+msgid "Decimal number"
+msgstr "Número de orden de compra"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1628
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1631
+#, fuzzy
+#| msgid "Description"
+msgid "Duration"
+msgstr "Descripción"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1683
+#, fuzzy
+#| msgid "email address"
+msgid "Email address"
+msgstr "Email"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1707
+msgid "File path"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1773
+#, python-format
+msgid "'%(value)s' value must be a float."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1775
+#, fuzzy
+#| msgid "Bank account number"
+msgid "Floating point number"
+msgstr "CBU"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1893
+#, fuzzy
+#| msgid "email address"
+msgid "IPv4 address"
+msgstr "Email"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1924
+#, fuzzy
+#| msgid "email address"
+msgid "IP address"
+msgstr "Email"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2006
+#, python-format
+msgid "'%(value)s' value must be either None, True or False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2008
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2071
+msgid "Positive integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2083
+msgid "Positive small integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2096
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2130
+msgid "Small integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2137
+msgid "Text"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2163
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2165
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2168
+msgid "Time"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2296
+msgid "URL"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2319
+msgid "Raw binary data"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2366
+#, python-format
+msgid "'%(value)s' is not a valid UUID."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:228
+#, fuzzy
+#| msgid "Files"
+msgid "File"
+msgstr "Archivos"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:391
+msgid "Image"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:788
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:790
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1029
+msgid "One-to-one relationship"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1104
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1105
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1147
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: env/lib/python3.7/site-packages/django/forms/boundfield.py:181
+msgid ":?.!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:56
+msgid "This field is required."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:258
+msgid "Enter a whole number."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:303
+#: env/lib/python3.7/site-packages/django/forms/fields.py:340
+#, fuzzy
+#| msgid "Account number"
+msgid "Enter a number."
+msgstr "Número de cuenta"
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:418
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1149
+msgid "Enter a valid date."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:442
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1150
+msgid "Enter a valid time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:464
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:493
+msgid "Enter a valid duration."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:547
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:548
+msgid "No file was submitted."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:549
+msgid "The submitted file is empty."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:551
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:554
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:619
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:776
+#: env/lib/python3.7/site-packages/django/forms/fields.py:872
+#: env/lib/python3.7/site-packages/django/forms/models.py:1265
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:873
+#: env/lib/python3.7/site-packages/django/forms/fields.py:990
+#: env/lib/python3.7/site-packages/django/forms/models.py:1264
+msgid "Enter a list of values."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:991
+msgid "Enter a complete value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1208
+msgid "Enter a valid UUID."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: env/lib/python3.7/site-packages/django/forms/forms.py:87
+msgid ":"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/forms.py:213
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:97
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:355
+#, python-format
+msgid "Please submit %d or fewer forms."
+msgid_plural "Please submit %d or fewer forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:362
+#, python-format
+msgid "Please submit %d or more forms."
+msgid_plural "Please submit %d or more forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:390
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:392
+msgid "Order"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:394
+msgid "Delete"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:744
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:748
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:754
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:763
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1093
+msgid "The inline foreign key did not match the parent instance primary key."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1154
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1267
+#, python-format
+msgid "\"%(pk)s\" is not a valid value for a primary key."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/utils.py:172
+#, python-format
+msgid ""
+"%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:377
+msgid "Clear"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:378
+#, fuzzy
+#| msgid "Currency"
+msgid "Currently"
+msgstr "Moneda"
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:379
+#, fuzzy
+#| msgid "Changed: \n"
+msgid "Change"
+msgstr "Cambios: \n"
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:701
+msgid "Unknown"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:702
+msgid "Yes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:703
+msgid "No"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:851
+msgid "yes,no,maybe"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:880
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:897
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:899
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:901
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:903
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:905
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:907
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:66
+msgid "p.m."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:67
+msgid "a.m."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:72
+msgid "PM"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:73
+msgid "AM"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:158
+msgid "midnight"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:160
+msgid "noon"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Monday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Tuesday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Wednesday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Thursday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Friday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:7
+msgid "Saturday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:7
+msgid "Sunday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Mon"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Tue"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Wed"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Thu"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Fri"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+#, fuzzy
+#| msgid "State"
+msgid "Sat"
+msgstr "Provincia"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+msgid "Sun"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+#, fuzzy
+#| msgid "Pay"
+msgid "May"
+msgstr "Pagar"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:18
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "September"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "October"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#, fuzzy
+#| msgid "Number"
+msgid "November"
+msgstr "Número"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "December"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgid "jan"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgid "feb"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgid "mar"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgid "apr"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+#, fuzzy
+#| msgid "Pay"
+msgid "may"
+msgstr "Pagar"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgid "jun"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "jul"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "aug"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "sep"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "oct"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "nov"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgid "dec"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:31
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:32
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:33
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:34
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:35
+#, fuzzy
+#| msgid "Pay"
+msgctxt "abbrev. month"
+msgid "May"
+msgstr "Pagar"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:36
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:37
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:38
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:39
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:40
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:41
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:42
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:45
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:46
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:47
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:48
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:49
+#, fuzzy
+#| msgid "Pay"
+msgctxt "alt. month"
+msgid "May"
+msgstr "Pagar"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:50
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:51
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:52
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:53
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:54
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:55
+#, fuzzy
+#| msgid "Number"
+msgctxt "alt. month"
+msgid "November"
+msgstr "Número"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:56
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/ipv6.py:12
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/text.py:81
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s..."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/text.py:251
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: env/lib/python3.7/site-packages/django/utils/text.py:270
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:71
+msgid ", "
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:14
+#, fuzzy, python-format
+#| msgid "15 days"
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "15 días"
+msgstr[1] "15 días"
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:15
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:16
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:60
+msgid "0 minutes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:109
+msgid "Forbidden"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:110
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:114
+msgid ""
+"You are seeing this message because this HTTPS site requires a 'Referer "
+"header' to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:119
+msgid ""
+"If you have configured your browser to disable 'Referer' headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for 'same-"
+"origin' requests."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:124
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:129
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for 'same-origin' requests."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:134
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/debug.py:520
+#, fuzzy
+#| msgid "Welcome to "
+msgid "Welcome to Django"
+msgstr "Bienvenido a"
+
+#: env/lib/python3.7/site-packages/django/views/debug.py:521
+msgid "It worked!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/debug.py:522
+msgid "Congratulations on your first Django-powered page."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/debug.py:524
+msgid ""
+"Next, start your first app by running <code>python manage.py startapp "
+"[app_label]</code>."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/debug.py:527
+msgid ""
+"You're seeing this message because you have <code>DEBUG = True</code> in "
+"your Django settings file and you haven't configured any URLs. Get to work!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:48
+msgid "No year specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:72
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:132
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:249
+msgid "Date out of range"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:107
+msgid "No month specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:169
+#, fuzzy
+#| msgid "No workday id"
+msgid "No day specified"
+msgstr "Workday ID no especificado"
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:225
+msgid "No week specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:387
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:415
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:669
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:703
+#, python-format
+msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/detail.py:55
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:77
+msgid "Page is not 'last', nor can it be converted to an int."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:82
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:172
+#, python-format
+msgid "Empty list and '%(class_name)s.allow_empty' is False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:44
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:46
+#, python-format
+msgid "\"%(path)s\" does not exist"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:86
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/denied.html:6
+msgid "Permission Denied"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/denied.html:9
+msgid "Sorry, you are not allowed to access this app"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/denied.html:11
+msgid ""
+"To report a problem with your access please contact your system administrator"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/signout.html:6
+msgid "Signed out"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/signout.html:9
+#, fuzzy
+#| msgid "You have joined the company succesfully"
+msgid "You have signed out successfully."
+msgstr "Te uniste al grupo económico correctamente"
+
+#: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/signout.html:11
+msgid ""
+"If you want to login again or switch to another account, please do so in SSO."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:53
+#: env/lib/python3.7/site-packages/djcelery/admin.py:62
+#: env/lib/python3.7/site-packages/djcelery/models.py:34
+#: env/lib/python3.7/site-packages/djcelery/models.py:341
+#, fuzzy
+#| msgid "State"
+msgid "state"
+msgstr "Provincia"
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:71
+#: env/lib/python3.7/site-packages/djcelery/models.py:350
+msgid "ETA"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:78
+msgid "when"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:87
+#: env/lib/python3.7/site-packages/djcelery/models.py:211
+#: env/lib/python3.7/site-packages/djcelery/models.py:345
+#, fuzzy
+#| msgid "Bank name"
+msgid "name"
+msgstr "Banco"
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:121
+#, fuzzy
+#| msgid "More details"
+msgid "Task detail"
+msgstr "Detalles"
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:122
+msgid "Tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:137
+#: env/lib/python3.7/site-packages/djcelery/models.py:343
+msgid "UUID"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:161
+msgid "Revoke selected tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:167
+msgid "Terminate selected tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:173
+msgid "Kill selected tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:180
+#: env/lib/python3.7/site-packages/djcelery/templates/djcelery/confirm_rate_limit.html:9
+msgid "Rate limit selected tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:193
+msgid "Rate limit selection"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:215
+#, fuzzy
+#| msgid "More details"
+msgid "Node detail"
+msgstr "Detalles"
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:216
+msgid "Worker Nodes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:223
+msgid "Shutdown selected worker nodes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:227
+msgid "Enable event mode for selected nodes."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:232
+msgid "Disable event mode for selected nodes."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:285
+msgid "Task (registered)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:287
+msgid "Task (custom)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:300
+msgid "Need name of task"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:311
+#, python-format
+msgid "Unable to parse JSON: %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:361
+msgid "Enable selected periodic tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/admin.py:366
+msgid "Disable selected periodic tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:10
+#, python-brace-format
+msgid "{num} year ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:10
+#, python-brace-format
+msgid "{num} years ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:14
+#, python-brace-format
+msgid "{num} month ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:14
+#, python-brace-format
+msgid "{num} months ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:18
+#, python-brace-format
+msgid "{num} week ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:18
+#, python-brace-format
+msgid "{num} weeks ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:22
+#, python-brace-format
+msgid "{num} day ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:22
+#, python-brace-format
+msgid "{num} days ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:56
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:71
+msgid "just now"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:62
+#, python-brace-format
+msgid "{minutes} minute ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:63
+#, python-brace-format
+msgid "{minutes} minutes ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:68
+#, python-brace-format
+msgid "{seconds} second ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:69
+#, python-brace-format
+msgid "{seconds} seconds ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:74
+#, python-brace-format
+msgid "{hours} hour ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:74
+#, python-brace-format
+msgid "{hours} hours ago"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/humanize.py:78
+#, python-brace-format
+msgid "yesterday at {time}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:32
+msgid "task id"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:38
+msgid "done at"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:39
+#: env/lib/python3.7/site-packages/djcelery/models.py:353
+msgid "traceback"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:50
+#, fuzzy
+#| msgid "United states"
+msgid "task state"
+msgstr "Estados Unidos"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:51
+#, fuzzy
+#| msgid "United states"
+msgid "task states"
+msgstr "Estados Unidos"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:69
+msgid "group id"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:71
+#, fuzzy
+#| msgid "Creation date"
+msgid "created at"
+msgstr "Fecha de creación"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:78
+msgid "saved group result"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:79
+msgid "saved group results"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:91
+msgid "Days"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:92
+msgid "Hours"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:93
+msgid "Minutes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:94
+msgid "Seconds"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:95
+msgid "Microseconds"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:100
+msgid "every"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:102
+msgid "period"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:106
+#: env/lib/python3.7/site-packages/djcelery/models.py:217
+msgid "interval"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:107
+msgid "intervals"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:127
+#, python-brace-format
+msgid "every {0.period_singular}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:128
+#, python-brace-format
+msgid "every {0.every:d} {0.period}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:137
+msgid "minute"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:138
+msgid "hour"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:140
+msgid "day of week"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:143
+msgid "day of month"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:146
+msgid "month of year"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:150
+#: env/lib/python3.7/site-packages/djcelery/models.py:221
+msgid "crontab"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:151
+msgid "crontabs"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:212
+#, fuzzy
+#| msgid "Description"
+msgid "Useful description"
+msgstr "Descripción"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:214
+#, fuzzy
+#| msgid "Bank name"
+msgid "task name"
+msgstr "Banco"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:223
+msgid "Use one of interval/crontab"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:226
+#: env/lib/python3.7/site-packages/djcelery/models.py:348
+msgid "Arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:227
+msgid "JSON encoded positional arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:230
+#: env/lib/python3.7/site-packages/djcelery/models.py:349
+msgid "Keyword arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:231
+msgid "JSON encoded keyword arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:234
+msgid "queue"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:235
+msgid "Queue defined in CELERY_QUEUES"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:238
+#, fuzzy
+#| msgid "Request change"
+msgid "exchange"
+msgstr "Solicitud de cambio"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:241
+msgid "routing key"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:244
+#: env/lib/python3.7/site-packages/djcelery/models.py:351
+msgid "expires"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:247
+msgid "enabled"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:257
+#, fuzzy
+#| msgid "Description"
+msgid "description"
+msgstr "Descripción"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:263
+msgid "periodic task"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:264
+msgid "periodic tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:307
+msgid "hostname"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:308
+msgid "last heartbeat"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:315
+#: env/lib/python3.7/site-packages/djcelery/models.py:360
+msgid "worker"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:316
+msgid "workers"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:347
+#| msgid "Date Received"
+msgid "event received at"
+msgstr "Fecha recepción"
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:352
+msgid "result"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:355
+msgid "execution time"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:356
+msgid "in seconds if task succeeded"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:358
+msgid "number of retries"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:369
+msgid "task"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/models.py:370
+msgid "tasks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/templates/admin/djcelery/change_list.html:6
+#: env/lib/python3.7/site-packages/djcelery/templates/djcelery/confirm_rate_limit.html:6
+msgid "Home"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/djcelery/templates/djcelery/confirm_rate_limit.html:22
+msgid "Rate limit"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:313
+msgid "usage: "
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:821
+msgid ".__call__() not defined"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1105
+#, python-format
+msgid "unknown parser %r (choices: %s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1146
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1349
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1387
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1407
+#, python-format
+msgid "invalid option string %r: must start with a character %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1428
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1445
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1463
+#, python-format
+msgid "conflicting option string(s): %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1526
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1596
+msgid "positional arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1597
+msgid "optional arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1615
+msgid "show this help message and exit"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1621
+msgid "show program's version number and exit"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1653
+msgid "cannot have multiple subparser arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1705
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1802
+#, python-format
+msgid "not allowed with argument %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1848
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1862
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1952
+msgid "too few arguments"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1959
+#| msgid "Change required"
+msgid "argument %s is required"
+msgstr "Solicitud de cambio"
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1973
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2019
+msgid "expected one argument"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2020
+msgid "expected at most one argument"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2021
+msgid "expected at least one argument"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2023
+#, python-format
+msgid "expected %s argument(s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2080
+#, python-format
+msgid "ambiguous option: %s could match %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2142
+#, python-format
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2243
+#, python-format
+msgid "%r is not callable"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2259
+#, python-format
+msgid "invalid %s value: %r"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2269
+#, python-format
+msgid "invalid choice: %r (choose from %s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:2362
+#, python-format
+msgid "%s: error: %s\n"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/kombu/transport/qpid.py:1301
+#, python-format
+msgid "Attempting to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/kombu/transport/qpid.py:1306
+#, python-format
+msgid "Connected to qpid with SASL mechanism %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/kombu/transport/qpid.py:1324
+#, python-format
+msgid "Unable to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:8
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:10
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:17
+msgid "previous page"
+msgstr "pagina anterior"
+
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:26
+#| msgid "Recent updates"
+msgid "current page"
+msgstr "pagina actual"
+
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:42
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:43
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:50
+msgid "next page"
+msgstr "proxima pagina"
+
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:4
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:6
+msgid "previous"
+msgstr "anterior"
+
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:20
+#: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:22
+msgid "next"
+msgstr "siguiente"
+
+#: invoices_app/__init__.py:25
 msgid "APPROVED"
 msgstr "APROBADA"
 
-#: invoices_app/__init__.py:20
-msgid "NEW"
-msgstr "NUEVA"
+#: invoices_app/__init__.py:26
+msgid "PENDING"
+msgstr "PENDIENTE"
 
-#: invoices_app/__init__.py:21
+#: invoices_app/__init__.py:27
 msgid "CHANGES REQUESTED"
 msgstr "CAMBIOS REQUERIDOS"
 
-#: invoices_app/__init__.py:22
+#: invoices_app/__init__.py:28
 msgid "REJECTED"
 msgstr "RECHAZADA"
 
-#: invoices_app/__init__.py:23
+#: invoices_app/__init__.py:29
 msgid "PAID"
 msgstr "PAGADA"
 
-#: invoices_app/__init__.py:55
+#: invoices_app/__init__.py:54
 msgid "MM/DD/YYYY"
 msgstr "DD/MM/YY"
 
-#: invoices_app/__init__.py:56
+#: invoices_app/__init__.py:55
 msgid "en"
 msgstr "es"
 
-#: invoices_app/__init__.py:59
+#: invoices_app/__init__.py:58
 msgid "Please provide a Workday ID in order to approve an invoice"
 msgstr "Por favor setea un workday ID para poder aprobar la factura"
 
-#: invoices_app/__init__.py:60
-msgid "Ivalid Worday ID"
-msgstr "Workday ID invalido"
+#: invoices_app/__init__.py:59
+msgid "Please add a comment to request changes"
+msgstr "Porfavor agregue un comentario para pedir cambios"
 
-#: invoices_app/__init__.py:62
+#: invoices_app/__init__.py:61 users_app/views.py:144
 msgid "Thank you"
 msgstr "Gracias"
 
-#: invoices_app/__init__.py:63
+#: invoices_app/__init__.py:62
 msgid "Eventbrite Invoice {} commented"
 msgstr "Factura de Eventbrite {} comentada"
 
-#: invoices_app/__init__.py:64
+#: invoices_app/__init__.py:63
 msgid ""
 "You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}"
 msgstr ""
 "Tienes un nuevo comentario en la factura # {}. Por favor revise su factura. "
 "COMENTARIO:{}"
 
-#: invoices_app/__init__.py:65
+#: invoices_app/__init__.py:64
 msgid "Invoice {} changed status to {}"
 msgstr "La factura {} cambió de estado a {}"
 
-#: invoices_app/__init__.py:66
+#: invoices_app/__init__.py:65
 msgid "Eventbrite Invoice Edited"
 msgstr "Factura de Eventbrite editada"
 
-#: invoices_app/__init__.py:67
+#: invoices_app/__init__.py:66
 msgid ""
 "Your Invoice # {} was edited by an administrator. Please check your invoice"
 msgstr ""
 "Tu factura # {} fue modificada por un administrador. Por favor revise su "
 "factura."
 
-#: invoices_app/filters.py:38 invoices_app/models.py:39
-#: templates/AP_app/ap-taxpayer-details.html:29
-#: templates/AP_app/ap-taxpayers.html:24
+#: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
 #: templates/invoices_app/invoice-list.html:36
 #: templates/invoices_app/invoice_detail.html:45
-#: templates/supplier_app/invoice-list.html:36
+#: templates/invoices_app/supplier-invoice-list.html:36
+#: templates/supplier_app/ap-taxpayers.html:24
 #: templates/supplier_app/supplier-home.html:28
+#: templates/supplier_app/taxpayer-details.html:40
 msgid "Status"
 msgstr "Estado"
 
-#: invoices_app/filters.py:40 invoices_app/views.py:212
-#: invoices_app/views.py:282 templates/invoices_app/invoice-list.html:31
+#: invoices_app/filters.py:29 invoices_app/views.py:227
+#: invoices_app/views.py:297 templates/invoices_app/invoice-list.html:31
 msgid "Invoice Date"
 msgstr "Fecha de factura"
 
-#: invoices_app/filters.py:41 invoices_app/models.py:43
+#: invoices_app/filters.py:30 invoices_app/models.py:43
 #: templates/invoices_app/invoice-list.html:32
 msgid "Due Date"
 msgstr "Fecha de vencimiento"
 
-#: invoices_app/filters.py:43 templates/invoices_app/history-list.html:26
+#: invoices_app/filters.py:32 templates/invoices_app/history-list.html:26
 #: templates/invoices_app/invoice-list.html:35
-#: templates/supplier_app/invoice-list.html:35
+#: templates/invoices_app/supplier-invoice-list.html:35
 msgid "Total Amount"
 msgstr "Monto Total"
 
-#: invoices_app/filters.py:46
-msgid "All"
-msgstr "Todos"
-
-#: invoices_app/filters.py:48 templates/AP_app/ap-taxpayers.html:15
-#: templates/invoices_app/history-list.html:21
+#: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
 #: templates/invoices_app/invoice-list.html:29
 msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
-#: invoices_app/filters.py:56 supplier_app/filters.py:28
-#: supplier_app/models.py:86 supplier_app/models.py:107
-#: supplier_app/models.py:286 templates/AP_app/ap-taxpayer-details.html:96
-#: templates/AP_app/ap-taxpayer-details.html:224
-#: templates/AP_app/taxpayer-history-list.html:22
-#: templates/AP_app/taxpayer-history-list.html:55
-#: templates/invoices_app/invoice-list.html:30
+#: invoices_app/filters.py:47 supplier_app/filters.py:28
+#: supplier_app/models.py:92 supplier_app/models.py:113
+#: supplier_app/models.py:295 templates/invoices_app/invoice-list.html:30
+#: templates/supplier_app/AP/taxpayer-history-list.html:22
+#: templates/supplier_app/AP/taxpayer-history-list.html:55
+#: templates/supplier_app/taxpayer-details.html:107
+#: templates/supplier_app/taxpayer-details.html:247
 msgid "Country"
 msgstr "País"
 
@@ -138,13 +1952,6 @@ msgstr "ej. 124246346"
 #: invoices_app/forms.py:63 templates/invoices_app/history-list.html:24
 msgid "Net Amount"
 msgstr "Neto"
-
-#: invoices_app/forms.py:70 invoices_app/models.py:45
-#: templates/invoices_app/history-list.html:22
-#: templates/invoices_app/invoice-list.html:33
-#: templates/supplier_app/invoice-list.html:33
-msgid "Invoice Number"
-msgstr "Número de factura"
 
 #: invoices_app/forms.py:73
 msgid "Workday ID"
@@ -166,6 +1973,12 @@ msgstr "Fecha de factura"
 msgid "Date Received"
 msgstr "Fecha recepción"
 
+#: invoices_app/models.py:45 templates/invoices_app/history-list.html:22
+#: templates/invoices_app/invoice-list.html:33
+#: templates/invoices_app/supplier-invoice-list.html:33
+msgid "Invoice Number"
+msgstr "Número de factura"
+
 #: invoices_app/models.py:46
 msgid "Invoice Type"
 msgstr "Tipo de factura"
@@ -183,118 +1996,31 @@ msgstr "Gravámenes"
 msgid "Total"
 msgstr "Total"
 
-#: invoices_app/models.py:71 templates/supplier_app/invoices_form.html:137
+#: invoices_app/models.py:71 templates/invoices_app/invoices_form.html:139
 msgid "Invoice File"
 msgstr "Factura"
 
-#: invoices_app/views.py:184
+#: invoices_app/views.py:199
 msgid "Taxpayer not approved yet"
 msgstr "Entidad fiscal no aprobado aún"
 
-#: invoices_app/views.py:187
+#: invoices_app/views.py:202
 msgid "The invoice {} already exists"
 msgstr "La factura {} ya existe."
 
-#: supplier_app/__init__.py:26
-msgid "Approved"
-msgstr "Aprobado"
-
-#: supplier_app/__init__.py:30
-msgid "Change required"
-msgstr "Solicitud de cambio"
-
-#: supplier_app/__init__.py:34
-msgid "Pending"
-msgstr "Pendiente"
-
-#: supplier_app/__init__.py:38
-msgid "Denied"
-msgstr "Rechazado"
-
-#: supplier_app/__init__.py:43
+#: supplier_app/__init__.py:18
 msgid "15 days"
 msgstr "15 días"
 
-#: supplier_app/__init__.py:44
+#: supplier_app/__init__.py:19
 msgid "30 days"
 msgstr "30 días"
 
-#: supplier_app/__init__.py:48
+#: supplier_app/__init__.py:23
 msgid "Bank"
 msgstr "Transferencia bancaria"
 
-#: supplier_app/__init__.py:53
-msgid "You have been invited to BriteSu"
-msgstr "Has sido invitado a BriteSu"
-
-#: supplier_app/__init__.py:56
-msgid ""
-"Welcome to BriteSu!\n"
-"Please click on the following link to register.\n"
-msgstr ""
-"Bienvenido a BriteSu!\n"
-"Por favor accede al siguiente link.\n"
-
-#: supplier_app/__init__.py:59 supplier_app/__init__.py:71
-#: supplier_app/__init__.py:84
-msgid "Thank you!"
-msgstr "¡Gracias!"
-
-#: supplier_app/__init__.py:60
-msgid "Join"
-msgstr "Únete"
-
-#: supplier_app/__init__.py:65
-msgid "Your taxpayer has been approved"
-msgstr "Su entidad fiscal fue aprobada"
-
-#: supplier_app/__init__.py:68
-msgid ""
-"You are ready to start using BriteSu.\n"
-"You can access the platform now and upload your invoices.\n"
-msgstr ""
-"Ya estás habilitado en BriteSU.\n"
-"Ahora podes acceder a la plataforma y subir tus facturas.\n"
-
-#: supplier_app/__init__.py:72 supplier_app/__init__.py:85
-#: supplier_app/__init__.py:97 utils/__init__.py:3
-msgid "Go to BriteSu"
-msgstr "Dirígete a BriteSU"
-
-#: supplier_app/__init__.py:77
-msgid "Your taxpayer has some pending modifications"
-msgstr "Su entidad fiscal tiene algunas modificaciones pendientes"
-
-#: supplier_app/__init__.py:80
-msgid ""
-"Please visit your taxpayer and read comments.\n"
-"Once changes are done and approved by Eventbrite,\n"
-"we will send you an email.\n"
-msgstr ""
-"Por favor diríjase a su entidad fiscal y lea los nuevos comentarios.\n"
-"Una vez que realice los cambios propuestos, Eventbrite los evaluará.\n"
-"Cuando se apruebe su entidad fiscal, Eventbrite se lo notificará por email.\n"
-
-#: supplier_app/__init__.py:90
-msgid "Your taxpayer has been rejected"
-msgstr "Su entidad fiscal fue rechazada"
-
-#: supplier_app/__init__.py:93
-msgid ""
-"We are afraid that the taxpayer you were trying to submit is invalid\n"
-"Please contact the Eventbrite employee that hired you.\n"
-msgstr ""
-"Lamentamos notificarle que la entidad fiscal que está tratando de cargar es "
-"inválida.\n"
-"Por favor contáctate con el empleado de Eventbrite que pactaste la compra.\n"
-
-#: supplier_app/__init__.py:96
-msgid "Please contact the Eventbrite employee that hired you, Thank you!"
-msgstr ""
-"Por favor contáctate con el empleado de Eventbrite que pactaste la compra. "
-"Gracias"
-
-#: supplier_app/__init__.py:108
+#: supplier_app/__init__.py:26
 msgid "M d, Y"
 msgstr "d M, Y"
 
@@ -318,53 +2044,155 @@ msgstr ""
 "Todavía no perteneces a un grupo económico, por favor contáctate con "
 "supplier-onboarding@eventbrite.com"
 
-#: supplier_app/constants/custom_messages.py:4
+#: supplier_app/constants/custom_messages.py:5
 msgid "Your invitation was sent successfully"
 msgstr "Su invitación se envió correctamente"
 
-#: supplier_app/constants/custom_messages.py:5
+#: supplier_app/constants/custom_messages.py:6
 msgid "There was an error sending your email"
 msgstr "Error, no se pudo enviar el email"
 
-#: supplier_app/constants/custom_messages.py:6
+#: supplier_app/constants/custom_messages.py:8
 msgid "You have joined the company succesfully"
 msgstr "Te uniste al grupo económico correctamente"
 
-#: supplier_app/constants/custom_messages.py:7
+#: supplier_app/constants/custom_messages.py:9
 msgid "An error has ocurred while joining the company"
 msgstr "Ocurrió un error en la asignación del grupo económico"
 
-#: supplier_app/constants/custom_messages.py:8
-msgid "Your taxpayer was created successfully"
-msgstr "Su entidad fiscal se creó correctamente"
-
-#: supplier_app/constants/custom_messages.py:9
-msgid "There was an error on creating your taxpayer please try again"
-msgstr "No se pudo crear la entidad fiscal, por favor inténtelo nuevamente"
-
-#: supplier_app/constants/custom_messages.py:10
-msgid "Your form is invalid"
-msgstr "El formulario es inválido"
-
 #: supplier_app/constants/custom_messages.py:11
-msgid "The taxpayer you try to access/modify doesnt exists"
-msgstr "La entidad fiscal que estás tratando de acceder/modificar no existe"
-
-#: supplier_app/constants/custom_messages.py:12
-msgid "You did not set workday id"
-msgstr "No seteaste el workday id"
-
-#: supplier_app/constants/custom_messages.py:14
-msgid "Taxpayer denied successfully"
-msgstr "Entidad fiscal denegada correctamente"
-
-#: supplier_app/constants/custom_messages.py:15
 msgid "Taxpayer approved successfully"
 msgstr "Entidad fiscal aprobada correctamente"
 
+#: supplier_app/constants/custom_messages.py:12
+msgid "Please write a comment in the text field"
+msgstr "Porfavor ingrese un comentario en el campo de texto"
+
+#: supplier_app/constants/custom_messages.py:13
+msgid "Your taxpayer was created successfully"
+msgstr "Su entidad fiscal se creó correctamente"
+
+#: supplier_app/constants/custom_messages.py:14
+msgid "There was an error on creating your taxpayer please try again"
+msgstr "No se pudo crear la entidad fiscal, por favor inténtelo nuevamente"
+
+#: supplier_app/constants/custom_messages.py:15
+msgid "Taxpayer denied successfully"
+msgstr "Entidad fiscal denegada correctamente"
+
 #: supplier_app/constants/custom_messages.py:16
+msgid "Your form is invalid"
+msgstr "El formulario es inválido"
+
+#: supplier_app/constants/custom_messages.py:17
+msgid "The taxpayer you try to access/modify doesnt exists"
+msgstr "La entidad fiscal que estás tratando de acceder/modificar no existe"
+
+#: supplier_app/constants/custom_messages.py:18
 msgid "Requested changes successfully"
 msgstr "Se solicitaron cambios correctamente"
+
+#: supplier_app/constants/custom_messages.py:19
+msgid "You did not set workday id"
+msgstr "No seteaste el workday id"
+
+#: supplier_app/constants/custom_messages.py:20
+msgid "There is other taxpayer with that workday id"
+msgstr "Ya existe una entidad fiscal con esa id en workday"
+
+#: supplier_app/constants/email_notifications.py:10
+msgid "You have been invited to BriteSu"
+msgstr "Has sido invitado a BriteSu"
+
+#: supplier_app/constants/email_notifications.py:13
+msgid ""
+"Welcome to BriteSu!\n"
+"Please click on the following link to register.\n"
+msgstr ""
+"Bienvenido a BriteSu!\n"
+"Por favor accede al siguiente link.\n"
+
+#: supplier_app/constants/email_notifications.py:16
+#: supplier_app/constants/email_notifications.py:28
+#: supplier_app/constants/email_notifications.py:41
+msgid "Thank you!"
+msgstr "¡Gracias!"
+
+#: supplier_app/constants/email_notifications.py:17
+msgid "Join"
+msgstr "Únete"
+
+#: supplier_app/constants/email_notifications.py:22
+msgid "Your taxpayer has been approved"
+msgstr "Su entidad fiscal fue aprobada"
+
+#: supplier_app/constants/email_notifications.py:25
+msgid ""
+"You are ready to start using BriteSu.\n"
+"You can access the platform now and upload your invoices.\n"
+msgstr ""
+"Ya estás habilitado en BriteSU.\n"
+"Ahora podes acceder a la plataforma y subir tus facturas.\n"
+
+#: supplier_app/constants/email_notifications.py:29
+#: supplier_app/constants/email_notifications.py:42
+#: supplier_app/constants/email_notifications.py:54 utils/__init__.py:3
+msgid "Go to BriteSu"
+msgstr "Dirígete a BriteSU"
+
+#: supplier_app/constants/email_notifications.py:34
+msgid "Your taxpayer has some pending modifications"
+msgstr "Su entidad fiscal tiene algunas modificaciones pendientes"
+
+#: supplier_app/constants/email_notifications.py:37
+msgid ""
+"Please visit your taxpayer and read comments.\n"
+"Once changes are done and approved by Eventbrite,\n"
+"we will send you an email.\n"
+msgstr ""
+"Por favor diríjase a su entidad fiscal y lea los nuevos comentarios.\n"
+"Una vez que realice los cambios propuestos, Eventbrite los evaluará.\n"
+"Cuando se apruebe su entidad fiscal, Eventbrite se lo notificará por email.\n"
+
+#: supplier_app/constants/email_notifications.py:47
+msgid "Your taxpayer has been rejected"
+msgstr "Su entidad fiscal fue rechazada"
+
+#: supplier_app/constants/email_notifications.py:50
+msgid ""
+"We are afraid that the taxpayer you were trying to submit is invalid\n"
+"Please contact the Eventbrite employee that hired you.\n"
+msgstr ""
+"Lamentamos notificarle que la entidad fiscal que está tratando de cargar es "
+"inválida.\n"
+"Por favor contáctate con el empleado de Eventbrite que pactaste la compra.\n"
+
+#: supplier_app/constants/email_notifications.py:53
+msgid "Please contact the Eventbrite employee that hired you, Thank you!"
+msgstr ""
+"Por favor contáctate con el empleado de Eventbrite que pactaste la compra. "
+"Gracias"
+
+#: supplier_app/constants/taxpayer_status.py:16
+msgid "Approved"
+msgstr "Aprobado"
+
+#: supplier_app/constants/taxpayer_status.py:20
+msgid "Change required"
+msgstr "Solicitud de cambio"
+
+#: supplier_app/constants/taxpayer_status.py:24
+msgid "Pending"
+msgstr "Pendiente"
+
+#: supplier_app/constants/taxpayer_status.py:28
+msgid "Denied"
+msgstr "Rechazado"
+
+#: supplier_app/constants/taxpayer_status.py:32
+#| msgid "Change required"
+msgid "Changes pending"
+msgstr "Cambios pendientes"
 
 #: supplier_app/filters.py:19
 msgid "Taxpayer state"
@@ -386,327 +2214,136 @@ msgstr "ej Buenos aires"
 msgid "Eventbrite entities to bill"
 msgstr "Entidades de Eventbrite a Facturar"
 
-#: supplier_app/models.py:39 templates/AP_app/company_creation.html:14
-#: templates/supplier_app/company_list.html:35
+#: supplier_app/models.py:45 templates/supplier_app/AP/company_creation.html:14
+#: templates/supplier_app/AP/company_list.html:29
 msgid "Name"
 msgstr "Nombre"
 
-#: supplier_app/models.py:82
+#: supplier_app/models.py:88
 msgid "Eventbrite entity name"
 msgstr "Entidad de Eventbrite"
 
-#: supplier_app/models.py:98 templates/AP_app/ap-taxpayer-details.html:44
-#: templates/AP_app/ap-taxpayers.html:22
-#: templates/AP_app/taxpayer-history-list.html:17
+#: supplier_app/models.py:104
+#: templates/supplier_app/AP/taxpayer-history-list.html:17
+#: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/supplier-home.html:26
+#: templates/supplier_app/taxpayer-details.html:55
 msgid "Business name"
 msgstr "Razón social"
 
-#: supplier_app/models.py:110
+#: supplier_app/models.py:116
 msgid "Creation date"
 msgstr "Fecha de creación"
 
-#: supplier_app/models.py:208
+#: supplier_app/models.py:217
 msgid "CUIT must only have numbers"
 msgstr "El CUIT solo debe tener numeros"
 
-#: supplier_app/models.py:219
+#: supplier_app/models.py:228
 msgid "Payment type"
 msgstr "Forma de pago"
 
-#: supplier_app/models.py:224
+#: supplier_app/models.py:233
 msgid "Payment term"
 msgstr "Plazo de pago"
 
-#: supplier_app/models.py:229
+#: supplier_app/models.py:238
 msgid "AFIP registration certificate"
 msgstr "Constancia de inscripción de AFIP"
 
-#: supplier_app/models.py:242
+#: supplier_app/models.py:251
 msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgstr "Certificado de no retención de gravámenes, SUSS"
 
-#: supplier_app/models.py:264 templates/AP_app/ap-taxpayer-details.html:190
-#: templates/AP_app/taxpayer-history-list.html:50
+#: supplier_app/models.py:273
+#: templates/supplier_app/AP/taxpayer-history-list.html:50
+#: templates/supplier_app/taxpayer-details.html:213
 msgid "Street"
 msgstr "Calle"
 
-#: supplier_app/models.py:266 templates/AP_app/ap-taxpayer-details.html:193
-#: templates/AP_app/taxpayer-history-list.html:51
+#: supplier_app/models.py:275
+#: templates/supplier_app/AP/taxpayer-history-list.html:51
+#: templates/supplier_app/taxpayer-details.html:216
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:267 templates/AP_app/taxpayer-history-list.html:52
+#: supplier_app/models.py:276
+#: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:270 templates/AP_app/ap-taxpayer-details.html:218
-#: templates/AP_app/taxpayer-history-list.html:53
+#: supplier_app/models.py:279
+#: templates/supplier_app/AP/taxpayer-history-list.html:53
+#: templates/supplier_app/taxpayer-details.html:241
 msgid "City"
 msgstr "Cíudad"
 
-#: supplier_app/models.py:274 templates/AP_app/ap-taxpayer-details.html:221
-#: templates/AP_app/taxpayer-history-list.html:54
+#: supplier_app/models.py:283
+#: templates/supplier_app/AP/taxpayer-history-list.html:54
+#: templates/supplier_app/taxpayer-details.html:244
 msgid "State"
 msgstr "Provincia"
 
-#: supplier_app/models.py:278
-#, fuzzy
+#: supplier_app/models.py:287
 msgid "City name must only have letters"
 msgstr "La ciudad solo debe tener letras"
 
-#: supplier_app/models.py:297
+#: supplier_app/models.py:306
 msgid "Bank account number"
 msgstr "CBU"
 
-#: supplier_app/models.py:301
+#: supplier_app/models.py:310
 msgid "Bank account must only have numbers"
 msgstr "La cuenta bancaria solo debe tener numeros"
 
-#: supplier_app/models.py:309 templates/AP_app/ap-taxpayer-details.html:146
+#: supplier_app/models.py:318 templates/supplier_app/taxpayer-details.html:164
 msgid "Bank name"
 msgstr "Banco"
 
-#: supplier_app/models.py:319
+#: supplier_app/models.py:328
 msgid "Bank account certificate"
 msgstr "Certificado de la cuenta bancaria"
 
-#: supplier_management_site/settings/base.py:146
-#: templates/supplier_app/company_list.html:56
+#: supplier_management_site/settings/base.py:147
+#: templates/supplier_app/AP/company_list.html:53
 msgid "English"
 msgstr "Inglés"
 
-#: supplier_management_site/settings/base.py:147
-#: templates/supplier_app/company_list.html:59
+#: supplier_management_site/settings/base.py:148
+#: templates/supplier_app/AP/company_list.html:56
 msgid "Spanish"
 msgstr "Español"
 
-#: supplier_management_site/settings/base.py:148
+#: supplier_management_site/settings/base.py:149
 msgid "Portuguese (Brazil)"
 msgstr "Portugués"
 
 #: supplier_management_site/tests/templates/tests/index.html:4
-#: users_app/tests/test_languages.py:34
+#: users_app/tests/test_languages.py:35
 msgid "Hello world"
 msgstr "Hola Mundo"
-
-#: templates/AP_app/admins-list.html:9
-msgid "Admins List"
-msgstr "Lista de administradores"
-
-#: templates/AP_app/admins-list.html:15
-msgid "User ID"
-msgstr "ID de usuario"
-
-#: templates/AP_app/admins-list.html:16
-msgid "Email"
-msgstr "Email"
-
-#: templates/AP_app/admins-list.html:17
-msgid "AP Admin"
-msgstr "AP Admin"
-
-#: templates/AP_app/admins-list.html:18
-msgid "AP Reporter"
-msgstr "AP Reporter"
-
-#: templates/AP_app/admins-list.html:19
-msgid "AP Manager"
-msgstr "AP Manager"
-
-#: templates/AP_app/ap-taxpayer-details.html:15
-msgid "You must set workday id to the taxpayer"
-msgstr "Debes ponerle un workday id a la entidad fiscal"
-
-#: templates/AP_app/ap-taxpayer-details.html:26
-msgid "General information"
-msgstr "Información general"
-
-#: templates/AP_app/ap-taxpayer-details.html:41
-msgid "Workday id"
-msgstr "Workday id"
-
-#: templates/AP_app/ap-taxpayer-details.html:47
-#: templates/AP_app/ap-taxpayers.html:23
-msgid "Taxpayer Identification Number"
-msgstr "Identificador de entidad fiscal"
-
-#: templates/AP_app/ap-taxpayer-details.html:57
-msgid "No workday id"
-msgstr "Workday ID no especificado"
-
-#: templates/AP_app/ap-taxpayer-details.html:71
-#: templates/AP_app/taxpayer-history-list.html:19
-msgid "Payment Type"
-msgstr "Tipo de pago"
-
-#: templates/AP_app/ap-taxpayer-details.html:74
-#: templates/AP_app/taxpayer-history-list.html:20
-msgid "Payment Term"
-msgstr "Período de pago"
-
-#: templates/AP_app/ap-taxpayer-details.html:77
-msgid "EB entities"
-msgstr "Entidades Eventbrite"
-
-#: templates/AP_app/ap-taxpayer-details.html:99
-#: templates/AP_app/ap-taxpayer-details.html:164
-msgid "Files"
-msgstr "Archivos"
-
-#: templates/AP_app/ap-taxpayer-details.html:112
-msgid "AFIP certificate"
-msgstr "Cerificado AFIP"
-
-#: templates/AP_app/ap-taxpayer-details.html:120
-msgid "Withholding taxes"
-msgstr "Impuesto a las ganancias"
-
-#: templates/AP_app/ap-taxpayer-details.html:133
-#: templates/AP_app/ap-taxpayer-details.html:178
-#: templates/AP_app/ap-taxpayer-details.html:248
-msgid "Edit"
-msgstr "Editar"
-
-#: templates/AP_app/ap-taxpayer-details.html:143
-msgid "Bank info"
-msgstr "Informacíon Bancaria"
-
-#: templates/AP_app/ap-taxpayer-details.html:152
-msgid "Bank code"
-msgstr "Código Bancario"
-
-#: templates/AP_app/ap-taxpayer-details.html:158
-msgid "Account number"
-msgstr "Número de cuenta"
-
-#: templates/AP_app/ap-taxpayer-details.html:168
-msgid "CBU"
-msgstr "CBU"
-
-#: templates/AP_app/ap-taxpayer-details.html:184
-msgid "Address information"
-msgstr "Domicilio"
-
-#: templates/AP_app/ap-taxpayer-details.html:196
-msgid "Zip_Code"
-msgstr "Código postal"
-
-#: templates/AP_app/ap-taxpayer-details.html:259
-#: templates/AP_app/taxpayer-history-list.html:9
-msgid "Taxpayer History"
-msgstr "Historial del proveedor"
-
-#: templates/AP_app/ap-taxpayer-details.html:270
-#: templates/AP_app/taxpayer-history-list.html:21
-msgid "Comments"
-msgstr "Comentarios adicionales"
-
-#: templates/AP_app/ap-taxpayers.html:25
-msgid "Action"
-msgstr "Operaciones"
-
-#: templates/AP_app/ap-taxpayers.html:40
-msgid "More details"
-msgstr "Detalles"
-
-#: templates/AP_app/company_creation.html:7
-msgid "Create a new company"
-msgstr "Crear un nuevo grupo económico"
-
-#: templates/AP_app/company_creation.html:20
-#: templates/supplier_app/company_list.html:36
-msgid "Description"
-msgstr "Descripción"
-
-#: templates/AP_app/company_creation.html:24
-msgid "Create Company"
-msgstr "Crear un nuevo grupo económico"
-
-#: templates/AP_app/edit-address-information.html:23
-#: templates/AP_app/edit-bank-account-information.html:23
-#: templates/AP_app/edit-taxpayer-information.html:23
-msgid "Save"
-msgstr "Guardar"
-
-#: templates/AP_app/edit-address-information.html:23
-#: templates/AP_app/edit-bank-account-information.html:23
-#: templates/AP_app/edit-taxpayer-information.html:23
-msgid "Request change"
-msgstr "Solicitud de cambio"
-
-#: templates/AP_app/edit-address-information.html:25
-#: templates/AP_app/edit-bank-account-information.html:25
-#: templates/AP_app/edit-taxpayer-information.html:25
-#: templates/supplier_app/invoices_form.html:163
-#: templates/supplier_app/invoices_form.html:165
-#: templates/supplier_app/invoices_form.html:167
-#: templates/supplier_app/taxpayer-creation.html:111
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: templates/AP_app/taxpayer-history-list.html:15
-#: templates/AP_app/taxpayer-history-list.html:48
-#: templates/AP_app/taxpayer-history-list.html:81
-#: templates/invoices_app/history-list.html:18
-msgid "User"
-msgstr "Usuario"
-
-#: templates/AP_app/taxpayer-history-list.html:16
-#: templates/AP_app/taxpayer-history-list.html:49
-#: templates/AP_app/taxpayer-history-list.html:82
-#: templates/invoices_app/history-list.html:19
-msgid "Modified"
-msgstr "Modificado"
-
-#: templates/AP_app/taxpayer-history-list.html:18
-#: templates/supplier_app/supplier-home.html:27
-msgid "Taxpayer identification number"
-msgstr "Identificador de entidad fiscal"
-
-#: templates/AP_app/taxpayer-history-list.html:42
-msgid "Address History"
-msgstr "Domicilio"
-
-#: templates/AP_app/taxpayer-history-list.html:75
-msgid "Bank Account History"
-msgstr "Cuenta bancaria"
-
-#: templates/AP_app/taxpayer-history-list.html:83
-msgid "Bank Name"
-msgstr "Banco"
-
-#: templates/AP_app/taxpayer-history-list.html:84
-msgid "Bank Account Number"
-msgstr "CBU"
-
-#: templates/AP_app/taxpayer_filter.html:51 templates/_filters.html:80
-msgid "Apply"
-msgstr "Aplicar"
-
-#: templates/AP_app/taxpayer_filter.html:60 templates/_filters.html:87
-msgid "Filters"
-msgstr "Filtros"
-
-#: templates/comments.html:5
-msgid "write your comments here"
-msgstr "Comentar"
-
-#: templates/comments.html:7
-msgid "Request Change"
-msgstr "Solicitar cambios"
-
-#: templates/comments.html:7
-msgid "Make Comment"
-msgstr "Hacer un comentario"
 
 #: templates/invoices_app/history-list.html:11
 msgid "Invoice history "
 msgstr "Historial de facturas"
 
+#: templates/invoices_app/history-list.html:18
+#: templates/supplier_app/AP/taxpayer-history-list.html:15
+#: templates/supplier_app/AP/taxpayer-history-list.html:48
+#: templates/supplier_app/AP/taxpayer-history-list.html:81
+msgid "User"
+msgstr "Usuario"
+
+#: templates/invoices_app/history-list.html:19
+#: templates/supplier_app/AP/taxpayer-history-list.html:16
+#: templates/supplier_app/AP/taxpayer-history-list.html:49
+#: templates/supplier_app/AP/taxpayer-history-list.html:82
+msgid "Modified"
+msgstr "Modificado"
+
 #: templates/invoices_app/history-list.html:23
 #: templates/invoices_app/invoice-list.html:34
-#: templates/supplier_app/invoice-list.html:34
+#: templates/invoices_app/supplier-invoice-list.html:34
 msgid "PO Number"
 msgstr "Número de orden de compra"
 
@@ -719,12 +2356,12 @@ msgid "Received"
 msgstr "Recibido"
 
 #: templates/invoices_app/invoice-list.html:38
-#: templates/supplier_app/invoice-list.html:37
+#: templates/invoices_app/supplier-invoice-list.html:37
 msgid "View"
 msgstr "Ver"
 
 #: templates/invoices_app/invoice-list.html:43
-#: templates/supplier_app/invoice-list.html:43
+#: templates/invoices_app/supplier-invoice-list.html:43
 msgid "No invoices"
 msgstr "No hay facturas"
 
@@ -774,48 +2411,116 @@ msgid "Net amount: "
 msgstr "Neto:"
 
 #: templates/invoices_app/invoice_detail.html:124
-msgid "Request Changes"
-msgstr "Solicitar cambios"
-
-#: templates/invoices_app/invoice_detail.html:125
 msgid "Reject"
 msgstr "Rechazar"
 
-#: templates/invoices_app/invoice_detail.html:128
+#: templates/invoices_app/invoice_detail.html:127
 msgid "Pay"
 msgstr "Pagar"
 
-#: templates/invoices_app/invoice_detail.html:139
+#: templates/invoices_app/invoice_detail.html:138
 msgid "Approve"
 msgstr "Aprobado"
 
 #: templates/invoices_app/invoice_detail.html:146
+msgid "Request Changes"
+msgstr "Solicitar cambios"
+
+#: templates/invoices_app/invoice_detail.html:154
+msgid "Send Request"
+msgstr "Enviar Pedido"
+
+#: templates/invoices_app/invoice_detail.html:162
 msgid "Invoice History"
 msgstr "Historial de facturas"
 
-#: templates/invoices_app/invoice_detail.html:158
+#: templates/invoices_app/invoice_detail.html:174
 msgid "Recent updates"
 msgstr "Cambios recientes"
 
-#: templates/invoices_app/invoice_detail.html:163
+#: templates/invoices_app/invoice_detail.html:181
 msgid "Make a comment"
 msgstr "Hacer un comentario"
 
-#: templates/invoices_app/invoice_detail.html:171
+#: templates/invoices_app/invoice_detail.html:189
 msgid "Post a comment"
 msgstr "Comentar"
 
-#: templates/invoices_app/invoice_detail.html:177
+#: templates/invoices_app/invoice_detail.html:195
 msgid "Choose a file"
 msgstr "Elige un archivo"
 
-#: templates/invoices_app/invoice_detail.html:192
+#: templates/invoices_app/invoice_detail.html:211
 msgid "Administrator"
 msgstr "Administrador"
 
-#: templates/invoices_app/invoice_detail.html:197
+#: templates/invoices_app/invoice_detail.html:216
 msgid "Attachment: "
 msgstr "Archivo Adjunto: "
+
+#: templates/invoices_app/invoice_filters.html:84
+#: templates/supplier_app/AP/taxpayer_filter.html:51
+msgid "Apply"
+msgstr "Aplicar"
+
+#: templates/invoices_app/invoice_filters.html:95
+#: templates/supplier_app/AP/taxpayer_filter.html:62
+msgid "Filters"
+msgstr "Filtros"
+
+#: templates/invoices_app/invoices_form.html:24
+msgid "Update Invoice"
+msgstr "Editar Factura"
+
+#: templates/invoices_app/invoices_form.html:26
+msgid "Create Invoice"
+msgstr "Crear Factura"
+
+#: templates/invoices_app/invoices_form.html:74
+msgid "Eventbrite entity"
+msgstr "Entidad de Eventbrite"
+
+#: templates/invoices_app/invoices_form.html:75
+msgid "Eventbrite company to which you bill"
+msgstr "Entidad de Eventbrite a la que le facturas"
+
+#: templates/invoices_app/invoices_form.html:143
+msgid "Choose file"
+msgstr "Elige un archivo"
+
+#: templates/invoices_app/invoices_form.html:160
+msgid "Submit"
+msgstr "Cargar"
+
+#: templates/invoices_app/invoices_form.html:163
+#: templates/invoices_app/invoices_form.html:165
+#: templates/invoices_app/invoices_form.html:167
+#: templates/registration/admin_create.html:34
+#: templates/supplier_app/AP/company_creation.html:25
+#: templates/supplier_app/Supplier/taxpayer-creation.html:111
+#: templates/supplier_app/edit-address-information.html:25
+#: templates/supplier_app/edit-bank-account-information.html:25
+#: templates/supplier_app/edit-taxpayer-information.html:25
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/invoices_app/supplier-invoice-list.html:11
+#: templates/navbar.html:121
+msgid "My Invoices"
+msgstr "Mis facturas"
+
+#: templates/invoices_app/supplier-invoice-list.html:21
+#: templates/navbar.html:124
+msgid "New Invoice"
+msgstr "Nueva factura"
+
+#: templates/invoices_app/supplier-invoice-list.html:32
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/invoices_app/supplier-invoice-list.html:45
+msgid "Create one?"
+msgstr "Crear nueva?"
 
 #: templates/mail_template.html:307
 msgid "New Mail from Eventbrite Supplier Management"
@@ -825,138 +2530,274 @@ msgstr "Nuevo email de 'BriteSu'"
 msgid "Hello"
 msgstr "Hola"
 
-#: templates/navbar.html:16 templates/navbar.html:71
+#: templates/navbar.html:16 templates/navbar.html:106
 msgid "Management"
 msgstr "Administración"
 
-#: templates/navbar.html:20 templates/navbar.html:75
+#: templates/navbar.html:21 templates/navbar.html:110
 #: templates/supplier_app/supplier-home.html:45
 msgid "Invoices"
 msgstr "Facturas"
 
-#: templates/navbar.html:22 templates/navbar.html:59
+#: templates/navbar.html:24 templates/navbar.html:94
+#: templates/supplier_app/ap-taxpayers.html:14
 msgid "Taxpayers"
 msgstr "Entidades fiscales"
 
-#: templates/navbar.html:25
+#: templates/navbar.html:28
 msgid "Manage Admins"
 msgstr "Administrar APs"
 
-#: templates/navbar.html:32
+#: templates/navbar.html:36 templates/navbar.html:66
 msgid "Companies"
 msgstr "Compañías"
 
-#: templates/navbar.html:37
+#: templates/navbar.html:41 templates/navbar.html:71
 msgid "See all"
 msgstr "Ver todas"
 
-#: templates/navbar.html:41
+#: templates/navbar.html:45 templates/navbar.html:75
 msgid "Create one"
 msgstr "Crear nueva"
 
-#: templates/navbar.html:51
+#: templates/navbar.html:57
+msgid "Buyer"
+msgstr "Comprador"
+
+#: templates/navbar.html:86
 msgid "Supplier"
 msgstr "Proveedor"
 
-#: templates/navbar.html:63
+#: templates/navbar.html:98
 msgid "My Taxpayers"
 msgstr "Mis entidades fiscales"
 
-#: templates/navbar.html:65
+#: templates/navbar.html:100
 msgid "New Taxpayer"
 msgstr "Crear entidad fiscal"
 
-#: templates/navbar.html:86 templates/supplier_app/invoice-list.html:11
-msgid "My Invoices"
-msgstr "Mis facturas"
-
-#: templates/navbar.html:89 templates/supplier_app/invoice-list.html:21
-msgid "New Invoice"
-msgstr "Nueva factura"
-
-#: templates/navbar.html:111
+#: templates/navbar.html:146
 msgid "Log out"
 msgstr "Cerrar sesión"
 
-#: templates/registration/invalid_login.html:16
+#: templates/registration/admin_create.html:7
+#| msgid "Create a new company"
+msgid "Create a new admin"
+msgstr "Crear un nuevo admin"
+
+#: templates/registration/admin_create.html:24
+msgid "Role:"
+msgstr "Rol:"
+
+#: templates/registration/admin_create.html:33
+
+#| msgid "Create one"
+msgid "Create"
+msgstr "Crear"
+
+#: templates/registration/admins-list.html:9
+msgid "Admins List"
+msgstr "Lista de administradores"
+
+#: templates/registration/admins-list.html:16
+
+#| msgid "AP Admin"
+msgid "New Admin"
+msgstr "AP Admin"
+
+#: templates/registration/admins-list.html:28
+msgid "User ID"
+msgstr "ID de usuario"
+
+#: templates/registration/admins-list.html:29
+msgid "Email"
+msgstr "Email"
+
+#: templates/registration/admins-list.html:30
+msgid "Registered"
+msgstr "Registrado"
+
+#: templates/registration/admins-list.html:31
+msgid "AP Admin"
+msgstr "AP Admin"
+
+#: templates/registration/admins-list.html:32
+msgid "AP Reporter"
+msgstr "AP Reporter"
+
+#: templates/registration/admins-list.html:33
+msgid "AP Manager"
+msgstr "AP Manager"
+
+#: templates/registration/invalid_login.html:15
 msgid "ERROR"
 msgstr "ERROR"
 
-#: templates/registration/invalid_login.html:17
+#: templates/registration/invalid_login.html:16
 msgid "If you are a supplier please:"
 msgstr "Si sos un proveedor por favor:"
 
-#: templates/registration/invalid_login.html:25
+#: templates/registration/invalid_login.html:19
+#: templates/registration/login.html:24
+
+#| msgid "Login with Google"
+msgid "Login with"
+msgstr "Ingresa a través de"
+
+#: templates/registration/invalid_login.html:26
 msgid "Login home"
 msgstr "Página de Ingreso"
 
-#: templates/registration/login.html:18
-msgid "Welcome to BriteSU"
-msgstr "Bienvenido a BriteSU"
+#: templates/registration/invalid_login.html:36
+#: templates/registration/login.html:39
+msgid "Language"
+msgstr "Lenguaje"
 
-#: templates/registration/login.html:23
-msgid "Sign In"
-msgstr "Ingresar"
-
-#: templates/registration/login.html:27
-msgid "Login with Eventbrite"
-msgstr "Ingresa a través de Eventbrite"
-
-#: templates/registration/login.html:49
+#: templates/registration/invalid_login.html:50
 msgid "AP login"
 msgstr "AP login"
 
-#: templates/supplier_app/company_list.html:13
+#: templates/registration/login.html:20
+#| msgid "Supplier"
+msgid "Supplier Sign in"
+msgstr "Ingrese como Proveedor"
+
+#: templates/registration/login.html:52
+
+#| msgid "Login with Eventbrite"
+msgid "Login as Eventbrite Employee"
+msgstr "Ingresa como empleado de Eventbrite"
+
+#: templates/registration/login.html:61
+msgid "Welcome to BriteSU"
+msgstr "Bienvenido a BriteSU"
+
+#: templates/supplier_app/AP/company_creation.html:7
+msgid "Create a new company"
+msgstr "Crear un nuevo grupo económico"
+
+#: templates/supplier_app/AP/company_creation.html:20
+#: templates/supplier_app/AP/company_list.html:30
+msgid "Description"
+msgstr "Descripción"
+
+#: templates/supplier_app/AP/company_creation.html:24
+msgid "Create Company"
+msgstr "Crear un nuevo grupo económico"
+
+#: templates/supplier_app/AP/company_list.html:13
 msgid "Company List"
 msgstr "Lista de grupos económicos"
 
-#: templates/supplier_app/company_list.html:19
+#: templates/supplier_app/AP/company_list.html:19
 msgid "Search by name"
 msgstr "Buscar por nombre"
 
-#: templates/supplier_app/company_list.html:37
+#: templates/supplier_app/AP/company_list.html:31
 msgid "Email Invitation"
 msgstr "Invitación vía email"
 
-#: templates/supplier_app/company_list.html:62
+#: templates/supplier_app/AP/company_list.html:59
 msgid "Portuguese"
 msgstr "Portugués"
 
-#: templates/supplier_app/company_list.html:65
+#: templates/supplier_app/AP/company_list.html:62
 msgid "Invite"
 msgstr "Invitar"
 
-#: templates/supplier_app/invoice-list.html:32
-msgid "Date"
-msgstr "Fecha"
+#: templates/supplier_app/AP/taxpayer-history-list.html:9
+#: templates/supplier_app/taxpayer-details.html:273
+msgid "Taxpayer History"
+msgstr "Historial del proveedor"
 
-#: templates/supplier_app/invoice-list.html:45
-msgid "Create one?"
-msgstr "Crear nueva?"
+#: templates/supplier_app/AP/taxpayer-history-list.html:18
+#: templates/supplier_app/supplier-home.html:27
+msgid "Taxpayer identification number"
+msgstr "Identificador de entidad fiscal"
 
-#: templates/supplier_app/invoices_form.html:24
-msgid "Update Invoice"
-msgstr "Editar Factura"
+#: templates/supplier_app/AP/taxpayer-history-list.html:19
+#: templates/supplier_app/taxpayer-details.html:82
+msgid "Payment Type"
+msgstr "Tipo de pago"
 
-#: templates/supplier_app/invoices_form.html:26
-msgid "Create Invoice"
-msgstr "Crear Factura"
+#: templates/supplier_app/AP/taxpayer-history-list.html:20
+#: templates/supplier_app/taxpayer-details.html:85
+msgid "Payment Term"
+msgstr "Período de pago"
 
-#: templates/supplier_app/invoices_form.html:76
-msgid "Eventbrite entity"
-msgstr "Entidad de Eventbrite"
+#: templates/supplier_app/AP/taxpayer-history-list.html:21
+#: templates/supplier_app/taxpayer-details.html:284
+msgid "Comments"
+msgstr "Comentarios adicionales"
 
-#: templates/supplier_app/invoices_form.html:75
-msgid "Eventbrite company to which you bill"
-msgstr "Entidad de Eventbrite a la que le facturas"
+#: templates/supplier_app/AP/taxpayer-history-list.html:42
+msgid "Address History"
+msgstr "Domicilio"
 
-#: templates/supplier_app/invoices_form.html:141
-msgid "Choose file"
-msgstr "Elige un archivo"
+#: templates/supplier_app/AP/taxpayer-history-list.html:75
+msgid "Bank Account History"
+msgstr "Cuenta bancaria"
 
-#: templates/supplier_app/invoices_form.html:158
-msgid "Submit"
-msgstr "Cargar"
+#: templates/supplier_app/AP/taxpayer-history-list.html:83
+msgid "Bank Name"
+msgstr "Banco"
+
+#: templates/supplier_app/AP/taxpayer-history-list.html:84
+msgid "Bank Account Number"
+msgstr "CBU"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:11
+msgid "Taxpayer info"
+msgstr "Información de la entidad fiscal"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:32
+msgid "Address info"
+msgstr "Domicilio"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:92
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:110
+msgid "Create taxpayer"
+msgstr "Crear entidad fiscal"
+
+#: templates/supplier_app/ap-taxpayers.html:23
+#: templates/supplier_app/taxpayer-details.html:58
+msgid "Taxpayer Identification Number"
+msgstr "Identificador de entidad fiscal"
+
+#: templates/supplier_app/ap-taxpayers.html:25
+msgid "Action"
+msgstr "Operaciones"
+
+#: templates/supplier_app/ap-taxpayers.html:40
+msgid "More details"
+msgstr "Detalles"
+
+#: templates/supplier_app/comments.html:9
+msgid "write your comments here"
+msgstr "Comentar"
+
+#: templates/supplier_app/comments.html:14
+msgid "Make Comment"
+msgstr "Hacer un comentario"
+
+#: templates/supplier_app/comments.html:18
+msgid "Request Change"
+msgstr "Solicitar cambios"
+
+#: templates/supplier_app/edit-address-information.html:23
+#: templates/supplier_app/edit-bank-account-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:23
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/supplier_app/edit-address-information.html:23
+#: templates/supplier_app/edit-bank-account-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:23
+msgid "Request change"
+msgstr "Solicitud de cambio"
 
 #: templates/supplier_app/supplier-home.html:16
 msgid "Create a new taxpayer"
@@ -970,21 +2811,72 @@ msgstr "Opciones"
 msgid "Details"
 msgstr "Detalles"
 
-#: templates/supplier_app/taxpayer-creation.html:11
-msgid "Taxpayer info"
-msgstr "Información de la entidad fiscal"
+#: templates/supplier_app/taxpayer-details.html:15
+msgid "You must set workday id to the taxpayer"
+msgstr "Debes ponerle un workday id a la entidad fiscal"
 
-#: templates/supplier_app/taxpayer-creation.html:32
-msgid "Address info"
+#: templates/supplier_app/taxpayer-details.html:27
+msgid "General information"
+msgstr "Información general"
+
+#: templates/supplier_app/taxpayer-details.html:32
+#: templates/supplier_app/taxpayer-details.html:155
+#: templates/supplier_app/taxpayer-details.html:202
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/supplier_app/taxpayer-details.html:52
+msgid "Workday id"
+msgstr "Workday id"
+
+#: templates/supplier_app/taxpayer-details.html:68
+msgid "No workday id"
+msgstr "Workday ID no especificado"
+
+#: templates/supplier_app/taxpayer-details.html:88
+msgid "EB entities"
+msgstr "Entidades Eventbrite"
+
+#: templates/supplier_app/taxpayer-details.html:110
+#: templates/supplier_app/taxpayer-details.html:182
+msgid "Files"
+msgstr "Archivos"
+
+#: templates/supplier_app/taxpayer-details.html:123
+msgid "AFIP certificate"
+msgstr "Cerificado AFIP"
+
+#: templates/supplier_app/taxpayer-details.html:131
+msgid "Withholding taxes"
+msgstr "Impuesto a las ganancias"
+
+#: templates/supplier_app/taxpayer-details.html:150
+msgid "Bank info"
+msgstr "Informacíon Bancaria"
+
+#: templates/supplier_app/taxpayer-details.html:170
+msgid "Bank code"
+msgstr "Código Bancario"
+
+#: templates/supplier_app/taxpayer-details.html:176
+msgid "Account number"
+msgstr "Número de cuenta"
+
+#: templates/supplier_app/taxpayer-details.html:186
+msgid "CBU"
+msgstr "CBU"
+
+#: templates/supplier_app/taxpayer-details.html:197
+msgid "Address information"
 msgstr "Domicilio"
 
-#: templates/supplier_app/taxpayer-creation.html:92
-msgid "Bank account"
-msgstr "Cuenta bancaria"
+#: templates/supplier_app/taxpayer-details.html:219
+msgid "Zip_Code"
+msgstr "Código postal"
 
-#: templates/supplier_app/taxpayer-creation.html:110
-msgid "Create taxpayer"
-msgstr "Crear entidad fiscal"
+#: users_app/forms.py:14
+msgid "Role"
+msgstr "Rol"
 
 #: users_app/models.py:17
 msgid "The Email must be set"
@@ -992,15 +2884,25 @@ msgstr "Debe especificar un email"
 
 #: users_app/models.py:34
 msgid "Superuser must have is_staff=True."
-msgstr ""
+msgstr "Superusuario debe tener is_staff=True"
 
 #: users_app/models.py:36
 msgid "Superuser must have is_superuser=True."
-msgstr ""
+msgstr "Superusuario debe tener is_superuser=True"
 
 #: users_app/models.py:43
 msgid "email address"
 msgstr "Email"
+
+#: users_app/views.py:139
+#, fuzzy
+#| msgid "You have been invited to BriteSu"
+msgid "You have been invited to BriteSu as AP"
+msgstr "Has sido invitado a BriteSu"
+
+#: users_app/views.py:140
+msgid "Please Login as AP with the link below"
+msgstr "Porfavor ingrese como AP con el siguiente link"
 
 #: utils/custom_filters.py:35
 msgid "From Date"
@@ -1025,6 +2927,26 @@ msgstr "Cambios: \n"
 #: utils/history.py:36
 msgid "{} from {} to {}\n"
 msgstr "{} de {} a {}\n"
+
+#: utils/history.py:42
+#, fuzzy
+#| msgid "Changed: \n"
+msgid ""
+"\n"
+"Change reason:\n"
+msgstr "Cambios: \n"
+
+#~ msgid "NEW"
+#~ msgstr "NUEVA"
+
+#~ msgid "Ivalid Worday ID"
+#~ msgstr "Workday ID invalido"
+
+#~ msgid "All"
+#~ msgstr "Todos"
+
+#~ msgid "Sign In"
+#~ msgstr "Ingresar"
 
 #~ msgid "M/D/Y"
 #~ msgstr "D/M/Y"
@@ -1059,9 +2981,3 @@ msgstr "{} de {} a {}\n"
 
 #~ msgid "If you are a EB employee please:"
 #~ msgstr "Si sos empleado de EB por favor:"
-
-#~ msgid "Login with Google"
-#~ msgstr "Ingresa a través de Google"
-
-#~ msgid "Welcome to "
-#~ msgstr "Bienvenido a"
