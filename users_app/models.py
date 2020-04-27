@@ -5,7 +5,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from supplier_app.models import (
-    Address
+    Address,
+    BankAccount
 )
 
 
@@ -98,10 +99,10 @@ class User(AbstractUser):
 class Form_adress(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ["street", "number", "zip_code", "city", "state", "country", "taxpayer"]
+        fields = ["street", "number", "zip_code", "city", "state", "country"]
 
 
 class Form_bank_information(forms.ModelForm):
     class Meta:
-        model = Address
-        fields = ["bank_account_number", "bank_info", "taxpayer", "bank_cbu_file"]
+        model = BankAccount
+        fields = ["bank_account_number", "bank_info", "bank_cbu_file"]

@@ -38,6 +38,8 @@ from django.conf import settings
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
 from users_app.models import Form_adress, Form_bank_information
+from django.core.files.storage import FileSystemStorage
+import os
 
 
 class LoginView(TemplateView):
@@ -156,6 +158,7 @@ class CreateAdmin(PermissionRequiredMixin, CreateView):
 class FormWizardView(SessionWizardView):
     template_name = "steper_example.html"
     form_list = [Form_adress, Form_bank_information]
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT))
 
     def done(self, form_list, **kwargs):
         return render(
