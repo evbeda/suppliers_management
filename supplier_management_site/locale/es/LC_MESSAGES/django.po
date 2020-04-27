@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-24 15:40+0000\n"
+"POT-Creation-Date: 2020-04-27 15:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1610,7 +1610,6 @@ msgid "workers"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:347
-#| msgid "Date Received"
 msgid "event received at"
 msgstr "Fecha recepción"
 
@@ -1739,7 +1738,8 @@ msgid "too few arguments"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1959
-#| msgid "Change required"
+#, fuzzy, python-format
+#| msgid "argument %s is required"
 msgid "argument %s is required"
 msgstr "Solicitud de cambio"
 
@@ -1817,7 +1817,6 @@ msgid "previous page"
 msgstr "pagina anterior"
 
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:26
-#| msgid "Recent updates"
 msgid "current page"
 msgstr "pagina actual"
 
@@ -2190,7 +2189,6 @@ msgid "Denied"
 msgstr "Rechazado"
 
 #: supplier_app/constants/taxpayer_status.py:32
-#| msgid "Change required"
 msgid "Changes pending"
 msgstr "Cambios pendientes"
 
@@ -2581,7 +2579,6 @@ msgid "Log out"
 msgstr "Cerrar sesión"
 
 #: templates/registration/admin_create.html:7
-#| msgid "Create a new company"
 msgid "Create a new admin"
 msgstr "Crear un nuevo admin"
 
@@ -2590,8 +2587,6 @@ msgid "Role:"
 msgstr "Rol:"
 
 #: templates/registration/admin_create.html:33
-
-#| msgid "Create one"
 msgid "Create"
 msgstr "Crear"
 
@@ -2600,8 +2595,6 @@ msgid "Admins List"
 msgstr "Lista de administradores"
 
 #: templates/registration/admins-list.html:16
-
-#| msgid "AP Admin"
 msgid "New Admin"
 msgstr "AP Admin"
 
@@ -2639,8 +2632,6 @@ msgstr "Si sos un proveedor por favor:"
 
 #: templates/registration/invalid_login.html:19
 #: templates/registration/login.html:24
-
-#| msgid "Login with Google"
 msgid "Login with"
 msgstr "Ingresa a través de"
 
@@ -2658,13 +2649,10 @@ msgid "AP login"
 msgstr "AP login"
 
 #: templates/registration/login.html:20
-#| msgid "Supplier"
 msgid "Supplier Sign in"
 msgstr "Ingrese como Proveedor"
 
 #: templates/registration/login.html:52
-
-#| msgid "Login with Eventbrite"
 msgid "Login as Eventbrite Employee"
 msgstr "Ingresa como empleado de Eventbrite"
 

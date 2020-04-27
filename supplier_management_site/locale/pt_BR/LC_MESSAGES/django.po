@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-24 15:40+0000\n"
+"POT-Creation-Date: 2020-04-27 15:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1814,7 +1814,7 @@ msgstr ""
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:10
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:17
 msgid "previous page"
-msgstr ""
+msgstr "página anterior"
 
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:26
 #, fuzzy
@@ -1826,17 +1826,17 @@ msgstr "Atualizações recentes"
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:43
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination-bootstrap.html:50
 msgid "next page"
-msgstr ""
+msgstr "próxima página"
 
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:4
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:6
 msgid "previous"
-msgstr ""
+msgstr "anterior"
 
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:20
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:22
 msgid "next"
-msgstr ""
+msgstr "próxima"
 
 #: invoices_app/__init__.py:25
 msgid "APPROVED"
@@ -1844,7 +1844,7 @@ msgstr "APROVADO"
 
 #: invoices_app/__init__.py:26
 msgid "PENDING"
-msgstr ""
+msgstr "PENDENTE"
 
 #: invoices_app/__init__.py:27
 msgid "CHANGES REQUESTED"
@@ -1872,7 +1872,7 @@ msgstr "Forneça um ID do Workday para aprovar uma fatura"
 
 #: invoices_app/__init__.py:59
 msgid "Please add a comment to request changes"
-msgstr ""
+msgstr "Adicione um comentário para solicitar alterações"
 
 #: invoices_app/__init__.py:61 users_app/views.py:144
 msgid "Thank you"
@@ -2060,8 +2060,6 @@ msgid "An error has ocurred while joining the company"
 msgstr "Ocorreu um erro ao ingressar na empresa"
 
 #: supplier_app/constants/custom_messages.py:11
-#, fuzzy
-#| msgid "Your taxpayer was created successfully"
 msgid "Taxpayer approved successfully"
 msgstr "Seu contribuinte foi criado com sucesso"
 
@@ -2078,8 +2076,6 @@ msgid "There was an error on creating your taxpayer please try again"
 msgstr "Ocorreu um erro ao criar seu contribuinte, tente novamente"
 
 #: supplier_app/constants/custom_messages.py:15
-#, fuzzy
-#| msgid "Your taxpayer was created successfully"
 msgid "Taxpayer denied successfully"
 msgstr "Seu contribuinte foi criado com sucesso"
 
@@ -2092,20 +2088,16 @@ msgid "The taxpayer you try to access/modify doesnt exists"
 msgstr "O contribuinte que você tenta acessar / modificar não existe"
 
 #: supplier_app/constants/custom_messages.py:18
-#, fuzzy
-#| msgid "Request change"
 msgid "Requested changes successfully"
 msgstr "Solicitar alteração"
 
 #: supplier_app/constants/custom_messages.py:19
-#, fuzzy
-#| msgid "You must set workday id to the taxpayer"
 msgid "You did not set workday id"
-msgstr "Você deve definir o ID do dia útil como contribuinte"
+msgstr "Você deve definir o ID do Workday como contribuinte"
 
 #: supplier_app/constants/custom_messages.py:20
 msgid "There is other taxpayer with that workday id"
-msgstr ""
+msgstr "Há outro contribuinte com esse ID de workday"
 
 #: supplier_app/constants/email_notifications.py:10
 msgid "You have been invited to BriteSu"
@@ -2196,8 +2188,6 @@ msgid "Denied"
 msgstr "Negado"
 
 #: supplier_app/constants/taxpayer_status.py:32
-#, fuzzy
-#| msgid "Change required"
 msgid "Changes pending"
 msgstr "Alteração necessária"
 
@@ -2244,7 +2234,7 @@ msgstr "Data de criação"
 
 #: supplier_app/models.py:217
 msgid "CUIT must only have numbers"
-msgstr ""
+msgstr "CUIT deve ter apenas números"
 
 #: supplier_app/models.py:228
 msgid "Payment type"
@@ -2293,7 +2283,7 @@ msgstr "Estado"
 
 #: supplier_app/models.py:287
 msgid "City name must only have letters"
-msgstr ""
+msgstr "O nome da cidade deve conter apenas letras"
 
 #: supplier_app/models.py:306
 msgid "Bank account number"
@@ -2319,7 +2309,7 @@ msgstr "Inglês"
 #: supplier_management_site/settings/base.py:148
 #: templates/supplier_app/AP/company_list.html:56
 msgid "Spanish"
-msgstr "espanhol"
+msgstr "Espanhol"
 
 #: supplier_management_site/settings/base.py:149
 msgid "Portuguese (Brazil)"
@@ -2435,7 +2425,7 @@ msgstr "Solicitar alterações"
 
 #: templates/invoices_app/invoice_detail.html:154
 msgid "Send Request"
-msgstr ""
+msgstr "Enviar pedido"
 
 #: templates/invoices_app/invoice_detail.html:162
 msgid "Invoice History"
@@ -2569,11 +2559,11 @@ msgstr "Crie um"
 
 #: templates/navbar.html:57
 msgid "Buyer"
-msgstr ""
+msgstr "Comprador"
 
 #: templates/navbar.html:86
 msgid "Supplier"
-msgstr "Proveedor"
+msgstr "Fornecedor"
 
 #: templates/navbar.html:98
 msgid "My Taxpayers"
@@ -2588,14 +2578,12 @@ msgid "Log out"
 msgstr "Sair"
 
 #: templates/registration/admin_create.html:7
-#, fuzzy
-#| msgid "Create a new company"
 msgid "Create a new admin"
 msgstr "Crie uma nova empresa"
 
 #: templates/registration/admin_create.html:24
 msgid "Role:"
-msgstr ""
+msgstr "Função"
 
 #: templates/registration/admin_create.html:33
 #, fuzzy
@@ -2608,8 +2596,6 @@ msgid "Admins List"
 msgstr "Lista de administradores"
 
 #: templates/registration/admins-list.html:16
-#, fuzzy
-#| msgid "AP Admin"
 msgid "New Admin"
 msgstr "Administrador do AP"
 
@@ -2623,7 +2609,7 @@ msgstr "O email"
 
 #: templates/registration/admins-list.html:30
 msgid "Registered"
-msgstr ""
+msgstr "Registrado"
 
 #: templates/registration/admins-list.html:31
 msgid "AP Admin"
@@ -2647,10 +2633,8 @@ msgstr "Se você é um fornecedor, por favor:"
 
 #: templates/registration/invalid_login.html:19
 #: templates/registration/login.html:24
-#, fuzzy
-#| msgid "Login with Google"
 msgid "Login with"
-msgstr "Entre com o Google"
+msgstr "Entre com a"
 
 #: templates/registration/invalid_login.html:26
 msgid "Login home"
@@ -2659,23 +2643,19 @@ msgstr "Iniciar sessão"
 #: templates/registration/invalid_login.html:36
 #: templates/registration/login.html:39
 msgid "Language"
-msgstr ""
+msgstr "Língua"
 
 #: templates/registration/invalid_login.html:50
 msgid "AP login"
-msgstr ""
+msgstr "Acesso AP"
 
 #: templates/registration/login.html:20
-#, fuzzy
-#| msgid "Supplier"
 msgid "Supplier Sign in"
-msgstr "Proveedor"
+msgstr "Login como Fornecedor"
 
 #: templates/registration/login.html:52
-#, fuzzy
-#| msgid "Login with Eventbrite"
 msgid "Login as Eventbrite Employee"
-msgstr "Entre com a Eventbrite"
+msgstr "Entrar como funcionário da Eventbrite"
 
 #: templates/registration/login.html:61
 msgid "Welcome to BriteSU"
@@ -2700,7 +2680,7 @@ msgstr "Lista de empresas"
 
 #: templates/supplier_app/AP/company_list.html:19
 msgid "Search by name"
-msgstr ""
+msgstr "Procura por nome"
 
 #: templates/supplier_app/AP/company_list.html:31
 msgid "Email Invitation"
@@ -2800,7 +2780,7 @@ msgstr "Solicitar alterações"
 #: templates/supplier_app/edit-bank-account-information.html:23
 #: templates/supplier_app/edit-taxpayer-information.html:23
 msgid "Save"
-msgstr "Salve "
+msgstr "Salve"
 
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
@@ -2813,8 +2793,6 @@ msgid "Create a new taxpayer"
 msgstr "Criar um novo contribuinte"
 
 #: templates/supplier_app/supplier-home.html:29
-#, fuzzy
-#| msgid "Action"
 msgid "Options"
 msgstr "Açao"
 
@@ -2887,7 +2865,7 @@ msgstr "Código postal"
 
 #: users_app/forms.py:14
 msgid "Role"
-msgstr ""
+msgstr "Função"
 
 #: users_app/models.py:17
 msgid "The Email must be set"
@@ -2906,14 +2884,12 @@ msgid "email address"
 msgstr "endereço de e-mail"
 
 #: users_app/views.py:139
-#, fuzzy
-#| msgid "You have been invited to BriteSu"
 msgid "You have been invited to BriteSu as AP"
 msgstr "Você foi convidado a BriteSu"
 
 #: users_app/views.py:140
 msgid "Please Login as AP with the link below"
-msgstr ""
+msgstr "Faça o login como AP com o link abaixo"
 
 #: utils/custom_filters.py:35
 msgid "From Date"

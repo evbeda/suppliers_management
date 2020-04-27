@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block head %}
+{{ wizard.form.media }}
+{% endblock %}
+
+{% block content %}
+
+{% include 'navbar.html' %}
+{% include 'messages_notification.html' %}
+
+
+<div class="container d-flex justify-content-center mt-5">
+  <div class="blue-eb p-4 border-eb">
+    <h3 class="text-center mb-5 text-white">Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h3>
+    <form action="" method="post" class="">
+      {% csrf_token %}
+      <table class="form-group text-white stepper d-flex justify-content-center">
+      {{ wizard.management_form }}
+      {% if wizard.form.forms %}
+        {{ wizard.form.management_form }}
+        {% for form in wizard.form.forms %}
+          {{ form }}
+        {% endfor %}
+      {% else %}
+        {{ wizard.form }}
+      {% endif %}
+      </table>
+      {% if wizard.steps.prev %}
+      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
+      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+      {% endif %}
+      <div class="d-flex justify-content-center">
+        <input class="btn btn-eb" type="submit" value="{% trans 'Submit' %}"/>
+      </div>
+      
+    </form>
+  </div>
+</div>
+
+{% endblock %}
