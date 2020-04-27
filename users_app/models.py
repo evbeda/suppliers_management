@@ -99,3 +99,9 @@ class Form_adress(forms.ModelForm):
     class Meta:
         model = Address
         fields = ["street", "number", "zip_code", "city", "state", "country", "taxpayer"]
+
+
+class Form_bank_information(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ["bank_account_number", "bank_info", "taxpayer", "bank_cbu_file"]

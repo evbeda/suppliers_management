@@ -37,7 +37,7 @@ from utils.send_email import (
 from django.conf import settings
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
-from users_app.models import Form_adress
+from users_app.models import Form_adress, Form_bank_information
 
 
 class LoginView(TemplateView):
@@ -155,7 +155,7 @@ class CreateAdmin(PermissionRequiredMixin, CreateView):
 
 class FormWizardView(SessionWizardView):
     template_name = "steper_example.html"
-    form_list = [Form_adress]
+    form_list = [Form_adress, Form_bank_information]
 
     def done(self, form_list, **kwargs):
         return render(
