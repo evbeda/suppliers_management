@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 
-COMPANY_INVITATION_URL = '/suppliersite/company/join'
+COMPANY_INVITATION_URL = '/users/supplier/company/join'
 SUPPLIER_HOME_URL = '/suppliersite/supplier'
 
 email_notifications = {
