@@ -3,6 +3,10 @@ from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
+from django import forms
+from supplier_app.models import (
+    Address
+)
 
 
 class UserManager(BaseUserManager):
@@ -89,3 +93,9 @@ class User(AbstractUser):
 
     class Meta:
         index_together = ["email"]
+
+
+class Form_adress(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ["street", "number", "zip_code", "city", "state", "country", "taxpayer"]

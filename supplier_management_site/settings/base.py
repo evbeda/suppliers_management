@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django_filters',
     'djcelery',
     "djcelery_email",
+    'formtools',
 ]
 
 MIDDLEWARE = [

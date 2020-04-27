@@ -13,6 +13,7 @@ from users_app.views import (
     AdminList,
     change_ap_permission,
     CreateAdmin,
+    FormWizardView,
 )
 
 
@@ -20,6 +21,7 @@ company_pattern = [
     url(r'^$', CompanyListView.as_view(), name='company-list'),
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
+    url(r'^pagin/', FormWizardView.as_view(), name='paging'),
 ]
 
 taxpayer_pattern = [

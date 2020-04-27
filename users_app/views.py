@@ -35,6 +35,9 @@ from utils.send_email import (
     build_mail_html,
 )
 from django.conf import settings
+from django.shortcuts import render
+from formtools.wizard.views import SessionWizardView
+from users_app.models import Form_adress
 
 
 class LoginView(TemplateView):
@@ -43,7 +46,7 @@ class LoginView(TemplateView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         if user.is_authenticated():
-            if user.is_AP :
+            if user.is_AP:
                 return HttpResponseRedirect(reverse('ap-taxpayers'))
             elif user.is_buyer:
                 return HttpResponseRedirect(reverse('company-list'))
@@ -148,3 +151,21 @@ class CreateAdmin(PermissionRequiredMixin, CreateView):
         recipient_list = [form.cleaned_data['email']]
         send_email_notification.apply_async([subject, message, recipient_list])
         return super().form_valid(form)
+
+
+class FormWizardView(SessionWizardView):
+    template_name = "steper_example.html"
+    form_list = [Form_adress]
+
+    def done(self, form_list, **kwargs):
+        return render(
+            self.request, 'done.html', {
+                'form_data': [form.cleaned_data for form in form_list],
+            }
+        )
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return self.render(self.get_form())
+        except KeyError:
+            return super().get(request, *args, **kwargs)
