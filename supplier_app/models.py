@@ -244,6 +244,48 @@ class TaxPayerArgentina(TaxPayer):
                 ),
             ],
         )
+    # Constancia de no Retencion
+    afip_no_retention_taxes_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        null=True,
+        verbose_name=_('AFIP No Retention'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code='invalid_file_size',
+            ),
+        ],
+    )
+    # IIBB Constancia de Inscripcion
+    iibb_registration_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        null=True,
+        verbose_name=_('IIBB registration certificate'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code='invalid_file_size',
+            ),
+        ],
+    )
+    # Constancia de no Retencion IIBB
+    iibb_no_retention_taxes_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        null=True,
+        verbose_name=_('IIBB No Retention'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code='invalid_file_size',
+            ),
+        ],
+    )
     witholding_taxes_file = models.FileField(
         upload_to='file',
         blank=True,
