@@ -98,6 +98,9 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     payment_type = PAYMENT_TYPES[0][0]
     payment_term = PAYMENT_TERMS[0][0]
     witholding_taxes_file = file_mock
+    afip_no_retention_taxes_file = file_mock
+    iibb_registration_file = file_mock
+    iibb_no_retention_taxes_file = file_mock
 
 
 class AddressFactory(factory.django.DjangoModelFactory):

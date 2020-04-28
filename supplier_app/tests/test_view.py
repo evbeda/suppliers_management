@@ -1117,6 +1117,9 @@ class TestEditTaxPayerInfo(TestCase):
     def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
         self.taxpayer.afip_registration_file = self.file_mock
         self.taxpayer.witholding_taxes_file = self.file_mock
+        self.taxpayer.afip_no_retention_taxes_file = self.file_mock
+        self.taxpayer.iibb_no_retention_taxes_file = self.file_mock
+        self.taxpayer.iibb_registration_file = self.file_mock
         self.taxpayer.save()
 
         response = self.client.get(
@@ -1154,9 +1157,15 @@ class TestEditTaxPayerInfo(TestCase):
         client.force_login(user)
         new_afip_file = SimpleUploadedFile('afip_file.pdf', bytes(100),)
         new_witholding_file = SimpleUploadedFile('witholding_file.pdf', bytes(35),)
+        new_afip_no_retention_file = SimpleUploadedFile('afip_no_retention_file.pdf', bytes(43),)
+        new_iibb_no_retention_file = SimpleUploadedFile('iibb_no_retention_file.pdf', bytes(50),)
+        new_iibb_file = SimpleUploadedFile('iibb_file.pdf', bytes(67),)
         self.TAXPAYER_POST.update({
             'afip_registration_file': new_afip_file,
             'witholding_taxes_file': new_witholding_file,
+            'afip_no_retention_taxes_file': new_afip_no_retention_file,
+            'iibb_no_retention_taxes_file': new_iibb_no_retention_file,
+            'iibb_registration_file': new_iibb_file,
         })
 
         client.post(
@@ -1176,6 +1185,9 @@ class TestEditTaxPayerInfo(TestCase):
         self.assertEquals(self.TAXPAYER_POST['country'], updated_taxpayer.country)
         self.assertEqual('file/afip_file.pdf', updated_taxpayer.afip_registration_file.name)
         self.assertEqual('file/witholding_file.pdf', updated_taxpayer.witholding_taxes_file.name)
+        self.assertEqual('file/iibb_file.pdf', updated_taxpayer.iibb_registration_file.name)
+        self.assertEqual('file/iibb_no_retention_file.pdf', updated_taxpayer.iibb_no_retention_taxes_file.name)
+        self.assertEqual('file/afip_no_retention_file.pdf', updated_taxpayer.afip_no_retention_taxes_file.name)
 
     def _taxpayer_edit_request(self, edit_data):
         request = self.factory.post(
@@ -1192,6 +1204,9 @@ class TestEditTaxPayerInfo(TestCase):
         self,
         afip_file=None,
         witholding_taxes_file=None,
+        afip_no_registration=None,
+        iibb_registration=None,
+        iibb_no_retention=None
     ):
         return MultiValueDict({
             'afip_registration_file': [
@@ -1199,6 +1214,15 @@ class TestEditTaxPayerInfo(TestCase):
             ],
             'witholding_taxes_file': [
                 witholding_taxes_file or self.file_mock
+            ],
+            'afip_no_retention_taxes_file': [
+                afip_no_registration or self.file_mock
+            ],
+            'iibb_registration_file': [
+                iibb_registration or self.file_mock
+            ],
+            'iibb_no_retention_file': [
+                iibb_no_retention or self.file_mock
             ],
         })
 
