@@ -136,7 +136,7 @@ class BankAccountEditForm(BankAccountBaseForm):
 class TaxPayerArgentinaBaseForm(ModelForm):
     eb_entities = \
         forms.ModelMultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple(attrs={"class": "form-control"}),
+            widget=forms.CheckboxSelectMultiple(attrs={"class": ""}),
             queryset=EBEntity.objects.all(),
             label=_("Eventbrite entities to bill"),
 
@@ -146,18 +146,18 @@ class TaxPayerArgentinaBaseForm(ModelForm):
         model = TaxPayerArgentina
         fields = '__all__'
         widgets = {
-            'business_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'business_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'taxpayer_condition':  forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control btn btn-file',
+                'class': '',
             }),
             'witholding_taxes_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control btn btn-file',
+                'class': '',
             }),
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(

@@ -52,7 +52,7 @@ body {
 	width: 100%;
 	box-sizing: border-box;
 	font-family: montserrat;
-	color: #2C3E50;
+	
 	font-size: 13px;
 }
 /*buttons*/
@@ -149,11 +149,13 @@ body {
 	font-size: 13px;
 }
 
+.arg-attach>input {
+	padding: 0px;
+}
 .check>label{
     font-size: small;
 }
 
-.check>label>input{
-    background-color: red;
-    
+.arg-attach{
+
 }
