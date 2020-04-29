@@ -106,7 +106,7 @@ class BankAccountEditForm(BankAccountBaseForm):
 class TaxPayerArgentinaBaseForm(ModelForm):
     eb_entities = \
         forms.ModelMultipleChoiceField(
-            widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+            widget=forms.CheckboxSelectMultiple(attrs={"class": "form-control"}),
             queryset=EBEntity.objects.all(),
             label=_("Eventbrite entities to bill"),
 
