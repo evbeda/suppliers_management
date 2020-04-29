@@ -17,6 +17,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxpayerComment,
     TaxPayerEBEntity,
+    ContactInformation,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -27,6 +28,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
+    ContactFactory,
 )
 from users_app.factory_boy import UserFactory
 
@@ -168,6 +170,17 @@ class TestAddressModel(TestCase):
             Address.objects.last()
         )
         self.assertEqual(address.taxpayer, taxpayer)
+
+
+class TestContactModel(TestCase):
+    def test_address(self):
+        taxpayer = TaxPayerFactory()
+        contact = ContactFactory(taxpayer=taxpayer)
+        self.assertEqual(
+            contact,
+            ContactInformation.objects.last()
+        )
+        self.assertEqual(contact.taxpayer, taxpayer)
 
 
 class TestBankInfoModel(TestCase):

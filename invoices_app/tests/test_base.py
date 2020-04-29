@@ -20,6 +20,7 @@ from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
     EBEntityFactory,
     TaxPayerArgentinaFactory,
+    ContactFactory,
 )
 
 from users_app.factory_boy import UserFactory
@@ -48,7 +49,7 @@ class TestBase(TestCase):
             invoice_number='1234'
         )
         self.address = AddressFactory(taxpayer=self.taxpayer)
-
+        self.contact = ContactFactory(taxpayer=self.taxpayer)
         self.other_user = UserFactory()
         self.other_user.groups.add(supplier_group)
         self.company_for_other_user = CompanyFactory()

@@ -68,6 +68,7 @@ from supplier_app.forms import (
     BankAccountCreateForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
+    ContactInformationCreateForm,
 )
 from supplier_app.models import (
     Address,
@@ -77,6 +78,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
     TaxpayerComment,
+    ContactInformation,
 )
 from supplier_app.tests import (
     file_mock,
@@ -98,6 +100,7 @@ from supplier_app.tests.factory_boy import (
     EBEntityFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
+    ContactFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
@@ -169,7 +172,8 @@ class TestCreateTaxPayer(TestCase):
             'taxpayer_form': TaxPayerCreateForm(
                 data=FORM_POST,
                 files=self._get_request_FILES(),
-                )
+            ),
+            'contact_form': ContactInformationCreateForm(data=FORM_POST),
         }
         return forms
 
@@ -207,10 +211,11 @@ class TestCreateTaxPayer(TestCase):
         return request
 
     @patch('supplier_app.views.messages.add_message')
-    def test_form_valid_method_should_save_taxpayer_address_bankaccount(self, msg_mocked):
+    def test_form_valid_method_should_save_taxpayer_address_bankaccount_contact(self, msg_mocked):
         taxpayer_qty_before_creation = len(TaxPayer.objects.all())
         bank_account_qty_before_creation = len(BankAccount.objects.all())
         address_qty_before_creation = len(Address.objects.all())
+        contact_qty_before_creation = len(ContactInformation.objects.all())
         taxpayer_creation_forms = self._get_example_forms()
 
         self.create_taxpayer_view.request = \
@@ -220,6 +225,7 @@ class TestCreateTaxPayer(TestCase):
         taxpayer_qty_after_creation = len(TaxPayer.objects.all())
         bank_account_qty_after_creation = len(BankAccount.objects.all())
         address_qty_after_creation = len(Address.objects.all())
+        contact_qty_after_creation = len(ContactInformation.objects.all())
 
         self.assertGreater(
             taxpayer_qty_after_creation,
@@ -233,9 +239,13 @@ class TestCreateTaxPayer(TestCase):
             address_qty_after_creation,
             address_qty_before_creation
         )
+        self.assertGreater(
+            contact_qty_after_creation,
+            contact_qty_before_creation
+        )
 
     @patch('supplier_app.views.messages.add_message')
-    def test_address_bankaccount_should_be_related_with_taxpayer(self, msg_mocked):
+    def test_address_bankaccount_contact_should_be_related_with_taxpayer(self, msg_mocked):
         taxpayer_creation_forms = self._get_example_forms()
 
         self.create_taxpayer_view.request = \
@@ -243,6 +253,7 @@ class TestCreateTaxPayer(TestCase):
         self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
         address = Address.objects.last()
         bankaccount = BankAccount.objects.last()
+        contact = ContactInformation.objects.last()
         taxpayer_created = TaxPayer.objects.last()
         self.assertEqual(
             taxpayer_created,
@@ -251,6 +262,10 @@ class TestCreateTaxPayer(TestCase):
         self.assertEqual(
             taxpayer_created,
             bankaccount.taxpayer
+        )
+        self.assertEqual(
+            taxpayer_created,
+            contact.taxpayer
         )
 
     @patch('supplier_app.views.messages.add_message')
@@ -659,6 +674,7 @@ class TestSupplierDetailsView(TestCase):
             witholding_taxes_file=self.file_mock,
         )
         self.address = AddressFactory(taxpayer=self.taxpayer)
+        self.contact = ContactInformation(taxpayer=self.taxpayer)
         self.bank_account = BankAccountFactory(
             taxpayer=self.taxpayer,
             bank_cbu_file=self.file_mock
@@ -742,6 +758,7 @@ class TestSupplierDetailsView(TestCase):
             afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
         )
+        ContactInformation(taxpayer=taxpayer)
         AddressFactory(taxpayer=taxpayer)
         BankAccountFactory(
             taxpayer=taxpayer,
@@ -774,6 +791,7 @@ class TestSupplierDetailsView(TestCase):
             witholding_taxes_file=self.file_mock,
         )
         AddressFactory(taxpayer=taxpayer)
+        ContactInformation(taxpayer=taxpayer)
         BankAccountFactory(
             taxpayer=taxpayer,
             bank_cbu_file=self.file_mock
@@ -820,6 +838,7 @@ class TestTaxpayerDetailsSupplier(TestCase):
             bank_cbu_file=self.file_mock
             )
         self.addres_example = AddressFactory(taxpayer=self.taxpayer_example)
+        self.contact_example = ContactInformation(taxpayer=self.taxpayer_example)
         self.kwargs = {
             'taxpayer_id': self.taxpayer_example.id
         }
@@ -1239,6 +1258,9 @@ class TestEditAddressInfo(TestCase):
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
 
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
+
         self.taxpayer = TaxPayerArgentinaFactory()
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
@@ -1298,6 +1320,13 @@ class TestEditAddressInfo(TestCase):
             response.url
         )
 
+    def test_post_edit_contact_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_address_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
+
     def test_post_edit_address_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
         status_approved = TAXPAYER_STATUS_APPROVED
@@ -1340,6 +1369,134 @@ class TestEditAddressInfo(TestCase):
         )
 
 
+class TestEditContactInfo(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
+        self.supplier_user.groups.add(self.supplier_group)
+
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
+
+        self.taxpayer = TaxPayerArgentinaFactory()
+        self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
+        self.taxpayer.save()
+        self.contact = ContactFactory(taxpayer=self.taxpayer)
+
+        self.contact_edit_url = 'contact-update'
+        self.taxpayer_detail_url = 'supplier-details'
+
+        self.CONTACT_POST = {
+            'contact_form-contact_person': 'Jhon Smith',
+            'contact_form-phone_number': '0115123456',
+            'contact_form-website': 'www.website.com',
+            'contact_form-email': 'jhonsmith@gmail.com',
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'AR',
+        }
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+            'contact_id': self.contact.id,
+        }
+        self.kwargs_taxpayer_id = {
+            'taxpayer_id': self.taxpayer.id,
+        }
+
+    def _make_contact_post(self):
+        return self.client.post(
+            reverse(
+                self.contact_edit_url,
+                kwargs=self.kwargs
+            ),
+            data=self.CONTACT_POST
+        )
+
+    def test_get_edit_contact_view_as_ap(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse(
+                self.contact_edit_url,
+                kwargs=self.kwargs
+            )
+        )
+        self.assertEqual(
+            'supplier_app/edit-contact-information.html',
+            response.template_name[0]
+        )
+
+    def test_post_edit_contact_info_as_ap_redirects_to_taxpayer_details(self):
+        self.client.force_login(self.ap_user)
+        response = self._make_contact_post()
+
+        # checking response status code and url should go to taxpayer detail
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertEqual(
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer_id,
+            ),
+            response.url
+        )
+
+    def test_post_edit_contact_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_contact_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
+
+    def test_post_edit_contact_info_as_ap_dont_change_status(self):
+        self.client.force_login(self.ap_user)
+        status_approved = TAXPAYER_STATUS_APPROVED
+        self._make_contact_post()
+        self.assertEqual(
+            status_approved,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
+        )
+
+    def test_post_edit_contact_info_as_supplier_redirects_to_taxpayer_details(self):
+        self.client.force_login(self.supplier_user)
+
+        CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+
+        response = self._make_contact_post()
+        self.assertEqual(HTTPStatus.FOUND, response.status_code)
+        self.assertEqual(
+            reverse(
+                self.taxpayer_detail_url,
+                kwargs=self.kwargs_taxpayer_id,
+            ),
+            response.url
+        )
+
+    def test_post_edit_contact_info_as_supplier_change_status_to_pending(self):
+        self.client.force_login(self.supplier_user)
+        status_changes_pending = TAXPAYER_STATUS_CHANGES_PENDING
+
+        CompanyUserPermissionFactory(
+            user=self.supplier_user,
+            company=self.taxpayer.company
+        )
+        self._make_contact_post()
+        self.assertEqual(
+            status_changes_pending,
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
+        )
+
+
 class TestEditBankAccountInfo(TestCase):
     def setUp(self):
         self.client = Client()
@@ -1356,6 +1513,9 @@ class TestEditBankAccountInfo(TestCase):
         self.supplier_group = Group.objects.get(name="supplier")
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
+
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
@@ -1430,6 +1590,13 @@ class TestEditBankAccountInfo(TestCase):
             status_approved,
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
+
+    def test_post_edit_bank_account_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_bank_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
 
     def test_post_edit_bank_account_info_as_supplier_redirect_to_taxpayer_details(self):
         CompanyUserPermissionFactory(
@@ -2269,6 +2436,51 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(updated_address.state, last_row_address_history.state)
         self.assertEqual(updated_address.country, last_row_address_history.country)
 
+    def test_create_new_row_in_history_contact_information_table(self):
+        contact = ContactFactory(taxpayer=self.taxpayer)
+        kwargs = {
+            'taxpayer_id': self.taxpayer.id,
+            'contact_id': contact.id,
+        }
+
+        CONTACT_POST = {
+            'contact_form-contact_person': 'Jhon Smith',
+            'contact_form-phone_number': '0115123456',
+            'contact_form-website': 'www.website.com',
+            'contact_form-email': 'jhonsmith@gmail.com',
+            'address_form-street': 'San Martin',
+            'address_form-number': '21312',
+            'address_form-zip_code': '123',
+            'address_form-city': 'Mendoza',
+            'address_form-state': 'Mendoza',
+            'address_form-country': 'AR',
+        }
+
+        row_before_modification = len(contact.history.all())
+
+        self.client.post(
+            reverse(
+                'contact-update',
+                kwargs=kwargs
+            ),
+            data=CONTACT_POST
+        )
+
+        row_after_modification = len(contact.history.all())
+
+        last_row_contact_history = contact.history.latest()
+        updated_contact = ContactInformation.objects.get(pk=contact.id)
+
+        self.assertGreater(row_after_modification, row_before_modification)
+
+        self.assertEqual(updated_contact.address.street, last_row_contact_history.address.street)
+        self.assertEqual(updated_contact.address.number, last_row_contact_history.address.number)
+        self.assertEqual(updated_contact.address.zip_code, last_row_contact_history.address.zip_code)
+        self.assertEqual(updated_contact.address.city, last_row_contact_history.address.city)
+        self.assertEqual(updated_contact.address.state, last_row_contact_history.address.state)
+        self.assertEqual(updated_contact.address.country, last_row_contact_history.address.country)
+        self.assertEqual(updated_contact.address.country, last_row_contact_history.address.country)
+
     def test_create_new_row_in_history_bank_account_table(self):
         bank_account = BankAccountFactory(taxpayer=self.taxpayer)
         kwargs = {
@@ -2352,6 +2564,29 @@ class TestTaxpayerHistory(TestCase):
         self.assertEqual(new_street, address.history.latest().street)
         self.assertEqual(response.template_name[0], 'supplier_app/AP/taxpayer-history-list.html')
 
+    def test_history_contact_should_contain_old_and_new_values(self):
+        contact = ContactFactory(taxpayer=self.taxpayer)
+
+        # contact_person = "John Smith"
+
+        old_contact_person = contact.contact_person
+        contact.contact_person = "Paul Street"
+        new_contact_person = contact.contact_person
+
+        contact.save()
+
+        response = self.client.get(
+            reverse(
+                'taxpayer-history',
+                kwargs={'taxpayer_id': contact.taxpayer.id}
+            ),
+        )
+        # last: means last in the table, so it is old data
+        self.assertEqual(old_contact_person, contact.history.last().contact_person)
+        # latest: means that is updated data
+        self.assertEqual(new_contact_person, contact.history.latest().contact_person)
+        self.assertEqual(response.template_name[0], 'supplier_app/AP/taxpayer-history-list.html')
+
     def test_history_bank_account_should_contain_old_and_new_values(self):
         bank_account = BankAccountFactory(
             taxpayer=self.taxpayer,
@@ -2415,8 +2650,12 @@ class TestTaxpayerCommentView(TestCase):
         BankAccountFactory(
             taxpayer=self.taxpayer_example,
             bank_cbu_file=self.file_mock
-            )
+        )
         AddressFactory(taxpayer=self.taxpayer_example)
+        self.kwargs = {
+            'taxpayer_id': self.taxpayer_example.id
+        }
+        ContactFactory(taxpayer=self.taxpayer_example)
         self.kwargs = {
             'taxpayer_id': self.taxpayer_example.id
         }

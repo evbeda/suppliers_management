@@ -337,8 +337,17 @@ class Address(models.Model):
         verbose_name=_("Country"),
     )
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE)
-
     history = HistoricalRecords()
+
+
+class ContactInformation(models.Model):
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    history = HistoricalRecords()
+    contact_person = models.CharField(max_length=100, verbose_name=_("Contact person"))
+    phone_number = models.CharField(max_length=20,verbose_name=_("Phone number"))
+    email = models.CharField(max_length=100, verbose_name=_("Email"))
+    website = models.CharField(max_length=100, verbose_name=_("Web site"))
+    taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE, default=None)
 
 
 class BankAccount(models.Model):
@@ -372,7 +381,7 @@ class BankAccount(models.Model):
             FileExtensionValidator(allowed_extensions=BANK_ACCOUNT_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(
                 limit_size=BANK_ACCOUNT_MAX_SIZE_FILE,
-                code='invalid_file_size',    
+                code='invalid_file_size',
             ),
         ],
     )

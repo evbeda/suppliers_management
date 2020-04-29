@@ -6,6 +6,7 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierDetailsView,
     TaxpayerCommentView,
+    EditContactInformationView
 )
 
 taxpayer_pattern = [
@@ -14,6 +15,11 @@ taxpayer_pattern = [
         r'^address/(?P<address_id>[0-9]+)$',
         EditAddressView.as_view(),
         name='address-update'
+    ),
+    url(
+        r'^contact/(?P<contact_id>[0-9]+)$',
+        EditContactInformationView.as_view(),
+        name='contact-update'
     ),
     url(
         r'^bank_account/(?P<bank_id>[0-9]+)$',
@@ -29,5 +35,5 @@ taxpayer_pattern = [
 ]
 
 urlpatterns = [
-   url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern))
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern))
 ]

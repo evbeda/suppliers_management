@@ -36,6 +36,7 @@ from supplier_app.forms import (
     BankAccountCreateForm,
     BasePrefixCreateForm,
     TaxPayerCreateForm,
+    ContactInformationCreateForm,
 )
 
 from supplier_app.views import (
@@ -61,11 +62,13 @@ class TestCreatePrefixForm(TestCase):
         data = QueryDict('', mutable=True)
         data.update(self.POST)
         address_form = AddressCreateForm(data=data)
+        contact_form = ContactInformationCreateForm(data=data)
         taxpayer_form = TaxPayerCreateForm(data=data)
         bankaccount_form = BankAccountCreateForm(data=data)
         self.assertEqual(6, len(address_form.data))
         self.assertEqual(9, len(taxpayer_form.data))
         self.assertEqual(3, len(bankaccount_form.data))
+        self.assertEqual(4, len(contact_form.data))
 
 
 class TestTaxPayerFormValidation(TestCase):
@@ -113,6 +116,7 @@ class TestTaxPayerFormValidation(TestCase):
         )
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
+            'contact_form': ContactInformationCreateForm(data=FORM_POST),
             'bank_account_form': BankAccountCreateForm(
                 data=FORM_POST,
                 files=self._get_request_FILES()
@@ -142,14 +146,16 @@ class TestTaxPayerFormValidation(TestCase):
             ],
         })
 
-    def test_GET_taxpayer_view_should_render_3_forms(self):
+    def test_GET_taxpayer_view_should_render_4_forms(self):
         response = self.client.get(reverse(self.taxpayer_creation_url))
         taxpayer_form = response.context_data['taxpayer_form']
         address_form = response.context_data['address_form']
         bankaccount_form = response.context_data['bank_account_form']
+        contact_form = response.context_data['contact_form']
         self.assertEqual(AddressCreateForm, type(address_form))
         self.assertEqual(BankAccountCreateForm, type(bankaccount_form))
         self.assertEqual(TaxPayerCreateForm, type(taxpayer_form))
+        self.assertEqual(ContactInformationCreateForm, type(contact_form))
 
     def test_valid_forms_pass_validation(self):
         forms = self._get_example_forms()
