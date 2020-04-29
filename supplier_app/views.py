@@ -209,27 +209,9 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         If the form is valid, redirect to the supplied URL.
         """
         try:
-            taxpayer = forms['taxpayer_form'].save(commit=False)
-            company = Company.objects.get(companyuserpermission__user=self.request.user)
-            taxpayer.company = company
-            taxpayer.save()
-            eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
-            for eb_entity in eb_entities:
-                eb_entity = EBEntity.objects.get(pk=eb_entity.id)
-                TaxPayerEBEntity.objects.create(
-                    eb_entity=eb_entity,
-                    taxpayer=taxpayer
-                )
-            address = forms['address_form'].save(commit=False)
-            address.taxpayer = taxpayer
-            address.save()
-            contact = forms['contact_form'].save(commit=False)
-            contact.taxpayer = taxpayer
-            contact.address = address
-            contact.save()
-            bankaccount = forms['bank_account_form'].save(commit=False)
-            bankaccount.taxpayer = taxpayer
-            bankaccount.save()
+            taxpayer = self.save_taxpayer(forms)
+            self.save_contact(forms, taxpayer, self.save_address(forms, taxpayer))
+            self.save_bankaccount(forms, taxpayer)
             messages.success(
                 self.request,
                 TAXPAYER_CREATION_SUCCESS_MESSAGE
@@ -241,6 +223,37 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             )
         finally:
             return HttpResponseRedirect(self.get_success_url())
+
+    def save_taxpayer(self, forms):
+        taxpayer = forms['taxpayer_form'].save(commit=False)
+        company = Company.objects.get(companyuserpermission__user=self.request.user)
+        taxpayer.company = company
+        taxpayer.save()
+        eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
+        for eb_entity in eb_entities:
+            eb_entity = EBEntity.objects.get(pk=eb_entity.id)
+            TaxPayerEBEntity.objects.create(
+                eb_entity=eb_entity,
+                taxpayer=taxpayer
+            )
+        return taxpayer
+
+    def save_address(self, forms, taxpayer):
+        address = forms['address_form'].save(commit=False)
+        address.taxpayer = taxpayer
+        address.save()
+        return address
+
+    def save_contact(self, forms, taxpayer, address):
+        contact = forms['contact_form'].save(commit=False)
+        contact.taxpayer = taxpayer
+        contact.address = address
+        contact.save()
+
+    def save_bankaccount(self, forms, taxpayer):
+        bankaccount = forms['bank_account_form'].save(commit=False)
+        bankaccount.taxpayer = taxpayer
+        bankaccount.save()
 
 
 class ApTaxpayers(UserLoginPermissionRequiredMixin, FilterView):
