@@ -3,30 +3,9 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
-$(document).ready(function(){
-    $("#id_taxpayer_form-business_name").attr("placeholder", "Business Name");
-    $("#eb-check>label").addClass("form-check-label");
-    $(".check>label>input").addClass("");
-    $("#id_taxpayer_form-eb_entities_0").addClass("form-check-input");
-    $("#id_taxpayer_form-eb_entities_1").addClass("form-check-input");
-    $("#id_taxpayer_form-eb_entities_2").addClass("form-check-input");
-    $(".arg").hide();
-    $(".usa").hide();
-});
 
-$("#id_address_form-country").change(function(){
-    if ($("#id_address_form-country").val() == "AR"){
-        $(".arg").show();
-        $(".usa").hide();
-    }
-    else if ($("#id_address_form-country").val() == "BR"){
 
-    }
-    else if ($("#id_address_form-country").val() == "US"){
-        $(".usa").show();
-        $(".arg").hide();
-    }
-});
+
 
 $(".next").click(function(){
 	if(animating) return false;
@@ -35,16 +14,6 @@ $(".next").click(function(){
 	current_fs = $(this).parent();
 	next_fs = $(this).parent().next();
     
-    // if ($("#id_address_form-country").val() == "AR"){
-    //     $("#arg").show();
-    // }
-    // else if ($("#id_address_form-country").val() == "BR"){
-
-    // }
-    // else if ($("#id_address_form-country").val() == "US"){
-    //     $("#usa").show();
-    // }
-
 	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 	
