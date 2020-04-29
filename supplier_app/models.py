@@ -344,7 +344,7 @@ class ContactInformation(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     history = HistoricalRecords()
     contact_person = models.CharField(max_length=100, verbose_name=_("Contact person"))
-    phone_number = models.IntegerField(verbose_name=_("Phone number"))
+    phone_number = models.CharField(max_length=20,verbose_name=_("Phone number"))
     email = models.CharField(max_length=100, verbose_name=_("Email"))
     website = models.CharField(max_length=100, verbose_name=_("Web site"))
     taxpayer = models.ForeignKey(TaxPayer, on_delete=models.CASCADE, default=None)
