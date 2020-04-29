@@ -47,6 +47,7 @@ from supplier_app.forms import (
     BankAccountEditForm,
     TaxPayerCreateForm,
     TaxPayerEditForm,
+    ContactInformationCreateForm,
 )
 from supplier_app.exceptions.taxpayer_exceptions import (
     NoWorkdayIDException,
@@ -64,6 +65,7 @@ from supplier_app.models import (
     TaxPayerArgentina,
     TaxpayerComment,
     TaxPayerEBEntity,
+    ContactInformation,
 )
 from users_app.mixins import (
     TaxPayerPermissionMixin,
@@ -151,11 +153,11 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             'address_form': AddressCreateForm(),
             'taxpayer_form': TaxPayerCreateForm(),
             'bank_account_form': BankAccountCreateForm(),
+            'contact_form': ContactInformationCreateForm(),
         }
         return self.render_to_response(self.get_context_data(**kwargs))
 
     def post(self, request, *args, **kwargs):
-
         forms = self._create_forms_from_request(request)
         if self.forms_are_valid(forms):
             return self.form_valid(forms)
@@ -176,6 +178,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             'bank_account_form': BankAccountCreateForm(
                 data=request.POST,
                 files=request.FILES),
+            'contact_form': ContactInformationCreateForm(data=request.POST),
         }
 
     def get_success_url(self):
@@ -220,6 +223,10 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             address = forms['address_form'].save(commit=False)
             address.taxpayer = taxpayer
             address.save()
+            contact = forms['contact_form'].save(commit=False)
+            contact.taxpayer = taxpayer
+            contact.address = address
+            contact.save()
             bankaccount = forms['bank_account_form'].save(commit=False)
             bankaccount.taxpayer = taxpayer
             bankaccount.save()
@@ -339,6 +346,38 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
 
     def get_success_url(self, **kwargs):
         taxpayer_id = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
+        return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_supplier:
+            taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
+            taxpayer.set_changes_pending_taxpayer()
+            taxpayer.save()
+        return super().post(request, *args, **kwargs)
+
+
+class EditContactInformationView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
+    template_name = 'supplier_app/edit-contact-information.html'
+    model = ContactInformation
+    form_class = ContactInformationCreateForm
+    pk_url_kwarg = "contact_id"
+    permission_required = (
+        CAN_EDIT_TAXPAYER_PERM,
+        CAN_EDIT_TAXPAYER_ADDRESS_PERM,
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
+        context['taxpayer_id'] = taxpayer.id
+        get_object_or_404(ContactInformation, pk=self.kwargs['contact_id'], taxpayer=taxpayer)
+        return context
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
+
+    def get_success_url(self, **kwargs):
+        taxpayer_id = ContactInformation.objects.get(pk=self.kwargs['contact_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
     def post(self, request, *args, **kwargs):

@@ -8,6 +8,7 @@ from supplier_app.models import (
     BankAccount,
     EBEntity,
     TaxPayerArgentina,
+    ContactInformation,
 )
 
 
@@ -45,31 +46,60 @@ class AddressCreateForm(BasePrefixCreateForm):
         model = Address
         exclude = ['taxpayer']
         widgets = {
-             'street': forms.TextInput(
-                 attrs={
-                     'class': 'form-control',
-                     'placeholder': _('e.g. Adolfo sourdeaux'),
-                     }
-                 ),
-             'city': forms.TextInput(
-                 attrs={
-                     'class': 'form-control',
-                     'placeholder': _('e.g. Tigre')
-                     }
-                ),
-             'state': forms.TextInput(
-                 attrs={
-                     'class': 'form-control',
-                     'placeholder': _('e.g. Buenos aires')
-                     }
-                 ),
-             'country': forms.Select(
-                 attrs={
-                     'class': 'form-control',
-                    }
-                ),
-             'number': forms.NumberInput(attrs={'class': 'form-control'}),
-             'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'street': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. Adolfo sourdeaux'),
+                }
+            ),
+            'city': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. Tigre')
+                }
+            ),
+            'state': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. Buenos aires')
+                }
+            ),
+            'country': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'number': forms.NumberInput(attrs={'class': 'form-control'}),
+            'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class ContactInformationCreateForm(BasePrefixCreateForm):
+    prefix = 'contact_form'
+
+    class Meta:
+        model = ContactInformation
+        exclude = ['address', 'taxpayer']
+        widgets = {
+            'contact_person': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. Jhon Smith'),
+                }
+            ),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. jhonsmith@mail.com')
+                }
+            ),
+            'website': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('e.g. www.website.com')
+                }
+            ),
         }
 
 

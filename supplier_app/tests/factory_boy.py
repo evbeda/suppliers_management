@@ -13,6 +13,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
     TaxPayerEBEntity,
+    ContactInformation,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO
@@ -113,6 +114,18 @@ class AddressFactory(factory.django.DjangoModelFactory):
     city = "Godoy Cruz"
     state = "Mendoza"
     country = "AR"
+    taxpayer = factory.SubFactory(TaxPayerFactory)
+
+
+class ContactFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ContactInformation
+
+    contact_person = "John Smith"
+    phone_number = "0115123456"
+    email = "jhonsmith@gmail.com"
+    website = "www.website.com"
+    address = factory.SubFactory(AddressFactory)
     taxpayer = factory.SubFactory(TaxPayerFactory)
 
 
