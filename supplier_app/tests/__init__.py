@@ -49,6 +49,7 @@ def taxpayer_creation_POST_factory(
         'taxpayer_form-eb_entities': eb_entity,
         'taxpayer_form-payment_type': 'BANK',
         'taxpayer_form-payment_term': '30',
+        'taxpayer_form-taxpayer_condition': 'monotributista',
         'taxpayer_form-afip_registration_file': afip_file or file_mock,
         'taxpayer_form-witholding_taxes_file': witholding_taxes_file or file_mock,
         'contact_form-contact_person': 'Jhon Smith',
@@ -72,7 +73,8 @@ def taxpayer_edit_POST_factory(
     business_name=None,
     cuit=None,
     payment_type=None,
-    payment_term=None
+    payment_term=None,
+    taxpayer_condition=None
 ):
     return {
             'business_name': business_name or 'EB ARG',
@@ -83,4 +85,5 @@ def taxpayer_edit_POST_factory(
             'payment_term': get_payment_term_example(payment_term),
             'afip_registration_file': file_mock,
             'witholding_taxes_file': file_mock,
+            'taxpayer_condition': "monotributista"
     }

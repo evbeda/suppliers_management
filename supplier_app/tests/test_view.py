@@ -1198,6 +1198,7 @@ class TestEditTaxPayerInfo(TestCase):
         updated_taxpayer = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
 
         self.assertEquals(self.TAXPAYER_POST['cuit'], updated_taxpayer.cuit)
+        self.assertEquals(self.TAXPAYER_POST['taxpayer_condition'], updated_taxpayer.taxpayer_condition)
         self.assertEquals(self.TAXPAYER_POST['payment_type'], updated_taxpayer.payment_type)
         self.assertEquals(self.TAXPAYER_POST['payment_term'], updated_taxpayer.payment_term)
         self.assertEquals(self.TAXPAYER_POST['business_name'], updated_taxpayer.business_name)

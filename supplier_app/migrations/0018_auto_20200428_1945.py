@@ -44,4 +44,18 @@ class Migration(migrations.Migration):
             name='iibb_registration_file',
             field=models.FileField(blank=True, null=True, upload_to='file', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf']), utils.file_validator.FileSizeValidator(code='invalid_file_size', limit_size=26214400)], verbose_name='IIBB registration certificate'),
         ),
+        migrations.AddField(
+            model_name='historicaltaxpayerargentina',
+            name='taxpayer_condition',
+            field=models.CharField(
+                choices=[('monotributista', 'Monotributista'), ('responsable_inscripto', 'Responsable Inscripto')],
+                default=1, max_length=30),
+        ),
+        migrations.AddField(
+            model_name='taxpayerargentina',
+            name='taxpayer_condition',
+            field=models.CharField(
+                choices=[('monotributista', 'Monotributista'), ('responsable_inscripto', 'Responsable Inscripto')],
+                default=1, max_length=30),
+        ),
     ]

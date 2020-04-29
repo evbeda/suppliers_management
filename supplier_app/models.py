@@ -29,6 +29,7 @@ from supplier_app.constants.taxpayer_status import (
 )
 from supplier_app.constants.bank_info import get_bank_info_choices
 from supplier_app.constants.countries import get_countries_choices
+from supplier_app.constants.conditions import get_conditions_choices
 from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
     UNUSED_STATUS,
@@ -220,6 +221,11 @@ class TaxPayerArgentina(TaxPayer):
             MaxLengthValidator(11),
             MinLengthValidator(11),
         ]
+    )
+    taxpayer_condition = models.CharField(
+        max_length=100,
+        choices=get_conditions_choices(),
+        verbose_name=_("Taxpayer Condition"),
     )
     payment_type = models.CharField(
         max_length=20,
