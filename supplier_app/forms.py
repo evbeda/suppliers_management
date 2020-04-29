@@ -150,6 +150,7 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             'cuit': forms.TextInput(attrs={'class': 'form-control'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
+            'taxpayer_condition':  forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': 'form-control btn btn-file',

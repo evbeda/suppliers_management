@@ -102,6 +102,7 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     afip_no_retention_taxes_file = file_mock
     iibb_registration_file = file_mock
     iibb_no_retention_taxes_file = file_mock
+    taxpayer_condition = "monotributista"
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
