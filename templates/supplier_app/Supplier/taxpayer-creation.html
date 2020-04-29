@@ -33,7 +33,7 @@
 
     <fieldset id="f1">
         <h2 class="fs-title">Taxpayer Info</h2>
-        <h3 class="fs-subtitle">This is step 1</h3>
+        <h3 class="fs-subtitle">Instructions about this step</h3>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
         <div class="div-input">{{ taxpayer_form.business_name }}</div>
         <div class="text-left">{{ address_form.country.label_tag }}</div>
@@ -50,9 +50,9 @@
         </div>
         
         
-        <input type="text" name="cpass" placeholder="Aca van las entidades EB" />
-        <input type="text" name="cpass" placeholder="Aca va Adress" />
-        <input type="text" name="cpass" placeholder="Aca va Contact info" />
+        <input type="text" name="cpass" placeholder="PLaceholder for EB entities" />
+        <input type="text" name="cpass" placeholder="PLaceholder for Adress info" />
+        <input type="text" name="cpass" placeholder="PLaceholder for Contact info" />
         <input type="button" name="next"  class="next action-button" value="Next" />
     </fieldset>
 
@@ -62,12 +62,12 @@
     </fieldset>
     
     <fieldset id="f3">
-        <h2 class="fs-title">Personal Details</h2>
-        <h3 class="fs-subtitle">We will never sell it</h3>
-        <input type="text" name="fname" placeholder="First Name" />
-        <input type="text" name="lname" placeholder="Last Name" />
-        <input type="text" name="phone" placeholder="Phone" />
-        <textarea name="address" placeholder="Address"></textarea>
+        <h2 class="fs-title">Placeholder for Attachments and tax condition</h2>
+        <h3 class="fs-subtitle">Placeholder for instruction about this step</h3>
+        <input type="text" name="fname" placeholder="Attachments here" />
+        <input type="text" name="lname" placeholder="Tax condition here" />
+        <input type="text" name="phone" placeholder="Anything else here" />
+        <textarea name="address" placeholder="Anything else here"></textarea>
         <input type="button" name="previous" class="previous action-button" value="Previous" />
         <input type="submit" name="submit" class="submit action-button" value="Submit" />
     </fieldset>
