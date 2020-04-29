@@ -1258,6 +1258,9 @@ class TestEditAddressInfo(TestCase):
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
 
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
+
         self.taxpayer = TaxPayerArgentinaFactory()
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
         self.taxpayer.save()
@@ -1317,6 +1320,13 @@ class TestEditAddressInfo(TestCase):
             response.url
         )
 
+    def test_post_edit_contact_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_address_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
+
     def test_post_edit_address_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
         status_approved = TAXPAYER_STATUS_APPROVED
@@ -1370,6 +1380,9 @@ class TestEditContactInfo(TestCase):
         self.supplier_group = Group.objects.get(name="supplier")
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
+
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
@@ -1435,6 +1448,13 @@ class TestEditContactInfo(TestCase):
             response.url
         )
 
+    def test_post_edit_contact_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_contact_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
+
     def test_post_edit_contact_info_as_ap_dont_change_status(self):
         self.client.force_login(self.ap_user)
         status_approved = TAXPAYER_STATUS_APPROVED
@@ -1493,6 +1513,9 @@ class TestEditBankAccountInfo(TestCase):
         self.supplier_group = Group.objects.get(name="supplier")
         self.supplier_user = UserFactory(email='nahuelSupplier@gmail.com')
         self.supplier_user.groups.add(self.supplier_group)
+
+        self.supplier_without_company = UserFactory()
+        self.supplier_without_company.groups.add(self.supplier_group)
 
         self.taxpayer = TaxPayerArgentinaFactory()
         self.taxpayer.taxpayer_state = TAXPAYER_STATUS_APPROVED
@@ -1567,6 +1590,13 @@ class TestEditBankAccountInfo(TestCase):
             status_approved,
             TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state
         )
+
+    def test_post_edit_bank_account_info_as_buyer_redirects_handle_no_permision(self):
+        self.client.force_login(self.supplier_without_company)
+        response = self._make_bank_post()
+
+        # checking pass for handle_no_permission
+        self.assertEqual(response.status_code, 302)
 
     def test_post_edit_bank_account_info_as_supplier_redirect_to_taxpayer_details(self):
         CompanyUserPermissionFactory(
