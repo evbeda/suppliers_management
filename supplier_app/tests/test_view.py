@@ -1742,7 +1742,6 @@ class TestCompanyCreateView(TestCase):
     def test_valid_company_creation(self):
         self.client.force_login(self.ap_user)
         self._make_post()
-        # import ipdb; ipdb.set_trace()
         self.assertEqual(
             Company.objects.last().name,
             self.company_constants['name']
