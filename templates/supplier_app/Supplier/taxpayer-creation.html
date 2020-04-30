@@ -17,7 +17,8 @@
 
 
     <!-- multistep form -->
-<form id="msform">
+<form id="msform" method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
     <!-- progressbar -->
     <ul id="progressbar">
         <li class="active">Taxpayer Info</li>

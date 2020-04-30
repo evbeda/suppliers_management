@@ -111,7 +111,7 @@ class BankAccountBaseForm(ModelForm):
             'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
             'bank_cbu_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
-                'class': 'form-control btn btn-file',
+                'class': '',
             }),
             'bank_info': forms.Select(attrs={'class': 'form-control'}),
         }
