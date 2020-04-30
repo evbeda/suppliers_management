@@ -3,24 +3,8 @@
         "model": "supplier_app.EBEntity",
         "pk": 1,
         "fields": {
-            "eb_name": "Eventbrite ARG",
+            "eb_name": "Eventbrite Argentina S.A.",
             "eb_country": "AR"
-        }
-    },
-    {
-        "model": "supplier_app.EBEntity",
-        "pk": 2,
-        "fields": {
-            "eb_name": "Eventbrite USA",
-            "eb_country": "US"
-        }
-    },
-    {
-        "model": "supplier_app.EBEntity",
-        "pk": 3,
-        "fields": {
-            "eb_name": "Eventbrite BR",
-            "eb_country": "BR"
         }
     }
 ]
