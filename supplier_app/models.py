@@ -42,9 +42,26 @@ from supplier_app.constants.taxpayer_status import (
 from utils.file_validator import FileSizeValidator
 
 
+class EBEntity(models.Model):
+    eb_name = models.CharField(
+        max_length=15,
+        verbose_name=_("Eventbrite entity name"),
+    )
+    eb_country = models.CharField(
+        max_length=15,
+        verbose_name=_("Country"),
+        choices=get_countries_choices(),
+        default=None,
+    )
+
+    def __str__(self):
+        return self.eb_name
+
+
 class Company(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("Name"))
     description = models.TextField()
+    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name.capitalize()
@@ -81,22 +98,6 @@ class CompanyUniqueToken(models.Model):
     def _token_generator(self):
         salt = uuid.uuid4().hex + str(self.company.id)
         return hashlib.sha256(salt.encode('utf-8')).hexdigest()
-
-
-class EBEntity(models.Model):
-    eb_name = models.CharField(
-        max_length=15,
-        verbose_name=_("Eventbrite entity name"),
-        )
-    eb_country = models.CharField(
-        max_length=15,
-        verbose_name=_("Country"),
-        choices=get_countries_choices(),
-        default=None,
-    )
-
-    def __str__(self):
-        return self.eb_name
 
 
 class TaxPayer(models.Model):

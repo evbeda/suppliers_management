@@ -31,9 +31,19 @@ file_mock.name = 'test.pdf'
 file_mock.size = 50
 
 
+class EBEntityFactory(factory.django.DjangoModelFactory):
+
+    class Meta:
+        model = EBEntity
+
+    eb_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
+    eb_country = "AR"
+
+
 class CompanyFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: "CompanyTest{}".format(n))
     description = "Fake description"
+    eb_entity = factory.SubFactory(EBEntityFactory)
 
     class Meta:
         model = Company
@@ -56,15 +66,6 @@ class CompanyUniqueTokenFactory(factory.django.DjangoModelFactory):
     company = factory.SubFactory(CompanyFactory)
     token = 'f360da6197be4436a4b686460289085c14a859d634a9daca2d7d137b178b193e'
     created_at = timezone.now()
-
-
-class EBEntityFactory(factory.django.DjangoModelFactory):
-
-    class Meta:
-        model = EBEntity
-
-    eb_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
-    eb_country = "AR"
 
 
 class TaxPayerFactory(factory.django.DjangoModelFactory):

@@ -228,6 +228,10 @@ class TestCompanyModel(TestCase):
             Company.objects.last().description
         )
         self.assertEqual(
+            company.eb_entity,
+            Company.objects.last().eb_entity
+        )
+        self.assertEqual(
             str(company),
             Company.objects.last().name.capitalize()
         )
