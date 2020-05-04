@@ -38,7 +38,12 @@ from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS,
     get_taxpayer_status_choices,
 )
-
+from supplier_app.constants.payment_ar import (
+    PAYMENT_TYPE_AR,
+    ACCOUNT_TYPE_AR,
+    get_payment_type_info_choices,
+    get_account_type_info_choices,
+)
 from utils.file_validator import FileSizeValidator
 
 
@@ -402,17 +407,13 @@ class BankAccount(models.Model):
 
 
 class BankAccountArgentina(models.Model):
-    payment_type = models.CharField(
-        max_length=60,
-        verbose_name=_("Payment type")
+    payment_type = models.IntegerField(
+        choices=get_payment_type_info_choices(),
+        verbose_name=_('Payment type')
     )
-    account_type = models.CharField(
-        max_length=60,
-        verbose_name=_("Account type"),
-    )
-    account_type = models.CharField(
-        max_length=60,
-        verbose_name=_("Account type"),
+    account_type = models.IntegerField(
+        choices=get_account_type_info_choices(),
+        verbose_name=_('Account type')
     )
     beneficiary = models.CharField(
         max_length=60,
