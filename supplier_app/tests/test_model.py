@@ -12,6 +12,7 @@ from supplier_app.constants.eb_entities_status import (
 from supplier_app.models import (
     Address,
     BankAccount,
+    BankAccountArgentina,
     Company,
     CompanyUniqueToken,
     TaxPayer,
@@ -29,6 +30,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
     ContactFactory,
+    BankAccountArgentinaFactory
 )
 from users_app.factory_boy import UserFactory
 
@@ -213,6 +215,15 @@ class TestBankAccountModel(TestCase):
         self.assertEqual(
             str(bank_account),
             "Account_number:1234567890"
+        )
+
+
+class TestBankAccountArgentinaModel(TestCase):
+    def test_bank_account_creation(self):
+        bank = BankAccountArgentinaFactory()
+        self.assertEqual(
+            bank,
+            BankAccountArgentina.objects.last()
         )
 
 

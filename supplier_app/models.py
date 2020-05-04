@@ -401,6 +401,31 @@ class BankAccount(models.Model):
         )
 
 
+class BankAccountArgentina(models.Model):
+    payment_type = models.CharField(
+        max_length=60,
+        verbose_name=_("Payment type")
+    )
+    account_type = models.CharField(
+        max_length=60,
+        verbose_name=_("Account type"),
+    )
+    account_type = models.CharField(
+        max_length=60,
+        verbose_name=_("Account type"),
+    )
+    beneficiary = models.CharField(
+        max_length=60,
+        verbose_name=_("Beneficiary"),
+    )
+    bank_account = models.ForeignKey(
+        BankAccount,
+        on_delete=models.CASCADE,
+        default=None
+    )
+    history = HistoricalRecords()
+
+
 class TaxpayerComment(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
