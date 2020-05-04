@@ -27,6 +27,13 @@
     </ul>
     <!-- fieldsets -->
 
+    {% for hidden_field in taxpayer_form.hidden_fields %}
+            <small class="text-danger">
+                {{ hidden_field.errors }}
+            </small>
+            {{ hidden_field }}
+    {% endfor %}
+    
     <fieldset id="f1">
         <h2 class="fs-title">{% trans "Taxpayer Info" %}</h2>
         <h3 class="fs-subtitle">- {% trans "Taxpayer Form" %} -</h3>
@@ -52,6 +59,9 @@
         <div class="div-input mandatory">{{ address_form.state }}</div>
         <div class="text-left">{{ address_form.city.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.city }}</div>
+
+        
+
         <div class="text-left">{{ address_form.street.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.street }}</div>
         <div class="row">
