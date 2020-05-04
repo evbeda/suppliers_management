@@ -1,8 +1,8 @@
+{% load i18n %}
 
 
-
-    <h2 class="fs-title arg arg-bank">Bank Info</h2>
-    <h3 class="fs-subtitle arg arg-bank">Place holder for instructions about bank info</h3>
+    <h2 class="fs-title arg arg-bank">{% trans "Bank Info" %}</h2>
+    <h3 class="fs-subtitle arg arg-bank">{% trans "Enter your bank account details" %}</h3>
     <div class="text-left arg arg-bank">{{ taxpayer_form.cuit.label_tag }}</div>
     <div class="div-input arg arg-bank">{{ taxpayer_form.cuit }}</div>
     <div class="text-left arg arg-bank">{{ bank_account_form.bank_account_number.label_tag }}</div>

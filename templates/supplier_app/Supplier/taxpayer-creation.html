@@ -28,8 +28,8 @@
     <!-- fieldsets -->
 
     <fieldset id="f1">
-        <h2 class="fs-title">Taxpayer Info</h2>
-        <h3 class="fs-subtitle">- Taxpayer form -</h3>
+        <h2 class="fs-title">{% trans "Taxpayer Info" %}</h2>
+        <h3 class="fs-subtitle">- {% trans "Taxpayer Form" %} -</h3>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
         <div class="div-input mandatory">{{ taxpayer_form.business_name }}</div>
         <div class="text-left">{{ address_form.country.label_tag }}</div>
@@ -47,7 +47,7 @@
         </div>
         {% endfor %} -->
 
-        <h3 class="fs-title mt-3">- Address Info -</h3>
+        <h3 class="fs-title mt-3">- {% trans "Address Info" %} -</h3>
         <div class="text-left">{{ address_form.state.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.state }}</div>
         <div class="text-left">{{ address_form.city.label_tag }}</div>
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <h3 class="fs-title mt-5">- Contact Info -</h3>
+        <h3 class="fs-title mt-5">- {% trans "Contact Info" %} -</h3>
         <div class="text-left">{{ contact_form.contact_person.label_tag }}</div>
         <div class="div-input mandatory">{{ contact_form.contact_person }}</div>
         <div class="text-left">{{ contact_form.phone_number.label_tag }}</div>
@@ -80,19 +80,19 @@
                 <div class="div-input optional">{{ contact_form.website }}</div>
             </div>
         </div>
-        <input type="button" name="next"  class="next action-button" value="Next" />
+        <input type="button" name="next"  class="next action-button" value="{% trans 'Next' %}" />
     </fieldset>
 
     <fieldset id="f2">
         {% include 'supplier_app/Supplier/bank-info-arg.html' %}
         {% include 'supplier_app/Supplier/bank-info-usa.html' %}
-        <input type="button" name="previous" class="previous action-button" value="Previous" />
-        <input type="button" name="next"  class="next action-button" value="Next" />
+        <input type="button" name="previous" class="previous action-button" value="{% trans 'Previous' %}" />
+        <input type="button" name="next"  class="next action-button" value="{% trans 'Next' %}" />
     </fieldset>
     
     <fieldset id="f3">
         {% include 'supplier_app/Supplier/attach_arg.html' %}
-        <input type="button" name="previous" class="previous action-button" value="Previous" />
+        <input type="button" name="previous" class="previous action-button" value="{% trans 'Previous' %}" />
         <input type="submit" name="submit" class="submit action-button" value="Submit" />
     </fieldset>
 </form>

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-27 15:29+0000\n"
+"POT-Creation-Date: 2020-05-04 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,8 +59,6 @@ msgid "Enter a valid integer."
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/core/validators.py:171
-#, fuzzy
-#| msgid "email address"
 msgid "Enter a valid email address."
 msgstr "Email"
 
@@ -281,8 +278,6 @@ msgid "'%(value)s' value must be a decimal number."
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1477
-#, fuzzy
-#| msgid "PO number"
 msgid "Decimal number"
 msgstr "Número de orden de compra"
 
@@ -294,14 +289,10 @@ msgid ""
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1631
-#, fuzzy
-#| msgid "Description"
 msgid "Duration"
 msgstr "Descripción"
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1683
-#, fuzzy
-#| msgid "email address"
 msgid "Email address"
 msgstr "Email"
 
@@ -315,20 +306,14 @@ msgid "'%(value)s' value must be a float."
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1775
-#, fuzzy
-#| msgid "Bank account number"
 msgid "Floating point number"
 msgstr "CBU"
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1893
-#, fuzzy
-#| msgid "email address"
 msgid "IPv4 address"
 msgstr "Email"
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1924
-#, fuzzy
-#| msgid "email address"
 msgid "IP address"
 msgstr "Email"
 
@@ -394,8 +379,6 @@ msgid "'%(value)s' is not a valid UUID."
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/db/models/fields/files.py:228
-#, fuzzy
-#| msgid "Files"
 msgid "File"
 msgstr "Archivos"
 
@@ -446,8 +429,6 @@ msgstr ""
 
 #: env/lib/python3.7/site-packages/django/forms/fields.py:303
 #: env/lib/python3.7/site-packages/django/forms/fields.py:340
-#, fuzzy
-#| msgid "Account number"
 msgid "Enter a number."
 msgstr "Número de cuenta"
 
@@ -603,16 +584,12 @@ msgid "Clear"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:378
-#, fuzzy
-#| msgid "Currency"
 msgid "Currently"
 msgstr "Moneda"
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:379
-#, fuzzy
-#| msgid "Changed: \n"
 msgid "Change"
-msgstr "Cambios: \n"
+msgstr "Cambio"
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:701
 msgid "Unknown"
@@ -620,15 +597,15 @@ msgstr ""
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:702
 msgid "Yes"
-msgstr ""
+msgstr "Si"
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:703
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: env/lib/python3.7/site-packages/django/template/defaultfilters.py:851
 msgid "yes,no,maybe"
-msgstr ""
+msgstr "si, no, talves"
 
 #: env/lib/python3.7/site-packages/django/template/defaultfilters.py:880
 #: env/lib/python3.7/site-packages/django/template/defaultfilters.py:897
@@ -736,8 +713,6 @@ msgid "Fri"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:11
-#, fuzzy
-#| msgid "State"
 msgid "Sat"
 msgstr "Provincia"
 
@@ -762,8 +737,6 @@ msgid "April"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:18
-#, fuzzy
-#| msgid "Pay"
 msgid "May"
 msgstr "Pagar"
 
@@ -788,8 +761,6 @@ msgid "October"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:19
-#, fuzzy
-#| msgid "Number"
 msgid "November"
 msgstr "Número"
 
@@ -814,8 +785,6 @@ msgid "apr"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:23
-#, fuzzy
-#| msgid "Pay"
 msgid "may"
 msgstr "Pagar"
 
@@ -868,8 +837,6 @@ msgid "April"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:35
-#, fuzzy
-#| msgid "Pay"
 msgctxt "abbrev. month"
 msgid "May"
 msgstr "Pagar"
@@ -930,8 +897,6 @@ msgid "April"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:49
-#, fuzzy
-#| msgid "Pay"
 msgctxt "alt. month"
 msgid "May"
 msgstr "Pagar"
@@ -962,8 +927,6 @@ msgid "October"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/utils/dates.py:55
-#, fuzzy
-#| msgid "Number"
 msgctxt "alt. month"
 msgid "November"
 msgstr "Número"
@@ -1016,7 +979,8 @@ msgstr[1] ""
 
 #: env/lib/python3.7/site-packages/django/utils/timesince.py:14
 #, fuzzy, python-format
-#| msgid "15 days"
+#| msgid "%d day"
+#| msgid_plural "%d days"
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "15 días"
@@ -1081,8 +1045,6 @@ msgid "More information is available with DEBUG=True."
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/views/debug.py:520
-#, fuzzy
-#| msgid "Welcome to "
 msgid "Welcome to Django"
 msgstr "Bienvenido a"
 
@@ -1121,8 +1083,6 @@ msgid "No month specified"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django/views/generic/dates.py:169
-#, fuzzy
-#| msgid "No workday id"
 msgid "No day specified"
 msgstr "Workday ID no especificado"
 
@@ -1199,8 +1159,6 @@ msgid "Signed out"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/django_saml2_auth/templates/django_saml2_auth/signout.html:9
-#, fuzzy
-#| msgid "You have joined the company succesfully"
 msgid "You have signed out successfully."
 msgstr "Te uniste al grupo económico correctamente"
 
@@ -1213,8 +1171,6 @@ msgstr ""
 #: env/lib/python3.7/site-packages/djcelery/admin.py:62
 #: env/lib/python3.7/site-packages/djcelery/models.py:34
 #: env/lib/python3.7/site-packages/djcelery/models.py:341
-#, fuzzy
-#| msgid "State"
 msgid "state"
 msgstr "Provincia"
 
@@ -1230,14 +1186,10 @@ msgstr ""
 #: env/lib/python3.7/site-packages/djcelery/admin.py:87
 #: env/lib/python3.7/site-packages/djcelery/models.py:211
 #: env/lib/python3.7/site-packages/djcelery/models.py:345
-#, fuzzy
-#| msgid "Bank name"
 msgid "name"
 msgstr "Banco"
 
 #: env/lib/python3.7/site-packages/djcelery/admin.py:121
-#, fuzzy
-#| msgid "More details"
 msgid "Task detail"
 msgstr "Detalles"
 
@@ -1272,8 +1224,6 @@ msgid "Rate limit selection"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/admin.py:215
-#, fuzzy
-#| msgid "More details"
 msgid "Node detail"
 msgstr "Detalles"
 
@@ -1412,14 +1362,10 @@ msgid "traceback"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:50
-#, fuzzy
-#| msgid "United states"
 msgid "task state"
 msgstr "Estados Unidos"
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:51
-#, fuzzy
-#| msgid "United states"
 msgid "task states"
 msgstr "Estados Unidos"
 
@@ -1428,8 +1374,6 @@ msgid "group id"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:71
-#, fuzzy
-#| msgid "Creation date"
 msgid "created at"
 msgstr "Fecha de creación"
 
@@ -1518,14 +1462,10 @@ msgid "crontabs"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:212
-#, fuzzy
-#| msgid "Description"
 msgid "Useful description"
 msgstr "Descripción"
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:214
-#, fuzzy
-#| msgid "Bank name"
 msgid "task name"
 msgstr "Banco"
 
@@ -1560,8 +1500,6 @@ msgid "Queue defined in CELERY_QUEUES"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:238
-#, fuzzy
-#| msgid "Request change"
 msgid "exchange"
 msgstr "Solicitud de cambio"
 
@@ -1579,8 +1517,6 @@ msgid "enabled"
 msgstr ""
 
 #: env/lib/python3.7/site-packages/djcelery/models.py:257
-#, fuzzy
-#| msgid "Description"
 msgid "description"
 msgstr "Descripción"
 
@@ -1829,12 +1765,32 @@ msgstr "proxima pagina"
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:4
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:6
 msgid "previous"
-msgstr "anterior"
+msgstr "Anterior"
 
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:20
 #: env/lib/python3.7/site-packages/pure_pagination/templates/pure_pagination/pagination.html:22
 msgid "next"
 msgstr "siguiente"
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:63
+msgid "Delete generated `*.css` files instead of creating them."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:70
+msgid ""
+"Store resulting .css in settings.SASS_PROCESSOR_ROOT folder. Default: store "
+"each css side-by-side with .scss."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:77
+msgid "Set templating engine used (django, jinja2). Default: django."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:84
+msgid ""
+"Set the precision for numeric computations in the SASS processor. Default: "
+"settings.SASS_PRECISION."
+msgstr ""
 
 #: invoices_app/__init__.py:25
 msgid "APPROVED"
@@ -1935,8 +1891,8 @@ msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
-#: supplier_app/models.py:92 supplier_app/models.py:113
-#: supplier_app/models.py:295 templates/invoices_app/invoice-list.html:30
+#: supplier_app/models.py:52 supplier_app/models.py:115
+#: supplier_app/models.py:344 templates/invoices_app/invoice-list.html:30
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/taxpayer-details.html:107
@@ -2023,17 +1979,17 @@ msgstr "Transferencia bancaria"
 msgid "M d, Y"
 msgstr "d M, Y"
 
+#: supplier_app/constants/conditions.py:7
+msgid "Monotributista"
+msgstr "Monotributista"
+
+#: supplier_app/constants/conditions.py:8
+msgid "Responsable Inscripto"
+msgstr "Responsable Inscripto"
+
 #: supplier_app/constants/countries.py:7
 msgid "Argentina"
 msgstr "Argentina"
-
-#: supplier_app/constants/countries.py:8
-msgid "Brazil"
-msgstr "Brasil"
-
-#: supplier_app/constants/countries.py:9
-msgid "United states"
-msgstr "Estados Unidos"
 
 #: supplier_app/constants/custom_messages.py:3
 msgid ""
@@ -2196,32 +2152,44 @@ msgstr "Cambios pendientes"
 msgid "Taxpayer state"
 msgstr "Estados de la entidad fiscal"
 
-#: supplier_app/forms.py:51
+#: supplier_app/forms.py:52
 msgid "e.g. Adolfo sourdeaux"
 msgstr "ej Adolfo sourdeaux"
 
-#: supplier_app/forms.py:57
+#: supplier_app/forms.py:58
 msgid "e.g. Tigre"
 msgstr "ej Tigre"
 
-#: supplier_app/forms.py:63
+#: supplier_app/forms.py:64
 msgid "e.g. Buenos aires"
 msgstr "ej Buenos aires"
 
-#: supplier_app/forms.py:111
+#: supplier_app/forms.py:87
+msgid "e.g. Jhon Smith"
+msgstr "ej. Jhon Smith"
+
+#: supplier_app/forms.py:94
+msgid "e.g. jhonsmith@mail.com"
+msgstr "ej. jhonsmith@mail.com"
+
+#: supplier_app/forms.py:100
+msgid "e.g. www.website.com"
+msgstr "ej. www.website.com"
+
+#: supplier_app/forms.py:141 templates/supplier_app/AP/company_creation.html:21
 msgid "Eventbrite entities to bill"
 msgstr "Entidades de Eventbrite a Facturar"
 
-#: supplier_app/models.py:45 templates/supplier_app/AP/company_creation.html:14
+#: supplier_app/models.py:48
+msgid "Eventbrite entity name"
+msgstr "Entidad de Eventbrite"
+
+#: supplier_app/models.py:62 templates/supplier_app/AP/company_creation.html:14
 #: templates/supplier_app/AP/company_list.html:29
 msgid "Name"
 msgstr "Nombre"
 
-#: supplier_app/models.py:88
-msgid "Eventbrite entity name"
-msgstr "Entidad de Eventbrite"
-
-#: supplier_app/models.py:104
+#: supplier_app/models.py:106
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/supplier-home.html:26
@@ -2229,76 +2197,108 @@ msgstr "Entidad de Eventbrite"
 msgid "Business name"
 msgstr "Razón social"
 
-#: supplier_app/models.py:116
+#: supplier_app/models.py:118
 msgid "Creation date"
 msgstr "Fecha de creación"
 
-#: supplier_app/models.py:217
+#: supplier_app/models.py:219
 msgid "CUIT must only have numbers"
 msgstr "El CUIT solo debe tener numeros"
 
-#: supplier_app/models.py:228
+#: supplier_app/models.py:229
+msgid "Taxpayer Condition"
+msgstr "Condición Impositiva"
+
+#: supplier_app/models.py:235
 msgid "Payment type"
 msgstr "Forma de pago"
 
-#: supplier_app/models.py:233
+#: supplier_app/models.py:240
 msgid "Payment term"
 msgstr "Plazo de pago"
 
-#: supplier_app/models.py:238
+#: supplier_app/models.py:245
 msgid "AFIP registration certificate"
 msgstr "Constancia de inscripción de AFIP"
 
-#: supplier_app/models.py:251
+#: supplier_app/models.py:259
+msgid "AFIP No Retention"
+msgstr "AFIP No Retencion"
+
+#: supplier_app/models.py:273
+msgid "IIBB registration certificate"
+msgstr "Constancia de inscripción IIBB"
+
+#: supplier_app/models.py:287
+msgid "IIBB No Retention"
+msgstr "IIBB No Retencion"
+
+#: supplier_app/models.py:300
 msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgstr "Certificado de no retención de gravámenes, SUSS"
 
-#: supplier_app/models.py:273
+#: supplier_app/models.py:322
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
 #: templates/supplier_app/taxpayer-details.html:213
 msgid "Street"
 msgstr "Calle"
 
-#: supplier_app/models.py:275
+#: supplier_app/models.py:324
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
 #: templates/supplier_app/taxpayer-details.html:216
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:276
+#: supplier_app/models.py:325
 #: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:279
+#: supplier_app/models.py:328
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
 #: templates/supplier_app/taxpayer-details.html:241
 msgid "City"
 msgstr "Cíudad"
 
-#: supplier_app/models.py:283
+#: supplier_app/models.py:332
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
 #: templates/supplier_app/taxpayer-details.html:244
 msgid "State"
 msgstr "Provincia"
 
-#: supplier_app/models.py:287
+#: supplier_app/models.py:336
 msgid "City name must only have letters"
 msgstr "La ciudad solo debe tener letras"
 
-#: supplier_app/models.py:306
+#: supplier_app/models.py:353
+msgid "Contact person"
+msgstr "Persona a contactar"
+
+#: supplier_app/models.py:354
+msgid "Phone number"
+msgstr "Numero de telefono"
+
+#: supplier_app/models.py:355 templates/registration/admins-list.html:29
+msgid "Email"
+msgstr "Email"
+
+#: supplier_app/models.py:356
+msgid "Web site"
+msgstr "Sitio web"
+
+#: supplier_app/models.py:364
 msgid "Bank account number"
 msgstr "CBU"
 
-#: supplier_app/models.py:310
+#: supplier_app/models.py:368
 msgid "Bank account must only have numbers"
 msgstr "La cuenta bancaria solo debe tener numeros"
 
-#: supplier_app/models.py:318 templates/supplier_app/taxpayer-details.html:164
+#: supplier_app/models.py:376 templates/supplier_app/taxpayer-details.html:164
 msgid "Bank name"
 msgstr "Banco"
 
-#: supplier_app/models.py:328
+#: supplier_app/models.py:386
 msgid "Bank account certificate"
 msgstr "Certificado de la cuenta bancaria"
 
@@ -2487,6 +2487,7 @@ msgid "Choose file"
 msgstr "Elige un archivo"
 
 #: templates/invoices_app/invoices_form.html:160
+#: templates/steper_example.html:36
 msgid "Submit"
 msgstr "Cargar"
 
@@ -2494,10 +2495,11 @@ msgstr "Cargar"
 #: templates/invoices_app/invoices_form.html:165
 #: templates/invoices_app/invoices_form.html:167
 #: templates/registration/admin_create.html:34
-#: templates/supplier_app/AP/company_creation.html:25
-#: templates/supplier_app/Supplier/taxpayer-creation.html:111
+#: templates/supplier_app/AP/company_creation.html:33
+#: templates/supplier_app/Supplier/taxpayer-creation.html:206
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
+#: templates/supplier_app/edit-contact-information.html:25
 #: templates/supplier_app/edit-taxpayer-information.html:25
 msgid "Cancel"
 msgstr "Cancelar"
@@ -2602,10 +2604,6 @@ msgstr "AP Admin"
 msgid "User ID"
 msgstr "ID de usuario"
 
-#: templates/registration/admins-list.html:29
-msgid "Email"
-msgstr "Email"
-
 #: templates/registration/admins-list.html:30
 msgid "Registered"
 msgstr "Registrado"
@@ -2660,16 +2658,24 @@ msgstr "Ingresa como empleado de Eventbrite"
 msgid "Welcome to BriteSU"
 msgstr "Bienvenido a BriteSU"
 
+#: templates/steper_example.html:32
+msgid "first step"
+msgstr "primer paso"
+
+#: templates/steper_example.html:33
+msgid "prev step"
+msgstr "paso previo"
+
 #: templates/supplier_app/AP/company_creation.html:7
 msgid "Create a new company"
 msgstr "Crear un nuevo grupo económico"
 
-#: templates/supplier_app/AP/company_creation.html:20
+#: templates/supplier_app/AP/company_creation.html:28
 #: templates/supplier_app/AP/company_list.html:30
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/supplier_app/AP/company_creation.html:24
+#: templates/supplier_app/AP/company_creation.html:32
 msgid "Create Company"
 msgstr "Crear un nuevo grupo económico"
 
@@ -2734,19 +2740,65 @@ msgstr "Banco"
 msgid "Bank Account Number"
 msgstr "CBU"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:11
-msgid "Taxpayer info"
+#: templates/supplier_app/Supplier/attach_arg.html:4
+msgid "Attachments and tax condition"
+msgstr "Archivos a Adjuntar"
+
+#: templates/supplier_app/Supplier/attach_arg.html:5
+msgid "Mandatory attachments"
+msgstr "Adjuntos Obligatorios"
+
+#: templates/supplier_app/Supplier/attach_arg.html:15
+msgid "Optional Attachments"
+msgstr "Archivos Adjuntos Opcionales: "
+
+#: templates/supplier_app/Supplier/bank-info-arg.html:4
+msgid "Bank Info"
+msgstr "Informacíon Bancaria"
+
+#: templates/supplier_app/Supplier/bank-info-arg.html:5
+msgid "Enter your bank account details"
+msgstr "Ingrese los datos de su cuenta bancaria"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:31
+msgid "Taxpayer Info"
 msgstr "Información de la entidad fiscal"
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:32
+msgid "Taxpayer Form"
+msgstr "Información de la entidad fiscal"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:50
+msgid "Address Info"
+msgstr "Domicilio"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:68
+msgid "Contact Info"
+msgstr "Informacion de Contacto"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:83
+#: templates/supplier_app/Supplier/taxpayer-creation.html:90
+msgid "Next"
+msgstr "Siguiente"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:89
+#: templates/supplier_app/Supplier/taxpayer-creation.html:95
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:106
+msgid "Taxpayer info"
+msgstr "Información de la entidad fiscal"
+
+#: templates/supplier_app/Supplier/taxpayer-creation.html:127
 msgid "Address info"
 msgstr "Domicilio"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:92
+#: templates/supplier_app/Supplier/taxpayer-creation.html:187
 msgid "Bank account"
 msgstr "Cuenta bancaria"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:110
+#: templates/supplier_app/Supplier/taxpayer-creation.html:205
 msgid "Create taxpayer"
 msgstr "Crear entidad fiscal"
 
@@ -2777,12 +2829,14 @@ msgstr "Solicitar cambios"
 
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
+#: templates/supplier_app/edit-contact-information.html:23
 #: templates/supplier_app/edit-taxpayer-information.html:23
 msgid "Save"
 msgstr "Guardar"
 
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
+#: templates/supplier_app/edit-contact-information.html:23
 #: templates/supplier_app/edit-taxpayer-information.html:23
 msgid "Request change"
 msgstr "Solicitud de cambio"
@@ -2883,8 +2937,6 @@ msgid "email address"
 msgstr "Email"
 
 #: users_app/views.py:139
-#, fuzzy
-#| msgid "You have been invited to BriteSu"
 msgid "You have been invited to BriteSu as AP"
 msgstr "Has sido invitado a BriteSu"
 
@@ -2918,11 +2970,20 @@ msgstr "{} de {} a {}\n"
 
 #: utils/history.py:42
 #, fuzzy
-#| msgid "Changed: \n"
+#| msgid "Change reason:\n"
 msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid "Ingrese los datos de su cuenta bancaria"
+#~ msgstr "Ingrese los datos de su cuenta bancaria"
+
+#~ msgid "Brazil"
+#~ msgstr "Brasil"
+
+#~ msgid "United states"
+#~ msgstr "Estados Unidos"
 
 #~ msgid "NEW"
 #~ msgstr "NUEVA"
