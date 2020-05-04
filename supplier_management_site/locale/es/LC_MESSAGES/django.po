@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-04 14:59+0000\n"
+"POT-Creation-Date: 2020-05-04 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -977,7 +977,8 @@ msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:14, python-format
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:14
+#, fuzzy, python-format
 #| msgid "%d day"
 #| msgid_plural "%d days"
 msgid "%d day"
@@ -1672,7 +1673,8 @@ msgstr ""
 msgid "too few arguments"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1959, python-format
+#: env/lib/python3.7/site-packages/gunicorn/argparse_compat.py:1959
+#, fuzzy, python-format
 #| msgid "argument %s is required"
 msgid "argument %s is required"
 msgstr "Solicitud de cambio"
@@ -2747,17 +2749,15 @@ msgid "Mandatory attachments"
 msgstr "Adjuntos Obligatorios"
 
 #: templates/supplier_app/Supplier/attach_arg.html:15
-#| msgid "Attachment: "
 msgid "Optional Attachments"
 msgstr "Archivos Adjuntos Opcionales: "
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:4
-#| msgid "Bank info"
 msgid "Bank Info"
 msgstr "Informacíon Bancaria"
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:5
-msgid "Ingrese los datos de su cuenta bancaria"
+msgid "Enter your bank account details"
 msgstr "Ingrese los datos de su cuenta bancaria"
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:31
@@ -2969,9 +2969,15 @@ msgid "{} from {} to {}\n"
 msgstr "{} de {} a {}\n"
 
 #: utils/history.py:42
+#, fuzzy
+#| msgid "Change reason:\n"
 msgid ""
+"\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid "Ingrese los datos de su cuenta bancaria"
+#~ msgstr "Ingrese los datos de su cuenta bancaria"
 
 #~ msgid "Brazil"
 #~ msgstr "Brasil"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-04 14:59+0000\n"
+"POT-Creation-Date: 2020-05-04 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2832,7 +2832,7 @@ msgid "Bank Info"
 msgstr "informação bancária"
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:5
-msgid "Ingrese los datos de su cuenta bancaria"
+msgid "Enter your bank account details"
 msgstr ""
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:31
