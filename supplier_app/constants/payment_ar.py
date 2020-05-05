@@ -1,4 +1,4 @@
-PAYMENT_TYPE_AR = {
+TRANSACTION_TYPE_AR = {
     'Transferencia': 1
 }
 
@@ -8,8 +8,8 @@ ACCOUNT_TYPE_AR = {
 }
 
 
-def get_payment_type_info_choices():
-    return [(v, k) for k, v in PAYMENT_TYPE_AR.items()]
+def get_transaction_type_info_choices():
+    return [(v, k) for k, v in TRANSACTION_TYPE_AR.items()]
 
 
 def get_account_type_info_choices():

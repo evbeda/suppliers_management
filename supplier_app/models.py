@@ -39,9 +39,7 @@ from supplier_app.constants.taxpayer_status import (
     get_taxpayer_status_choices,
 )
 from supplier_app.constants.payment_ar import (
-    PAYMENT_TYPE_AR,
-    ACCOUNT_TYPE_AR,
-    get_payment_type_info_choices,
+    get_transaction_type_info_choices,
     get_account_type_info_choices,
 )
 from utils.file_validator import FileSizeValidator
@@ -364,7 +362,7 @@ class ContactInformation(models.Model):
 
 class BankAccount(models.Model):
     bank_account_number = models.CharField(
-        max_length=60,
+        max_length=22,
         unique=True,
         verbose_name=_("Bank account number"),
         validators=[
@@ -397,6 +395,21 @@ class BankAccount(models.Model):
             ),
         ],
     )
+    bank_transaction_type = models.IntegerField(
+        choices=get_transaction_type_info_choices(),
+        verbose_name=_('Transaction type'),
+        default=None
+    )
+    bank_account_type = models.IntegerField(
+        choices=get_account_type_info_choices(),
+        verbose_name=_('Account type'),
+        default=None
+    )
+    bank_beneficiary = models.CharField(
+        max_length=60,
+        verbose_name=_("Beneficiary"),
+        default=None
+    )
 
     history = HistoricalRecords()
 
@@ -404,27 +417,6 @@ class BankAccount(models.Model):
         return "Account_number:{}".format(
             self.bank_account_number,
         )
-
-
-class BankAccountArgentina(models.Model):
-    payment_type = models.IntegerField(
-        choices=get_payment_type_info_choices(),
-        verbose_name=_('Payment type')
-    )
-    account_type = models.IntegerField(
-        choices=get_account_type_info_choices(),
-        verbose_name=_('Account type')
-    )
-    beneficiary = models.CharField(
-        max_length=60,
-        verbose_name=_("Beneficiary"),
-    )
-    bank_account = models.ForeignKey(
-        BankAccount,
-        on_delete=models.CASCADE,
-        default=None
-    )
-    history = HistoricalRecords()
 
 
 class TaxpayerComment(models.Model):

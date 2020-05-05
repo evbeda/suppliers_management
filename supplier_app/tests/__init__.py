@@ -6,7 +6,10 @@ from supplier_app import (
     PAYMENT_TYPES,
 )
 from supplier_app.constants.bank_info import BANK_INFO
-
+from supplier_app.constants.payment_ar import (
+    TRANSACTION_TYPE_AR,
+    ACCOUNT_TYPE_AR,
+)
 BUSINESS_EXAMPLE_NAME_1 = 'Pyme 1'
 BUSINESS_EXAMPLE_NAME_2 = 'Pyme 2'
 
@@ -34,12 +37,22 @@ def get_payment_type_example(index=None):
     return PAYMENT_TYPES[index or 0].value
 
 
+def get_transaction_type_example(key=None):
+    return TRANSACTION_TYPE_AR[key or "Transferencia"]
+
+
+def get_acccount_type_example(key=None):
+    return ACCOUNT_TYPE_AR[key or "Caja de Ahorro"]
+
+
 def taxpayer_creation_POST_factory(
     eb_entity=None,
     afip_file=None,
     witholding_taxes_file=None,
     bank_cbu_file=None,
     bank_info=None,
+    account_type=None,
+    transaction_type=None,
 ):
     return {
         'taxpayer_form-workday_id': '1',
@@ -65,6 +78,9 @@ def taxpayer_creation_POST_factory(
         'bank_account_form-bank_cbu_file': bank_cbu_file or file_mock,
         'bank_account_form-bank_info': bank_info or get_bank_info_example(),
         'bank_account_form-bank_account_number': '1113111162117111131111',
+        'bank_account_form-bank_transaction_type': transaction_type or get_transaction_type_example(),
+        'bank_account_form-bank_account_type': account_type or get_acccount_type_example(),
+        'bank_account_form-bank_beneficiary': 'John Smith',
     }
 
 

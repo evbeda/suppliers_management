@@ -114,6 +114,9 @@ class BankAccountBaseForm(ModelForm):
                 'class': '',
             }),
             'bank_info': forms.Select(attrs={'class': 'form-control'}),
+            'bank_transaction_type': forms.Select(attrs={'class': 'form-control'}),
+            'bank_account_type': forms.Select(attrs={'class': 'form-control'}),
+            'bank_beneficiary': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 

@@ -67,7 +67,7 @@ class TestCreatePrefixForm(TestCase):
         bankaccount_form = BankAccountCreateForm(data=data)
         self.assertEqual(6, len(address_form.data))
         self.assertEqual(10, len(taxpayer_form.data))
-        self.assertEqual(3, len(bankaccount_form.data))
+        self.assertEqual(6, len(bankaccount_form.data))
         self.assertEqual(4, len(contact_form.data))
 
 
