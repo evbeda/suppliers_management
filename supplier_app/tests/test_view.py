@@ -83,6 +83,8 @@ from supplier_app.models import (
 from supplier_app.tests import (
     file_mock,
     get_bank_info_example,
+    get_transaction_type_example,
+    get_acccount_type_example,
     taxpayer_creation_POST_factory,
     taxpayer_edit_POST_factory,
     STATUS_CHANGE_REQUIRED,
@@ -1530,6 +1532,9 @@ class TestEditBankAccountInfo(TestCase):
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': self.file_mock,
+            'bank_transaction_type': get_transaction_type_example("Transferencia"),
+            'bank_account_type': get_acccount_type_example("Caja de Ahorro"),
+            'bank_beneficiary': 'John Smith',
         }
 
         self.taxpayer_detail_url = 'supplier-details'
@@ -2498,6 +2503,9 @@ class TestTaxpayerHistory(TestCase):
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': file_mock,
+            'bank_transaction_type': get_transaction_type_example("Transferencia"),
+            'bank_account_type': get_acccount_type_example("Caja de Ahorro"),
+            'bank_beneficiary': 'John Smith',
         }
 
         row_before_modification = len(bank_account.history.all())
