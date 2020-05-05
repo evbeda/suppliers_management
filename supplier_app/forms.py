@@ -88,7 +88,7 @@ class ContactInformationCreateForm(BasePrefixCreateForm):
                 }
             ),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(
+            'email': forms.EmailInput(
                 attrs={
                     'class': 'form-control',
                     'placeholder': _('e.g. jhonsmith@mail.com')
@@ -108,7 +108,7 @@ class BankAccountBaseForm(ModelForm):
         model = BankAccount
         fields = '__all__'
         widgets = {
-            'bank_account_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'bank_account_number': forms.TextInput(attrs={'class': 'form-control', 'minlength': '22', 'maxlength': '22'}),
             'bank_cbu_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': '',
@@ -147,7 +147,7 @@ class TaxPayerArgentinaBaseForm(ModelForm):
         fields = '__all__'
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
-            'cuit': forms.TextInput(attrs={'class': 'form-control'}),
+            'cuit': forms.TextInput(attrs={'class': 'form-control', 'minlength': '11', 'maxlength': '12'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'taxpayer_condition':  forms.Select(attrs={'class': 'form-control'}),
@@ -156,6 +156,10 @@ class TaxPayerArgentinaBaseForm(ModelForm):
                 'class': '',
             }),
             'witholding_taxes_file': forms.FileInput(attrs={
+                'accept': 'application/pdf',
+                'class': '',
+            }),
+            'witholding_suss_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': '',
             }),
