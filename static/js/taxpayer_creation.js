@@ -5,7 +5,6 @@ var animating;
 
 
 
-
 $(".next").click(function(){
 	if(animating) return false;
 	animating = true;
