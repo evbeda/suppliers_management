@@ -211,7 +211,7 @@ class TaxPayerEBEntity(models.Model):
 
 class TaxPayerArgentina(TaxPayer):
     cuit = models.CharField(
-        max_length=20,
+        max_length=12,
         unique=True,
         validators=[
             RegexValidator(
@@ -219,7 +219,7 @@ class TaxPayerArgentina(TaxPayer):
                 message=_('CUIT must only have numbers'),
                 code='invalid_cuit'
             ),
-            MaxLengthValidator(11),
+            MaxLengthValidator(12),
             MinLengthValidator(11),
         ]
     )
@@ -297,15 +297,28 @@ class TaxPayerArgentina(TaxPayer):
         upload_to='file',
         blank=True,
         null=True,
-        verbose_name=_('Certificate of no tax withholding of Tax liens, income or SUSS'),
+        verbose_name=_('Certificate of no income withholding'),
         validators=[
             FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(
                 limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
                 code='invalid_file_size',
-                ),
-            ],
-        )
+            ),
+        ],
+    )
+    witholding_suss_file = models.FileField(
+        upload_to='file',
+        blank=True,
+        null=True,
+        verbose_name=_('Certificate of no SUSS withholding'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code='invalid_file_size',
+            ),
+        ],
+    )
 
     def get_taxpayer_identifier(self):
         return self.cuit
@@ -359,7 +372,7 @@ class ContactInformation(models.Model):
 
 class BankAccount(models.Model):
     bank_account_number = models.CharField(
-        max_length=60,
+        max_length=22,
         unique=True,
         verbose_name=_("Bank account number"),
         validators=[
