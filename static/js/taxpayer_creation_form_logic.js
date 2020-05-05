@@ -79,11 +79,11 @@ $("#id_address_form-country").change(function(){
     }
 });
 
-function arg_is_ri(){
+function arg_is_responsable_inscripto(){
     $(".ri>input").prop("required", true);
     set_optionals();
 }
-function arg_is_mono(){
+function arg_is_monotributista(){
     $(".ri>input").prop("required", false);
     $(".mono>input").prop("required", true);
 }
@@ -91,24 +91,24 @@ function arg_is_mono(){
 function arg_bank_change(){
     if ($("#id_taxpayer_form-taxpayer_condition").val() == "responsable_inscripto"){
 		$(".ri").show();
-        arg_is_ri();
+        arg_is_responsable_inscripto();
     }
     else if ($("#id_taxpayer_form-taxpayer_condition").val() == "monotributista"){
         $(".ri").hide();
         $(".mono").show();
-        arg_is_mono();
+        arg_is_monotributista();
     }
 }
 
 $("#id_taxpayer_form-taxpayer_condition").change(function(){
     if ($("#id_taxpayer_form-taxpayer_condition").val() == "responsable_inscripto"){
 		$(".ri").show();
-        arg_is_ri();
+        arg_is_responsable_inscripto();
 
     }
     else if ($("#id_taxpayer_form-taxpayer_condition").val() == "monotributista"){
         $(".ri").hide();
         $(".mono").show();
-        arg_is_mono();
+        arg_is_monotributista();
     }
 });

@@ -2304,13 +2304,11 @@ msgstr ""
 #, fuzzy
 #| msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgid "Certificate of no income withholding"
-msgstr "Certificado sem retenção na fonte de IVA, renda ou SUSS"
+msgstr "Certificado sem retenção na fonte de renda"
 
 #: supplier_app/models.py:313
-#, fuzzy
-#| msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgid "Certificate of no SUSS withholding"
-msgstr "Certificado sem retenção na fonte de IVA, renda ou SUSS"
+msgstr "Certificado sem retenção na fonte de SUSS"
 
 #: supplier_app/models.py:335
 #: templates/supplier_app/AP/taxpayer-history-list.html:50

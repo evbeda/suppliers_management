@@ -303,9 +303,9 @@ class TaxPayerArgentina(TaxPayer):
             FileSizeValidator(
                 limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
                 code='invalid_file_size',
-                ),
-            ],
-        )
+            ),
+        ],
+    )
     witholding_suss_file = models.FileField(
         upload_to='file',
         blank=True,
@@ -316,9 +316,9 @@ class TaxPayerArgentina(TaxPayer):
             FileSizeValidator(
                 limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
                 code='invalid_file_size',
-                ),
-            ],
-        )
+            ),
+        ],
+    )
 
     def get_taxpayer_identifier(self):
         return self.cuit
