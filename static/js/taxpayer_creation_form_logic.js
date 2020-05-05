@@ -44,16 +44,6 @@ $(".special-rules>input").change(function(){
     validating.get(0).reportValidity();
 });
 
-// $("input:text").focusout(function(){
-//     var validating = $(this);
-//     validating.get(0).reportValidity();
-// });
-
-// $("input:number").focusout(function(){
-//     var validating = $(this);
-//     validating.get(0).reportValidity();
-// });
-
 function country_change(){
     if ($("#id_address_form-country").val() == "AR"){
 		$(".arg-bank").show();
@@ -69,9 +59,6 @@ function country_change(){
         $(".arg").hide();
         arg_unrequired();
         empty_arg();
-    }
-    else{
-        // console.log("nothing to do")
     }
 }
 $("#id_address_form-country").change(function(){
@@ -110,9 +97,6 @@ function arg_bank_change(){
         $(".ri").hide();
         $(".mono").show();
         arg_is_mono();
-    }
-    else {
-        // console.log("nothing to do for bank");
     }
 }
 

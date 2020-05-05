@@ -4,15 +4,8 @@ var left, opacity, scale;
 var animating; 
 
 
-function check_complete(esto){
-	var current_fieldset = $(esto).parent().attr("id");
-	
-	console.log(current_fieldset);
-	console.log("hola");
-}
 
 $(".next").click(function(){
-	check_complete(this)
 	if(animating) return false;
 	animating = true;
 
