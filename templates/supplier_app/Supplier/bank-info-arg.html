@@ -3,12 +3,34 @@
 
     <h2 class="fs-title arg arg-bank">{% trans "Bank Info" %}</h2>
     <h3 class="fs-subtitle arg arg-bank">{% trans "Enter your bank account details" %}</h3>
-    <div class="text-left arg arg-bank">{{ taxpayer_form.cuit.label_tag }}</div>
-    <div class="div-input arg arg-bank special-rules">{{ taxpayer_form.cuit }}</div>
+    
+    <div class="row">
+        <div class="col">
+            <div class="text-left arg arg-bank">{{ bank_account_form.bank_transaction_type.label_tag }}</div>
+            <div class="div-input arg arg-bank special-rules">{{ bank_account_form.bank_transaction_type }}</div>
+        </div>
+        <div class="col">
+            <div class="text-left arg arg-bank">{{ bank_account_form.bank_account_type.label_tag }}</div>
+            <div class="div-input arg arg-bank special-rules">{{ bank_account_form.bank_account_type}}</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="text-left arg arg-bank">{{ bank_account_form.bank_beneficiary.label_tag }}</div>
+            <div class="div-input arg arg-bank special-rules">{{ bank_account_form.bank_beneficiary }}</div>
+        </div>
+        <div class="col">
+            <div class="text-left arg arg-bank">{{ taxpayer_form.cuit.label_tag }}</div>
+            <div class="div-input arg arg-bank special-rules">{{ taxpayer_form.cuit }}</div>
+        </div>
+    </div>
+
     <div class="text-left arg arg-bank">{{ bank_account_form.bank_account_number.label_tag }}</div>
     <div class="div-input arg arg-bank special-rules">{{ bank_account_form.bank_account_number }}</div>
     <div class="text-left arg arg-bank">{{ bank_account_form.bank_info.label_tag }}</div>
     <div class="div-input arg arg-bank">{{ bank_account_form.bank_info }}</div>
     <div class="text-left arg arg-bank">{{ taxpayer_form.taxpayer_condition.label_tag }}</div>
     <div class="div-input arg arg-bank">{{ taxpayer_form.taxpayer_condition }}</div>
-    
+    <input type="button" name="previous" class="previous action-button arg arg-bank" value="{% trans 'Previous' %}" />
+    <input type="button" name="next"  class="next action-button arg arg-bank" value="{% trans 'Next' %}" />
