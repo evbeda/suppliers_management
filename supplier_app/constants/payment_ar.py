@@ -1,10 +1,12 @@
+from django.utils.translation import ugettext_lazy as _
+
 TRANSACTION_TYPE_AR = {
-    'Transferencia': 1
+    _("Bank transfer"): 1
 }
 
 ACCOUNT_TYPE_AR = {
-    'Caja de Ahorro': 1,
-    'Cuenta corriente': 2
+    _("Saving account"): 1,
+    _("Checking account"): 2
 }
 
 
