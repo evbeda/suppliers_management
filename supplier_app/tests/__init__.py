@@ -38,11 +38,11 @@ def get_payment_type_example(index=None):
 
 
 def get_transaction_type_example(key=None):
-    return TRANSACTION_TYPE_AR[key or "Transferencia"]
+    return TRANSACTION_TYPE_AR[key or "Bank transfer"]
 
 
 def get_acccount_type_example(key=None):
-    return ACCOUNT_TYPE_AR[key or "Caja de Ahorro"]
+    return ACCOUNT_TYPE_AR[key or "Saving account"]
 
 
 def taxpayer_creation_POST_factory(

@@ -1532,8 +1532,8 @@ class TestEditBankAccountInfo(TestCase):
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': self.file_mock,
-            'bank_transaction_type': get_transaction_type_example("Transferencia"),
-            'bank_account_type': get_acccount_type_example("Caja de Ahorro"),
+            'bank_transaction_type': get_transaction_type_example("Bank transfer"),
+            'bank_account_type': get_acccount_type_example("Saving account"),
             'bank_beneficiary': 'John Smith',
         }
 
@@ -2501,8 +2501,8 @@ class TestTaxpayerHistory(TestCase):
             'bank_info': get_bank_info_example("CITIBANK N.A."),
             'bank_account_number': '1234567890987654321234',
             'bank_cbu_file': file_mock,
-            'bank_transaction_type': get_transaction_type_example("Transferencia"),
-            'bank_account_type': get_acccount_type_example("Caja de Ahorro"),
+            'bank_transaction_type': get_transaction_type_example("Bank transfer"),
+            'bank_account_type': get_acccount_type_example("Saving account"),
             'bank_beneficiary': 'John Smith',
         }
 
