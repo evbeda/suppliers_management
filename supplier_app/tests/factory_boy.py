@@ -44,7 +44,6 @@ class EBEntityFactory(factory.django.DjangoModelFactory):
 class CompanyFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: "CompanyTest{}".format(n))
     description = "Fake description"
-    eb_entity = factory.SubFactory(EBEntityFactory)
 
     class Meta:
         model = Company
