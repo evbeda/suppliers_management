@@ -148,9 +148,6 @@ class TaxPayer(models.Model):
     def change_required_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Change Required']['choices'].value
 
-    def change_to_pending_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Pending']['choices'].value
-
     def set_changes_pending_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Changes Pending']['choices'].value
 
