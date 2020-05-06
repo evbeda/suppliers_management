@@ -33,7 +33,7 @@
             </small>
             {{ hidden_field }}
     {% endfor %}
-    
+
     <fieldset id="f1">
         <h2 class="fs-title mb-4">- {% trans "Taxpayer Info" %} -</h2>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
@@ -41,17 +41,17 @@
         <div class="text-left">{{ address_form.country.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.country }}</div>
 
-        <!-- <div class="text-left">{{ taxpayer_form.eb_entities.label_tag }}</div>
+        <div class="text-left">{{ taxpayer_form.eb_entities.label_tag }}</div>
         {% for check in taxpayer_form.eb_entities%}
-        <div class="row container ml-5">
-            <div class="mr-3">
-                {{ check.tag }}
-            </div>
-            <div class="">
-                {{ check.choice_label }}
-            </div>
-        </div>
-        {% endfor %} -->
+            <label class="row" for="{{ check.id_for_label }}">
+                <div class="ml-5">
+                    <span>{{ check.tag }}</span>
+                </div>
+                <div class="ml-5">
+                    {{ check.choice_label }}
+                </div>
+            </label>
+        {% endfor %}
 
         <h3 class="fs-title mt-3">- {% trans "Address Info" %} -</h3>
         <div class="text-left">{{ address_form.state.label_tag }}</div>
@@ -94,7 +94,7 @@
         {% include 'supplier_app/Supplier/bank-info-arg.html' %}
         {% include 'supplier_app/Supplier/bank-info-usa.html' %}
     </fieldset>
-    
+
     <fieldset id="f3">
         {% include 'supplier_app/Supplier/attach_arg.html' %}
         <input type="button" name="previous" class="previous action-button" value="{% trans 'Previous' %}" />
