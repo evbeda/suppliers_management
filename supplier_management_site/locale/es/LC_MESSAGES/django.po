@@ -2109,20 +2109,14 @@ msgstr ""
 "Gracias"
 
 #: supplier_app/constants/payment_ar.py:4
-#, fuzzy
-#| msgid "Bank name"
 msgid "Bank transfer"
-msgstr "Transferencia bancaria"
+msgstr "Transferencia"
 
 #: supplier_app/constants/payment_ar.py:8
-#, fuzzy
-#| msgid "Bank account"
 msgid "Saving account"
 msgstr "Caja de ahorros"
 
 #: supplier_app/constants/payment_ar.py:9
-#, fuzzy
-#| msgid "Bank account"
 msgid "Checking account"
 msgstr "Cuenta corriente"
 
@@ -2254,7 +2248,7 @@ msgstr "Número"
 #: supplier_app/models.py:341
 #: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
-msgstr "Código postal"
+msgstr "Cod. postal"
 
 #: supplier_app/models.py:344
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
@@ -2305,20 +2299,16 @@ msgid "Bank account certificate"
 msgstr "Constancia de CBU"
 
 #: supplier_app/models.py:413
-#, fuzzy
-#| msgid "Creation date"
 msgid "Transaction type"
-msgstr "Fecha de creación"
+msgstr "Tipo de transacción"
 
 #: supplier_app/models.py:418
-#, fuzzy
-#| msgid "Account number"
 msgid "Account type"
-msgstr "Número de cuenta"
+msgstr "Tipo de cuenta"
 
 #: supplier_app/models.py:423
 msgid "Beneficiary"
-msgstr ""
+msgstr "Beneficiario"
 
 #: supplier_management_site/settings/base.py:147
 #: templates/supplier_app/AP/company_list.html:53
