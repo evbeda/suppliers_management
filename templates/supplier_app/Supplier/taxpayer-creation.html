@@ -54,29 +54,48 @@
         {% endfor %}
 
         <h3 class="fs-title mt-3">- {% trans "Address Info" %} -</h3>
-        <div class="text-left">{{ address_form.state.label_tag }}</div>
-        <div class="div-input mandatory">{{ address_form.state }}</div>
-        <div class="text-left">{{ address_form.city.label_tag }}</div>
-        <div class="div-input mandatory">{{ address_form.city }}</div>
 
-        <div class="text-left">{{ address_form.street.label_tag }}</div>
-        <div class="div-input mandatory">{{ address_form.street }}</div>
         <div class="row">
             <div class="col">
+                <div class="text-left">{{ address_form.state.label_tag }}</div>
+                <div class="div-input mandatory">{{ address_form.state }}</div>
+            </div>
+            <div class="col">
+                <div class="text-left">{{ address_form.city.label_tag }}</div>
+                <div class="div-input mandatory">{{ address_form.city }}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="text-left">{{ address_form.street.label_tag }}</div>
+                <div class="div-input mandatory">{{ address_form.street }}</div>
+            </div>
+            <div class="col-sm-3">
                 <div class="text-left">{{ address_form.number.label_tag }}</div>
                 <div class="div-input mandatory">{{ address_form.number }}</div>
             </div>
-            <div class="col">
+            <div class="col-sm-3">
                 <div class="text-left">{{ address_form.zip_code.label_tag }}</div>
                 <div class="div-input mandatory">{{ address_form.zip_code }}</div>
             </div>
         </div>
 
         <h3 class="fs-title mt-3 mb-4">- {% trans "Contact Info" %} -</h3>
-        <div class="text-left">{{ contact_form.contact_person.label_tag }}</div>
-        <div class="div-input mandatory">{{ contact_form.contact_person }}</div>
-        <div class="text-left">{{ contact_form.phone_number.label_tag }}</div>
-        <div class="div-input mandatory">{{ contact_form.phone_number }}</div>
+
+        <div class="row">
+            <div class="col">
+                <div class="text-left">{{ contact_form.contact_person.label_tag }}</div>
+                <div class="div-input mandatory">{{ contact_form.contact_person }}</div>
+            </div>
+            <div class="col">
+                <div class="text-left">{{ contact_form.phone_number.label_tag }}</div>
+                <div class="div-input mandatory">{{ contact_form.phone_number }}</div>
+            </div>
+        </div>
+
+
+
         <div class="row">
             <div class="col">
                 <div class="text-left">{{ contact_form.email.label_tag }}</div>
