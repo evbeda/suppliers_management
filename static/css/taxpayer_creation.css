@@ -127,8 +127,8 @@ body {
 	/*connector not needed before the first step*/
 	content: none; 
 }
-/*marking active/completed steps green*/
-/*The number of the step and the connector before it = green*/
+/*marking active/completed steps orange*/
+/*The number of the step and the connector before it = orange*/
 #progressbar li.active:before,  #progressbar li.active:after{
     background: rgba(255, 125, 0);
     z-index: 1;
@@ -153,3 +153,6 @@ body {
 	padding: 0px;
 }
 
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
+	-webkit-appearance: none;
+}
