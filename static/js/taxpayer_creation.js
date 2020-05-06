@@ -4,12 +4,64 @@ var left, opacity, scale;
 var animating; 
 
 
-$(".next").click(function(){
+// Checks if first part of form is complete
+function check_first_fieldset_complete(){
+	var token = true
+	$(".mandatory>input:text, .mandatory>input[type='number'], .mandatory>select, .mandatory>input[type='email']").each(function(index){
+		if ($(this).val() == "") {
+			token = false;
+		}
+		else if($(this).get(0).checkValidity() == false){
+			token = false;
+		}
+	});
+	return token
+}
+
+// Click on First "next" button
+$("#first-next").click(function(){
+	var esto = $(this);
+	if (check_first_fieldset_complete()){
+		next_page(esto);
+	}
+	else{
+		alert("Porfavor termine de completar el formulario antes de continuar");
+	}
+});
+
+// Checks if argentinian BANK form is filled
+function check_arg_bank_complete(){
+	var token = true;
+	$(".arg-bank>input:text, .arg-bank>input[type='number'], .arg-bank>select").each(function(index){
+		if ($(this).val() == "") {
+			token = false;
+		}
+		else if($(this).get(0).checkValidity() == false){
+			token = false;
+		}
+	});
+	return token
+}
+
+// Click on the arg-bank "next" button
+$("#arg-bank-next").click(function(){
+	var esto = $(this);
+	if (check_arg_bank_complete()){
+		next_page(esto);
+	}
+	else {
+		alert("Porfavor termine de completar el formulario antes de continuar");
+	}
+});
+
+// Moves to the next page of the form
+function next_page(esto){
+
 	if(animating) return false;
 	animating = true;
 
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
+	current_fs = esto.parent();
+	next_fs = esto.parent().next();
 
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
@@ -35,8 +87,9 @@ $(".next").click(function(){
 		}, 
 		easing: 'easeInOutBack'
 	});
-});
+};
 
+// Moves to the previous page of the form
 $(".previous").click(function(){
 	if(animating) return false;
 	animating = true;
