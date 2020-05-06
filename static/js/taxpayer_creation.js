@@ -4,7 +4,6 @@ var left, opacity, scale;
 var animating; 
 
 
-
 $(".next").click(function(){
 	if(animating) return false;
 	animating = true;
