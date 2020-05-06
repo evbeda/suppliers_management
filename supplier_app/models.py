@@ -64,7 +64,6 @@ class EBEntity(models.Model):
 class Company(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("Name"))
     description = models.TextField()
-    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name.capitalize()
