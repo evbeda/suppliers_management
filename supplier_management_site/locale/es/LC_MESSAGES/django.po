@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-05 19:07+0000\n"
+"POT-Creation-Date: 2020-05-06 13:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1772,26 +1772,6 @@ msgstr "Anterior"
 msgid "next"
 msgstr "siguiente"
 
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:63
-msgid "Delete generated `*.css` files instead of creating them."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:70
-msgid ""
-"Store resulting .css in settings.SASS_PROCESSOR_ROOT folder. Default: store "
-"each css side-by-side with .scss."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:77
-msgid "Set templating engine used (django, jinja2). Default: django."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:84
-msgid ""
-"Set the precision for numeric computations in the SASS processor. Default: "
-"settings.SASS_PRECISION."
-msgstr ""
-
 #: invoices_app/__init__.py:25
 msgid "APPROVED"
 msgstr "APROBADA"
@@ -1891,8 +1871,8 @@ msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
-#: supplier_app/models.py:52 supplier_app/models.py:115
-#: supplier_app/models.py:357 templates/invoices_app/invoice-list.html:30
+#: supplier_app/models.py:55 supplier_app/models.py:118
+#: supplier_app/models.py:360 templates/invoices_app/invoice-list.html:30
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/taxpayer-details.html:107
@@ -2128,6 +2108,24 @@ msgstr ""
 "Por favor contáctate con el empleado de Eventbrite que pactaste la compra. "
 "Gracias"
 
+#: supplier_app/constants/payment_ar.py:4
+#, fuzzy
+#| msgid "Bank name"
+msgid "Bank transfer"
+msgstr "Transferencia bancaria"
+
+#: supplier_app/constants/payment_ar.py:8
+#, fuzzy
+#| msgid "Bank account"
+msgid "Saving account"
+msgstr "Caja de ahorros"
+
+#: supplier_app/constants/payment_ar.py:9
+#, fuzzy
+#| msgid "Bank account"
+msgid "Checking account"
+msgstr "Cuenta corriente"
+
 #: supplier_app/constants/taxpayer_status.py:16
 msgid "Approved"
 msgstr "Aprobado"
@@ -2176,20 +2174,20 @@ msgstr "ej. jhonsmith@mail.com"
 msgid "e.g. www.website.com"
 msgstr "ej. www.website.com"
 
-#: supplier_app/forms.py:141 templates/supplier_app/AP/company_creation.html:21
+#: supplier_app/forms.py:144 templates/supplier_app/AP/company_creation.html:21
 msgid "Eventbrite entities to bill"
 msgstr "Entidades de Eventbrite a Facturar"
 
-#: supplier_app/models.py:48
+#: supplier_app/models.py:51
 msgid "Eventbrite entity name"
 msgstr "Entidad de Eventbrite"
 
-#: supplier_app/models.py:62 templates/supplier_app/AP/company_creation.html:14
+#: supplier_app/models.py:65 templates/supplier_app/AP/company_creation.html:14
 #: templates/supplier_app/AP/company_list.html:29
 msgid "Name"
 msgstr "Nombre"
 
-#: supplier_app/models.py:106
+#: supplier_app/models.py:109
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/supplier-home.html:26
@@ -2197,114 +2195,130 @@ msgstr "Nombre"
 msgid "Business name"
 msgstr "Razón social"
 
-#: supplier_app/models.py:118
+#: supplier_app/models.py:121
 msgid "Creation date"
 msgstr "Fecha de creación"
 
-#: supplier_app/models.py:219
+#: supplier_app/models.py:222
 msgid "CUIT must only have numbers"
 msgstr "El CUIT solo debe tener numeros"
 
-#: supplier_app/models.py:229
+#: supplier_app/models.py:232
 msgid "Taxpayer Condition"
 msgstr "Condición Impositiva"
 
-#: supplier_app/models.py:235
+#: supplier_app/models.py:238
 msgid "Payment type"
 msgstr "Forma de pago"
 
-#: supplier_app/models.py:240
+#: supplier_app/models.py:243
 msgid "Payment term"
 msgstr "Plazo de pago"
 
-#: supplier_app/models.py:245
+#: supplier_app/models.py:248
 msgid "AFIP registration certificate"
 msgstr "Constancia de inscripción de AFIP"
 
-#: supplier_app/models.py:259
+#: supplier_app/models.py:262
 msgid "AFIP No Retention"
 msgstr "Certificado de no retencion de IVA"
 
-#: supplier_app/models.py:273
+#: supplier_app/models.py:276
 msgid "IIBB registration certificate"
 msgstr "Constancia de inscripción IIBB"
 
-#: supplier_app/models.py:287
+#: supplier_app/models.py:290
 msgid "IIBB No Retention"
 msgstr "Constancia de No Retención de IIBB"
 
-#: supplier_app/models.py:300
+#: supplier_app/models.py:303
 msgid "Certificate of no income withholding"
 msgstr "Constancia de No Retención de Ganancias"
 
-#: supplier_app/models.py:313
+#: supplier_app/models.py:316
 msgid "Certificate of no SUSS withholding"
 msgstr "Constancia de No Retención de SUSS"
 
-#: supplier_app/models.py:335
+#: supplier_app/models.py:338
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
 #: templates/supplier_app/taxpayer-details.html:213
 msgid "Street"
 msgstr "Calle"
 
-#: supplier_app/models.py:337
+#: supplier_app/models.py:340
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
 #: templates/supplier_app/taxpayer-details.html:216
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:338
+#: supplier_app/models.py:341
 #: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:341
+#: supplier_app/models.py:344
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
 #: templates/supplier_app/taxpayer-details.html:241
 msgid "City"
 msgstr "Ciudad"
 
-#: supplier_app/models.py:345
+#: supplier_app/models.py:348
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
 #: templates/supplier_app/taxpayer-details.html:244
 msgid "State"
 msgstr "Provincia"
 
-#: supplier_app/models.py:349
+#: supplier_app/models.py:352
 msgid "City name must only have letters"
 msgstr "La ciudad solo debe tener letras"
 
-#: supplier_app/models.py:366
+#: supplier_app/models.py:369
 msgid "Contact person"
 msgstr "Nombre y apellido"
 
-#: supplier_app/models.py:367
+#: supplier_app/models.py:370
 msgid "Phone number"
 msgstr "Número de teléfono"
 
-#: supplier_app/models.py:368 templates/registration/admins-list.html:29
+#: supplier_app/models.py:371 templates/registration/admins-list.html:29
 msgid "Email"
 msgstr "Email"
 
-#: supplier_app/models.py:369
+#: supplier_app/models.py:372
 msgid "Web site"
 msgstr "Sitio web"
 
-#: supplier_app/models.py:377
+#: supplier_app/models.py:380
 msgid "Bank account number"
 msgstr "CBU"
 
-#: supplier_app/models.py:381
+#: supplier_app/models.py:384
 msgid "Bank account must only have numbers"
 msgstr "La cuenta bancaria solo debe tener numeros"
 
-#: supplier_app/models.py:389 templates/supplier_app/taxpayer-details.html:164
+#: supplier_app/models.py:392 templates/supplier_app/taxpayer-details.html:164
 msgid "Bank name"
 msgstr "Banco"
 
-#: supplier_app/models.py:399
+#: supplier_app/models.py:402
 msgid "Bank account certificate"
 msgstr "Constancia de CBU"
+
+#: supplier_app/models.py:413
+#, fuzzy
+#| msgid "Creation date"
+msgid "Transaction type"
+msgstr "Fecha de creación"
+
+#: supplier_app/models.py:418
+#, fuzzy
+#| msgid "Account number"
+msgid "Account type"
+msgstr "Número de cuenta"
+
+#: supplier_app/models.py:423
+msgid "Beneficiary"
+msgstr ""
 
 #: supplier_management_site/settings/base.py:147
 #: templates/supplier_app/AP/company_list.html:53

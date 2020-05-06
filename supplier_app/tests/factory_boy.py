@@ -138,8 +138,8 @@ class BankAccountFactory(factory.django.DjangoModelFactory):
 
     bank_account_number = factory.Sequence(lambda n: "{}".format(n))
     taxpayer = factory.SubFactory(TaxPayerFactory)
-    bank_transaction_type = TRANSACTION_TYPE_AR['Transferencia']
-    bank_account_type = ACCOUNT_TYPE_AR['Caja de Ahorro']
+    bank_transaction_type = TRANSACTION_TYPE_AR['Bank transfer']
+    bank_account_type = ACCOUNT_TYPE_AR['Saving account']
     bank_beneficiary = 'John Smith'
     bank_info = BANK_INFO["BANCO DE LA NACION ARGENTINA"]
     bank_cbu_file = file_mock
