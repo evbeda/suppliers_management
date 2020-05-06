@@ -37,7 +37,7 @@ class EBEntityFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = EBEntity
 
-    eb_name = factory.Sequence(lambda n: "Eventbrite {}".format(n))
+    eb_name = factory.Sequence(lambda n: "Eventbrite Argentina S.A.")
     eb_country = "AR"
 
 

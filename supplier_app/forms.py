@@ -137,13 +137,6 @@ class BankAccountEditForm(BankAccountBaseForm):
 
 
 class TaxPayerArgentinaBaseForm(ModelForm):
-    eb_entities = \
-        forms.ModelMultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple(attrs={"class": ""}),
-            queryset=EBEntity.objects.all(),
-            label=_("Eventbrite entities to bill"),
-
-        )
 
     class Meta:
         model = TaxPayerArgentina
@@ -180,7 +173,7 @@ class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
     prefix = 'taxpayer_form'
 
     class Meta(TaxPayerArgentinaBaseForm.Meta):
-        exclude = ['taxpayer_state', 'workday_id', 'company']
+        exclude = ['taxpayer_state', 'workday_id', 'company', 'eb_entities', 'payment_type', 'payment_term']
 
 
 class TaxPayerEditForm(TaxPayerArgentinaBaseForm):

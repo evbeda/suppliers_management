@@ -23,7 +23,7 @@ from django.core.urlresolvers import (
     reverse,
     reverse_lazy,
 )
-from django.db import DatabaseError
+from django.db import DatabaseError, transaction
 from django.http import (
     QueryDict
 )
@@ -161,10 +161,7 @@ class TestCreateTaxPayer(TestCase):
             eb_entities.append(str(EBEntityFactory().id))
         FORM_POST = QueryDict('', mutable=True)
         FORM_POST.update(self.POST)
-        FORM_POST.setlist(
-            'taxpayer_form-eb_entities',
-            eb_entities,
-        )
+
         forms = {
             'address_form': AddressCreateForm(data=FORM_POST),
             'bank_account_form': BankAccountCreateForm(

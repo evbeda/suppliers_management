@@ -1,3 +1,5 @@
+import sys
+
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -225,18 +227,21 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             return HttpResponseRedirect(self.get_success_url())
 
     def save_taxpayer(self, forms):
-        taxpayer = forms['taxpayer_form'].save(commit=False)
-        company = Company.objects.get(companyuserpermission__user=self.request.user)
-        taxpayer.company = company
-        taxpayer.save()
-        eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
-        for eb_entity in eb_entities:
-            eb_entity = EBEntity.objects.get(pk=eb_entity.id)
-            TaxPayerEBEntity.objects.create(
-                eb_entity=eb_entity,
-                taxpayer=taxpayer
-            )
-        return taxpayer
+        try:
+            taxpayer = forms['taxpayer_form'].save(commit=False)
+            company = Company.objects.get(companyuserpermission__user=self.request.user)
+            taxpayer.company = company
+            taxpayer.save()
+            taxpayer.set_current_eb_entities([company.eb_entity])
+            eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
+            for eb_entity in eb_entities:
+                eb_entity = EBEntity.objects.get(pk=eb_entity.id)
+                TaxPayerEBEntity.objects.create(
+                    eb_entity=eb_entity,
+                    taxpayer=taxpayer
+                )
+        except:
+            print(sys.exc_info()[0])
 
     def save_address(self, forms, taxpayer):
         address = forms['address_form'].save(commit=False)
@@ -307,10 +312,7 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
     def post(self, request, **kwargs):
         self.object = self.get_object()
 
-        eb_entities = EBEntity.objects.filter(
-            pk__in=request.POST.getlist('eb_entities')
-        )
-        self.object.set_current_eb_entities(eb_entities)
+
         form = self.get_form()
         if request.user.is_supplier:
             form.instance.set_changes_pending_taxpayer()
