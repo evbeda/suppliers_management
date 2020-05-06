@@ -64,7 +64,6 @@ class EBEntity(models.Model):
 class Company(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("Name"))
     description = models.TextField()
-    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.name.capitalize()
@@ -148,9 +147,6 @@ class TaxPayer(models.Model):
 
     def change_required_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Change Required']['choices'].value
-
-    def change_to_pending_taxpayer(self):
-        self.taxpayer_state = TAXPAYER_STATUS['Pending']['choices'].value
 
     def set_changes_pending_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Changes Pending']['choices'].value
