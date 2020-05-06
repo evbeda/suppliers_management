@@ -1693,10 +1693,12 @@ class TestEditBankAccountInfo(TestCase):
 
 class TestCompanyCreateView(TestCase):
     def setUp(self):
+        self.eb_entity = EBEntityFactory()
         self.company_constants = {
             'name': 'Eventbrite',
             'description':
                 'Bringing the world together through live experiences',
+            'eb_entity': '1',
         }
         self.client = Client()
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
