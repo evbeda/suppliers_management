@@ -38,6 +38,10 @@
         <h2 class="fs-title mb-4">- {% trans "Taxpayer Info" %} -</h2>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
         <div class="div-input mandatory">{{ taxpayer_form.business_name }}</div>
+
+        <div class="text-left hidden">{{ taxpayer_form.payment_type.label_tag }}</div>
+        <div class="div-input mandatory hidden">{{ taxpayer_form.payment_type }}</div>
+
         <div class="text-left">{{ address_form.country.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.country }}</div>
 
