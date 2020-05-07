@@ -149,7 +149,7 @@ class TaxPayerArgentinaBaseForm(ModelForm):
         model = TaxPayerArgentina
         fields = '__all__'
         widgets = {
-            'business_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
+            'business_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Business Name')}),
             'cuit': forms.TextInput(attrs={'class': 'form-control', 'minlength': '11', 'maxlength': '12'}),
             'payment_type': forms.Select(attrs={'class': 'form-control'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
