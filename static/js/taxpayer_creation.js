@@ -38,6 +38,7 @@ $(".next").click(function(){
 
 	if (can_advance){
 		next_page($(this));
+	}
 });
 
 // Moves to the next page of the form
