@@ -16,6 +16,7 @@ function set_optionals(){
 
 function set_mandatory(){
     $(".mandatory>input").prop("required", true);
+    $(".mandatory>select").prop("required", true);
 }
 
 function arg_bank_required(){
