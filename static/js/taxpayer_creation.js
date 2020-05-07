@@ -9,9 +9,11 @@ function check_completed_form_section(section){
 	var token = true
 	section.each(function(index){
 		if ($(this).val() == "") {
+			$(this).get(0).reportValidity();
 			token = false;
 		}
 		else if($(this).get(0).checkValidity() == false){
+			$(this).get(0).reportValidity();
 			token = false;
 		}
 	});
@@ -36,10 +38,6 @@ $(".next").click(function(){
 
 	if (can_advance){
 		next_page($(this));
-	}
-	else{
-		alert("Porfavor termine de completar el formulario antes de continuar");
-	}
 });
 
 // Moves to the next page of the form
