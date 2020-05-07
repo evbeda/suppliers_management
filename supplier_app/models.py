@@ -47,7 +47,7 @@ from utils.file_validator import FileSizeValidator
 
 class EBEntity(models.Model):
     eb_name = models.CharField(
-        max_length=15,
+        max_length=50,
         verbose_name=_("Eventbrite entity name"),
     )
     eb_country = models.CharField(
