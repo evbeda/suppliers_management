@@ -24,3 +24,4 @@ DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 
 DEBUG = True
+CELERY_ALWAYS_EAGER = True
