@@ -7,7 +7,7 @@ $(document).ready(function(){
     set_mandatory();
     country_change();
     arg_bank_change();
-
+    $(".hidden").hide();
 });
 
 function set_optionals(){
