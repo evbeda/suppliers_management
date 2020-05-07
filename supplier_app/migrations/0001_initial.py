@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
             name='EBEntity',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('eb_name', models.CharField(max_length=15, verbose_name='Eventbrite entity name')),
+                ('eb_name', models.CharField(max_length=50, verbose_name='Eventbrite entity name')),
                 ('eb_country', models.CharField(choices=[('AR', 'Argentina'), ('BR', 'Brazil'), ('US', 'United states')], default=None, max_length=15, verbose_name='Country')),
             ],
         ),
