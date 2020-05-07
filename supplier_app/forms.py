@@ -142,6 +142,7 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             widget=forms.CheckboxSelectMultiple(attrs={"class": ""}),
             queryset=EBEntity.objects.all(),
             label=_("Eventbrite entities to bill"),
+            initial=1,
 
         )
 
@@ -151,7 +152,7 @@ class TaxPayerArgentinaBaseForm(ModelForm):
         widgets = {
             'business_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}),
             'cuit': forms.TextInput(attrs={'class': 'form-control', 'minlength': '11', 'maxlength': '12'}),
-            'payment_type': forms.Select(attrs={'class': 'form-control'}),
+            'payment_type': forms.Select(attrs={'class': 'form-control', 'type': 'hidden', 'value':'BANK'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'taxpayer_condition':  forms.Select(attrs={'class': 'form-control'}),
             'afip_registration_file': forms.FileInput(attrs={
