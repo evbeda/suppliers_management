@@ -25,6 +25,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='taxpayer',
             name='workday_id',
-            field=models.CharField(max_length=50, unique=True),
+            field=models.CharField(max_length=50),
         ),
     ]
