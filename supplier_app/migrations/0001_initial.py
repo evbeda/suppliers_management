@@ -148,7 +148,7 @@ class Migration(migrations.Migration):
                 ('taxpayer_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplier_app.TaxPayer')),
                 ('cuit', models.CharField(max_length=20)),
                 ('payment_type', models.CharField(choices=[('BANK', 'Bank')], default='BANK', max_length=20, verbose_name='Payment type')),
-                ('payment_term', models.IntegerField(choices=[(15, '15 days'), (30, '30 days')], default=15, verbose_name='Payment term')),
+                ('payment_term', models.IntegerField(choices=[(15, '15 days'), (30, '30 days')], verbose_name='Payment term')),
                 ('afip_registration_file', models.FileField(upload_to='file', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf'])], verbose_name='AFIP registration certificate')),
                 ('witholding_taxes_file', models.FileField(upload_to='file', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['pdf'])], verbose_name='Certificate of no tax withholding of IVA, income or SUSS')),
             ],

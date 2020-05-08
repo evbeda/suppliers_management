@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bankaccount',
             name='bank_account_type',
-            field=models.IntegerField(choices=[(1, 'Caja de Ahorro'), (2, 'Cuenta corriente')], default=None, verbose_name='Account type'),
+            field=models.IntegerField(choices=[(1, 'Caja de Ahorro'), (2, 'Cuenta corriente')], verbose_name='Account type'),
         ),
         migrations.AddField(
             model_name='bankaccount',
@@ -26,12 +26,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bankaccount',
             name='bank_transaction_type',
-            field=models.IntegerField(choices=[(1, 'Transferencia')], default=None, verbose_name='Transaction type'),
+            field=models.IntegerField(choices=[(1, 'Transferencia')], verbose_name='Transaction type'),
         ),
         migrations.AddField(
             model_name='historicalbankaccount',
             name='bank_account_type',
-            field=models.IntegerField(choices=[(1, 'Caja de Ahorro'), (2, 'Cuenta corriente')], default=None, verbose_name='Account type'),
+            field=models.IntegerField(choices=[(1, 'Caja de Ahorro'), (2, 'Cuenta corriente')], verbose_name='Account type'),
         ),
         migrations.AddField(
             model_name='historicalbankaccount',
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='historicalbankaccount',
             name='bank_transaction_type',
-            field=models.IntegerField(choices=[(1, 'Transferencia')], default=None, verbose_name='Transaction type'),
+            field=models.IntegerField(choices=[(1, 'Transferencia')], verbose_name='Transaction type'),
         ),
         migrations.AlterField(
             model_name='address',
