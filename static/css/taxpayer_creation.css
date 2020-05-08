@@ -156,3 +156,9 @@ body {
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
 	-webkit-appearance: none;
 }
+
+.form-check .form-check-input {
+	opacity: 1;
+	overflow: visible;
+	width: fit-content;
+}
