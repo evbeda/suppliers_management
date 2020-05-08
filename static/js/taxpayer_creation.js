@@ -8,7 +8,6 @@ var animating;
 function check_completed_form_section(section){
 	var token = true
 	section.each(function(index){
-		console.log(index + " value is: " + $(this).val())
 		if ($(this).val() == "") {
 			$(this).get(0).reportValidity();
 			token = false;
