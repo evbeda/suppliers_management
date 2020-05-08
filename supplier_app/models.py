@@ -104,7 +104,7 @@ class CompanyUniqueToken(models.Model):
 
 class TaxPayer(models.Model):
 
-    workday_id = models.CharField(max_length=50, unique=True)
+    workday_id = models.CharField(max_length=50)
     business_name = models.CharField(max_length=200, verbose_name=_("Business name"))
     taxpayer_state = models.CharField(
         max_length=200,
