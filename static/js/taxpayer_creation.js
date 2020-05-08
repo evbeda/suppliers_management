@@ -11,10 +11,12 @@ function check_completed_form_section(section){
 		if ($(this).val() == "") {
 			$(this).get(0).reportValidity();
 			token = false;
+			return false;
 		}
 		else if($(this).get(0).checkValidity() == false){
 			$(this).get(0).reportValidity();
 			token = false;
+			return false;
 		}
 	});
 	return token
@@ -24,7 +26,7 @@ function check_completed_form_section(section){
 $(".next").click(function(){
 	var can_advance = true
 	if ($(this).is("#first-next")){
-		var first_fieldset_mandatory_inputs = $(".mandatory>input:text, .mandatory>input[type='number'], .mandatory>select, .mandatory>input[type='email']")
+		var first_fieldset_mandatory_inputs = $(".mandatory>input:text, .mandatory>input[type='number'], .mandatory>select, .mandatory>input[type='email'], .mandatory>input[type='checkbox']")
 		if (check_completed_form_section(first_fieldset_mandatory_inputs) == false){
 			can_advance = false;
 		}
