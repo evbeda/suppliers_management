@@ -108,7 +108,14 @@ class BankAccountBaseForm(ModelForm):
         model = BankAccount
         fields = '__all__'
         widgets = {
-            'bank_account_number': forms.TextInput(attrs={'class': 'form-control', 'minlength': '22', 'maxlength': '22'}),
+            'bank_account_number': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'minlength': '22',
+                    'maxlength': '22',
+                    'placeholder': _('Only numbers, whitout / or -')
+                }
+            ),
             'bank_cbu_file': forms.FileInput(attrs={
                 'accept': 'application/pdf',
                 'class': '',
