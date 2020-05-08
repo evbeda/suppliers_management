@@ -235,7 +235,6 @@ class TaxPayerArgentina(TaxPayer):
     )
     payment_term = models.IntegerField(
         choices=PAYMENT_TERMS,
-        default=15,
         verbose_name=_("Payment term")
     )
     afip_registration_file = models.FileField(
@@ -406,13 +405,11 @@ class BankAccount(models.Model):
     )
     bank_transaction_type = models.IntegerField(
         choices=get_transaction_type_info_choices(),
-        verbose_name=_('Transaction type'),
-        default=None
+        verbose_name=_('Transaction type')
     )
     bank_account_type = models.IntegerField(
         choices=get_account_type_info_choices(),
-        verbose_name=_('Account type'),
-        default=None
+        verbose_name=_('Account type')
     )
     bank_beneficiary = models.CharField(
         max_length=60,
