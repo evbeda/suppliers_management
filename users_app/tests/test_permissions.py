@@ -63,7 +63,7 @@ def in_group(group, user):
 
 class TestUserPermissionGroup(TestCase):
     def setUp(self):
-        self.ap_admin_group = Group.objects.get(name='ap_admin')
+        self.ap_administrator_group = Group.objects.get(name='ap_administrator')
         self.ap_manager_group = Group.objects.get(name='ap_manager')
         self.ap_reporter_group = Group.objects.get(name='ap_reporter')
         self.supplier_group = Group.objects.get(name='supplier')

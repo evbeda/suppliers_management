@@ -31,7 +31,7 @@ class TestBase(TestCase):
 
     def setUp(self):
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_group = Group.objects.get(name='ap_admin')
+        self.ap_group = Group.objects.get(name='ap_administrator')
         self.ap_user.groups.add(self.ap_group)
 
         self.user = UserFactory()

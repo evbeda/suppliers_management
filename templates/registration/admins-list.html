@@ -28,7 +28,7 @@
                     <th scope="col">{% trans "User ID"%}</th>
                     <th scope="col">{% trans "Email"%}</th>
                     <th scope="col">{% trans "Registered"%}</th>
-                    <th class="text-center" scope="col">{% trans "AP Admin"%}</th>
+                    <th class="text-center" scope="col">{% trans "AP Administrator"%}</th>
                     <th class="text-center" scope="col">{% trans "AP Reporter"%}</th>
                     <th class="text-center" scope="col">{% trans "AP Manager"%}</th>
                 </tr>
@@ -50,10 +50,10 @@
                                 {% csrf_token %}
                                 <div class="col text-center">
                                     {% if user.is_AP %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i
+                                    <button type="submit" name='group_name' class="btn" value="ap_administrator"><i
                                             class="fas fa-check text-success"></i></button>
                                     {% else %}
-                                    <button type="submit" name='group_name' class="btn" value="ap_admin"><i
+                                    <button type="submit" name='group_name' class="btn" value="ap_administrator"><i
                                             class="fas fa-times text-danger"></i></button>
                                     {% endif %}
                                 </div>
