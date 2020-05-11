@@ -22,6 +22,7 @@ from supplier_app.tests.factory_boy import (
     CompanyFactory,
     CompanyUserPermissionFactory,
     TaxPayerArgentinaFactory,
+    ContactFactory,
 )
 from users_app.factory_boy import (
     UserFactory,
@@ -99,7 +100,7 @@ class TestSupplierPermissions(TestCase):
             bank_cbu_file=self.file_mock
             )
         self.addres1 = AddressFactory(taxpayer=self.taxpayer1)
-
+        self.contact1 = ContactFactory(taxpayer=self.taxpayer1)
         self.taxpayer2 = TaxPayerArgentinaFactory()
 
         self.supplier_detail_url = 'supplier-details'
