@@ -23,7 +23,7 @@ def add_group_permissions(*args, **kwargs):
             ('can_edit_invoice', 'Can edit invoice', content_type),
             ('supplier_role', 'Is supplier', content_type),
         ],
-        'ap_admin': [
+        'ap_administrator': [
             ('can_view_invoices', 'Can view invoices', content_type),
             ('can_view_all_invoices', 'Can view all invoices', content_type),
             ('can_view_invoices_history', 'Can view invoice history', content_type),

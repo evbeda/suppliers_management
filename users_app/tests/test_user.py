@@ -84,7 +84,7 @@ class TestLoginRedirect(TestCase):
         self.client = Client()
 
         self.supplier_group = Group.objects.get(name='supplier')
-        self.ap_group = Group.objects.get(name='ap_admin')
+        self.ap_group = Group.objects.get(name='ap_administrator')
         self.user_with_eb_social = UserFactory(email='nicolas@gmail.com')
         self.user_with_eb_social.groups.add(self.supplier_group)
         self.user_with_google_social = UserFactory(email='ap@eventbrite.com')
@@ -121,7 +121,7 @@ class TestLoginRedirect(TestCase):
         )
 
     def test_login_success_with_Google_should_redirect_to_apsite(self):
-        self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
+        self.user_with_google_social.groups.add(Group.objects.get(name='ap_administrator'))
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(AP_HOME, follow=True)
         self.assertEqual(HTTPStatus.OK, response.status_code)
@@ -136,7 +136,7 @@ class TestLoginRedirect(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_ap_site_permission_taxpayers(self):
-        self.user_with_google_social.groups.add(Group.objects.get(name='ap_admin'))
+        self.user_with_google_social.groups.add(Group.objects.get(name='ap_administrator'))
         self.client.force_login(self.user_with_google_social)
         response = self.client.get(
             reverse('ap-taxpayers'),

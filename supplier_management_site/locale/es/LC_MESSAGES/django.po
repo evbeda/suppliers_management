@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-08 14:13+0000\n"
+"POT-Creation-Date: 2020-05-11 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1772,6 +1772,26 @@ msgstr "Anterior"
 msgid "next"
 msgstr "siguiente"
 
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:63
+msgid "Delete generated `*.css` files instead of creating them."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:70
+msgid ""
+"Store resulting .css in settings.SASS_PROCESSOR_ROOT folder. Default: store "
+"each css side-by-side with .scss."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:77
+msgid "Set templating engine used (django, jinja2). Default: django."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:84
+msgid ""
+"Set the precision for numeric computations in the SASS processor. Default: "
+"settings.SASS_PRECISION."
+msgstr ""
+
 #: invoices_app/__init__.py:25
 msgid "APPROVED"
 msgstr "APROBADA"
@@ -1876,7 +1896,7 @@ msgstr "Entidad Fiscal"
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/taxpayer-details.html:107
-#: templates/supplier_app/taxpayer-details.html:247
+#: templates/supplier_app/taxpayer-details.html:276
 msgid "Country"
 msgstr "País"
 
@@ -2243,13 +2263,13 @@ msgstr "Constancia de No Retención de SUSS"
 
 #: supplier_app/models.py:333
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
-#: templates/supplier_app/taxpayer-details.html:213
+#: templates/supplier_app/taxpayer-details.html:242
 msgid "Street"
 msgstr "Calle"
 
 #: supplier_app/models.py:335
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
-#: templates/supplier_app/taxpayer-details.html:216
+#: templates/supplier_app/taxpayer-details.html:245
 msgid "Number"
 msgstr "Número"
 
@@ -2260,13 +2280,13 @@ msgstr "Cod. postal"
 
 #: supplier_app/models.py:339
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
-#: templates/supplier_app/taxpayer-details.html:241
+#: templates/supplier_app/taxpayer-details.html:270
 msgid "City"
 msgstr "Ciudad"
 
 #: supplier_app/models.py:343
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
-#: templates/supplier_app/taxpayer-details.html:244
+#: templates/supplier_app/taxpayer-details.html:273
 msgid "State"
 msgstr "Provincia"
 
@@ -2314,7 +2334,7 @@ msgstr "Transacción"
 msgid "Account type"
 msgstr "Tipo de cuenta"
 
-#: supplier_app/models.py:416
+#: supplier_app/models.py:416 templates/supplier_app/taxpayer-details.html:171
 msgid "Beneficiary"
 msgstr "Beneficiario"
 
@@ -2504,7 +2524,7 @@ msgstr "Elige un archivo"
 
 #: templates/invoices_app/invoices_form.html:160
 #: templates/steper_example.html:36
-#: templates/supplier_app/Supplier/taxpayer-creation.html:124
+#: templates/supplier_app/Supplier/taxpayer-creation.html:114
 msgid "Submit"
 msgstr "Enviar"
 
@@ -2513,7 +2533,6 @@ msgstr "Enviar"
 #: templates/invoices_app/invoices_form.html:167
 #: templates/registration/admin_create.html:34
 #: templates/supplier_app/AP/company_creation.html:25
-#: templates/supplier_app/Supplier/taxpayer-creation.html:234
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
 #: templates/supplier_app/edit-contact-information.html:25
@@ -2626,8 +2645,8 @@ msgid "Registered"
 msgstr "Registrado"
 
 #: templates/registration/admins-list.html:31
-msgid "AP Admin"
-msgstr "AP Admin"
+msgid "AP Administrator"
+msgstr "Administrador"
 
 #: templates/registration/admins-list.html:32
 msgid "AP Reporter"
@@ -2717,7 +2736,7 @@ msgid "Invite"
 msgstr "Invitar"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:9
-#: templates/supplier_app/taxpayer-details.html:273
+#: templates/supplier_app/taxpayer-details.html:302
 msgid "Taxpayer History"
 msgstr "Historial del proveedor"
 
@@ -2737,7 +2756,7 @@ msgid "Payment Term"
 msgstr "Período de pago"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:21
-#: templates/supplier_app/taxpayer-details.html:284
+#: templates/supplier_app/taxpayer-details.html:313
 msgid "Comments"
 msgstr "Comentarios adicionales"
 
@@ -2779,43 +2798,27 @@ msgstr "Ingrese los datos de su cuenta bancaria"
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:39
 #: templates/supplier_app/Supplier/bank-info-usa.html:3
-#: templates/supplier_app/Supplier/taxpayer-creation.html:123
+#: templates/supplier_app/Supplier/taxpayer-creation.html:113
 msgid "Previous"
 msgstr "Anterior"
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:40
 #: templates/supplier_app/Supplier/bank-info-usa.html:4
-#: templates/supplier_app/Supplier/taxpayer-creation.html:113
+#: templates/supplier_app/Supplier/taxpayer-creation.html:103
 msgid "Next"
 msgstr "Siguiente"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:38
+#: templates/supplier_app/Supplier/taxpayer-creation.html:36
 msgid "Taxpayer Info"
 msgstr "Información de la entidad fiscal"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:60
+#: templates/supplier_app/Supplier/taxpayer-creation.html:56
 msgid "Address Info"
 msgstr "Domicilio"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:88
+#: templates/supplier_app/Supplier/taxpayer-creation.html:82
 msgid "Contact Info"
 msgstr "Información de Contacto"
-
-#: templates/supplier_app/Supplier/taxpayer-creation.html:134
-msgid "Taxpayer info"
-msgstr "Información de la entidad fiscal"
-
-#: templates/supplier_app/Supplier/taxpayer-creation.html:155
-msgid "Address info"
-msgstr "Domicilio"
-
-#: templates/supplier_app/Supplier/taxpayer-creation.html:215
-msgid "Bank account"
-msgstr "Cuenta bancaria"
-
-#: templates/supplier_app/Supplier/taxpayer-creation.html:233
-msgid "Create taxpayer"
-msgstr "Crear entidad fiscal"
 
 #: templates/supplier_app/ap-taxpayers.html:23
 #: templates/supplier_app/taxpayer-details.html:58
@@ -2878,7 +2881,7 @@ msgstr "Información general"
 
 #: templates/supplier_app/taxpayer-details.html:32
 #: templates/supplier_app/taxpayer-details.html:155
-#: templates/supplier_app/taxpayer-details.html:202
+#: templates/supplier_app/taxpayer-details.html:231
 msgid "Edit"
 msgstr "Editar"
 
@@ -2895,7 +2898,7 @@ msgid "EB entities"
 msgstr "Entidades Eventbrite"
 
 #: templates/supplier_app/taxpayer-details.html:110
-#: templates/supplier_app/taxpayer-details.html:182
+#: templates/supplier_app/taxpayer-details.html:211
 msgid "Files"
 msgstr "Archivos"
 
@@ -2911,23 +2914,35 @@ msgstr "Impuesto a las ganancias"
 msgid "Bank info"
 msgstr "Información Bancaria"
 
-#: templates/supplier_app/taxpayer-details.html:170
+#: templates/supplier_app/taxpayer-details.html:178
+msgid "Bank account type"
+msgstr "Cuenta bancaria"
+
+#: templates/supplier_app/taxpayer-details.html:185
+msgid "Bank transaction type"
+msgstr "Transacción"
+
+#: templates/supplier_app/taxpayer-details.html:192
+msgid "Taxpayer condition"
+msgstr "Condición Impositiva"
+
+#: templates/supplier_app/taxpayer-details.html:199
 msgid "Bank code"
 msgstr "Código Bancario"
 
-#: templates/supplier_app/taxpayer-details.html:176
+#: templates/supplier_app/taxpayer-details.html:205
 msgid "Account number"
 msgstr "Número de cuenta"
 
-#: templates/supplier_app/taxpayer-details.html:186
+#: templates/supplier_app/taxpayer-details.html:215
 msgid "CBU"
 msgstr "CBU"
 
-#: templates/supplier_app/taxpayer-details.html:197
+#: templates/supplier_app/taxpayer-details.html:226
 msgid "Address information"
 msgstr "Domicilio"
 
-#: templates/supplier_app/taxpayer-details.html:219
+#: templates/supplier_app/taxpayer-details.html:248
 msgid "Zip_Code"
 msgstr "Código postal"
 
@@ -2990,6 +3005,18 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid "AP Admin"
+#~ msgstr "AP Admin"
+
+#~ msgid "Taxpayer info"
+#~ msgstr "Información de la entidad fiscal"
+
+#~ msgid "Address info"
+#~ msgstr "Domicilio"
+
+#~ msgid "Create taxpayer"
+#~ msgstr "Crear entidad fiscal"
 
 #~ msgid "Taxpayer Form"
 #~ msgstr "Información de la entidad fiscal"

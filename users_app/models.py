@@ -69,7 +69,7 @@ class User(AbstractUser):
 
     @property
     def is_AP(self):
-        return self.groups.filter(name='ap_admin').exists()
+        return self.groups.filter(name='ap_administrator').exists()
 
     @property
     def is_ap_reporter(self):

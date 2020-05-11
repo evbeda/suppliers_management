@@ -393,7 +393,7 @@ class TestCreateTaxPayer(TestCase):
     def test_users_without_required_permission_cant_create(self):
         client = Client()
         user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
-        ap_group = Group.objects.get(name='ap_admin')
+        ap_group = Group.objects.get(name='ap_administrator')
         user_without_supplier_permission.groups.add(ap_group)
 
         client.force_login(user_without_supplier_permission)
@@ -505,7 +505,7 @@ class TestSupplierHome(TestCase):
 
     def test_users_without_required_permission_cant_access_supplier_home(self):
         user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
-        ap_group = Group.objects.get(name='ap_admin')
+        ap_group = Group.objects.get(name='ap_administrator')
         user_without_supplier_permission.groups.add(ap_group)
 
         self.client.force_login(user_without_supplier_permission)
@@ -562,7 +562,7 @@ class TestApTaxpayers(TestCase):
         )
 
         self.user_ap = User.objects.create_user(email='ap@eventbrite.com')
-        self.user_ap.groups.add(Group.objects.get(name='ap_admin'))
+        self.user_ap.groups.add(Group.objects.get(name='ap_administrator'))
 
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
@@ -664,7 +664,7 @@ class TestSupplierDetailsView(TestCase):
         self.file_mock.size = 50
 
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
+        self.ap_user.groups.add(Group.objects.get(name='ap_administrator'))
         self.client.force_login(self.ap_user)
 
         self.company_user_permission = CompanyUserPermissionFactory()
@@ -875,7 +875,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.client_supplier = Client()
 
         self.factory = RequestFactory()
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
         self.client.force_login(self.ap_user)
@@ -1161,7 +1161,7 @@ class TestEditTaxPayerInfo(TestCase):
 
     @parameterized.expand([
         ('supplier', 'supplier@gmail.com'),
-        ('ap_admin', 'fake_ap@eventbrite.com'),
+        ('ap_administrator', 'fake_ap@eventbrite.com'),
     ])
     def test_post_edit_taxpayer_view_should_update_taxpayer_info(self, group, user):
         client = Client()
@@ -1253,7 +1253,7 @@ class TestEditAddressInfo(TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
 
@@ -1376,7 +1376,7 @@ class TestEditContactInfo(TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
 
@@ -1509,7 +1509,7 @@ class TestEditBankAccountInfo(TestCase):
         self.file_mock.name = 'bank_account.pdf'
         self.file_mock.size = 50
 
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
 
@@ -1653,7 +1653,7 @@ class TestEditBankAccountInfo(TestCase):
 
     @parameterized.expand([
         ('supplier', 'Supplier@gmail.com', 'new_cbu_file_sup.PDF'),
-        ('ap_admin', 'Ap@eventbrite.com', 'new_cbu_file_ap.PDF'),
+        ('ap_administrator', 'Ap@eventbrite.com', 'new_cbu_file_ap.PDF'),
     ])
     def test_post_edit_bank_account_view_should_update_bank_account_info(
         self, group, user, new_cbu_file_name
@@ -1700,7 +1700,7 @@ class TestCompanyCreateView(TestCase):
         }
         self.client = Client()
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
+        self.ap_user.groups.add(Group.objects.get(name='ap_administrator'))
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
         self.user_buyer_with_google_social = UserFactory(email='buyer@eventbrite.com')
@@ -1990,7 +1990,7 @@ class TestCompanyJoinView(TestCase):
     def test_users_without_required_permission_cant_join_a_company(self):
         client = Client()
         user_without_supplier_permission = UserFactory(email='ap@eventbrite.com')
-        ap_group = Group.objects.get(name='ap_admin')
+        ap_group = Group.objects.get(name='ap_administrator')
         user_without_supplier_permission.groups.add(ap_group)
 
         client.force_login(user_without_supplier_permission)
@@ -2072,7 +2072,7 @@ class TestApprovalRefuse(TestCase):
         self.client = Client()
 
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
-        self.ap_user.groups.add(Group.objects.get(name='ap_admin'))
+        self.ap_user.groups.add(Group.objects.get(name='ap_administrator'))
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
         self.client.force_login(self.ap_user)
@@ -2354,7 +2354,7 @@ class TestTaxpayerHistory(TestCase):
     def setUp(self):
         self.client = Client()
         self.ap_user = ApUserFactory()
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user.groups.add(self.ap_group)
         self.client.force_login(self.ap_user)
 
@@ -2628,7 +2628,7 @@ class TestTaxpayerCommentView(TestCase):
     def setUp(self):
         self.client = Client()
 
-        self.ap_group = Group.objects.get(name="ap_admin")
+        self.ap_group = Group.objects.get(name="ap_administrator")
         self.ap_user = UserFactory(email='ap@eventbrite.com')
         self.ap_user.groups.add(self.ap_group)
 
