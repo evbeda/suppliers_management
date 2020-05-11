@@ -228,7 +228,7 @@
                                     <strong> |</strong>
                                     {% if taxpayer.taxpayer_state != 'DENIED' %}
                                     <a class='card-link'
-                                        href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">
+                                        href="{% url 'contact-update' taxpayer_id=taxpayer.id contact_id=taxpayer_contact.id %}">
                                         {% trans "Edit" %}
                                         <i class="fa fa-edit"></i>
                                     </a>
