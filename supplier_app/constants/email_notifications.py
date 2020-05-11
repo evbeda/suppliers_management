@@ -59,9 +59,9 @@ email_notifications = {
         'subject': _('Your taxpayer is in progress now'),
         'body': {
             'upper_text': _(
-                'You Taxpayer is now in progress to Approve\n'
+                'Your taxpayer is now in progress to be approved\n'
             ),
-            'lower_text': _('You dont need to do anything, we contact with you soon, Thanks!'),
+            'lower_text': _("You don't need to do anything else, we will contact with you soon, Thanks!"),
             'btn_text': _('Go to BriteSu'),
             'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
