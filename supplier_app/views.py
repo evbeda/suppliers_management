@@ -284,6 +284,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context = super().get_context_data(**kwargs)
         context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
+        context['taxpayer_contact'] = context['taxpayer'].contactinformation_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
         context['workday_id_is_setted'] = context['taxpayer'].has_workday_id()
         context['comments'] = context['taxpayer'].taxpayercomment_set.all()
