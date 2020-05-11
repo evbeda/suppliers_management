@@ -16,8 +16,8 @@
     </div>
     {% endif %}
     {% include 'messages_notification.html' %}
-    <div class="row h-100">
-        <div class="card col-md-9 h-100">
+    <div class="row">
+        <div class="card col-md-9">
             <div class="card-body">
 
                 <div class="col-md-12">
@@ -166,6 +166,35 @@
                                         {{taxpayer_bank_account.get_bank_info_display}}
                                     </p>
                                 </div>
+
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Beneficiary" %}:</p>
+                                    <p class="card-subtitle pl-2">
+                                        {{taxpayer_bank_account.bank_beneficiary}}
+                                    </p>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Bank account type" %}:</p>
+                                    <p class="card-subtitle pl-2">
+                                        {{taxpayer_bank_account.get_bank_account_type_display}}
+                                    </p>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Bank transaction type" %}:</p>
+                                    <p class="card-subtitle pl-2">
+                                        {{taxpayer_bank_account.get_bank_transaction_type_display}}
+                                    </p>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <p class="card-subtitle text-muted">{% trans "Taxpayer condition" %}:</p>
+                                    <p class="card-subtitle pl-2">
+                                        {{taxpayer.get_taxpayer_condition_display}}
+                                    </p>
+                                </div>
+
                                 <div class="row mb-3">
                                     <p class="card-subtitle text-muted">{% trans "Bank code" %}:</p>
                                     <p class="card-subtitle pr-2 pl-3">
@@ -279,7 +308,7 @@
             </div>
         </div>
 
-        <div class="card col-md-3 h-100 overflow-auto">
+        <div class="card col-md-3 overflow-auto">
             <div class="card-body">
                 <h5 class="card-title">{% trans "Comments" %}</h5>
                 {% for comment in comments %}
