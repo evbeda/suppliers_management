@@ -676,7 +676,7 @@ class TestSupplierDetailsView(TestCase):
             witholding_taxes_file=self.file_mock,
         )
         self.address = AddressFactory(taxpayer=self.taxpayer)
-        self.contact = ContactInformation(taxpayer=self.taxpayer)
+        self.contact = ContactFactory(taxpayer=self.taxpayer)
         self.bank_account = BankAccountFactory(
             taxpayer=self.taxpayer,
             bank_cbu_file=self.file_mock
@@ -760,7 +760,7 @@ class TestSupplierDetailsView(TestCase):
             afip_registration_file=self.file_mock,
             witholding_taxes_file=self.file_mock,
         )
-        ContactInformation(taxpayer=taxpayer)
+        ContactFactory(taxpayer=taxpayer)
         AddressFactory(taxpayer=taxpayer)
         BankAccountFactory(
             taxpayer=taxpayer,
@@ -793,7 +793,7 @@ class TestSupplierDetailsView(TestCase):
             witholding_taxes_file=self.file_mock,
         )
         AddressFactory(taxpayer=taxpayer)
-        ContactInformation(taxpayer=taxpayer)
+        ContactFactory(taxpayer=taxpayer)
         BankAccountFactory(
             taxpayer=taxpayer,
             bank_cbu_file=self.file_mock
@@ -840,7 +840,7 @@ class TestTaxpayerDetailsSupplier(TestCase):
             bank_cbu_file=self.file_mock
             )
         self.addres_example = AddressFactory(taxpayer=self.taxpayer_example)
-        self.contact_example = ContactInformation(taxpayer=self.taxpayer_example)
+        self.contact_example = ContactFactory(taxpayer=self.taxpayer_example)
         self.kwargs = {
             'taxpayer_id': self.taxpayer_example.id
         }
@@ -2069,6 +2069,7 @@ class TestApprovalRefuse(TestCase):
         self.taxpayer = TaxPayerArgentinaFactory()
         AddressFactory(taxpayer=self.taxpayer)
         BankAccountFactory(taxpayer=self.taxpayer)
+        ContactFactory(taxpayer=self.taxpayer)
         self.client = Client()
 
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')
