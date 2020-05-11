@@ -6,6 +6,7 @@ from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
     TAXPAYER_STATUS_CHANGE_REQUIRED,
     TAXPAYER_STATUS_DENIED,
+    TAXPAYER_STATUS_IN_PROGRESS,
 )
 from supplier_app.exceptions.taxpayer_exceptions import (
     NoWorkdayIDException,
@@ -15,7 +16,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_APPROVE_MESSAGE,
     TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
-)
+    TAXPAYER_IN_PROGRESS_MESSAGE)
 from utils.send_email import taxpayer_notification
 
 
@@ -83,10 +84,25 @@ class StrategyChangeRequired(StrategyStatusChange):
         messages.success(request, TAXPAYER_REQUEST_CHANGE_MESSAGE)
 
 
+class StrategyInProgress(StrategyStatusChange):
+
+    def send_email(taxpayer):
+        taxpayer_notification(taxpayer, 'taxpayer_in_progress')
+
+
+    def change_taxpayer_status(taxpayer, request):
+        taxpayer.in_progress_taxpayer()
+        taxpayer.save()
+
+    def show_message(request):
+        messages.success(request, TAXPAYER_IN_PROGRESS_MESSAGE)
+
+
 strategy = {
     TAXPAYER_STATUS_APPROVED: StrategyApprove,
     TAXPAYER_STATUS_CHANGE_REQUIRED: StrategyChangeRequired,
     TAXPAYER_STATUS_DENIED: StrategyDeny,
+    TAXPAYER_STATUS_IN_PROGRESS: StrategyInProgress,
 }
 
 

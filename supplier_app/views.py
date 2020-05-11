@@ -36,10 +36,10 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
 )
 from supplier_app.constants.taxpayer_status import (
-        TAXPAYER_STATUS_APPROVED,
-        TAXPAYER_STATUS_CHANGE_REQUIRED,
-        TAXPAYER_STATUS_DENIED,
-)
+    TAXPAYER_STATUS_APPROVED,
+    TAXPAYER_STATUS_CHANGE_REQUIRED,
+    TAXPAYER_STATUS_DENIED,
+    TAXPAYER_STATUS_IN_PROGRESS)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
@@ -291,6 +291,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         context['approve'] = TAXPAYER_STATUS_APPROVED
         context['change_required'] = TAXPAYER_STATUS_CHANGE_REQUIRED
         context['deny'] = TAXPAYER_STATUS_DENIED
+        context['in_progress'] = TAXPAYER_STATUS_IN_PROGRESS
         context['make_comment'] = 'make comment'
         context['is_AP'] = self.request.user.is_AP
         return context

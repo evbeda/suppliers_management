@@ -9,6 +9,7 @@ TAXPAYER_STATUS_CHANGE_REQUIRED = "CHANGE REQUIRED"
 TAXPAYER_STATUS_PENDING = "PENDING"
 TAXPAYER_STATUS_CHANGES_PENDING = "CHANGES PENDING"
 TAXPAYER_STATUS_DENIED = "DENIED"
+TAXPAYER_STATUS_IN_PROGRESS = "IN PROGRESS"
 
 TAXPAYER_STATUS = {
     "Approved": {
@@ -30,6 +31,10 @@ TAXPAYER_STATUS = {
     "Changes Pending": {
         "css-class": "badge badge-primary",
         "choices": DBTuple(TAXPAYER_STATUS_CHANGES_PENDING, _("Changes pending"))
+    },
+    "In Progress": {
+        "css-class": "badge badge-warning",
+        "choices": DBTuple(TAXPAYER_STATUS_IN_PROGRESS, _("In Progress"))
     },
 }
 

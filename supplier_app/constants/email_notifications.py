@@ -55,4 +55,15 @@ email_notifications = {
             'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
     },
+    'taxpayer_in_progress': {
+        'subject': _('Your taxpayer is in progress now'),
+        'body': {
+            'upper_text': _(
+                'You Taxpayer is now in progress to Approve\n'
+            ),
+            'lower_text': _('You dont need to do anything, we contact with you soon, Thanks!'),
+            'btn_text': _('Go to BriteSu'),
+            'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
+        },
+    },
 }

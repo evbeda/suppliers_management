@@ -45,7 +45,7 @@ from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_CHANGES_PENDING,
     TAXPAYER_STATUS_DENIED,
     TAXPAYER_STATUS_PENDING,
-)
+    TAXPAYER_STATUS_IN_PROGRESS)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -748,10 +748,10 @@ class TestSupplierDetailsView(TestCase):
             'Withholding taxes'
         )
 
-    def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
+    def test_details_view_has_pending_button_when_AP_has_set_workday_id(self):
         response = self.client.get(self.sup_detail_url)
         self.assertContains(
-            response, 'Approve'
+            response, 'Pending'
         )
 
     def test_taxpayer_details_view_doesnt_show_edit_button_when_the_taxpayer_has_status_denied(self):
@@ -2084,6 +2084,7 @@ class TestApprovalRefuse(TestCase):
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
+        self.in_progress = TAXPAYER_STATUS_IN_PROGRESS
         self.approve = TAXPAYER_STATUS_APPROVED
         self.change_required = TAXPAYER_STATUS_CHANGE_REQUIRED
         self.deny = TAXPAYER_STATUS_DENIED

@@ -399,14 +399,19 @@
     <div class="row pt-3 pb-3">
         <div class="col-md-12">
             {% if is_AP %}
-            {% if taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGES PENDING' %}
+            {% if taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGES PENDING' or taxpayer.taxpayer_state == 'IN PROGRESS' %}
             <div class="row">
                 <div class="col-md-8">
                     {% include 'supplier_app/comments.html' %}
                 </div>
                 <div class="col-md-4">
                     <div class="row justify-content-around">
+                        {% if taxpayer.taxpayer_state == 'PENDING'%}
+                        {% include 'supplier_app/AP/in-progress-taxpayer.html'%}
+                        {% endif %}
+                        {% if taxpayer.taxpayer_state == 'IN PROGRESS'%}
                         {% include 'supplier_app/AP/approve-taxpayer.html'%}
+                        {% endif %}
                         {% include 'supplier_app/AP/deny-taxpayer.html'%}
                     </div>
                 </div>
