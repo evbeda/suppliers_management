@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-11 16:04+0000\n"
+"POT-Creation-Date: 2020-05-11 18:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1838,26 +1838,6 @@ msgstr "anterior"
 msgid "next"
 msgstr "próxima"
 
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:63
-msgid "Delete generated `*.css` files instead of creating them."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:70
-msgid ""
-"Store resulting .css in settings.SASS_PROCESSOR_ROOT folder. Default: store "
-"each css side-by-side with .scss."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:77
-msgid "Set templating engine used (django, jinja2). Default: django."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/sass_processor/management/commands/compilescss.py:84
-msgid ""
-"Set the precision for numeric computations in the SASS processor. Default: "
-"settings.SASS_PRECISION."
-msgstr ""
-
 #: invoices_app/__init__.py:25
 msgid "APPROVED"
 msgstr "APROVADO"
@@ -1960,7 +1940,7 @@ msgstr "Contribuinte"
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/taxpayer-details.html:107
-#: templates/supplier_app/taxpayer-details.html:276
+#: templates/supplier_app/taxpayer-details.html:348
 msgid "Country"
 msgstr "País"
 
@@ -2340,13 +2320,13 @@ msgstr "Certificado sem retenção na fonte de SUSS"
 
 #: supplier_app/models.py:333
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
-#: templates/supplier_app/taxpayer-details.html:242
+#: templates/supplier_app/taxpayer-details.html:314
 msgid "Street"
 msgstr "Rua"
 
 #: supplier_app/models.py:335
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
-#: templates/supplier_app/taxpayer-details.html:245
+#: templates/supplier_app/taxpayer-details.html:317
 msgid "Number"
 msgstr "Número"
 
@@ -2357,13 +2337,13 @@ msgstr "Código postal"
 
 #: supplier_app/models.py:339
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
-#: templates/supplier_app/taxpayer-details.html:270
+#: templates/supplier_app/taxpayer-details.html:342
 msgid "City"
 msgstr "Cidade"
 
 #: supplier_app/models.py:343
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
-#: templates/supplier_app/taxpayer-details.html:273
+#: templates/supplier_app/taxpayer-details.html:345
 msgid "State"
 msgstr "Estado"
 
@@ -2371,21 +2351,22 @@ msgstr "Estado"
 msgid "City name must only have letters"
 msgstr "O nome da cidade deve conter apenas letras"
 
-#: supplier_app/models.py:364
+#: supplier_app/models.py:364 templates/supplier_app/taxpayer-details.html:243
 msgid "Contact person"
 msgstr ""
 
-#: supplier_app/models.py:365
+#: supplier_app/models.py:365 templates/supplier_app/taxpayer-details.html:246
 #, fuzzy
 #| msgid "PO number"
 msgid "Phone number"
 msgstr "Número do pedido"
 
 #: supplier_app/models.py:366 templates/registration/admins-list.html:29
+#: templates/supplier_app/taxpayer-details.html:266
 msgid "Email"
 msgstr "O email"
 
-#: supplier_app/models.py:367
+#: supplier_app/models.py:367 templates/supplier_app/taxpayer-details.html:282
 msgid "Web site"
 msgstr ""
 
@@ -2823,7 +2804,7 @@ msgid "Invite"
 msgstr "Convite"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:9
-#: templates/supplier_app/taxpayer-details.html:302
+#: templates/supplier_app/taxpayer-details.html:374
 msgid "Taxpayer History"
 msgstr "História do Contribuinte"
 
@@ -2843,7 +2824,7 @@ msgid "Payment Term"
 msgstr "Termo de pagamento"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:21
-#: templates/supplier_app/taxpayer-details.html:313
+#: templates/supplier_app/taxpayer-details.html:385
 msgid "Comments"
 msgstr "Comentários"
 
@@ -2978,7 +2959,8 @@ msgstr "Informação geral"
 
 #: templates/supplier_app/taxpayer-details.html:32
 #: templates/supplier_app/taxpayer-details.html:155
-#: templates/supplier_app/taxpayer-details.html:231
+#: templates/supplier_app/taxpayer-details.html:232
+#: templates/supplier_app/taxpayer-details.html:303
 msgid "Edit"
 msgstr "Editar"
 
@@ -3041,11 +3023,17 @@ msgstr "Número da conta"
 msgid "CBU"
 msgstr "CBU"
 
-#: templates/supplier_app/taxpayer-details.html:226
+#: templates/supplier_app/taxpayer-details.html:227
+#, fuzzy
+#| msgid "General information"
+msgid "Contact information"
+msgstr "Informação geral"
+
+#: templates/supplier_app/taxpayer-details.html:298
 msgid "Address information"
 msgstr "Informação de Endereço"
 
-#: templates/supplier_app/taxpayer-details.html:248
+#: templates/supplier_app/taxpayer-details.html:320
 msgid "Zip_Code"
 msgstr "Código postal"
 
