@@ -39,7 +39,8 @@ from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
     TAXPAYER_STATUS_CHANGE_REQUIRED,
     TAXPAYER_STATUS_DENIED,
-    TAXPAYER_STATUS_IN_PROGRESS)
+    TAXPAYER_STATUS_IN_PROGRESS
+)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,

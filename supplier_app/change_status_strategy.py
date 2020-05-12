@@ -16,7 +16,8 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_APPROVE_MESSAGE,
     TAXPAYER_DENIED_MESSAGE,
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
-    TAXPAYER_IN_PROGRESS_MESSAGE)
+    TAXPAYER_IN_PROGRESS_MESSAGE
+)
 from utils.send_email import taxpayer_notification
 
 
@@ -86,11 +87,10 @@ class StrategyChangeRequired(StrategyStatusChange):
 
 class StrategyInProgress(StrategyStatusChange):
 
-    def send_email(taxpayer):
+    def send_email(taxpayer: TaxPayer):
         taxpayer_notification(taxpayer, 'taxpayer_in_progress')
 
-
-    def change_taxpayer_status(taxpayer, request):
+    def change_taxpayer_status(taxpayer: TaxPayer, request):
         taxpayer.in_progress_taxpayer()
         taxpayer.save()
 
