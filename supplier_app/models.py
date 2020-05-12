@@ -145,6 +145,9 @@ class TaxPayer(models.Model):
     def deny_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Denied']['choices'].value
 
+    def in_progress_taxpayer(self):
+        self.taxpayer_state = TAXPAYER_STATUS['In Progress']['choices'].value
+
     def change_required_taxpayer(self):
         self.taxpayer_state = TAXPAYER_STATUS['Change Required']['choices'].value
 

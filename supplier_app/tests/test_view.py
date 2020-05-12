@@ -45,7 +45,7 @@ from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_CHANGES_PENDING,
     TAXPAYER_STATUS_DENIED,
     TAXPAYER_STATUS_PENDING,
-)
+    TAXPAYER_STATUS_IN_PROGRESS)
 from supplier_app.constants.custom_messages import (
     COMPANY_ERROR_MESSAGE,
     EMAIL_ERROR_MESSAGE,
@@ -748,10 +748,10 @@ class TestSupplierDetailsView(TestCase):
             'Withholding taxes'
         )
 
-    def test_details_view_has_approve_button_when_AP_has_set_workday_id(self):
+    def test_details_view_has_pending_button_when_AP_has_set_workday_id(self):
         response = self.client.get(self.sup_detail_url)
         self.assertContains(
-            response, 'Approve'
+            response, 'Pending'
         )
 
     def test_taxpayer_details_view_doesnt_show_edit_button_when_the_taxpayer_has_status_denied(self):
@@ -2084,6 +2084,7 @@ class TestApprovalRefuse(TestCase):
         self.kwargs = {
             'taxpayer_id': self.taxpayer.id
         }
+        self.in_progress = TAXPAYER_STATUS_IN_PROGRESS
         self.approve = TAXPAYER_STATUS_APPROVED
         self.change_required = TAXPAYER_STATUS_CHANGE_REQUIRED
         self.deny = TAXPAYER_STATUS_DENIED
@@ -2218,6 +2219,14 @@ class TestApprovalRefuse(TestCase):
         self.assertContains(response, EMAIL_ERROR_MESSAGE)
 
     @patch(
+        'supplier_app.change_status_strategy.StrategyInProgress.send_email',
+        side_effect=CouldNotSendEmailError
+    )
+    def test_error_sending_mail_should_display_error_msg_in_taxpayer_in_progress(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request(self.in_progress, True)
+        self.assertContains(response, EMAIL_ERROR_MESSAGE)
+
+    @patch(
         'supplier_app.change_status_strategy.StrategyDeny.send_email',
         side_effect=CouldNotSendEmailError
     )
@@ -2231,6 +2240,14 @@ class TestApprovalRefuse(TestCase):
     )
     def test_nonexistent_taxpayer_should_display_error_message_on_approve(self, send_mail_mocked):
         response = self._handle_taxpayer_status_request(self.approve, True)
+        self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
+
+    @patch(
+        'supplier_app.views.TaxPayer.objects.get',
+        side_effect=ObjectDoesNotExist
+    )
+    def test_nonexistent_taxpayer_should_display_error_message_on_progress(self, send_mail_mocked):
+        response = self._handle_taxpayer_status_request(self.in_progress, True)
         self.assertContains(response, TAXPAYER_NOT_EXISTS_MESSAGE.encode('utf-8'))
 
     @patch(
@@ -2254,6 +2271,14 @@ class TestApprovalRefuse(TestCase):
             'DENIED'
         )
 
+    def test_change_taxpayer_status_to_IN_PROGRESS_when_clicking_In_Progress_button(self):
+        self._handle_taxpayer_status_request(self.in_progress)
+
+        self.assertEqual(
+            TaxPayer.objects.get(pk=self.taxpayer.id).taxpayer_state,
+            'IN PROGRESS'
+        )
+
     def test_change_taxpayer_status_to_denied_sends_email_notification(self):
         CompanyUserPermissionFactory(
             user=UserFactory(),
@@ -2264,6 +2289,23 @@ class TestApprovalRefuse(TestCase):
         self.assertEqual(
             mail.outbox[0].subject,
             email_notifications['taxpayer_denial']['subject']
+        )
+
+        self.assertIn(
+            SUPPLIER_HOME_URL,
+            mail.outbox[0].alternatives[0][0]
+        )
+
+    def test_change_taxpayer_status_to_in_progress_sends_email_notification(self):
+        CompanyUserPermissionFactory(
+            user=UserFactory(),
+            company=self.taxpayer.company
+        )
+        self._handle_taxpayer_status_request(self.in_progress)
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            email_notifications['taxpayer_in_progress']['subject']
         )
 
         self.assertIn(

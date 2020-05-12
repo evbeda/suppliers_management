@@ -1,0 +1,5 @@
+<form method="POST" action="{% url 'handle-taxpayer-status' taxpayer_id=taxpayer.id %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="{{in_progress}}">
+    <input class="btn btn-warning" type="submit" value="In Progress"/>
+</form>
