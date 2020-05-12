@@ -61,11 +61,10 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 AUTHENTICATION_BACKENDS = (
-   'social_core.backends.eventbrite.EventbriteOAuth2',
+   'supplier_management_site.auth.eventbrite_ar.EventbriteAuth2',
    'social_core.backends.open_id.OpenIdAuth',
    'social_core.backends.google.GoogleOpenId',
    'social_core.backends.google.GoogleOAuth2',
-
    'django.contrib.auth.backends.ModelBackend',
 )
 
