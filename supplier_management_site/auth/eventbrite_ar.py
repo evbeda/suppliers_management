@@ -6,9 +6,6 @@ from django.utils.translation import to_locale, get_language
 
 
 class EventbriteAuth2(EventbriteOAuth2):
-    AUTHORIZATION_URL = 'https://www.eventbrite.com/oauth/authorize'
-    ACCESS_TOKEN_URL = 'https://www.eventbrite.com/oauth/token'
-    METADATA_URL = 'https://www.eventbriteapi.com/v3/users/me'
 
     def authorization_url(self):
         if to_locale(get_language()) == 'es':
