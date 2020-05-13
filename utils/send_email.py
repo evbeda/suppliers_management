@@ -81,16 +81,12 @@ def get_supplier_language_by_taxpayer(taxpayer):
 
 
 def taxpayer_notification(taxpayer, change_type):
-    try:
-        taxpayer_language = to_locale(get_language())
-        translation.activate(get_supplier_language_by_taxpayer(taxpayer))
-        message, subject = get_message_and_subject(change_type, taxpayer)
-        recipient_list = get_user_emails_by_tax_payer_id(taxpayer.id)
-        send_email_notification.apply_async([subject, message, recipient_list])
-    except CouldNotSendEmailError:
-        messages.error(EMAIL_ERROR_MESSAGE)
-    finally:
-        translation.activate(taxpayer_language)
+    taxpayer_language = to_locale(get_language())
+    translation.activate(get_supplier_language_by_taxpayer(taxpayer))
+    message, subject = get_message_and_subject(change_type, taxpayer)
+    recipient_list = get_user_emails_by_tax_payer_id(taxpayer.id)
+    send_email_notification.apply_async([subject, message, recipient_list])
+    translation.activate(taxpayer_language)
 
 
 def buyer_notification(taxpayer, change_type):
