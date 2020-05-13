@@ -2484,15 +2484,25 @@ msgid "Your taxpayer has been approved"
 msgstr "Su entidad fiscal fue aprobada"
 
 #: supplier_app/constants/email_notifications.py:26
-msgid ""
-"Instructions on next steps, \n"
-"\n"
-"First, Soon your contact at Eventbrite will send you a Purchase Order "
-"Number.\n"
-" Then, Once you receive the Purchase Order Number, you'll need to include "
-"that on your invoice as reference.\n"
-" Finally, send your invoice to payables-ar@eventbrite.com."
-msgstr "Instrucciones a seguir. Primero, tu contacto de Eventbrite se contactara contigo para pasarte su numero de Orden de Compra. Luego una vez que recibas el numero de Orden de Compra, deberás incluirlo en tu factura como referencia. Finalmente, envía tu factura a payables-ar@eventbrite.com."
+msgid "Instructions on next steps,"
+msgstr "Instrucciones a seguir,"
+
+#: supplier_app/constants/email_notifications.py:27
+msgid "First, Soon your contact at Eventbrite will send you a Purchase Order Number."
+msgstr "Primero, tu contacto de Eventbrite se contactara contigo para pasarte su numero de Orden de Compra."
+
+#: supplier_app/constants/email_notifications.py:28
+msgid "Then, Once you receive the Purchase Order Number, "
+msgstr "Luego una vez que recibas el numero de Orden de Compra,"
+
+#: supplier_app/constants/email_notifications.py:29
+msgid "you'll need to include that on your invoice as reference."
+msgstr "deberás incluirlo en tu factura como referencia."
+
+#: supplier_app/constants/email_notifications.py:30
+msgid "Finally, send your invoice to payables-ar@eventbrite.com."
+msgstr "Finalmente, envía tu factura a payables-ar@eventbrite.com(opens in new tab)."
+
 
 #: supplier_app/constants/email_notifications.py:33
 #: supplier_app/constants/email_notifications.py:46

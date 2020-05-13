@@ -33,7 +33,7 @@ from utils.send_email import (
     get_user_emails_by_tax_payer_id,
     send_email_notification,
     taxpayer_notification,
-    get_buyer_emails_by_tax_payer_id)
+    get_buyer_emails_by_tax_payer_id, buyer_notification)
 
 
 class EmailUtilsTest(TestCase):
@@ -141,6 +141,16 @@ class EmailUtilsTest(TestCase):
     ])
     def test_taxpayer_email_notification(self, change_type):
         taxpayer_notification(self.tax_payer1, change_type)
+        self.assertEqual(
+            email_notifications[change_type]['subject'],
+            mail.outbox[0].subject,
+        )
+
+    @parameterized.expand([
+        ('buyer_notification',),
+    ])
+    def test_taxpayer_email_notification(self, change_type):
+        buyer_notification(self.tax_payer1, change_type)
         self.assertEqual(
             email_notifications[change_type]['subject'],
             mail.outbox[0].subject,
