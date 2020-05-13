@@ -2075,6 +2075,13 @@ msgid ""
 "that on your invoice as reference.\n"
 " Finally, send your invoice to payables-ar@eventbrite.com."
 msgstr ""
+"Instrucciones a seguir, "
+"\n"
+"Primero, tu contacto de Eventbrite se contactara contigo para pasarte su numero de Orden de Compra. "
+"\n"
+"Luego una vez que recibas el numero de Orden de Compra, deberás incluirlo "
+"en tu factura como referencia. "
+" Finalmente, envía tu factura a payables-ar@eventbrite.com."
 
 #: supplier_app/constants/email_notifications.py:33
 #: supplier_app/constants/email_notifications.py:46
