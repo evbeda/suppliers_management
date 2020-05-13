@@ -8,7 +8,7 @@ from django.utils.translation import (
 from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
-)
+    InvitingBuyer)
 from supplier_app.constants.email_notifications import email_notifications
 from celery import shared_task
 from utils import GO_TO_BRITESU
@@ -69,6 +69,23 @@ def taxpayer_notification(taxpayer, change_type):
     send_email_notification.apply_async([subject, message, recipient_list])
 
 
+def buyer_notification(taxpayer, change_type):
+    subject = _(email_notifications[change_type]['subject'])
+    upper_text = _(email_notifications[change_type]['body']['upper_text'])
+    lower_text = _(email_notifications[change_type]['body']['lower_text'])
+    btn_text = _(email_notifications[change_type]['body']['btn_text'])
+    btn_url = email_notifications[change_type]['body']['btn_url']
+    message = build_mail_html(
+        taxpayer.business_name,
+        upper_text,
+        lower_text,
+        btn_text,
+        btn_url,
+    )
+    recipient_list = get_buyer_emails_by_tax_payer_id(taxpayer.id)
+    send_email_notification.apply_async([subject, message, recipient_list])
+
+
 def get_user_emails_by_tax_payer_id(tax_payer_id):
     company = TaxPayer.objects.get(pk=tax_payer_id).company
     emails = CompanyUserPermission.objects.values_list(
@@ -76,6 +93,12 @@ def get_user_emails_by_tax_payer_id(tax_payer_id):
         flat=True,
     ).filter(company=company)
     return list(emails)
+
+
+def get_buyer_emails_by_tax_payer_id(tax_payer_id):
+    company = TaxPayer.objects.get(pk=tax_payer_id).company
+    buyer = InvitingBuyer.objects.get(pk=company.id).inviting_buyer
+    return [buyer.email]
 
 
 def build_mail_html(
