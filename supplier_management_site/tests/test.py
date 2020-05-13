@@ -15,6 +15,7 @@ from invoices_app import (
 )
 
 from supplier_app.constants.email_notifications import email_notifications
+from supplier_app.models import InvitingBuyer
 
 from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
@@ -32,7 +33,7 @@ from utils.send_email import (
     get_user_emails_by_tax_payer_id,
     send_email_notification,
     taxpayer_notification,
-)
+    get_buyer_emails_by_tax_payer_id)
 
 
 class EmailUtilsTest(TestCase):
@@ -119,6 +120,19 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(len(mail.outbox[0].to), 2)
         self.assertEqual(mail.outbox[0].to, recipient_list)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
+    def test_send_email_notification_to_buyers_from_same_company(self):
+        subject = 'Testing title'
+        message = 'Testing message'
+        InvitingBuyer.objects.create(company=self.company2, inviting_buyer=self.user1)
+        recipient_list = get_buyer_emails_by_tax_payer_id(self.tax_payer3.id)
+        send_email_notification(subject, message, recipient_list)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox[0].to), 1)
+        self.assertEqual(mail.outbox[0].to, recipient_list)
+        self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
 
     @parameterized.expand([
         ('taxpayer_approval',),

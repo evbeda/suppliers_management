@@ -2142,7 +2142,7 @@ class TestApprovalRefuse(TestCase):
             ),
             [redirect[0] for redirect in response.redirect_chain],
         )
-        self.assertContains(response, "Approved")
+        self.assertContains(response, TAXPAYER_APPROVE_MESSAGE)
 
     def test_redirect_to_supplier_detail_with_denied_success_msg(self):
         response = self._handle_taxpayer_status_request(self.deny, follow=True)

@@ -55,7 +55,7 @@ class StrategyApprove(StrategyStatusChange):
 
     def send_email(taxpayer):
         taxpayer_notification(taxpayer, 'taxpayer_approval')
-        buyer_notification(taxpayer,'buyer_notification')
+        buyer_notification(taxpayer, 'buyer_notification')
 
     def change_taxpayer_status(taxpayer, request=None):
         try:
@@ -110,5 +110,5 @@ strategy = {
 def run_strategy_taxpayer_status(action, taxpayer, request):
     strategy_type = strategy[action]
     strategy_type.change_taxpayer_status(taxpayer, request)
-    strategy_type.send_email(taxpayer)
     strategy_type.show_message(request)
+    strategy_type.send_email(taxpayer)
