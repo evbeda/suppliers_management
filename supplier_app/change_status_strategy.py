@@ -18,7 +18,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
     TAXPAYER_IN_PROGRESS_MESSAGE
 )
-from utils.send_email import taxpayer_notification
+from utils.send_email import taxpayer_notification, buyer_notification
 
 
 def _taxpayer_exists_with_workday_id(workday_id):
@@ -55,6 +55,7 @@ class StrategyApprove(StrategyStatusChange):
 
     def send_email(taxpayer):
         taxpayer_notification(taxpayer, 'taxpayer_approval')
+        buyer_notification(taxpayer, 'buyer_notification')
 
     def change_taxpayer_status(taxpayer, request=None):
         try:
@@ -109,5 +110,5 @@ strategy = {
 def run_strategy_taxpayer_status(action, taxpayer, request):
     strategy_type = strategy[action]
     strategy_type.change_taxpayer_status(taxpayer, request)
-    strategy_type.send_email(taxpayer)
     strategy_type.show_message(request)
+    strategy_type.send_email(taxpayer)

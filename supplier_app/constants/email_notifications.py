@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 COMPANY_INVITATION_URL = '/users/supplier/company/join'
 SUPPLIER_HOME_URL = '/suppliersite/supplier'
+HOME_URL = '/'
 
 email_notifications = {
     'company_invitation': {
@@ -22,8 +23,11 @@ email_notifications = {
         'subject': _('Your taxpayer has been approved'),
         'body': {
             'upper_text': _(
-                'You are ready to start using BriteSu.\n'
-                'You can access the platform now and upload your invoices.\n'
+                'Instructions on next steps, \n'
+                "\nFirst, Soon your contact at Eventbrite will send you a Purchase Order Number."
+                "\n Then, Once you receive the Purchase Order Number, "
+                "you'll need to include that on your invoice as reference."
+                "\n Finally, send your invoice to payables-ar@eventbrite.com."
             ),
             'lower_text': _('Thank you!'),
             'btn_text': _('Go to BriteSu'),
@@ -66,4 +70,16 @@ email_notifications = {
             'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
     },
+    'buyer_notification': {
+            'subject': _('Now you can create a Purchase Requisition for this Supplier on Workday'),
+            'body': {
+                'upper_text': _(
+                    "Once your Purchase Requisition is approved you will receive a Purchase Order Number from Workday. "
+                ),
+                'lower_text': _("Remember to inform the supplier of the Purchase Order Number as soon as you get it so"
+                                " that the supplier can send the invoice."),
+                'btn_text': _('Go to BriteSu'),
+                'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, HOME_URL),
+            },
+        },
 }

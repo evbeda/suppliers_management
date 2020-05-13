@@ -61,7 +61,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_REQUEST_CHANGE_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
-)
+    TAXPAYER_IN_PROGRESS_MESSAGE)
 
 from supplier_app.forms import (
     AddressCreateForm,

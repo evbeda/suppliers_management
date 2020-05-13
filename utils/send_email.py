@@ -1,3 +1,5 @@
+from typing import Tuple, List
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -8,7 +10,7 @@ from django.utils.translation import (
 from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
-)
+    InvitingBuyer)
 from supplier_app.constants.email_notifications import email_notifications
 from celery import shared_task
 from utils import GO_TO_BRITESU
@@ -52,7 +54,7 @@ def company_invitation_notification(company, token, email, language):
     send_email_notification.apply_async([subject, message, email])
 
 
-def taxpayer_notification(taxpayer, change_type):
+def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, str]:
     subject = _(email_notifications[change_type]['subject'])
     upper_text = _(email_notifications[change_type]['body']['upper_text'])
     lower_text = _(email_notifications[change_type]['body']['lower_text'])
@@ -65,7 +67,18 @@ def taxpayer_notification(taxpayer, change_type):
         btn_text,
         btn_url,
     )
+    return message, subject
+
+
+def taxpayer_notification(taxpayer, change_type):
+    message, subject = get_message_and_subject(change_type, taxpayer)
     recipient_list = get_user_emails_by_tax_payer_id(taxpayer.id)
+    send_email_notification.apply_async([subject, message, recipient_list])
+
+
+def buyer_notification(taxpayer, change_type):
+    message, subject = get_message_and_subject(change_type, taxpayer)
+    recipient_list = get_buyer_emails_by_tax_payer_id(taxpayer.id)
     send_email_notification.apply_async([subject, message, recipient_list])
 
 
@@ -76,6 +89,12 @@ def get_user_emails_by_tax_payer_id(tax_payer_id):
         flat=True,
     ).filter(company=company)
     return list(emails)
+
+
+def get_buyer_emails_by_tax_payer_id(tax_payer_id: int) -> List[str]:
+    company = TaxPayer.objects.get(pk=tax_payer_id).company
+    buyer = InvitingBuyer.objects.get(company=company.id).inviting_buyer
+    return [buyer.email]
 
 
 def build_mail_html(

@@ -67,7 +67,7 @@ from supplier_app.models import (
     TaxpayerComment,
     TaxPayerEBEntity,
     ContactInformation,
-)
+    InvitingBuyer)
 from users_app.mixins import (
     TaxPayerPermissionMixin,
     UserLoginPermissionRequiredMixin,
@@ -97,6 +97,18 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         CAN_CREATE_COMPANY_PERM,
     )
 
+    def form_valid(self, form):
+        company = self.save_company(form)
+        InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
+        return HttpResponseRedirect(self.get_success_url())
+
+    def save_company(self, forms):
+        company = forms.save(commit=False)
+        company.save()
+        return company
+
+    def get_success_url(self):
+        return reverse('company-list')
 
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company

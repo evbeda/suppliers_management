@@ -69,6 +69,14 @@ class Company(models.Model):
         return self.name.capitalize()
 
 
+class InvitingBuyer(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    inviting_buyer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        default=None
+    )
+
 class CompanyUserPermission(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     user = models.ForeignKey(

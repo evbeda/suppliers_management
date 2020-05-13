@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-11 20:59+0000\n"
+"POT-Creation-Date: 2020-05-13 01:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2289,8 +2289,8 @@ msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
-#: supplier_app/models.py:55 supplier_app/models.py:117
-#: supplier_app/models.py:358 templates/invoices_app/invoice-list.html:30
+#: supplier_app/models.py:55 supplier_app/models.py:125
+#: supplier_app/models.py:366 templates/invoices_app/invoice-list.html:30
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/taxpayer-details.html:107
@@ -2457,11 +2457,11 @@ msgstr "No seteaste el workday id"
 msgid "There is other taxpayer with that workday id"
 msgstr "Ya existe una entidad fiscal con esa id en workday"
 
-#: supplier_app/constants/email_notifications.py:10
+#: supplier_app/constants/email_notifications.py:11
 msgid "You have been invited to BriteSu"
 msgstr "Has sido invitado a BriteSu"
 
-#: supplier_app/constants/email_notifications.py:13
+#: supplier_app/constants/email_notifications.py:14
 msgid ""
 "Welcome to BriteSu!\n"
 "Please click on the following link to register.\n"
@@ -2469,40 +2469,54 @@ msgstr ""
 "Bienvenido a BriteSu!\n"
 "Por favor accede al siguiente link.\n"
 
-#: supplier_app/constants/email_notifications.py:16
-#: supplier_app/constants/email_notifications.py:28
-#: supplier_app/constants/email_notifications.py:41
+#: supplier_app/constants/email_notifications.py:17
+#: supplier_app/constants/email_notifications.py:32
+#: supplier_app/constants/email_notifications.py:45
 msgid "Thank you!"
 msgstr "¡Gracias!"
 
-#: supplier_app/constants/email_notifications.py:17
+#: supplier_app/constants/email_notifications.py:18
 msgid "Join"
 msgstr "Únete"
 
-#: supplier_app/constants/email_notifications.py:22
+#: supplier_app/constants/email_notifications.py:23
 msgid "Your taxpayer has been approved"
 msgstr "Su entidad fiscal fue aprobada"
 
-#: supplier_app/constants/email_notifications.py:25
-msgid ""
-"You are ready to start using BriteSu.\n"
-"You can access the platform now and upload your invoices.\n"
-msgstr ""
-"Ya estás habilitado en BriteSU.\n"
-"Ahora podes acceder a la plataforma y subir tus facturas.\n"
+#: supplier_app/constants/email_notifications.py:26
+msgid "Instructions on next steps,"
+msgstr "Instrucciones a seguir,"
+
+#: supplier_app/constants/email_notifications.py:27
+msgid "First, Soon your contact at Eventbrite will send you a Purchase Order Number."
+msgstr "Primero, tu contacto de Eventbrite se contactara contigo para pasarte su numero de Orden de Compra."
+
+#: supplier_app/constants/email_notifications.py:28
+msgid "Then, Once you receive the Purchase Order Number, "
+msgstr "Luego una vez que recibas el numero de Orden de Compra,"
 
 #: supplier_app/constants/email_notifications.py:29
-#: supplier_app/constants/email_notifications.py:42
-#: supplier_app/constants/email_notifications.py:54
-#: supplier_app/constants/email_notifications.py:65 utils/__init__.py:3
+msgid "you'll need to include that on your invoice as reference."
+msgstr "deberás incluirlo en tu factura como referencia."
+
+#: supplier_app/constants/email_notifications.py:30
+msgid "Finally, send your invoice to payables-ar@eventbrite.com."
+msgstr "Finalmente, envía tu factura a payables-ar@eventbrite.com(opens in new tab)."
+
+
+#: supplier_app/constants/email_notifications.py:33
+#: supplier_app/constants/email_notifications.py:46
+#: supplier_app/constants/email_notifications.py:58
+#: supplier_app/constants/email_notifications.py:69
+#: supplier_app/constants/email_notifications.py:81 utils/__init__.py:3
 msgid "Go to BriteSu"
 msgstr "Dirígete a BriteSU"
 
-#: supplier_app/constants/email_notifications.py:34
+#: supplier_app/constants/email_notifications.py:38
 msgid "Your taxpayer has some pending modifications"
 msgstr "Su entidad fiscal tiene algunas modificaciones pendientes"
 
-#: supplier_app/constants/email_notifications.py:37
+#: supplier_app/constants/email_notifications.py:41
 msgid ""
 "Please visit your taxpayer and read comments.\n"
 "Once changes are done and approved by Eventbrite,\n"
@@ -2512,11 +2526,11 @@ msgstr ""
 "Una vez que realice los cambios propuestos, Eventbrite los evaluará.\n"
 "Cuando se apruebe su entidad fiscal, Eventbrite se lo notificará por email.\n"
 
-#: supplier_app/constants/email_notifications.py:47
+#: supplier_app/constants/email_notifications.py:51
 msgid "Your taxpayer has been rejected"
 msgstr "Su entidad fiscal fue rechazada"
 
-#: supplier_app/constants/email_notifications.py:50
+#: supplier_app/constants/email_notifications.py:54
 msgid ""
 "We are afraid that the taxpayer you were trying to submit is invalid\n"
 "Please contact the Eventbrite employee that hired you.\n"
@@ -2525,23 +2539,40 @@ msgstr ""
 "inválida.\n"
 "Por favor contáctate con el empleado de Eventbrite que pactaste la compra.\n"
 
-#: supplier_app/constants/email_notifications.py:53
+#: supplier_app/constants/email_notifications.py:57
 msgid "Please contact the Eventbrite employee that hired you, Thank you!"
 msgstr ""
 "Por favor contáctate con el empleado de Eventbrite que pactaste la compra. "
 "Gracias"
 
-#: supplier_app/constants/email_notifications.py:59
+#: supplier_app/constants/email_notifications.py:63
 msgid "Your taxpayer is in progress now"
 msgstr "Su entidad fiscal está en progreso"
 
-#: supplier_app/constants/email_notifications.py:62
+#: supplier_app/constants/email_notifications.py:66
 msgid "Your taxpayer is now in progress to be approved\n"
 msgstr "Su entidad fiscal está en progreso para ser aprobada"
 
-#: supplier_app/constants/email_notifications.py:64
-msgid "You don't need to do anything else, we will contact with you soon, Thanks!"
+#: supplier_app/constants/email_notifications.py:68
+msgid ""
+"You don't need to do anything else, we will contact with you soon, Thanks!"
 msgstr "No tienes que hacer nada, te contactaremos pronto, Gracias!"
+
+#: supplier_app/constants/email_notifications.py:74
+msgid "Now you can create a Purchase Requisition for this Supplier on Workday"
+msgstr "Ahora puedes crear una Solicitud de Compra para este Proveedor en Workday"
+
+#: supplier_app/constants/email_notifications.py:77
+msgid ""
+"Once your Purchase Requisition is approved you will receive a Purchase Order "
+"Number from Workday. "
+msgstr "Una vez que la Solicitud de Compra haya sido aprovada vas a recibir un numero de Orden De Compra de Workday"
+
+#: supplier_app/constants/email_notifications.py:79
+msgid ""
+"Remember to inform the supplier of the Purchase Order Number as soon as you "
+"get it so that the supplier can send the invoice."
+msgstr "Recuerda informar lo antes posible al provedoor sobre el numero de Orden de Compra para que lo incluya en la Factura"
 
 #: supplier_app/constants/payment_ar.py:4
 msgid "Bank transfer"
@@ -2628,7 +2659,7 @@ msgstr "Entidad de Eventbrite"
 msgid "Name"
 msgstr "Nombre"
 
-#: supplier_app/models.py:108
+#: supplier_app/models.py:116
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/supplier-home.html:26
@@ -2636,125 +2667,125 @@ msgstr "Nombre"
 msgid "Business name"
 msgstr "Razón social"
 
-#: supplier_app/models.py:120
+#: supplier_app/models.py:128
 msgid "Creation date"
 msgstr "Fecha de creación"
 
-#: supplier_app/models.py:221
+#: supplier_app/models.py:229
 msgid "CUIT must only have numbers"
 msgstr "El CUIT solo debe tener numeros"
 
-#: supplier_app/models.py:231
+#: supplier_app/models.py:239
 msgid "Taxpayer Condition"
 msgstr "Condición Impositiva"
 
-#: supplier_app/models.py:237
+#: supplier_app/models.py:245
 msgid "Payment type"
 msgstr "Forma de pago"
 
-#: supplier_app/models.py:241
+#: supplier_app/models.py:249
 msgid "Payment term"
 msgstr "Plazo de pago"
 
-#: supplier_app/models.py:246
+#: supplier_app/models.py:254
 msgid "AFIP registration certificate"
 msgstr "Constancia de inscripción de AFIP"
 
-#: supplier_app/models.py:260
+#: supplier_app/models.py:268
 msgid "AFIP No Retention"
 msgstr "Constancia de No Retención de IVA"
 
-#: supplier_app/models.py:274
+#: supplier_app/models.py:282
 msgid "IIBB registration certificate"
 msgstr "Constancia de inscripción IIBB"
 
-#: supplier_app/models.py:288
+#: supplier_app/models.py:296
 msgid "IIBB No Retention"
 msgstr "Constancia de No Retención de IIBB"
 
-#: supplier_app/models.py:301
+#: supplier_app/models.py:309
 msgid "Certificate of no income withholding"
 msgstr "Constancia de No Retención de Ganancias"
 
-#: supplier_app/models.py:314
+#: supplier_app/models.py:322
 msgid "Certificate of no SUSS withholding"
 msgstr "Constancia de No Retención de SUSS"
 
-#: supplier_app/models.py:336
+#: supplier_app/models.py:344
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
 #: templates/supplier_app/taxpayer-details.html:314
 msgid "Street"
 msgstr "Calle"
 
-#: supplier_app/models.py:338
+#: supplier_app/models.py:346
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
 #: templates/supplier_app/taxpayer-details.html:317
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:339
+#: supplier_app/models.py:347
 #: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Cod. postal"
 
-#: supplier_app/models.py:342
+#: supplier_app/models.py:350
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
 #: templates/supplier_app/taxpayer-details.html:342
 msgid "City"
 msgstr "Ciudad"
 
-#: supplier_app/models.py:346
+#: supplier_app/models.py:354
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
 #: templates/supplier_app/taxpayer-details.html:345
 msgid "State"
 msgstr "Provincia"
 
-#: supplier_app/models.py:350
+#: supplier_app/models.py:358
 msgid "City name must only have letters"
 msgstr "La ciudad solo debe tener letras"
 
-#: supplier_app/models.py:367 templates/supplier_app/taxpayer-details.html:243
+#: supplier_app/models.py:375 templates/supplier_app/taxpayer-details.html:243
 msgid "Contact person"
 msgstr "Nombre y apellido"
 
-#: supplier_app/models.py:368 templates/supplier_app/taxpayer-details.html:246
+#: supplier_app/models.py:376 templates/supplier_app/taxpayer-details.html:246
 msgid "Phone number"
 msgstr "Número de teléfono"
 
-#: supplier_app/models.py:369 templates/registration/admins-list.html:29
+#: supplier_app/models.py:377 templates/registration/admins-list.html:29
 #: templates/supplier_app/taxpayer-details.html:266
 msgid "Email"
 msgstr "Email"
 
-#: supplier_app/models.py:370 templates/supplier_app/taxpayer-details.html:282
+#: supplier_app/models.py:378 templates/supplier_app/taxpayer-details.html:282
 msgid "Web site"
 msgstr "Sitio web"
 
-#: supplier_app/models.py:378
+#: supplier_app/models.py:386
 msgid "Bank account number"
 msgstr "CBU"
 
-#: supplier_app/models.py:382
+#: supplier_app/models.py:390
 msgid "Bank account must only have numbers"
 msgstr "La cuenta bancaria solo debe tener numeros"
 
-#: supplier_app/models.py:390 templates/supplier_app/taxpayer-details.html:164
+#: supplier_app/models.py:398 templates/supplier_app/taxpayer-details.html:164
 msgid "Bank name"
 msgstr "Banco"
 
-#: supplier_app/models.py:400
+#: supplier_app/models.py:408
 msgid "Bank account certificate"
 msgstr "Constancia de CBU"
 
-#: supplier_app/models.py:411
+#: supplier_app/models.py:419
 msgid "Transaction type"
 msgstr "Transacción"
 
-#: supplier_app/models.py:415
+#: supplier_app/models.py:423
 msgid "Account type"
 msgstr "Tipo de cuenta"
 
-#: supplier_app/models.py:419 templates/supplier_app/taxpayer-details.html:171
+#: supplier_app/models.py:427 templates/supplier_app/taxpayer-details.html:171
 msgid "Beneficiary"
 msgstr "Beneficiario"
 
@@ -3430,6 +3461,13 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid ""
+#~ "You are ready to start using BriteSu.\n"
+#~ "You can access the platform now and upload your invoices.\n"
+#~ msgstr ""
+#~ "Ya estás habilitado en BriteSU.\n"
+#~ "Ahora podes acceder a la plataforma y subir tus facturas.\n"
 
 #~ msgid "AP Admin"
 #~ msgstr "AP Admin"

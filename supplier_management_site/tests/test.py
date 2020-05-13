@@ -15,6 +15,7 @@ from invoices_app import (
 )
 
 from supplier_app.constants.email_notifications import email_notifications
+from supplier_app.models import InvitingBuyer
 
 from supplier_app.tests.factory_boy import (
     CompanyUserPermissionFactory,
@@ -32,7 +33,7 @@ from utils.send_email import (
     get_user_emails_by_tax_payer_id,
     send_email_notification,
     taxpayer_notification,
-)
+    get_buyer_emails_by_tax_payer_id, buyer_notification)
 
 
 class EmailUtilsTest(TestCase):
@@ -120,6 +121,19 @@ class EmailUtilsTest(TestCase):
         self.assertEqual(mail.outbox[0].to, recipient_list)
         self.assertEqual(mail.outbox[0].subject, 'Testing title')
 
+    def test_send_email_notification_to_buyers_from_same_company(self):
+        subject = 'Testing title'
+        message = 'Testing message'
+        InvitingBuyer.objects.create(company=self.company2, inviting_buyer=self.user1)
+        recipient_list = get_buyer_emails_by_tax_payer_id(self.tax_payer3.id)
+        send_email_notification(subject, message, recipient_list)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox[0].to), 1)
+        self.assertEqual(mail.outbox[0].to, recipient_list)
+        self.assertEqual(mail.outbox[0].subject, 'Testing title')
+
+
     @parameterized.expand([
         ('taxpayer_approval',),
         ('taxpayer_change_required',),
@@ -127,6 +141,17 @@ class EmailUtilsTest(TestCase):
     ])
     def test_taxpayer_email_notification(self, change_type):
         taxpayer_notification(self.tax_payer1, change_type)
+        self.assertEqual(
+            email_notifications[change_type]['subject'],
+            mail.outbox[0].subject,
+        )
+
+    @parameterized.expand([
+        ('buyer_notification',),
+    ])
+    def test_taxpayer_email_notification(self, change_type):
+        InvitingBuyer.objects.create(company=self.tax_payer1.company, inviting_buyer=self.user1)
+        buyer_notification(self.tax_payer1, change_type)
         self.assertEqual(
             email_notifications[change_type]['subject'],
             mail.outbox[0].subject,
