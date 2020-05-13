@@ -61,7 +61,7 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 AUTHENTICATION_BACKENDS = (
-   'supplier_management_site.auth.eventbrite_ar.EventbriteAuth2',
+   'supplier_management_site.auth.eventbrite_custom.LanguageAwareEventbriteOAuth2',
    'social_core.backends.open_id.OpenIdAuth',
    'social_core.backends.google.GoogleOpenId',
    'social_core.backends.google.GoogleOAuth2',
