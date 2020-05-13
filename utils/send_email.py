@@ -3,10 +3,13 @@ from typing import Tuple, List
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils import translation
 from django.utils.html import strip_tags
 from django.utils.translation import (
     ugettext_lazy as _,
 )
+from django.contrib import messages
+from supplier_app.constants.custom_messages import EMAIL_ERROR_MESSAGE
 from supplier_app.models import (
     CompanyUserPermission,
     TaxPayer,
@@ -18,6 +21,7 @@ from utils.exceptions import CouldNotSendEmailError
 from supplier_app.constants.email_notifications import (
     SUPPLIER_HOME_URL,
 )
+from django.utils.translation import to_locale, get_language
 
 
 @shared_task(ignore_result=True)
@@ -70,10 +74,19 @@ def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, 
     return message, subject
 
 
+def get_supplier_language_by_taxpayer(taxpayer):
+    company_id = TaxPayer.objects.get(pk=taxpayer.id).company.id
+    supplier_language = CompanyUserPermission.objects.get(pk=company_id).user.preferred_language
+    return supplier_language
+
+
 def taxpayer_notification(taxpayer, change_type):
+    taxpayer_language = to_locale(get_language())
+    translation.activate(get_supplier_language_by_taxpayer(taxpayer))
     message, subject = get_message_and_subject(change_type, taxpayer)
     recipient_list = get_user_emails_by_tax_payer_id(taxpayer.id)
     send_email_notification.apply_async([subject, message, recipient_list])
+    translation.activate(taxpayer_language)
 
 
 def buyer_notification(taxpayer, change_type):
