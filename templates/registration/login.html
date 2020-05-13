@@ -25,7 +25,10 @@
               <img src="{% static 'images/Eventbrite_logo_2018.png' %}" width="100" heigth=50 alt="">
             </a>
           </div>
-          
+          <div class="row d-flex justify-content-center">
+            <p class="mr-3 text-white">{% trans "Choose your language" %}:</p>
+            {% include 'language_selector.html' %}
+          </div>
         </div>
       </div>
     </div>
