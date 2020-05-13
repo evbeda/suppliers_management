@@ -406,7 +406,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="row justify-content-around">
-                        {% if taxpayer.taxpayer_state == 'PENDING'%}
+                        {% if taxpayer.taxpayer_state == 'PENDING' or taxpayer.taxpayer_state == 'CHANGES PENDING' %}
                         {% include 'supplier_app/AP/in-progress-taxpayer.html'%}
                         {% endif %}
                         {% if taxpayer.taxpayer_state == 'IN PROGRESS'%}
