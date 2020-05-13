@@ -150,6 +150,7 @@ class EmailUtilsTest(TestCase):
         ('buyer_notification',),
     ])
     def test_taxpayer_email_notification(self, change_type):
+        InvitingBuyer.objects.create(company=self.tax_payer1.company, inviting_buyer=self.user1)
         buyer_notification(self.tax_payer1, change_type)
         self.assertEqual(
             email_notifications[change_type]['subject'],
