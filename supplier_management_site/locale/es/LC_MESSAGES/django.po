@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 15:14+0000\n"
+"POT-Creation-Date: 2020-05-14 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2122,8 +2122,6 @@ msgid "Your taxpayer is in progress now"
 msgstr "Su entidad fiscal está en progreso"
 
 #: supplier_app/constants/email_notifications.py:66
-#, fuzzy
-#| msgid "Your taxpayer is now in progress to be approved"
 msgid "Your taxpayer is now in progress to be approved\n"
 msgstr "Su entidad fiscal está en progreso para ser aprobada"
 
