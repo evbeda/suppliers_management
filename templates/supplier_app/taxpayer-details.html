@@ -368,8 +368,12 @@
                     </div>
                 </div>
 
-                <div class="row justify-content-end">
+                <div class="row">
                     {% if is_AP %}
+                    <a class="btn btn-danger mr-auto" href="{% url 'pdf-web' taxpayer_id=taxpayer.id %}">
+                        {% trans "View PDF" %}
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
                     <a href="{% url 'taxpayer-history' taxpayer_id=taxpayer.id %}" class="btn btn-primary">
                         {% trans "Taxpayer History" %}
                         <i class="fas fa-history"></i>
@@ -433,5 +437,6 @@
         </div>
     </div>
 </div>
+
 
 {% endblock %}

@@ -79,6 +79,7 @@ from supplier_app.models import (
     TaxPayerArgentina,
     TaxpayerComment,
     ContactInformation,
+    InvitingBuyer,
 )
 from supplier_app.tests import (
     file_mock,
@@ -775,6 +776,22 @@ class TestSupplierDetailsView(TestCase):
         self.assertNotContains(
             response, 'Edit',
         )
+    
+    def test_pdf(self):
+        
+        InvitingBuyer.objects.create(company=self.taxpayer.company, inviting_buyer=self.ap_user)
+        response = self.client.get(
+            reverse_lazy(
+            'pdf-web',
+            kwargs=self.kwargs
+            )
+        )
+
+        self.assertEqual(
+            self.taxpayer,
+            response.context['taxpayer']
+        )
+        
 
     @parameterized.expand([
         ("APPROVED", "1"),

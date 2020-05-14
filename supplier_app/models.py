@@ -76,6 +76,7 @@ class InvitingBuyer(models.Model):
         on_delete=models.CASCADE,
         default=None
     )
+    creation_date = models.DateTimeField(auto_now_add=True)
 
 class CompanyUserPermission(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

@@ -4,10 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db import DatabaseError
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.views.generic.edit import (
     CreateView,
     FormView,
@@ -84,9 +84,10 @@ from users_app import (
     COMPANY_USER_CAN_APPROVE_PERM,
     SUPPLIER_ROLE_PERM,
 )
+from users_app.models import User
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import company_invitation_notification
-
+from utils.htmltopdf import render_to_pdf
 
 class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
@@ -570,3 +571,34 @@ def change_taxpayer_status(request, taxpayer_id):
                 'taxpayer_id': taxpayer_id
             }
         ))
+
+class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
+    template_name = 'supplier_app/html-to-pdf-page.html'
+    permission_required = (CAN_VIEW_TAXPAYER_PERM)
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).company
+        context['company'] = company
+        context['buyer'] = InvitingBuyer.objects.get(company=company.id)
+        supplier = TaxPayerArgentina.history.filter(id=self.kwargs['taxpayer_id'])
+        context['supplier'] = supplier[len(supplier)-1]
+        approved_object_query = TaxPayer.history.filter(id=self.kwargs['taxpayer_id'], taxpayer_state='APPROVED')
+        approved_object = None
+        context['approved_by'] = None
+        if len(approved_object_query) > 0:
+            approved_object = approved_object_query[0]
+            context['approved_by'] = User.objects.get(pk=approved_object.history_user_id)
+        context['approved_object'] = approved_object
+        context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        context['taxpayer_address'] = context['taxpayer'].address_set.get()
+        context['taxpayer_contact'] = context['taxpayer'].contactinformation_set.get()
+        context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        pdf = render_to_pdf('supplier_app/html-to-pdf-page.html', self.get_context_data())
+        return HttpResponse(pdf, content_type='application/pdf')
