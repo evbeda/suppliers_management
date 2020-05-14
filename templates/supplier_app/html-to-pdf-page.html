@@ -1,0 +1,265 @@
+{% load i18n %}
+
+<!DOCTYPE HTML PUBLIC>
+<html>
+    <head>
+        <title>{{taxpayer.business_name}}</title>
+        <style type="text/css">
+            body {
+                font-weight: 200;
+                font-size: 14px;
+            }
+            .company-title{
+                font-size: 30px;
+                font-weight: 200;
+                text-align: center;
+                color: rgb(30, 10, 61);
+            }
+            .header {
+                font-size: 20px;
+                font-weight: 100;
+                text-align: center;
+                color: rgb(255, 125, 0);
+            }
+            .details {
+                padding: 10px 20px 0px 20px;
+                text-align: left !important;
+                /*margin-left: 40%;*/
+            }
+            .hrItem {
+                border: none;
+                height: 1px;
+                /* Set the hr color */
+                color: rgb(30, 10, 61); /* old IE */
+                background-color: #fff; /* Modern Browsers */
+            }
+            .text-center{
+                text-align: center;
+            }
+            table{
+                margin: 25px 0 0 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='wrapper'>
+            <div class='company-title'>
+                <p class='title'>{{taxpayer.business_name}}</p>
+            </div>
+            <!-- <p>{% trans "Approved by: " %}{{buyer.email}}</p>
+            <p>{% trans "Company name: " %}{{company.name}}</p> -->
+        
+        <!-- AP INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "Administrative Information" %}</p>
+        </div>
+        <table class="">
+            <tr>
+                <th class="text-center">{% trans "Company name: " %}</th> 
+            </tr>
+            <tr>
+                <td class="text-center">{{company.name}}</td>
+            </tr>
+        </table>
+        <table class="">
+            <tr>
+                <th class="text-center">{% trans "Invited by" %}</th>
+                <th class="text-center">{% trans "Invitation Date" %}:</th> 
+                
+            </tr>
+            <tr>
+                <td class="text-center">{{buyer.inviting_buyer.email}}</td>
+                <td class="text-center">{{buyer.creation_date}}</td>
+                
+            </tr>
+        </table>
+
+        <table class="">
+            <tr>
+                <th class="text-center">{% trans "Approved by" %}</th>
+                <th class="text-center">{% trans "Approved date" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{approved_by}}</td>
+                <td class="text-center">{{approved_object.history_date}}</td>
+            </tr>
+        </table>
+        
+
+
+        <!-- SUPPLIER INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "The following information corresponds to this Supplier" %}</p>
+        </div>
+
+        <table class="">
+            <tr>
+                <th class="text-center">{% trans "Supplier" %}</th>
+                <th class="text-center">{% trans "Created as" %}:</th> 
+                <th class="text-center">{% trans "Creation date" %}</th> 
+            </tr>
+            <tr>
+                <td class="text-center">{{supplier.history_user}}</td>
+                <td class="text-center">{{supplier.business_name}}</td>
+                <td class="text-center">{{supplier.history_date}}</td>
+            </tr>
+        </table>
+
+        <!-- GENERAL INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "General information" %}</p>
+        </div>
+        <table class="">
+            <tr>
+                <th class="text-center">
+                    Wrokday ID: 
+                </th>
+                <th class="text-center">
+                    {% trans "Business name" %}: 
+                </th>
+                <th class="text-center">
+                    {% trans "Taxpayer Identification Number" %}: 
+                </th>
+            </tr>
+            <tr>
+                <td class="text-center">{% if taxpayer.workday_id%}
+                    {{taxpayer.workday_id}}
+                    {% else %}
+                    {% trans "No workday id" %}
+                    {% endif%}</td>
+                <td class="text-center">{{taxpayer.business_name}}</td>
+                <td class="text-center">{{taxpayer.cuit}}</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Payment Type" %}</th>
+                <th class="text-center">{% trans "Payment Term" %}</th>
+                <th class="text-center">{% trans "Country" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer.get_payment_type_display}}</td>
+                <td class="text-center">{{taxpayer.payment_term}}</td>
+                <td class="text-center">{{taxpayer.country}}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th class="text-center">{% trans "EB entities" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{% for eb_entity in taxpayer.eb_entities%}
+                    <p>{{eb_entity}}</p>
+                    {% endfor%}</td>
+            </tr>
+        </table>
+
+        <!-- BANK INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "Bank info" %}</p>
+        </div>
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Bank name" %}</th>
+                <th class="text-center">{% trans "Bank code" %}</th>
+                <th class="text-center">{% trans "Bank transaction type" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_bank_account.get_bank_info_display}}</td>
+                <td class="text-center">{{taxpayer_bank_account.bank_info}}</td>
+                <td class="text-center">{{taxpayer_bank_account.get_bank_transaction_type_display}}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Beneficiary" %}</th>
+                <th class="text-center">{% trans "Bank account type" %}</th>
+                <th class="text-center">{% trans "Taxpayer condition" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_bank_account.bank_beneficiary}}</td>
+                <td class="text-center">{{taxpayer_bank_account.get_bank_account_type_display}}</td>
+                <td class="text-center">{{taxpayer.get_taxpayer_condition_display}}</td>
+            </tr>
+        </table>
+        
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Account number" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_bank_account.bank_account_number}}</td>
+            </tr>
+        </table>
+
+        <!-- CONTACT INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "Contact information" %}</p>
+        </div>
+
+
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Contact person" %}</th>
+                <th class="text-center">{% trans "Phone number" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_contact.contact_person}}</td>
+                <td class="text-center">{{taxpayer_contact.phone_number}}</td>
+            </tr>
+        </table>
+        
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Email" %}</th>
+                <th class="text-center">{% trans "Web site" %}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_contact.email}}</td>
+                <td class="text-center">{{taxpayer_contact.website}}</td>
+            </tr>
+        </table>
+
+        <!-- ADDRESS INFORMATION STARTS HERE -->
+        <hr class='hrItem' />
+        <div class="header">
+            <p>{% trans "Address information" %}</p>
+        </div>
+
+
+        <table>
+            <tr>
+                <th class="text-center">{% trans "Street"%}</th>
+                <th class="text-center">{% trans "Number"%}</th>
+                <th class="text-center">{% trans "Zip_Code"%}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_address.street}}</td>
+                <td class="text-center">{{taxpayer_address.number}}</td>
+                <td class="text-center">{{taxpayer_address.zip_code}}</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <th class="text-center">{% trans "City"%}</th>
+                <th class="text-center">{% trans "State"%}</th>
+                <th class="text-center">{% trans "Country"%}</th>
+            </tr>
+            <tr>
+                <td class="text-center">{{taxpayer_address.city}}</td>
+                <td class="text-center">{{taxpayer_address.state}}</td>
+                <td class="text-center">{{taxpayer_address.country}}</td>
+            </tr>
+        </table>
+
+        
+    </div>
+    </body>
+</html>
