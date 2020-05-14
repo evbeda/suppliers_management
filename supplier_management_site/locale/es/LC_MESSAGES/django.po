@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 17:28+0000\n"
+"POT-Creation-Date: 2020-05-14 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2075,13 +2075,6 @@ msgid ""
 "that on your invoice as reference.\n"
 " Finally, send your invoice to payables-ar@eventbrite.com."
 msgstr ""
-"Instrucciones a seguir, "
-"\n"
-"Primero, tu contacto de Eventbrite se contactara contigo para pasarte su numero de Orden de Compra. "
-"\n"
-"Luego una vez que recibas el numero de Orden de Compra, deberás incluirlo "
-"en tu factura como referencia. "
-" Finalmente, envía tu factura a payables-ar@eventbrite.com."
 
 #: supplier_app/constants/email_notifications.py:33
 #: supplier_app/constants/email_notifications.py:46
@@ -2129,7 +2122,9 @@ msgid "Your taxpayer is in progress now"
 msgstr "Su entidad fiscal está en progreso"
 
 #: supplier_app/constants/email_notifications.py:66
-msgid "Your taxpayer is now in progress to be approved"
+#, fuzzy
+#| msgid "Your taxpayer is now in progress to be approved"
+msgid "Your taxpayer is now in progress to be approved\n"
 msgstr "Su entidad fiscal está en progreso para ser aprobada"
 
 #: supplier_app/constants/email_notifications.py:68
@@ -2907,8 +2902,12 @@ msgid "Options"
 msgstr "Opciones"
 
 #: templates/supplier_app/supplier-home.html:49
-msgid "Details"
-msgstr "Detalles"
+#: templates/supplier_app/taxpayer-details.html:32
+#: templates/supplier_app/taxpayer-details.html:155
+#: templates/supplier_app/taxpayer-details.html:232
+#: templates/supplier_app/taxpayer-details.html:303
+msgid "Edit"
+msgstr "Editar"
 
 #: templates/supplier_app/taxpayer-details.html:15
 msgid "You must set workday id to the taxpayer"
@@ -2917,13 +2916,6 @@ msgstr "Debes ponerle un workday id a la entidad fiscal"
 #: templates/supplier_app/taxpayer-details.html:27
 msgid "General information"
 msgstr "Información general"
-
-#: templates/supplier_app/taxpayer-details.html:32
-#: templates/supplier_app/taxpayer-details.html:155
-#: templates/supplier_app/taxpayer-details.html:232
-#: templates/supplier_app/taxpayer-details.html:303
-msgid "Edit"
-msgstr "Editar"
 
 #: templates/supplier_app/taxpayer-details.html:52
 msgid "Workday id"
@@ -3049,6 +3041,9 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid "Details"
+#~ msgstr "Detalles"
 
 #~ msgid "Instructions on next steps,"
 #~ msgstr "Instrucciones a seguir,"
