@@ -587,8 +587,11 @@ class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, Tem
         supplier = TaxPayerArgentina.history.filter(id=self.kwargs['taxpayer_id'])
         context['supplier'] = supplier[len(supplier)-1]
         approved_object_query = TaxPayer.history.filter(id=self.kwargs['taxpayer_id'], taxpayer_state='APPROVED')
-        approved_object = approved_object_query[len(approved_object_query)-1]
-        context['approved_by'] = User.objects.get(pk=approved_object.history_user_id)
+        approved_object = None
+        context['approved_by'] = None
+        if len(approved_object_query) > 0:
+            approved_object = approved_object_query[0]
+            context['approved_by'] = User.objects.get(pk=approved_object.history_user_id)
         context['approved_object'] = approved_object
         context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
         context['taxpayer_address'] = context['taxpayer'].address_set.get()

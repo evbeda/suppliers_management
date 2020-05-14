@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 20:58+0000\n"
+"POT-Creation-Date: 2020-05-14 21:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1959,8 +1959,8 @@ msgstr "Contribuinte"
 #: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:30
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
-#: templates/supplier_app/html-to-pdf-page.html:141
-#: templates/supplier_app/html-to-pdf-page.html:253
+#: templates/supplier_app/html-to-pdf-page.html:153
+#: templates/supplier_app/html-to-pdf-page.html:265
 #: templates/supplier_app/taxpayer-details.html:107
 #: templates/supplier_app/taxpayer-details.html:348
 msgid "Country"
@@ -2334,13 +2334,13 @@ msgstr "Nome"
 #: supplier_app/models.py:117
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
-#: templates/supplier_app/html-to-pdf-page.html:121
+#: templates/supplier_app/html-to-pdf-page.html:133
 #: templates/supplier_app/supplier-home.html:26
 #: templates/supplier_app/taxpayer-details.html:55
 msgid "Business name"
 msgstr "Nome da empresa"
 
-#: supplier_app/models.py:129 templates/supplier_app/html-to-pdf-page.html:101
+#: supplier_app/models.py:129 templates/supplier_app/html-to-pdf-page.html:113
 msgid "Creation date"
 msgstr "Data de criação"
 
@@ -2392,14 +2392,14 @@ msgstr "Certificado sem retenção na fonte de SUSS"
 
 #: supplier_app/models.py:345
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
-#: templates/supplier_app/html-to-pdf-page.html:239
+#: templates/supplier_app/html-to-pdf-page.html:251
 #: templates/supplier_app/taxpayer-details.html:314
 msgid "Street"
 msgstr "Rua"
 
 #: supplier_app/models.py:347
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
-#: templates/supplier_app/html-to-pdf-page.html:240
+#: templates/supplier_app/html-to-pdf-page.html:252
 #: templates/supplier_app/taxpayer-details.html:317
 msgid "Number"
 msgstr "Número"
@@ -2411,14 +2411,14 @@ msgstr "Código postal"
 
 #: supplier_app/models.py:351
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
-#: templates/supplier_app/html-to-pdf-page.html:251
+#: templates/supplier_app/html-to-pdf-page.html:263
 #: templates/supplier_app/taxpayer-details.html:342
 msgid "City"
 msgstr "Cidade"
 
 #: supplier_app/models.py:355
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
-#: templates/supplier_app/html-to-pdf-page.html:252
+#: templates/supplier_app/html-to-pdf-page.html:264
 #: templates/supplier_app/taxpayer-details.html:345
 msgid "State"
 msgstr "Estado"
@@ -2427,12 +2427,12 @@ msgstr "Estado"
 msgid "City name must only have letters"
 msgstr "O nome da cidade deve conter apenas letras"
 
-#: supplier_app/models.py:376 templates/supplier_app/html-to-pdf-page.html:210
+#: supplier_app/models.py:376 templates/supplier_app/html-to-pdf-page.html:222
 #: templates/supplier_app/taxpayer-details.html:243
 msgid "Contact person"
 msgstr ""
 
-#: supplier_app/models.py:377 templates/supplier_app/html-to-pdf-page.html:211
+#: supplier_app/models.py:377 templates/supplier_app/html-to-pdf-page.html:223
 #: templates/supplier_app/taxpayer-details.html:246
 #, fuzzy
 #| msgid "PO number"
@@ -2440,12 +2440,12 @@ msgid "Phone number"
 msgstr "Número do pedido"
 
 #: supplier_app/models.py:378 templates/registration/admins-list.html:29
-#: templates/supplier_app/html-to-pdf-page.html:221
+#: templates/supplier_app/html-to-pdf-page.html:233
 #: templates/supplier_app/taxpayer-details.html:266
 msgid "Email"
 msgstr "O email"
 
-#: supplier_app/models.py:379 templates/supplier_app/html-to-pdf-page.html:222
+#: supplier_app/models.py:379 templates/supplier_app/html-to-pdf-page.html:234
 #: templates/supplier_app/taxpayer-details.html:282
 msgid "Web site"
 msgstr ""
@@ -2458,7 +2458,7 @@ msgstr "número da conta de banco"
 msgid "Bank account must only have numbers"
 msgstr "número da conta de banco"
 
-#: supplier_app/models.py:399 templates/supplier_app/html-to-pdf-page.html:168
+#: supplier_app/models.py:399 templates/supplier_app/html-to-pdf-page.html:180
 #: templates/supplier_app/taxpayer-details.html:164
 msgid "Bank name"
 msgstr "nome do banco"
@@ -2479,7 +2479,7 @@ msgstr "Data de criação"
 msgid "Account type"
 msgstr "Número da conta"
 
-#: supplier_app/models.py:428 templates/supplier_app/html-to-pdf-page.html:181
+#: supplier_app/models.py:428 templates/supplier_app/html-to-pdf-page.html:193
 #: templates/supplier_app/taxpayer-details.html:171
 msgid "Beneficiary"
 msgstr ""
@@ -2747,7 +2747,7 @@ msgstr "Crie um"
 msgid "Buyer"
 msgstr "Comprador"
 
-#: templates/navbar.html:86 templates/supplier_app/html-to-pdf-page.html:99
+#: templates/navbar.html:86 templates/supplier_app/html-to-pdf-page.html:111
 msgid "Supplier"
 msgstr "Fornecedor"
 
@@ -2905,13 +2905,13 @@ msgid "Taxpayer identification number"
 msgstr "Número de Identificação Fiscal"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:19
-#: templates/supplier_app/html-to-pdf-page.html:139
+#: templates/supplier_app/html-to-pdf-page.html:151
 #: templates/supplier_app/taxpayer-details.html:82
 msgid "Payment Type"
 msgstr "Tipo de pagamento"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:20
-#: templates/supplier_app/html-to-pdf-page.html:140
+#: templates/supplier_app/html-to-pdf-page.html:152
 #: templates/supplier_app/taxpayer-details.html:85
 msgid "Payment Term"
 msgstr "Termo de pagamento"
@@ -2992,7 +2992,7 @@ msgid "Contact Info"
 msgstr ""
 
 #: templates/supplier_app/ap-taxpayers.html:23
-#: templates/supplier_app/html-to-pdf-page.html:124
+#: templates/supplier_app/html-to-pdf-page.html:136
 #: templates/supplier_app/taxpayer-details.html:58
 msgid "Taxpayer Identification Number"
 msgstr "Número de Identificação Fiscal"
@@ -3074,80 +3074,87 @@ msgstr "Aprovado"
 msgid "Approved date"
 msgstr "Aprovado"
 
-#: templates/supplier_app/html-to-pdf-page.html:94
+#: templates/supplier_app/html-to-pdf-page.html:88
+#: templates/supplier_app/html-to-pdf-page.html:95
+#, fuzzy
+#| msgid "Approved"
+msgid "Not Approved yet"
+msgstr "Aprovado"
+
+#: templates/supplier_app/html-to-pdf-page.html:106
 msgid "The following information corresponds to this Supplier"
 msgstr ""
 
-#: templates/supplier_app/html-to-pdf-page.html:100
+#: templates/supplier_app/html-to-pdf-page.html:112
 #, fuzzy
 #| msgid "Creation date"
 msgid "Created as"
 msgstr "Data de criação"
 
-#: templates/supplier_app/html-to-pdf-page.html:113
+#: templates/supplier_app/html-to-pdf-page.html:125
 #: templates/supplier_app/taxpayer-details.html:27
 msgid "General information"
 msgstr "Informação geral"
 
-#: templates/supplier_app/html-to-pdf-page.html:131
+#: templates/supplier_app/html-to-pdf-page.html:143
 #: templates/supplier_app/taxpayer-details.html:68
 msgid "No workday id"
 msgstr ""
 
-#: templates/supplier_app/html-to-pdf-page.html:152
+#: templates/supplier_app/html-to-pdf-page.html:164
 #: templates/supplier_app/taxpayer-details.html:88
 msgid "EB entities"
 msgstr "Entidades EB"
 
-#: templates/supplier_app/html-to-pdf-page.html:164
+#: templates/supplier_app/html-to-pdf-page.html:176
 #: templates/supplier_app/taxpayer-details.html:150
 msgid "Bank info"
 msgstr "informação bancária"
 
-#: templates/supplier_app/html-to-pdf-page.html:169
+#: templates/supplier_app/html-to-pdf-page.html:181
 #: templates/supplier_app/taxpayer-details.html:199
 msgid "Bank code"
 msgstr "Código bancário"
 
-#: templates/supplier_app/html-to-pdf-page.html:170
+#: templates/supplier_app/html-to-pdf-page.html:182
 #: templates/supplier_app/taxpayer-details.html:185
 #, fuzzy
 #| msgid "Creation date"
 msgid "Bank transaction type"
 msgstr "Data de criação"
 
-#: templates/supplier_app/html-to-pdf-page.html:182
+#: templates/supplier_app/html-to-pdf-page.html:194
 #: templates/supplier_app/taxpayer-details.html:178
 #, fuzzy
 #| msgid "Bank account"
 msgid "Bank account type"
 msgstr "conta bancária"
 
-#: templates/supplier_app/html-to-pdf-page.html:183
+#: templates/supplier_app/html-to-pdf-page.html:195
 #: templates/supplier_app/taxpayer-details.html:192
 #, fuzzy
 #| msgid "Taxpayer info"
 msgid "Taxpayer condition"
 msgstr "Informações do contribuinte"
 
-#: templates/supplier_app/html-to-pdf-page.html:194
+#: templates/supplier_app/html-to-pdf-page.html:206
 #: templates/supplier_app/taxpayer-details.html:205
 msgid "Account number"
 msgstr "Número da conta"
 
-#: templates/supplier_app/html-to-pdf-page.html:204
+#: templates/supplier_app/html-to-pdf-page.html:216
 #: templates/supplier_app/taxpayer-details.html:227
 #, fuzzy
 #| msgid "General information"
 msgid "Contact information"
 msgstr "Informação geral"
 
-#: templates/supplier_app/html-to-pdf-page.html:233
+#: templates/supplier_app/html-to-pdf-page.html:245
 #: templates/supplier_app/taxpayer-details.html:298
 msgid "Address information"
 msgstr "Informação de Endereço"
 
-#: templates/supplier_app/html-to-pdf-page.html:241
+#: templates/supplier_app/html-to-pdf-page.html:253
 #: templates/supplier_app/taxpayer-details.html:320
 msgid "Zip_Code"
 msgstr "Código postal"
@@ -3196,7 +3203,7 @@ msgstr "CBU"
 #: templates/supplier_app/taxpayer-details.html:374
 #, fuzzy
 #| msgid "View PO"
-msgid "View in PDF"
+msgid "View PDF"
 msgstr "Exibir PO"
 
 #: users_app/forms.py:14

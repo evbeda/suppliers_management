@@ -81,8 +81,20 @@
                 <th class="text-center">{% trans "Approved date" %}</th>
             </tr>
             <tr>
-                <td class="text-center">{{approved_by}}</td>
-                <td class="text-center">{{approved_object.history_date}}</td>
+                <td class="text-center">
+                    {% if approved_by %}
+                    {{approved_by}}
+                    {% else %}
+                    {% trans "Not Approved yet" %}
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if approved_object.history_date %}
+                    {{approved_object.history_date}}
+                    {% else %}
+                    {% trans "Not Approved yet" %}
+                    {% endif %}
+                </td>
             </tr>
         </table>
         
