@@ -76,7 +76,7 @@ def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, 
 
 def get_supplier_language_by_taxpayer(taxpayer):
     company_id = TaxPayer.objects.get(pk=taxpayer.id).company.id
-    supplier_language = CompanyUserPermission.objects.get(pk=company_id).user.preferred_language
+    supplier_language = CompanyUserPermission.objects.filter(company_id=company_id).order_by('user_id').reverse()[0].user.preferred_language
     return supplier_language
 
 
