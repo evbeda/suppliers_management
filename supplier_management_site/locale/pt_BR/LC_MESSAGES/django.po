@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-13 17:28+0000\n"
+"POT-Creation-Date: 2020-05-14 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2998,8 +2998,12 @@ msgid "Options"
 msgstr "Açao"
 
 #: templates/supplier_app/supplier-home.html:49
-msgid "Details"
-msgstr "Detalhes"
+#: templates/supplier_app/taxpayer-details.html:32
+#: templates/supplier_app/taxpayer-details.html:155
+#: templates/supplier_app/taxpayer-details.html:232
+#: templates/supplier_app/taxpayer-details.html:303
+msgid "Edit"
+msgstr "Editar"
 
 #: templates/supplier_app/taxpayer-details.html:15
 msgid "You must set workday id to the taxpayer"
@@ -3008,13 +3012,6 @@ msgstr "Você deve definir o ID do dia útil como contribuinte"
 #: templates/supplier_app/taxpayer-details.html:27
 msgid "General information"
 msgstr "Informação geral"
-
-#: templates/supplier_app/taxpayer-details.html:32
-#: templates/supplier_app/taxpayer-details.html:155
-#: templates/supplier_app/taxpayer-details.html:232
-#: templates/supplier_app/taxpayer-details.html:303
-msgid "Edit"
-msgstr "Editar"
 
 #: templates/supplier_app/taxpayer-details.html:52
 msgid "Workday id"
@@ -3146,6 +3143,9 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#~ msgid "Details"
+#~ msgstr "Detalhes"
 
 #~ msgid ""
 #~ "You are ready to start using BriteSu.\n"
