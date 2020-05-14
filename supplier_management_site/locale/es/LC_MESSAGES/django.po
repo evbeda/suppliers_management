@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-14 15:22+0000\n"
+"POT-Creation-Date: 2020-05-14 19:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2123,7 +2123,7 @@ msgstr "Su entidad fiscal está en progreso"
 
 #: supplier_app/constants/email_notifications.py:66
 msgid "Your taxpayer is now in progress to be approved\n"
-msgstr "Su entidad fiscal está en progreso para ser aprobada"
+msgstr "Su entidad fiscal está en progreso para ser aprobada\n"
 
 #: supplier_app/constants/email_notifications.py:68
 msgid ""
@@ -2184,6 +2184,7 @@ msgid "Changes pending"
 msgstr "Cambios pendientes"
 
 #: supplier_app/constants/taxpayer_status.py:37
+#: templates/supplier_app/AP/in-progress-taxpayer.html:6
 msgid "In Progress"
 msgstr "En Progreso"
 
@@ -2481,6 +2482,7 @@ msgid "Pay"
 msgstr "Pagar"
 
 #: templates/invoices_app/invoice_detail.html:138
+#: templates/supplier_app/AP/approve-taxpayer.html:8
 msgid "Approve"
 msgstr "Aprobado"
 
@@ -2766,6 +2768,10 @@ msgstr "Portugués"
 #: templates/supplier_app/AP/company_list.html:62
 msgid "Invite"
 msgstr "Invitar"
+
+#: templates/supplier_app/AP/deny-taxpayer.html:6
+msgid "Deny"
+msgstr "Denegado"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:9
 #: templates/supplier_app/taxpayer-details.html:374
