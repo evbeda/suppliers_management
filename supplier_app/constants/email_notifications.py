@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 COMPANY_INVITATION_URL = '/users/supplier/company/join'
-SUPPLIER_HOME_URL = '/suppliersite/supplier'
+SUPPLIER_HOME_URL = '/users/supplier'
 HOME_URL = '/'
 
 email_notifications = {
