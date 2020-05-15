@@ -372,7 +372,7 @@
                     {% if is_AP %}
                     <div class="mr-auto">
                         {% if taxpayer.taxpayer_state == 'APPROVED' %}
-                        <a class="btn btn-danger " href="{% url 'pdf-web' taxpayer_id=taxpayer.id %}">
+                        <a class="btn btn-danger " target="_blank" href="{% url 'pdf-web' taxpayer_id=taxpayer.id %}">
                             {% trans "View PDF" %}
                             <i class="fas fa-file-pdf"></i>
                         </a>
