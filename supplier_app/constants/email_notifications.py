@@ -23,11 +23,11 @@ email_notifications = {
         'subject': _('Your taxpayer has been approved'),
         'body': {
             'upper_text': _(
-                'Instructions on next steps, \n'
-                "\nFirst, Soon your contact at Eventbrite will send you a Purchase Order Number."
-                "\n Then, Once you receive the Purchase Order Number, "
+                'Instructions on next steps, '
+                "First, Soon your contact at Eventbrite will send you a Purchase Order Number."
+                "Then, Once you receive the Purchase Order Number, "
                 "you'll need to include that on your invoice as reference."
-                "\n Finally, send your invoice to payables-ar@eventbrite.com."
+                "Finally, send your invoice to payables-ar@eventbrite.com."
             ),
             'lower_text': _('Thank you!'),
             'btn_text': _('Go to BriteSu'),
