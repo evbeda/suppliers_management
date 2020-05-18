@@ -738,15 +738,15 @@ class TestSupplierDetailsView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(
             response,
-            "CBU"
+            "Bank account certificate"
         )
         self.assertContains(
             response,
-            'AFIP certificate'
+            'AFIP registration certificate'
         )
         self.assertContains(
             response,
-            'Withholding taxes'
+            'Certificate of no income withholding'
         )
 
     def test_details_view_has_pending_button_when_AP_has_set_workday_id(self):
