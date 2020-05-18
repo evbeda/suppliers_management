@@ -2,7 +2,11 @@
 
 <form action="{% url 'set_user_language' %}" method="POST">
     {% csrf_token %}
-    <input name="next" type="hidden" value="{{ request.path }}" />
+    {% if 'join' in request.GET.next %}
+    <input name="next" type="hidden" value="{{ request.GET.next }}" />
+    {% else %}
+    <input name="next" type="hidden" value="/" />
+    {% endif %}
     <div class="dropdown pull-left">
         <a id="language-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
           {% if request.user.preferred_language == 'en' or LANGUAGE_CODE == 'en' %}
