@@ -3034,7 +3034,7 @@ msgstr "Condición Impositiva"
 #: templates/supplier_app/html-to-pdf-page.html:206
 #: templates/supplier_app/taxpayer-details.html:253
 msgid "Account number"
-msgstr "Número de cuenta"
+msgstr "CBU"
 
 #: templates/supplier_app/html-to-pdf-page.html:216
 #: templates/supplier_app/taxpayer-details.html:277
