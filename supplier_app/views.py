@@ -173,6 +173,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
 
     def post(self, request, *args, **kwargs):
         forms = self._create_forms_from_request(request)
+        
         if self.forms_are_valid(forms):
             return self.form_valid(forms)
         else:
@@ -242,6 +243,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         taxpayer = forms['taxpayer_form'].save(commit=False)
         company = Company.objects.get(companyuserpermission__user=self.request.user)
         taxpayer.company = company
+        
         taxpayer.save()
         eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
         for eb_entity in eb_entities:

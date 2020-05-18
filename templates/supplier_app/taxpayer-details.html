@@ -117,22 +117,70 @@
                             <p class="card-text">{{taxpayer.country}}</p>
                         </div>
                         <div class="col-md-4">
+
+                            <!-- AFIP CERTIFICATE -->
                             <a target="_blank"
                                 href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">
                                 <span class="badge badge-info">
-                                    {% trans "AFIP certificate" %}
+                                    {% trans "AFIP registration certificate" %}
                                     <i class="fa fa-eye ml-2"></i>
                                 </span>
                             </a>
+
+                            <!-- IIBB CERTIFICATE -->
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.iibb_registration_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "IIBB registration certificate" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+
+                            <!-- WITHOLDING TAXES -->
                             {% if taxpayer.witholding_taxes_file %}
                             <a target="_blank"
                                 href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">
                                 <span class="badge badge-info">
-                                    {% trans "Withholding taxes" %}
+                                    {% trans "Certificate of no income withholding" %}
                                     <i class="fa fa-eye ml-2"></i>
                                 </span>
                             </a>
                             {% endif %}
+
+                            <!-- AFIP NO RETENTION -->
+                            {% if taxpayer.afip_no_retention_taxes_file %}
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.afip_no_retention_taxes_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "AFIP No Retention" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+                            {% endif %}
+
+                            <!-- IIBB NO RETENTION -->
+                            {% if taxpayer.iibb_no_retention_taxes_file %}
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.iibb_no_retention_taxes_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "IIBB No Retention" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+                            {% endif %}
+
+                            <!-- WITHOLDING SUSS -->
+                            {% if taxpayer.witholding_suss_file %}
+                            <a target="_blank"
+                                href="http://docs.google.com/gview?url={{ taxpayer.witholding_suss_file.url }}">
+                                <span class="badge badge-info">
+                                    {% trans "Certificate of no SUSS withholding" %}
+                                    <i class="fa fa-eye ml-2"></i>
+                                </span>
+                            </a>
+                            {% endif %}
+
+                            
                             <div class="col-md-5">
 
                             </div>
@@ -212,10 +260,12 @@
                                     <a target="_blank" class="card-subtitle pr-2 pl-3"
                                         href="http://docs.google.com/gview?url={{ taxpayer_bank_account.bank_cbu_file.url }}">
                                         <span class="badge badge-info">
-                                            {% trans "CBU" %}
+                                            {% trans "Bank account certificate" %}
                                             <i class="fa fa-eye ml-2"></i>
                                         </span>
                                     </a>
+
+
                                 </div>
                             </div>
 
