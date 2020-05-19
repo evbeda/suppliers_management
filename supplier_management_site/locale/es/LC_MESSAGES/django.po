@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 14:53+0000\n"
+"POT-Creation-Date: 2020-05-19 18:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1858,6 +1858,19 @@ msgstr ""
 "Tu factura # {} fue modificada por un administrador. Por favor revise su "
 "factura."
 
+#: invoices_app/__init__.py:68 supplier_app/constants/email_notifications.py:25
+#: supplier_app/constants/email_notifications.py:35
+#: supplier_app/constants/email_notifications.py:45
+#: supplier_app/constants/email_notifications.py:55
+#: supplier_app/constants/email_notifications.py:65
+msgid ""
+"\"Please do not reply to this email. If you have any questions, please login "
+"into Britesu and make a comment in the section related to your question.\""
+msgstr ""
+"Por favor, no respondas a este correo. Ante cualquier consulta por favor "
+"dirígete a Britesu y haz un comentario en la sección relacionada a tu "
+"consulta."
+
 #: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
 #: templates/invoices_app/invoice-list.html:36
@@ -1869,8 +1882,8 @@ msgstr ""
 msgid "Status"
 msgstr "Estado"
 
-#: invoices_app/filters.py:29 invoices_app/views.py:227
-#: invoices_app/views.py:297 templates/invoices_app/invoice-list.html:31
+#: invoices_app/filters.py:29 invoices_app/views.py:228
+#: invoices_app/views.py:298 templates/invoices_app/invoice-list.html:31
 msgid "Invoice Date"
 msgstr "Fecha de factura"
 
@@ -1957,11 +1970,11 @@ msgstr "Total"
 msgid "Invoice File"
 msgstr "Factura"
 
-#: invoices_app/views.py:199
+#: invoices_app/views.py:200
 msgid "Taxpayer not approved yet"
 msgstr "Entidad fiscal no aprobado aún"
 
-#: invoices_app/views.py:202
+#: invoices_app/views.py:203
 msgid "The invoice {} already exists"
 msgstr "La factura {} ya existe."
 
@@ -2062,16 +2075,16 @@ msgid "There is other taxpayer with that workday id"
 msgstr "Ya existe una entidad fiscal con esa id en workday"
 
 #: supplier_app/constants/email_notifications.py:11
-msgid "You have been invited to BriteSu"
-msgstr "Has sido invitado a BriteSu"
+msgid "You’re invited to join as a supplier for Eventbrite"
+msgstr "Has sido invitado a unirte como proveedor de Eventbrite"
 
 #: supplier_app/constants/email_notifications.py:13
 msgid ""
 "Welcome to BriteSu! Please click on the following link to complete the "
 "supplier registration form before doing business with Eventbrite.."
 msgstr ""
-"Bienvenido a BriteSu! Por favor accede al siguiente link "
-"para registrarte como proveedor de Eventbrite."
+"Bienvenido a BriteSu! Por favor accede al siguiente link para registrarte "
+"como proveedor de Eventbrite."
 
 #: supplier_app/constants/email_notifications.py:14
 #: supplier_app/constants/email_notifications.py:24
@@ -2080,17 +2093,13 @@ msgid "Thank you!"
 msgstr "¡Gracias!"
 
 #: supplier_app/constants/email_notifications.py:15
-#: supplier_app/constants/email_notifications.py:25
-#: supplier_app/constants/email_notifications.py:35
-#: supplier_app/constants/email_notifications.py:45
-#: supplier_app/constants/email_notifications.py:55
-#: supplier_app/constants/email_notifications.py:65
 msgid ""
-"\"Please do not reply to this email. If you have any questions, please login "
-"into Britesu and make a comment in the section related to your question.\""
+"\"Please do not reply to this email. If you have any questions, please click "
+"on the “Join” button, register, and then make a comment in the section "
+"related to your question.\""
 msgstr ""
 "Por favor, no respondas a este correo. Ante cualquier consulta por favor "
-"dirígete a Britesu y haz un comentario en la sección relacionada a tu "
+"haz click en el botón “Únete”, regístrate, y luego haz un comentario en la sección relacionada a tu "
 "consulta."
 
 #: supplier_app/constants/email_notifications.py:16
@@ -2107,10 +2116,10 @@ msgid ""
 "you receive it, you'll need to include the Purchase Order Number on your "
 "invoice as reference. Finally, send your invoice to payables-ar@eventbrite."
 "com"
-msgstr "Pronto tu contacto en Eventbrite te enviará el Número de Orden de Compra. Una vez "
-"que lo recibas, recuerda incluir ese dato en tu "
-"factura como referencia. Finalmente, envía la factura a payables-ar@eventbrite"
-".com"
+msgstr ""
+"Pronto tu contacto en Eventbrite te enviará el Número de Orden de Compra. "
+"Una vez que lo recibas, recuerda incluir ese dato en tu factura como "
+"referencia. Finalmente, envía la factura a payables-ar@eventbrite.com"
 
 #: supplier_app/constants/email_notifications.py:26
 #: supplier_app/constants/email_notifications.py:36
@@ -2122,16 +2131,17 @@ msgstr "Dirígete a BriteSU"
 
 #: supplier_app/constants/email_notifications.py:31
 msgid "Your supplier registration request has some pending modifications"
-msgstr "Su entidad fiscal tiene algunas modificaciones pendientes"
+msgstr "Su solicitud de alta de proveedor  tiene modificaciones pendientes"
 
 #: supplier_app/constants/email_notifications.py:33
 msgid ""
 "Please visit your taxpayer  “Edit” section and read the comments. Once "
 "changes are done and approved by Eventbrite, we will send you an email."
 msgstr ""
-"Por favor diríjase a la sección de “Edición” de su entidad fiscal y lea los nuevos comentarios.Una vez "
-"que realice los cambios solicitados, Eventbrite los evaluará.Cuando se "
-"apruebe su entidad fiscal, Eventbrite se lo notificará por email."
+"Por favor diríjase a la sección de “Edición” de su entidad fiscal y lea los "
+"nuevos comentarios.Una vez que realice los cambios solicitados, Eventbrite "
+"los evaluará.Cuando se apruebe su entidad fiscal, Eventbrite se lo "
+"notificará por email."
 
 #: supplier_app/constants/email_notifications.py:41
 msgid "Your taxpayer has been rejected"
@@ -3155,6 +3165,9 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Cambios: \n"
+
+#~ msgid "You have been invited to BriteSu"
+#~ msgstr "Has sido invitado a BriteSu"
 
 #~ msgid "Your taxpayer is in progress now"
 #~ msgstr "Su entidad fiscal está en progreso"
