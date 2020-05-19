@@ -2131,7 +2131,7 @@ msgstr "Dirígete a BriteSU"
 
 #: supplier_app/constants/email_notifications.py:31
 msgid "Your supplier registration request has some pending modifications"
-msgstr "Su entidad fiscal tiene algunas modificaciones pendientes"
+msgstr "Su solicitud de alta de proveedor  tiene modificaciones pendientes"
 
 #: supplier_app/constants/email_notifications.py:33
 msgid ""
