@@ -64,3 +64,5 @@ NEW_COMMENT_EMAIL_TEXT = _('You have a new comment on Invoice # {}. Please check
 INVOICE_CHANGE_STATUS_TEXT_EMAIL = _('Invoice {} changed status to {}')
 EVENTBRITE_INVOICE_EDITED = _('Eventbrite Invoice Edited')
 INVOICE_EDIT_INVOICE_UPPER_TEXT = _('Your Invoice # {} was edited by an administrator. Please check your invoice')
+
+DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),

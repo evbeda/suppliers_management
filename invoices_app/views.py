@@ -97,6 +97,7 @@ from invoices_app import (
     NO_COMMENT_ERROR,
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
+    DISCLAIMER,
 )
 
 from invoices_app.change_status_strategy import get_change_status_strategy
@@ -475,7 +476,8 @@ def _send_email_when_posting_a_comment(request, invoice):
         message = build_mail_html(
             invoice.taxpayer.business_name,
             upper_text,
-            THANK_YOU
+            THANK_YOU,
+            DISCLAIMER,
         )
         _send_email(subject, message, [user.email])
 
@@ -500,7 +502,8 @@ def _send_email_when_change_invoice_status(request, invoice):
         message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,
-                THANK_YOU
+                THANK_YOU,
+                DISCLAIMER,
             )
         _send_email(subject, message, [user.email])
 
@@ -519,7 +522,8 @@ def _send_email_when_editing_invoice(instance, ap_user):
         message = build_mail_html(
             instance.taxpayer.business_name,
             upper_text,
-            str(THANK_YOU)
+            str(THANK_YOU),
+            DISCLAIMER,
         )
 
         _send_email(subject, message, [user.email])
