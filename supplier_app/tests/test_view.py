@@ -1856,7 +1856,7 @@ class TestCompanyInvite(TestCase):
 
     def test_company_invite_sends_email_notification_in_spanish(self,):
         self._make_post("es")
-        self.assertIn("Bienvenido a BriteSu!\nPor favor accede al siguiente link.", mail.outbox[0].body)
+        self.assertIn("Bienvenido a BriteSu! Por favor accede al siguiente link", mail.outbox[0].body)
         self.assertIn("¡Gracias!", mail.outbox[0].body)
 
     def test_company_invite_sends_email_notification(self):

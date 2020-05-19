@@ -173,7 +173,6 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
 
     def post(self, request, *args, **kwargs):
         forms = self._create_forms_from_request(request)
-        
         if self.forms_are_valid(forms):
             return self.form_valid(forms)
         else:
@@ -224,6 +223,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         If the form is valid, redirect to the supplied URL.
         """
         try:
+            
             taxpayer = self.save_taxpayer(forms)
             self.save_contact(forms, taxpayer, self.save_address(forms, taxpayer))
             self.save_bankaccount(forms, taxpayer)
