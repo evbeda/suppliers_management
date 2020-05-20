@@ -117,6 +117,7 @@ from users_app.factory_boy import (
     UserFactory,
     ApUserFactory,
 )
+from supplier_app.change_status_strategy import StrategyStatusChange
 
 
 class TestCreateTaxPayer(TestCase):
@@ -2876,3 +2877,22 @@ class TestTaxpayerCommentView(TestCase):
             [redirect[0] for redirect in response.redirect_chain],
         )
         self.assertContains(response, TAXPAYER_REQUEST_CHANGE_MESSAGE)
+
+
+class TestChangeStrategy(TestCase):
+
+    def setUp(self):
+        self.main = StrategyStatusChange()
+    
+
+    def test_send_email_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.send_email()
+    
+    def test_change_taxpayer_status_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.change_taxpayer_status("request")
+    
+    def test_show_message_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.show_message()
