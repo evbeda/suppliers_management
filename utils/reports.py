@@ -63,3 +63,17 @@ def generate_response_xls(xls_file, file_name):
         file_name=file_name
     )
     return response
+
+
+def get_field_changes(form, except_field, model_to_compare):
+    result = ""
+    if hasattr(form, 'cleaned_data'):
+        form_data = form.cleaned_data
+        for field in form_data:
+            if form_data[field] is None:
+                form_data[field] = ''
+            if field not in except_field and str(form_data[field]) != str(model_to_compare.__dict__[field]):
+                result = "{} Se cambio el campo {} de {} a {} \n".format(result, str(form.fields[field].label),
+                                                                         model_to_compare.__dict__[field],
+                                                                         form_data[field])
+    return result
