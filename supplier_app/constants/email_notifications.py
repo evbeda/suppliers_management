@@ -62,7 +62,7 @@ email_notifications = {
             'body': {
                 'upper_text': _("Once your Purchase Requisition is approved you will receive a Purchase Order Number from Workday. "),
                 'lower_text': _("Remember to inform the supplier of the Purchase Order Number as soon as you get it so that the supplier can send the invoice."),
-                'disclaimer': _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
+                'disclaimer': '',
                 'btn_text': _('Go to BriteSu'),
                 'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, HOME_URL),
             },

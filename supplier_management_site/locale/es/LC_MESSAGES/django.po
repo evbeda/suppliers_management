@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 18:08+0000\n"
+"POT-Creation-Date: 2020-05-20 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1862,7 +1862,6 @@ msgstr ""
 #: supplier_app/constants/email_notifications.py:35
 #: supplier_app/constants/email_notifications.py:45
 #: supplier_app/constants/email_notifications.py:55
-#: supplier_app/constants/email_notifications.py:65
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into Britesu and make a comment in the section related to your question.\""
@@ -2098,9 +2097,9 @@ msgid ""
 "on the “Join” button, register, and then make a comment in the section "
 "related to your question.\""
 msgstr ""
-"Por favor, no respondas a este correo. Ante cualquier consulta por favor "
-"haz click en el botón “Únete”, regístrate, y luego haz un comentario en la sección relacionada a tu "
-"consulta."
+"Por favor, no respondas a este correo. Ante cualquier consulta por favor haz "
+"click en el botón “Únete”, regístrate, y luego haz un comentario en la "
+"sección relacionada a tu consulta."
 
 #: supplier_app/constants/email_notifications.py:16
 msgid "Join"
@@ -2108,7 +2107,7 @@ msgstr "Únete"
 
 #: supplier_app/constants/email_notifications.py:21
 msgid "Your supplier registration request has been approved"
-msgstr "Su entidad fiscal fue aprobada"
+msgstr "Su solicitud de alta de proveedor fue aprobada"
 
 #: supplier_app/constants/email_notifications.py:23
 msgid ""
@@ -2648,7 +2647,7 @@ msgstr "Crear nueva?"
 msgid "New Mail from Eventbrite Supplier Management"
 msgstr "Nuevo email de 'BriteSu'"
 
-#: templates/mail_template.html:323
+#: templates/mail_template.html:324 templates/mail_template.html:326
 msgid "Hello"
 msgstr "Hola"
 

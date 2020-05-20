@@ -64,7 +64,7 @@ def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, 
     subject = _(email_notifications[change_type]['subject'])
     upper_text = _(email_notifications[change_type]['body']['upper_text'])
     lower_text = _(email_notifications[change_type]['body']['lower_text'])
-    disclaimer = _(email_notifications['company_invitation']['body']['disclaimer'])
+    disclaimer = _(email_notifications[change_type]['body']['disclaimer'])
     btn_text = _(email_notifications[change_type]['body']['btn_text'])
     btn_url = email_notifications[change_type]['body']['btn_url']
     message = build_mail_html(
