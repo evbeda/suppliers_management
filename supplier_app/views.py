@@ -332,13 +332,14 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         )
         self.object.set_current_eb_entities(eb_entities)
         form = self.get_form()
-        if request.user.is_supplier:
-            except_field = ['csrfmiddlewaretoken', 'eb_entities']
-            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
-            text_to_coment = reports.get_field_changes(form, except_field, taxpayer_to_compare)
-            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
-            form.instance.set_changes_pending_taxpayer()
+
         if form.is_valid():
+            if request.user.is_supplier:
+                except_field = ['csrfmiddlewaretoken', 'eb_entities']
+                taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+                text_to_coment = reports.get_field_changes(form, except_field, taxpayer_to_compare)
+                TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
+                form.instance.set_changes_pending_taxpayer()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -626,11 +627,3 @@ class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, Tem
         pdf = render_to_pdf('supplier_app/html-to-pdf-page.html', self.get_context_data())
         return HttpResponse(pdf, content_type='application/pdf')
 
-
-def _compare(self, model, other, except_fields):
-    result = {}
-    for field in model._meta.fields:
-        if field.attname not in except_fields and model.__dict__[field.attname] != other.__dict__[
-            field.attname]:
-            result.update({field.attname: model.__dict__[field.attname]})
-    return result

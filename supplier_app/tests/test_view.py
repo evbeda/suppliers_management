@@ -111,6 +111,7 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierHome,
 )
+from utils import reports
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
 from users_app.factory_boy import (
@@ -1151,6 +1152,15 @@ class TestEditTaxPayerInfo(TestCase):
         current_eb_entities = taxpayer.eb_entities
         self.assertEqual(2, len(current_eb_entities))
         self.assertEqual([eb_entity_1, eb_entity_2], taxpayer.eb_entities)
+
+    def test_field_changes(self):
+        self.taxpayer.afip_registration_file = self.file_mock
+        self.taxpayer.witholding_taxes_file = self.file_mock
+        self.taxpayer.afip_no_retention_taxes_file = self.file_mock
+        self.taxpayer.iibb_no_retention_taxes_file = self.file_mock
+        self.taxpayer.iibb_registration_file = None
+        self.taxpayer.save()
+        reports.get_field_changes(self.TAXPAYER_POST, [], self.taxpayer)
 
     def test_edit_taxpayer_view_should_populate_file_fields_with_existing_files(self):
         self.taxpayer.afip_registration_file = self.file_mock
