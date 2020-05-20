@@ -116,10 +116,10 @@ class BankAccountBaseForm(ModelForm):
                     'placeholder': _('Only numbers, whitout / or -')
                 }
             ),
-            'bank_cbu_file': forms.FileInput(attrs={
-                'accept': 'application/pdf',
-                'class': '',
-            }),
+            # 'bank_cbu_file': forms.FileInput(attrs={
+            #     'accept': 'application/pdf',
+            #     'class': '',
+            # }),
             'bank_info': forms.Select(attrs={'class': 'form-control'}),
             'bank_transaction_type': forms.Select(attrs={'class': 'form-control'}),
             'bank_account_type': forms.Select(attrs={'class': 'form-control'}),
@@ -135,7 +135,7 @@ class BankAccountCreateForm(BasePrefixCreateForm, BankAccountBaseForm):
 
 
 class BankAccountEditForm(BankAccountBaseForm):
-    bank_cbu_file = forms.FileField()
+    # bank_cbu_file = forms.FileField()
 
     class Meta(BankAccountBaseForm.Meta):
         exclude = [
@@ -162,18 +162,18 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             'payment_type': forms.Select(attrs={'class': 'form-control', 'type': 'hidden', 'value':'BANK'}),
             'payment_term': forms.Select(attrs={'class': 'form-control'}),
             'taxpayer_condition':  forms.Select(attrs={'class': 'form-control'}),
-            'afip_registration_file': forms.FileInput(attrs={
-                'accept': 'application/pdf',
-                'class': '',
-            }),
-            'witholding_taxes_file': forms.FileInput(attrs={
-                'accept': 'application/pdf',
-                'class': '',
-            }),
-            'witholding_suss_file': forms.FileInput(attrs={
-                'accept': 'application/pdf',
-                'class': '',
-            }),
+            # 'afip_registration_file': forms.FileInput(attrs={
+            #     'accept': 'application/pdf',
+            #     'class': '',
+            # }),
+            # 'witholding_taxes_file': forms.FileInput(attrs={
+            #     'accept': 'application/pdf',
+            #     'class': '',
+            # }),
+            # 'witholding_suss_file': forms.FileInput(attrs={
+            #     'accept': 'application/pdf',
+            #     'class': '',
+            # }),
             'workday_id': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(
                 attrs={
@@ -192,8 +192,9 @@ class TaxPayerCreateForm(BasePrefixCreateForm, TaxPayerArgentinaBaseForm):
 
 
 class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
-    afip_registration_file = forms.FileField()
-    witholding_taxes_file = forms.FileField(required=False)
+    # afip_registration_file = forms.FileField()
+    # witholding_taxes_file = forms.FileField(required=False)
+    # witholding_suss_file = forms.FileField(required=False)
 
     class Meta(TaxPayerArgentinaBaseForm.Meta):
         exclude = [

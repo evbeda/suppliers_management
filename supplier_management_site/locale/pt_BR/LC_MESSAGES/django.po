@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 15:18+0000\n"
+"POT-Creation-Date: 2020-05-20 20:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2711,7 +2711,7 @@ msgstr "Enviar"
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
 #: templates/supplier_app/edit-contact-information.html:25
-#: templates/supplier_app/edit-taxpayer-information.html:25
+#: templates/supplier_app/edit-taxpayer-information.html:26
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -2969,10 +2969,14 @@ msgid "Attachments and tax condition"
 msgstr ""
 
 #: templates/supplier_app/Supplier/attach_arg.html:5
+msgid "Only PDF files are accepted"
+msgstr ""
+
+#: templates/supplier_app/Supplier/attach_arg.html:6
 msgid "Mandatory attachments"
 msgstr ""
 
-#: templates/supplier_app/Supplier/attach_arg.html:16
+#: templates/supplier_app/Supplier/attach_arg.html:17
 #, fuzzy
 #| msgid "Attachment: "
 msgid "Optional Attachments"
@@ -3053,14 +3057,14 @@ msgstr "Informação de Endereço"
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
 #: templates/supplier_app/edit-contact-information.html:23
-#: templates/supplier_app/edit-taxpayer-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:24
 msgid "Save"
 msgstr "Salve"
 
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
 #: templates/supplier_app/edit-contact-information.html:23
-#: templates/supplier_app/edit-taxpayer-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:24
 msgid "Request change"
 msgstr "Solicitar alteração"
 
@@ -3074,7 +3078,7 @@ msgstr "Informações de conta bancária"
 msgid "Contact Information"
 msgstr "Informação geral"
 
-#: templates/supplier_app/edit-taxpayer-information.html:14
+#: templates/supplier_app/edit-taxpayer-information.html:15
 #, fuzzy
 #| msgid "Taxpayer info"
 msgid "Taxpayer Information"
