@@ -60,7 +60,7 @@ email_notifications = {
     'buyer_notification': {
             'subject': _('Now you can create a Purchase Requisition for this Supplier on Workday'),
             'body': {
-                'upper_text': _("Once your Purchase Requisition is approved you will receive a Purchase Order Number from Workday. "),
+                'upper_text': _("Now you can create a Purchase Requisition for this supplier from Workday.Once your Purchase Requisition is approved you will receive a Purchase Order Number from Workday. "),
                 'lower_text': _("Remember to inform the supplier of the Purchase Order Number as soon as you get it so that the supplier can send the invoice."),
                 'disclaimer': '',
                 'btn_text': _('Go to BriteSu'),
