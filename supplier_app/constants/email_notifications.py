@@ -8,11 +8,11 @@ HOME_URL = '/'
 
 email_notifications = {
     'company_invitation': {
-        'subject': _('You have been invited to BriteSu'),
+        'subject': _('You’re invited to join as a supplier for Eventbrite'),
         'body': {
             'upper_text': _('Welcome to BriteSu! Please click on the following link to complete the supplier registration form before doing business with Eventbrite..'),
             'lower_text': _('Thank you!'),
-            'disclaimer': _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
+            'disclaimer': _('"Please do not reply to this email. If you have any questions, please click on the “Join” button, register, and then make a comment in the section related to your question."'),
             'btn_text': _('Join'),
             'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, COMPANY_INVITATION_URL),
         },
@@ -58,11 +58,11 @@ email_notifications = {
         },
     },
     'buyer_notification': {
-            'subject': _('Now you can create a Purchase Requisition for this Supplier on Workday'),
+            'subject': _('Now you can create a Purchase Requisition for this supplier on Workday.'),
             'body': {
-                'upper_text': _("Once your Purchase Requisition is approved you will receive a Purchase Order Number from Workday. "),
-                'lower_text': _("Remember to inform the supplier of the Purchase Order Number as soon as you get it so that the supplier can send the invoice."),
-                'disclaimer': _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
+                'upper_text': _("Now you can create a Purchase Requisition for this supplier from Workday. Once the purchase requisition is approved, you will receive a Purchase Order Number on Workday."),
+                'lower_text': _("Remember to inform the supplier on the Purchase Order Number as soon as you get it so that the supplier can include it as a reference within the invoice."),
+                'disclaimer': '',
                 'btn_text': _('Go to BriteSu'),
                 'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, HOME_URL),
             },

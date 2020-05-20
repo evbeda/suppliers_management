@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 14:53+0000\n"
+"POT-Creation-Date: 2020-05-20 15:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1922,6 +1922,15 @@ msgid ""
 "Your Invoice # {} was edited by an administrator. Please check your invoice"
 msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 
+#: invoices_app/__init__.py:68 supplier_app/constants/email_notifications.py:25
+#: supplier_app/constants/email_notifications.py:35
+#: supplier_app/constants/email_notifications.py:45
+#: supplier_app/constants/email_notifications.py:55
+msgid ""
+"\"Please do not reply to this email. If you have any questions, please login "
+"into Britesu and make a comment in the section related to your question.\""
+msgstr ""
+
 #: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
 #: templates/invoices_app/invoice-list.html:36
@@ -1933,8 +1942,8 @@ msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 msgid "Status"
 msgstr "Status"
 
-#: invoices_app/filters.py:29 invoices_app/views.py:227
-#: invoices_app/views.py:297 templates/invoices_app/invoice-list.html:31
+#: invoices_app/filters.py:29 invoices_app/views.py:228
+#: invoices_app/views.py:298 templates/invoices_app/invoice-list.html:31
 msgid "Invoice Date"
 msgstr "Data da fatura"
 
@@ -2021,11 +2030,11 @@ msgstr "Total"
 msgid "Invoice File"
 msgstr "Arquivo de fatura"
 
-#: invoices_app/views.py:199
+#: invoices_app/views.py:200
 msgid "Taxpayer not approved yet"
 msgstr "Contribuinte ainda não aprovado"
 
-#: invoices_app/views.py:202
+#: invoices_app/views.py:203
 msgid "The invoice {} already exists"
 msgstr "A fatura {} já existe"
 
@@ -2128,8 +2137,8 @@ msgid "There is other taxpayer with that workday id"
 msgstr "Há outro contribuinte com esse ID de workday"
 
 #: supplier_app/constants/email_notifications.py:11
-msgid "You have been invited to BriteSu"
-msgstr "Você foi convidado a BriteSu"
+msgid "You’re invited to join as a supplier for Eventbrite"
+msgstr ""
 
 #: supplier_app/constants/email_notifications.py:13
 #, fuzzy
@@ -2152,14 +2161,10 @@ msgid "Thank you!"
 msgstr "Obrigado!"
 
 #: supplier_app/constants/email_notifications.py:15
-#: supplier_app/constants/email_notifications.py:25
-#: supplier_app/constants/email_notifications.py:35
-#: supplier_app/constants/email_notifications.py:45
-#: supplier_app/constants/email_notifications.py:55
-#: supplier_app/constants/email_notifications.py:65
 msgid ""
-"\"Please do not reply to this email. If you have any questions, please login "
-"into Britesu and make a comment in the section related to your question.\""
+"\"Please do not reply to this email. If you have any questions, please click "
+"on the “Join” button, register, and then make a comment in the section "
+"related to your question.\""
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:16
@@ -2244,19 +2249,20 @@ msgid ""
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:61
-msgid "Now you can create a Purchase Requisition for this Supplier on Workday"
+msgid "Now you can create a Purchase Requisition for this supplier on Workday."
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:63
 msgid ""
-"Once your Purchase Requisition is approved you will receive a Purchase Order "
-"Number from Workday. "
+"Now you can create a Purchase Requisition for this supplier from Workday. "
+"Once the purchase requisition is approved, you will receive a Purchase Order "
+"Number on Workday."
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:64
 msgid ""
-"Remember to inform the supplier of the Purchase Order Number as soon as you "
-"get it so that the supplier can send the invoice."
+"Remember to inform the supplier on the Purchase Order Number as soon as you "
+"get it so that the supplier can include it as a reference within the invoice."
 msgstr ""
 
 #: supplier_app/constants/payment_ar.py:4
@@ -2731,7 +2737,7 @@ msgstr "Crie um?"
 msgid "New Mail from Eventbrite Supplier Management"
 msgstr "Novas mensagens do Eventbrite Supplier Management"
 
-#: templates/mail_template.html:323
+#: templates/mail_template.html:324 templates/mail_template.html:326
 msgid "Hello"
 msgstr "Oi"
 
@@ -3294,6 +3300,9 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#~ msgid "You have been invited to BriteSu"
+#~ msgstr "Você foi convidado a BriteSu"
 
 #, fuzzy
 #~| msgid "Your taxpayer has been approved"
