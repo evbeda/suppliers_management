@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-19 18:08+0000\n"
+"POT-Creation-Date: 2020-05-20 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1926,7 +1926,6 @@ msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 #: supplier_app/constants/email_notifications.py:35
 #: supplier_app/constants/email_notifications.py:45
 #: supplier_app/constants/email_notifications.py:55
-#: supplier_app/constants/email_notifications.py:65
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into Britesu and make a comment in the section related to your question.\""
@@ -2737,7 +2736,7 @@ msgstr "Crie um?"
 msgid "New Mail from Eventbrite Supplier Management"
 msgstr "Novas mensagens do Eventbrite Supplier Management"
 
-#: templates/mail_template.html:323
+#: templates/mail_template.html:324 templates/mail_template.html:326
 msgid "Hello"
 msgstr "Oi"
 
