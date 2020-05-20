@@ -349,6 +349,7 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         taxpayer = TaxPayerArgentina.objects.get(pk=context['taxpayer_id'])
         form = context['form']
+        
         form.fields['afip_registration_file'].initial = taxpayer.afip_registration_file
         form.fields['witholding_taxes_file'].initial = taxpayer.witholding_taxes_file
         form.fields['eb_entities'].initial = taxpayer.eb_entities

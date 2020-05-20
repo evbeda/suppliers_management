@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-20 15:18+0000\n"
+"POT-Creation-Date: 2020-05-20 20:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2175,7 +2175,6 @@ msgid ""
 msgstr "No tienes que hacer nada, te contactaremos pronto, Gracias!"
 
 #: supplier_app/constants/email_notifications.py:61
-
 msgid "Now you can create a Purchase Requisition for this supplier on Workday."
 msgstr ""
 "Ahora puedes crear una Solicitud de Compra para este Proveedor en Workday."
@@ -2624,7 +2623,7 @@ msgstr "Enviar"
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
 #: templates/supplier_app/edit-contact-information.html:25
-#: templates/supplier_app/edit-taxpayer-information.html:25
+#: templates/supplier_app/edit-taxpayer-information.html:26
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -2878,10 +2877,14 @@ msgid "Attachments and tax condition"
 msgstr "Archivos a Adjuntar"
 
 #: templates/supplier_app/Supplier/attach_arg.html:5
+msgid "Only PDF files are accepted"
+msgstr "Solo se aceptan archivos PDF"
+
+#: templates/supplier_app/Supplier/attach_arg.html:6
 msgid "Mandatory attachments"
 msgstr "Adjuntos Obligatorios"
 
-#: templates/supplier_app/Supplier/attach_arg.html:16
+#: templates/supplier_app/Supplier/attach_arg.html:17
 msgid "Optional Attachments"
 msgstr "Archivos Adjuntos Opcionales: "
 
@@ -2950,14 +2953,14 @@ msgstr "Domicilio"
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
 #: templates/supplier_app/edit-contact-information.html:23
-#: templates/supplier_app/edit-taxpayer-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:24
 msgid "Save"
 msgstr "Guardar"
 
 #: templates/supplier_app/edit-address-information.html:23
 #: templates/supplier_app/edit-bank-account-information.html:23
 #: templates/supplier_app/edit-contact-information.html:23
-#: templates/supplier_app/edit-taxpayer-information.html:23
+#: templates/supplier_app/edit-taxpayer-information.html:24
 msgid "Request change"
 msgstr "Solicitud de cambio"
 
@@ -2969,7 +2972,7 @@ msgstr "Cuenta bancaria"
 msgid "Contact Information"
 msgstr "Información de contacto"
 
-#: templates/supplier_app/edit-taxpayer-information.html:14
+#: templates/supplier_app/edit-taxpayer-information.html:15
 msgid "Taxpayer Information"
 msgstr "Información de la entidad fiscal"
 
