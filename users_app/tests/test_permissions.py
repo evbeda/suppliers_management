@@ -4,10 +4,11 @@ from os import (
 from shutil import rmtree
 from unittest.mock import (
     MagicMock,
-    Mock,
+    Mock, patch,
 )
 from http import HTTPStatus
-from social_core.exceptions import AuthException
+
+from social_core.strategy import BaseStrategy
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
@@ -30,9 +31,10 @@ from users_app.factory_boy import (
 from users_app.pipeline.pipeline import (
     add_user_to_group,
     check_user_backend,
+    create_user,
 )
-
 from utils.permissions import create_groups_and_apply_permisssions
+from social_core.backends.base import BaseAuth
 
 
 class TestUser(TestCase):
@@ -98,7 +100,7 @@ class TestSupplierPermissions(TestCase):
         self.bank_info1 = BankAccountFactory(
             taxpayer=self.taxpayer1,
             bank_cbu_file=self.file_mock
-            )
+        )
         self.addres1 = AddressFactory(taxpayer=self.taxpayer1)
         self.contact1 = ContactFactory(taxpayer=self.taxpayer1)
         self.taxpayer2 = TaxPayerArgentinaFactory()
@@ -110,7 +112,7 @@ class TestSupplierPermissions(TestCase):
 
     def tearDown(self):
         if self.file_mock and path.exists(
-            'file/{}'.format(self.file_mock.name)
+                'file/{}'.format(self.file_mock.name)
         ):
             rmtree('file')
 
@@ -200,8 +202,35 @@ class TestSupplierPermissions(TestCase):
         user = UserFactory(email='admin@eventbrite.com')
         backend = Mock()
         backend.name = 'google-oauth2'
+        request = Mock()
+        request.LANGUAGE_CODE = 'en'
         details = {'email': 'admin2@eventbrite.com'}
-        self.assertEqual(check_user_backend(True, user, details=details, backend=backend)['user'].get_name, "admin2")
+        self.assertEqual(
+            check_user_backend(True, user, details=details, backend=backend, request=request)['user'].get_name,
+            "admin2")
+
+    def function_returning_list(self):
+        return ['username', 'email']
+
+    @patch('users_app.pipeline.pipeline.original_create_user')
+    def test_create_user_eventbirte_account_not_created(self, mock_original_create_user):
+        backend = Mock()
+        backend.name = 'LanguageAwareEventbriteOAuth2'
+        backend.setting.side_effect = self.function_returning_list()
+        request = Mock()
+        request.LANGUAGE_CODE = 'es'
+        is_new = True
+        details = {
+            'email': 'admin2@gmail.com',
+            'username': 'admin2@gmail.com',
+            'first_name': 'John',
+            'last_name': 'Smith',
+        }
+        strategy = Mock()
+        mock_create_user = MagicMock()
+        strategy.create_user = mock_create_user
+        create_user(strategy, details, backend, None, None, request=request, is_new=is_new)
+        self.assertEqual(mock_original_create_user.call_args_list[0][1]['preferred_language'], 'es')
 
     def test_add_user_to_group_supplier(self):
         user = UserFactory(email='supplier@supplier.com')
