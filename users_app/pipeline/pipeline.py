@@ -5,6 +5,7 @@ from users_app import (
     GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND,
     EVENTBRITE_OAUTH_SOCIAL_DJANGO_BACKEND,
 )
+from social_core.pipeline.user import create_user as original_create_user
 
 
 def add_user_to_group(is_new, user, *args, **kwargs):
@@ -27,10 +28,17 @@ def check_user_backend(is_new, user, *args, **kwargs):
     if backend == GOOGLE_OAUTH2_SOCIAL_DJANGO_BACKEND and not User.objects.filter(email=user_email).exists():
         user_email_domain = user_email.split("@")[1]
         if user_email_domain == 'eventbrite.com':
-            user = User.objects.create_user(user_email)
+            language = kwargs['request'].LANGUAGE_CODE
+            user = User.objects.create_user(user_email, None, preferred_language=language)
         else:
             raise AuthException(backend, 'Invalid Login')
     return {
             'is_new': is_new,
             'user': user
         }
+
+
+def create_user(strategy, details, backend, user=None, *args, **kwargs):
+    kwargs['preferred_language'] = kwargs['request'].LANGUAGE_CODE
+    return original_create_user(strategy, details, backend, user, *args, **kwargs)
+
