@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 import attr
 
-from utils import COMMENT_TAXPAYER
+from utils import COMMENT_TAXPAYER, COMMENT_TAXPAYER_INT_VALUES
 
 
 class ExcelReportInputParams:
@@ -72,10 +72,16 @@ def get_field_changes(form, except_field, model_to_compare):
     result = ""
     if hasattr(form, 'cleaned_data'):
         form_data = form.cleaned_data
-        for field in form_data:
-            if form_data[field] is None:
-                form_data[field] = ''
-            if field not in except_field and str(form_data[field]) != str(model_to_compare.__dict__[field]):
+    else:
+        form_data = form.data
+        except_field.append('csrfmiddlewaretoken')
+    for field in form_data:
+        if form_data[field] is None:
+            form_data[field] = ''
+        if field not in except_field and str(form_data[field]) != str(model_to_compare.__dict__[field]):
+            if type(form_data[field]).__name__ == 'int' or type(model_to_compare.__dict__[field]).__name__ == 'int':
+                result = _(COMMENT_TAXPAYER_INT_VALUES).format(result, str(form.fields[field].label))
+            else:
                 result = _(COMMENT_TAXPAYER).format(result, str(form.fields[field].label),
                                                     model_to_compare.__dict__[field],
                                                     form_data[field])
