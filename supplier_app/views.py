@@ -35,6 +35,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_NOT_EXISTS_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
+    THANKS,
 )
 from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
@@ -225,13 +226,16 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         If the form is valid, redirect to the supplied URL.
         """
         try:
-            
             taxpayer = self.save_taxpayer(forms)
             self.save_contact(forms, taxpayer, self.save_address(forms, taxpayer))
             self.save_bankaccount(forms, taxpayer)
             messages.success(
                 self.request,
-                TAXPAYER_CREATION_SUCCESS_MESSAGE
+                TAXPAYER_CREATION_SUCCESS_MESSAGE,
+            )
+            messages.success(
+                self.request,
+                THANKS,
             )
         except ObjectDoesNotExist:
             messages.error(
