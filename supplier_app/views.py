@@ -387,17 +387,17 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
         taxpayer_id = Address.objects.get(pk=self.kwargs['address_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
-    def form_valid(self, form):
-        return_value = super().form_valid(form)
-        if self.request.user.is_supplier:
-            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
-            model_to_compare = self.object
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = Address.objects.get(taxpayer_id=kwargs['taxpayer_id'])
             text_to_coment = reports.get_field_changes(form, [], model_to_compare)
-            TaxpayerComment.objects.create(user=self.request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
-        return return_value
+        return super().post(request, *args, **kwargs)
 
 
 class EditContactInformationView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
@@ -424,17 +424,17 @@ class EditContactInformationView(UserLoginPermissionRequiredMixin, TaxPayerPermi
         taxpayer_id = ContactInformation.objects.get(pk=self.kwargs['contact_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
-    def form_valid(self, form):
-        return_value = super().form_valid(form)
-        if self.request.user.is_supplier:
-            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
-            model_to_compare = self.object
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = ContactInformation.objects.get(taxpayer_id=kwargs['taxpayer_id'])
             text_to_coment = reports.get_field_changes(form, [], model_to_compare)
-            TaxpayerComment.objects.create(user=self.request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
-        return return_value
+        return super().post(request, *args, **kwargs)
 
 
 class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, UpdateView):
@@ -464,17 +464,17 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         taxpayer_id = BankAccount.objects.get(pk=self.kwargs['bank_id']).taxpayer.id
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
-    def form_valid(self, form):
-        return_value = super().form_valid(form)
-        if self.request.user.is_supplier:
-            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=self.kwargs['taxpayer_id'])
-            model_to_compare = self.object
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = BankAccount.objects.get(taxpayer_id=kwargs['taxpayer_id'])
             text_to_coment = reports.get_field_changes(form, [], model_to_compare)
-            TaxpayerComment.objects.create(user=self.request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
-        return return_value
+        return super().post(request, *args, **kwargs)
 
 
 class TaxpayerHistory(UserLoginPermissionRequiredMixin, ListView):
