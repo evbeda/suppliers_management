@@ -7,8 +7,11 @@ from django.core.files.base import ContentFile
 from django.http import (
     HttpResponse,
 )
+from django.utils.translation import gettext_lazy as _
 
 import attr
+
+from utils import COMMENT_TAXPAYER
 
 
 class ExcelReportInputParams:
@@ -73,7 +76,7 @@ def get_field_changes(form, except_field, model_to_compare):
             if form_data[field] is None:
                 form_data[field] = ''
             if field not in except_field and str(form_data[field]) != str(model_to_compare.__dict__[field]):
-                result = "{} Se cambio el campo {} de {} a {} \n".format(result, str(form.fields[field].label),
-                                                                         model_to_compare.__dict__[field],
-                                                                         form_data[field])
+                result = _(COMMENT_TAXPAYER).format(result, str(form.fields[field].label),
+                                                    model_to_compare.__dict__[field],
+                                                    form_data[field])
     return result
