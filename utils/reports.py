@@ -81,7 +81,7 @@ def get_field_changes(form, except_field, model_to_compare):
         if field not in except_field and str(form_data[field]) != str(model_to_compare.__dict__[field]):
             if 'file' in field or type(form_data[field]).__name__ == 'int' or type(
                     model_to_compare.__dict__[field]).__name__ == 'int':
-                resultg = _(COMMENT_TAXPAYER_INT_VALUES).format(result, str(form.fields[field].label))
+                result = _(COMMENT_TAXPAYER_INT_VALUES).format(result, str(form.fields[field].label))
             else:
                 result = _(COMMENT_TAXPAYER).format(result, str(form.fields[field].label),
                                                     model_to_compare.__dict__[field],

@@ -473,7 +473,7 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         if request.user.is_supplier:
             taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
             model_to_compare = BankAccount.objects.get(taxpayer_id=kwargs['taxpayer_id'])
-            text_to_coment = reports.get_field_changes(form, [], model_to_compare)
+            text_to_coment = reports.get_field_changes(form, ['bank_cbu_file'], model_to_compare)
             TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
