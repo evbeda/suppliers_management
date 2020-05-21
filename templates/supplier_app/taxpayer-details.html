@@ -10,11 +10,6 @@
 {% include 'navbar.html' %}
 
 <div class="container col-md-11" style="height:70vh">
-    {% if not workday_id_is_setted  and is_AP%}
-    <div class="row justify-content-center" role="alert">
-        <h5 class="alert alert-danger">{% trans "You must set workday id to the taxpayer" %}</h5>
-    </div>
-    {% endif %}
     {% include 'messages_notification.html' %}
     <div class="row">
         <div class="card col-md-9">
