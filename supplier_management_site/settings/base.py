@@ -166,7 +166,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL NOTIFICATION URLS
 BRITESU_BASE_URL = 'http://127.0.0.1:8000'
 # CELERY REDIS CONFIG
-BROKER_URL = 'redis://:{}@{}'.format(get_env_variable('REDISLAB_PASSWORD'), get_env_variable('REDISLAB_ENDPOINT'))
+BROKER_URL = 'redis://{}:{}@{}'.format(get_env_variable('REDIS_USER'), get_env_variable('REDIS_PASSWORD'), get_env_variable('REDIS_ENDPOINT'))
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
