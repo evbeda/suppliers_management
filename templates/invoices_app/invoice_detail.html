@@ -58,6 +58,9 @@
           {% if invoice.status == INVOICE_STATUS_APPROVED %}
           <span class="badge badge-success">{{invoice.get_status_display}}</span>
           {% endif %}
+          {% if invoice.status == INVOICE_STATUS_IN_PROGRESS %}
+          <span class="badge badge-warning">{{invoice.get_status_display}}</span>
+          {% endif %}
       </div>
       <div class="card-body">
         <div class="row mb-4">
@@ -128,7 +131,7 @@
             {% endif %}
             </form>
           </div>
-          {% if invoice.status != INVOICE_STATUS_APPROVED and not invoice.workday_id %}
+          {% if invoice.status != INVOICE_STATUS_APPROVED and invoice.status == INVOICE_STATUS_IN_PROGRESS %}
             <div class="col">
               <form method='POST' class="form-inline d-flex justify-content-end" action="{% url 'change-invoice-status' pk=invoice.id %}">
                 {% csrf_token %}
@@ -142,6 +145,21 @@
             </div>
           {% endif %}
           {% if invoice.status == INVOICE_STATUS_PENDING %}
+         <div class="col">
+           <form method='POST' class="form-inline d-flex justify-content-end"
+                 action="{% url 'change-invoice-status' pk=invoice.id %}">
+             {% csrf_token %}
+             <div class="input-group mb-3">
+               <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
+               <div class="input-group-append">
+                 <button type="submit" name='status' class="btn btn-warning" value="{{ INVOICE_STATUS_IN_PROGRESS }}">{% trans "In Progress" %}
+                 </button>
+               </div>
+             </div>
+           </form>
+         </div>
+         {% endif %}
+         {% if invoice.status == INVOICE_STATUS_PENDING or invoice.status == INVOICE_STATUS_IN_PROGRESS  %}
           <div class="col text-right"> 
               <button id="toggleRequestChanges" class="btn btn-warning">{% trans 'Request Changes' %}</button>
             </div>

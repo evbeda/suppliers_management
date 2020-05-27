@@ -9,7 +9,7 @@ from invoices_app import (
     INVOICE_STATUS_REJECTED_CODE,
     NO_COMMENT_ERROR,
     NO_WORKDAY_ID_ERROR,
-)
+    INVOICE_STATUS_IN_PROGRESS_CODE)
 
 
 def change_status(invoice, status, *args):
@@ -40,5 +40,6 @@ def get_change_status_strategy(status):
         INVOICE_STATUS_PAID_CODE: change_status,
         INVOICE_STATUS_PENDING_CODE: change_status,
         INVOICE_STATUS_REJECTED_CODE: change_status,
+        INVOICE_STATUS_IN_PROGRESS_CODE: strategy_change_to_approved,
     }
     return strategy_assignment[status]

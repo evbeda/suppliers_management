@@ -98,7 +98,7 @@ from invoices_app import (
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
     DISCLAIMER,
-)
+    INVOICE_STATUS_IN_PROGRESS)
 
 from invoices_app.change_status_strategy import get_change_status_strategy
 from invoices_app.filters import InvoiceFilter
@@ -134,6 +134,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['date_format'] = DATE_FORMAT
         context['all_taxpayers'] = self.get_taxpayers()
         return context
@@ -175,6 +176,7 @@ class SupplierInvoiceListView(
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['date_format'] = DATE_FORMAT
         return context
 
@@ -319,6 +321,7 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         return context
 
 
@@ -392,6 +395,7 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['comments'] = self.get_comments(invoice)
         context['date_format'] = DATE_FORMAT
         return context
