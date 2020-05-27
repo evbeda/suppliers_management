@@ -4,7 +4,7 @@ from utils.env import get_env_variable
 
 ALLOWED_HOSTS = [
     'britesu.herokuapp.com',
-    'brite-su-qa.herokuapp.com',
+    'britesu-qa.herokuapp.com',
 ]
 
 DATABASES = {
