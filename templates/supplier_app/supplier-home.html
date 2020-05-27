@@ -13,7 +13,9 @@
         <div class="col-md-10">
             <div class="row justify-content-end">
                 {% if user_has_company %}
-                <a class='btn btn-success' href="{% url 'taxpayer-create' %}">{% trans "Create a new taxpayer" %}</a>
+                <a class='btn btn-success' href="{% url 'taxpayer-create' %}">
+                    <i class="fa fa-plus mr-2"></i>
+                    {% trans "Create a new taxpayer" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -40,10 +42,10 @@
                             </span>
                         </td>
                         <td>
-                            <a class='btn btn-info'
+                            <!-- <a class='btn btn-info'
                                 href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer.id %}">
                                 {% trans "Invoices" %}
-                            </a>
+                            </a> -->
                             <a class='btn btn-info'
                                 href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">
                                 {% trans "Edit" %}
