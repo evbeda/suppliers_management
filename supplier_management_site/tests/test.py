@@ -11,8 +11,8 @@ from invoices_app import (
     INVOICE_STATUS_PENDING,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PAID,
-    INVOICE_STATUS_REJECTED
-)
+    INVOICE_STATUS_REJECTED,
+    INVOICE_STATUS_IN_PROGRESS)
 
 from supplier_app.constants.email_notifications import email_notifications
 from supplier_app.models import InvitingBuyer
@@ -173,6 +173,7 @@ class TestInvoiceStatusLookup(TestCase):
         ('3', INVOICE_STATUS_CHANGES_REQUEST,),
         ('4', INVOICE_STATUS_REJECTED),
         ('5', INVOICE_STATUS_PAID,),
+        ('6', INVOICE_STATUS_IN_PROGRESS,),
     ])
     def test_invoice_status_lookup(self, expected_value, tag):
         self.assertEqual(invoice_status_lookup(tag), expected_value)

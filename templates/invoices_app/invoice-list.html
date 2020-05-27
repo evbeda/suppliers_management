@@ -68,6 +68,9 @@
                             {% if invoice.status == INVOICE_STATUS_APPROVED %}
                             <span class="badge badge-success">{{invoice.get_status_display}}</span>
                             {% endif %}
+                            {% if invoice.status == INVOICE_STATUS_IN_PROGRESS %}
+                            <span class="badge badge-warning">{{invoice.get_status_display}}</span>
+                            {% endif %}
                         </td>
                         <td>
                             <a href="{% url 'invoices-detail' taxpayer_id=invoice.taxpayer.id pk=invoice.id %}"><i class="fa fa-eye ml-2"></i></a>
