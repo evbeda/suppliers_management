@@ -64,7 +64,11 @@
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              {{ form.po_number.label_tag }} {{ form.po_number }}
+              {{ form.po_number.label_tag }}
+              <a data-toggle="tooltip" data-placement="right" title="{% trans 'Get the Purchase Order Number for your invoice from your contact/buyer at Eventbrite' %}">
+                <i class="fas fa-info-circle"></i>
+              </a>
+              {{ form.po_number }}
               <small class="text-danger">
                 {{ form.po_number.errors }}
               </small>
