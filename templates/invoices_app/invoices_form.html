@@ -23,7 +23,7 @@
       {% if invoice %}
       <p class="text-center py-4 h3">{% trans "Update Invoice" %}</p>
       {% else %}
-      <p class="text-center py-4 h3">{% trans "Create Invoice" %}</p>
+      <p class="text-center py-4 h3">{{taxpayer.business_name}} > {% trans "Create Invoice" %}</p>
       {% endif %}
     </div>
       <form id="invoiceForm" method="post" class="form-row" enctype="multipart/form-data">
@@ -165,10 +165,8 @@
           </button>
           {% if invoice %}
           <a class='btn btn-danger' href="{% url 'invoices-detail' taxpayer_id=taxpayer_id pk=invoice.id %}">{% trans "Cancel" %}</a>
-          {% elif is_AP %}
-          <a class='btn btn-danger' href="{% url 'invoices-list' %}">{% trans "Cancel" %}</a>
           {% else %}
-          <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">{% trans "Cancel" %}</a>
+          <a class='btn btn-danger' href="{% url 'invoices-list' %}">{% trans "Cancel" %}</a>
           {% endif %}
         </div>
         {% csrf_token %}

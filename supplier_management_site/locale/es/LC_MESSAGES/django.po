@@ -2274,11 +2274,11 @@ msgstr ""
 
 #: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
-#: templates/invoices_app/invoice-list.html:36
+#: templates/invoices_app/invoice-list.html:53
 #: templates/invoices_app/invoice_detail.html:45
 #: templates/invoices_app/supplier-invoice-list.html:36
 #: templates/supplier_app/ap-taxpayers.html:24
-#: templates/supplier_app/supplier-home.html:28
+#: templates/supplier_app/supplier-home.html:30
 #: templates/supplier_app/taxpayer-details.html:35
 msgid "Status"
 msgstr "Estado"
@@ -2289,24 +2289,24 @@ msgid "Invoice Date"
 msgstr "Fecha de factura"
 
 #: invoices_app/filters.py:30 invoices_app/models.py:43
-#: templates/invoices_app/invoice-list.html:32
+#: templates/invoices_app/invoice-list.html:49
 msgid "Due Date"
 msgstr "Fecha de vencimiento"
 
 #: invoices_app/filters.py:32 templates/invoices_app/history-list.html:26
-#: templates/invoices_app/invoice-list.html:35
+#: templates/invoices_app/invoice-list.html:52
 #: templates/invoices_app/supplier-invoice-list.html:35
 msgid "Total Amount"
 msgstr "Monto Total"
 
 #: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
-#: templates/invoices_app/invoice-list.html:29
+#: templates/invoices_app/invoice-list.html:46
 msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
 #: supplier_app/models.py:55 supplier_app/models.py:126
-#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:30
+#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:47
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/html-to-pdf-page.html:153
@@ -2345,7 +2345,7 @@ msgid "Date Received"
 msgstr "Fecha recepción"
 
 #: invoices_app/models.py:45 templates/invoices_app/history-list.html:22
-#: templates/invoices_app/invoice-list.html:33
+#: templates/invoices_app/invoice-list.html:50
 #: templates/invoices_app/supplier-invoice-list.html:33
 msgid "Invoice Number"
 msgstr "Número de factura"
@@ -2693,7 +2693,7 @@ msgstr "Nombre"
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/html-to-pdf-page.html:133
-#: templates/supplier_app/supplier-home.html:26
+#: templates/supplier_app/supplier-home.html:28
 #: templates/supplier_app/taxpayer-details.html:50
 msgid "Business name"
 msgstr "Razón social"
@@ -2868,7 +2868,7 @@ msgid "Modified"
 msgstr "Modificado"
 
 #: templates/invoices_app/history-list.html:23
-#: templates/invoices_app/invoice-list.html:34
+#: templates/invoices_app/invoice-list.html:51
 #: templates/invoices_app/supplier-invoice-list.html:34
 msgid "PO Number"
 msgstr "Número de orden de compra"
@@ -2877,16 +2877,25 @@ msgstr "Número de orden de compra"
 msgid "Invoice List"
 msgstr "Lista de facturas"
 
-#: templates/invoices_app/invoice-list.html:28
+#: templates/invoices_app/invoice-list.html:23
+#: templates/invoices_app/invoices_form.html:26
+msgid "Create Invoice"
+msgstr "Crear Factura"
+
+#: templates/invoices_app/invoice-list.html:30
+msgid "Taxpayer still in progress"
+msgstr "La entidad fiscal está en progreso"
+
+#: templates/invoices_app/invoice-list.html:45
 msgid "Received"
 msgstr "Recibido"
 
-#: templates/invoices_app/invoice-list.html:38
+#: templates/invoices_app/invoice-list.html:55
 #: templates/invoices_app/supplier-invoice-list.html:37
 msgid "View"
 msgstr "Ver"
 
-#: templates/invoices_app/invoice-list.html:43
+#: templates/invoices_app/invoice-list.html:60
 #: templates/invoices_app/supplier-invoice-list.html:43
 msgid "No invoices"
 msgstr "No hay facturas"
@@ -2999,10 +3008,6 @@ msgstr "Filtros"
 msgid "Update Invoice"
 msgstr "Editar Factura"
 
-#: templates/invoices_app/invoices_form.html:26
-msgid "Create Invoice"
-msgstr "Crear Factura"
-
 #: templates/invoices_app/invoices_form.html:68
 msgid ""
 "Get the Purchase Order Number for your invoice from your contact/buyer at "
@@ -3030,7 +3035,6 @@ msgstr "Enviar"
 
 #: templates/invoices_app/invoices_form.html:167
 #: templates/invoices_app/invoices_form.html:169
-#: templates/invoices_app/invoices_form.html:171
 #: templates/registration/admin_create.html:34
 #: templates/supplier_app/AP/company_creation.html:25
 #: templates/supplier_app/edit-address-information.html:25
@@ -3041,12 +3045,12 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: templates/invoices_app/supplier-invoice-list.html:11
-#: templates/navbar.html:121
+#: templates/navbar.html:109
 msgid "My Invoices"
 msgstr "Mis facturas"
 
 #: templates/invoices_app/supplier-invoice-list.html:21
-#: templates/navbar.html:124
+#: templates/navbar.html:112
 msgid "New Invoice"
 msgstr "Nueva factura"
 
@@ -3066,17 +3070,16 @@ msgstr "Nuevo email de 'BriteSu'"
 msgid "Hello"
 msgstr "Hola"
 
-#: templates/navbar.html:16 templates/navbar.html:106
+#: templates/navbar.html:16
 msgid "Management"
 msgstr "Administración"
 
-#: templates/navbar.html:21 templates/navbar.html:110
-#: templates/supplier_app/supplier-home.html:45
+#: templates/navbar.html:21 templates/navbar.html:99
+#: templates/supplier_app/supplier-home.html:47
 msgid "Invoices"
 msgstr "Facturas"
 
-#: templates/navbar.html:24 templates/navbar.html:94
-#: templates/supplier_app/ap-taxpayers.html:14
+#: templates/navbar.html:24 templates/supplier_app/ap-taxpayers.html:14
 msgid "Taxpayers"
 msgstr "Entidades fiscales"
 
@@ -3104,15 +3107,11 @@ msgstr "Comprador"
 msgid "Supplier"
 msgstr "Proveedor"
 
-#: templates/navbar.html:98
+#: templates/navbar.html:93
 msgid "My Taxpayers"
 msgstr "Mis entidades fiscales"
 
-#: templates/navbar.html:100
-msgid "New Taxpayer"
-msgstr "Crear entidad fiscal"
-
-#: templates/navbar.html:146
+#: templates/navbar.html:134
 msgid "Log out"
 msgstr "Cerrar sesión"
 
@@ -3248,7 +3247,7 @@ msgid "Taxpayer History"
 msgstr "Historial del proveedor"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:18
-#: templates/supplier_app/supplier-home.html:27
+#: templates/supplier_app/supplier-home.html:29
 msgid "Taxpayer identification number"
 msgstr "CUIT"
 
@@ -3491,15 +3490,15 @@ msgstr "Domicilio"
 msgid "Zip_Code"
 msgstr "Código postal"
 
-#: templates/supplier_app/supplier-home.html:16
+#: templates/supplier_app/supplier-home.html:18
 msgid "Create a new taxpayer"
 msgstr "Crear entidad fiscal"
 
-#: templates/supplier_app/supplier-home.html:29
+#: templates/supplier_app/supplier-home.html:31
 msgid "Options"
 msgstr "Opciones"
 
-#: templates/supplier_app/supplier-home.html:49
+#: templates/supplier_app/supplier-home.html:51
 #: templates/supplier_app/taxpayer-details.html:27
 #: templates/supplier_app/taxpayer-details.html:198
 #: templates/supplier_app/taxpayer-details.html:277
@@ -3587,6 +3586,9 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "New Taxpayer"
+#~ msgstr "Crear entidad fiscal"
 
 #~ msgid "You must set workday id to the taxpayer"
 #~ msgstr "Debes ponerle un workday id a la entidad fiscal"

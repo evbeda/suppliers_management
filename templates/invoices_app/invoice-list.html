@@ -17,8 +17,25 @@
         {% include 'invoices_app/invoice_filters.html' %}
         <div class="row">
             <div class="col">
-                <a class='float-right text-success' href="{% url 'invoice-to-xls' %}?{{ filter_to_xls }}"><i class="far fa-2x fa-file-excel"></i></a>
+                <div class="dropdown">
+                    <button class="btn btn-success dropdown-toggle mb-2" data-toggle="dropdown">
+                        <i class="fa fa-plus mr-2"></i>
+                        {% trans "Create Invoice"%}
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for taxpayer in all_taxpayers %}
+                            {% if taxpayer.taxpayer_state == 'APPROVED' %}
+                                <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}" class="dropdown-item">{{taxpayer.business_name}}</a>
+                            {% else %}
+                                <span class="dropdown-item text-muted">{{taxpayer.business_name}} ({% trans "Taxpayer still in progress"%})</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
+                <div class="col">
+                    <a class='float-right text-success' href="{% url 'invoice-to-xls' %}?{{ filter_to_xls }}"><i class="far fa-2x fa-file-excel"></i></a>
+                </div>
         </div>
         <div class="min-height">
             <table class="table table-hover table-sm">
@@ -82,4 +99,5 @@
         </div>
         {% include "_pagination.html" %}
     </div>
+
 {% endblock%}

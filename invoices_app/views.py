@@ -123,7 +123,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         else:
             return TaxPayer.objects.filter(
                 company__companyuserpermission__user=user
-            ).values('business_name')
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -217,6 +217,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         context['is_AP'] = self.request.user.is_AP
         context['eb_entities'] = TaxPayer.objects.get(pk=context['taxpayer_id']).eb_entities
+        context['taxpayer'] = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
         return context
 
     def get_form_class(self):
