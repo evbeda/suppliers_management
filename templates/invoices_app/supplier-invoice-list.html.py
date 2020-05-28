@@ -1,0 +1,91 @@
+BBBBBBB BBBBBBBBBBB
+BBBB BBBB
+
+
+BBBBB BBBBBBB
+BBBBBBB BBBBBBBBBBBBB
+
+XXXX XXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXX
+        XXXX XXXXXXXXXXX XXXXXX
+            XXX XXXXXXXXXXXXXXXXXXXX  gettext(u'My Invoices') XXXXX
+        XXXXXX
+    XXXXXX
+XXXXXX
+XXXX XXXXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXX
+        XXX XXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXXXX
+            XXX XXXXXXXXXXXXXXXXX
+                BB BBBBBBBBBBBBBBBBBBBBBBB BB BBBBBBBBBB
+                XX XXXXXXXXXX XXXXXXXXXXXX XXXXXXBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBBBBBBBBXX
+                    XX XXXXXXXXX XXXXXXXXXXXXX  gettext(u'New Invoice') 
+                XXXX
+                BBBBB
+            XXXXX
+        XXXXX
+    XXXXXX
+    XXXX XXXXXXXXXXXXXXX  XXXXXXXXXXXX
+        XXXXXX XXXXXXXXXXXX XXXXXXXX XXXXXXXXXXXXX
+            XXXXXX XXXXXXXXXXXXXXXXXXXXXX
+                XXXX
+                    XXX XXXXXXXXXXXXXXXXXX
+                    XXX XXXXXXXXXXXX gettext(u'Date') XXXXX
+                    XXX XXXXXXXXXXXX gettext(u'Invoice Number') XXXXX
+                    XXX XXXXXXXXXXXX gettext(u'PO Number') XXXXX
+                    XXX XXXXXXXXXXXX gettext(u'Total Amount') XXXXX
+                    XXX XXXXXXXXXXXX gettext(u'Status') XXXXX
+                    XXX XXXXXXXXXXXX gettext(u'View') XXXXX
+                XXXXX
+            XXXXXXXX
+            XXXXXXX
+                BB BBB BBBBBBBBBBB
+                XXXX
+                    XXX XXXXXXXXXXXXXXXXXXX XXXXXXXXXXXX XXXXXXXXXXXX gettext(u'No invoices') 
+                        BB BBBBBBBBBBBBBBBBBBBBBBB BB BBBBBBBBBB
+                          XX XXXXXXBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBBBBBBBBXX gettext(u'Create one?') XXXXXXXXX
+                        BBBBB
+                XXXXX
+                BBBBB
+                BBB BBBBBBB BB BBBBBBBBBBB
+                XXXX
+                    XXX XXXXXXXXXXXXXXXXX
+                    XXXXFFFFFFFFFFFFFFFFXXXXX
+                    XXXXXXXXX
+                    XXXXXXXXX
+                    XXX XXXXXXXXXXXXXXXXXXXX XXXXX
+                    XXXXBB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                        BB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                        BB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                        BB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                        BB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                        BB BBBBBBBBBBBBBB BB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+                        XXXXX XXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX
+                        BBBBB
+                    XXXXX
+                    XXXX
+                        XX XXXXXXBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB BBBBBBBBBBBBBXXXX
+                                XXXXXXXXX XXXXXX XXXXXXXXXXXXXX
+                    XXXXX
+                XXXXX
+                BBBBBB
+            XXXXXXXX
+        XXXXXXXX
+    XXXXXX
+XXXXXX
+XXXX XXXXXXXXXXXX
+    XXXX XXXXXXXXXXXX
+        BBBBBBB BBBBBBBBBBBBBBBBBB
+    XXXXXX
+XXXXXX
+
+BBBBBBBB
