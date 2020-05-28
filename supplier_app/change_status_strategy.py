@@ -61,7 +61,7 @@ class StrategyApprove(StrategyStatusChange):
     def change_taxpayer_status(taxpayer, request=None):
         try:
             workday_id = request.POST['workday_id']
-            if workday_id == "":
+            if not workday_id:
                 raise NoWorkdayIDException()
             _taxpayer_exists_with_workday_id(workday_id, taxpayer)
             taxpayer.workday_id = workday_id or taxpayer.workday_id

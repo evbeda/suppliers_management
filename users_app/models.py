@@ -17,9 +17,8 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
-        if 'preferred_language' in extra_fields:
-            if extra_fields['preferred_language'] not in LANGUAGES:
-                extra_fields['preferred_language'] = 'en'
+        if extra_fields.get('preferred_language') not in LANGUAGES:
+            extra_fields['preferred_language'] = 'en'
         user = self.model(email=email, **extra_fields)
         if password:
             user.set_password(password)
