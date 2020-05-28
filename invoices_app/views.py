@@ -98,7 +98,9 @@ from invoices_app import (
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
     DISCLAIMER,
-    INVOICE_STATUS_IN_PROGRESS)
+    INVOICE_STATUS_IN_PROGRESS, INVOICE_STATUS_CHANGES_REQUEST_CODE,
+)
+
 
 from invoices_app.change_status_strategy import get_change_status_strategy
 from invoices_app.filters import InvoiceFilter
@@ -353,7 +355,10 @@ def change_invoice_status(request, pk):
         )
 
     invoice.save()
-    _send_email_when_change_invoice_status(request, invoice)
+    if status == INVOICE_STATUS_CHANGES_REQUEST_CODE:
+        _send_email_when_posting_a_comment(request, invoice)
+    else:
+        _send_email_when_change_invoice_status(request, invoice)
 
     return redirect(
         '{}?status={}'.format(
