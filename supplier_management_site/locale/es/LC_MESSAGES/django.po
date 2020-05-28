@@ -2240,10 +2240,10 @@ msgstr "Factura de Eventbrite {} comentada"
 
 #: invoices_app/__init__.py:66
 msgid ""
-"You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}"
+"You have a new comment on Invoice # {}. Please check your invoice. COMMENT: {}"
 msgstr ""
 "Tienes un nuevo comentario en la factura # {}. Por favor revise su factura. "
-"COMENTARIO:{}"
+"COMENTARIO: {}"
 
 #: invoices_app/__init__.py:67
 msgid "Invoice {} changed status to {}"
