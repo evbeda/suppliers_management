@@ -16,7 +16,7 @@ def change_status(invoice, status, *args):
     invoice.status = status
 
 
-def strategy_change_to_pending(invoice, status, request):
+def strategy_change_to_in_progress(invoice, status, request):
     change_status(invoice, status)
     workday_id = request.POST.get('workday_id')
     if not workday_id:
@@ -40,6 +40,6 @@ def get_change_status_strategy(status):
         INVOICE_STATUS_PAID_CODE: change_status,
         INVOICE_STATUS_PENDING_CODE: change_status,
         INVOICE_STATUS_REJECTED_CODE: change_status,
-        INVOICE_STATUS_IN_PROGRESS_CODE: strategy_change_to_pending,
+        INVOICE_STATUS_IN_PROGRESS_CODE: strategy_change_to_in_progress,
     }
     return strategy_assignment[status]
