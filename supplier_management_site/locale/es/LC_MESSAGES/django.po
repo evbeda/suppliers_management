@@ -716,7 +716,7 @@ msgstr ""
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:378
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:378
 msgid "Currently"
-msgstr "Moneda"
+msgstr "Actual"
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:379
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:379
@@ -726,7 +726,7 @@ msgstr "Cambio"
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:701
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:701
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 #: env/lib/python3.7/site-packages/django/forms/widgets.py:702
 #: venv/lib/python3.7/site-packages/django/forms/widgets.py:702
