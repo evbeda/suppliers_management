@@ -27,7 +27,8 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
     INVOICE_MAX_SIZE_FILE,
     NO_WORKDAY_ID_ERROR,
-    INVOICE_STATUS_IN_PROGRESS)
+    INVOICE_STATUS_IN_PROGRESS,
+)
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
