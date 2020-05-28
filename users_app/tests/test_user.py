@@ -64,6 +64,11 @@ class TestUser(TestCase):
         admin_user = User.objects.create_superuser('super@user.com', 'foo')
         self.assertEqual(str(admin_user), 'super@user.com')
 
+    def test_create_user_ap(self):
+        User = get_user_model()
+        user = UserFactory(email='normal@user.com', password='foo')
+        self.assertEqual(User.objects.create_user('normal@user.com', 'foo'), user)
+
 
 class TestLoginErrorTemplate(TestCase):
     def setUp(self):

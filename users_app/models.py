@@ -14,6 +14,8 @@ class UserManager(BaseUserManager):
         """
         Create and save a User with the given email and password.
         """
+        if User.objects.filter(email=email).exists():
+            return User.objects.get(email=email)
         if not email:
             raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
