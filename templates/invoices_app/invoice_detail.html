@@ -136,7 +136,6 @@
               <form method='POST' class="form-inline d-flex justify-content-end" action="{% url 'change-invoice-status' pk=invoice.id %}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                    <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
                     <div class="input-group-append">
                         <button type="submit" name='status' class="btn btn-success" value="{{ INVOICE_STATUS_APPROVED }}">{% trans "Approve" %}</button>
                       </div>

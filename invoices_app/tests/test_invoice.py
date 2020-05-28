@@ -27,7 +27,7 @@ from invoices_app import (
     INVOICE_STATUS_PAID,
     INVOICE_MAX_SIZE_FILE,
     NO_WORKDAY_ID_ERROR,
-)
+    INVOICE_STATUS_IN_PROGRESS)
 from invoices_app.factory_boy import InvoiceFactory
 from invoices_app.forms import InvoiceForm
 from invoices_app.models import Invoice
@@ -331,13 +331,13 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'status': invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS),
             },
             follow=True
         )
         self.assertContains(request, NO_WORKDAY_ID_ERROR)
 
-    def test_invoice_approbe_in_db(self):
+    def test_invoice_in_progress_in_db(self):
         self.client.force_login(self.ap_user)
         self.client.post(
             reverse(
@@ -347,14 +347,14 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'status': invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS),
                 'workday_id': 123123,
             },
             follow=True
         )
 
         invoice = get_object_or_404(Invoice, pk=self.invoice.id)
-        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_APPROVED))
+        self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS))
         self.assertEqual(invoice.workday_id, 123123)
 
     def test_invoice_change_status_code_to_approved(self):
@@ -383,7 +383,7 @@ class TestInvoice(TestBase):
                 }
             ),
             {
-                'status': invoice_status_lookup(INVOICE_STATUS_APPROVED),
+                'status': invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS),
                 'workday_id': "invalid id",
             },
             follow=True
