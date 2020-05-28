@@ -481,7 +481,7 @@ class TestInvoice(TestBase):
             follow=True,
         )
         self.assertIn(
-            (reverse('supplier-invoice-list', kwargs={'taxpayer_id': self.taxpayer.id}), 302),
+            (reverse('invoices-list'), 302),
             res.redirect_chain
         )
         self.assertEqual(res.status_code, HTTPStatus.OK)
