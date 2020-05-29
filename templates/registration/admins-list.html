@@ -14,8 +14,8 @@
         <div class="row justify-content-md-center">
             <form method="GET" action="{% url 'manage-admins' %}">
                 {% csrf_token %}
-                <input class='btn btn-success' type="submit" name="only_ap" value="{% trans 'Only AP' %}" id="appro"/>
-                <input class='btn btn-success' type="submit" name="all_eb_users" value="{% trans 'All eb users' %}" id="approve"/>
+                <input class='btn btn-success' type="submit" name="only_ap" value="{% trans 'Only AP' %}" id="only_ap"/>
+                <input class='btn btn-success' type="submit" name="all_eb_users" value="{% trans 'All eb users' %}" id="all_eb_users"/>
             </form>
         </div>
         <div class="row mt-3">
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="col-md-9">
-        <table class="table table-hover table-sm" id="ap_list">
+        <table class="table table-hover table-sm">
             <thead class="thead-eb-dark">
                 <tr>
                     <th scope="col">{% trans "User ID"%}</th>
