@@ -88,9 +88,11 @@ class AdminList(PaginationMixin, PermissionRequiredMixin, ListView):
             queryset = User.objects.filter(
                 Q(groups__permissions=perm)).distinct()
         else:
-            perm = Permission.objects.get(codename='supplier_role')
+            perm_buyer = Permission.objects.get(codename='buyer_role')
+            perm_ap = Permission.objects.get(codename='ap_role')
             queryset = User.objects.filter(
-            ~Q(groups__permissions=perm)).distinct()
+                Q(groups__permissions=perm_buyer)| Q(groups__permissions=perm_ap)
+            ).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):
