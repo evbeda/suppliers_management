@@ -191,7 +191,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
     raise_exception = True
 
     def get_success_url(self):
-        return reverse_lazy('supplier-invoice-list', kwargs={'taxpayer_id': self.kwargs['taxpayer_id']})
+        return reverse_lazy('invoices-list')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -257,8 +257,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         taxpayer_id = self.kwargs.get('taxpayer_id')
         if taxpayer_id:
             return reverse_lazy(
-                'supplier-invoice-list',
-                kwargs={'taxpayer_id': taxpayer_id}
+                'invoices-list',
             )
         else:
             return reverse_lazy(
@@ -288,7 +287,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
     def get_login_url(self):
         taxpayer_id = self.kwargs.get('taxpayer_id')
         if taxpayer_id:
-            return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
+            return reverse('invoices-list')
         else:
             return reverse('invoices-list')
 
