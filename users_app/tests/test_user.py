@@ -201,12 +201,32 @@ class TestAdmin(TestCase):
         manager_group = Group.objects.get(name='ap_manager')
         self.ap_user.groups.add(manager_group)
 
+        self.user_buyer_with_google_social = UserFactory(email='buyer@eventbrite.com')
+        self.buyer_group = Group.objects.get(name='buyer')
+        self.user_buyer_with_google_social.groups.add(self.buyer_group)
+
     def test_admin_list_view(self):
         self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse('manage-admins')
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_admin_list_view_only_ap(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('manage-admins'),
+            {'only_ap': 'only_ap'}
+        )
+        self.assertEqual(len(response.context_data['object_list']), 1)
+
+    def test_admin_list_view_all_eb_users(self):
+        self.client.force_login(self.ap_user)
+        response = self.client.get(
+            reverse('manage-admins'),
+            {'all_eb_users': 'all_eb_users'}
+        )
+        self.assertEqual(len(response.context_data['object_list']), 2)
 
     def test_change_admin_group_view(self):
         self.client.force_login(self.ap_user)
