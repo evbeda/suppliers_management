@@ -59,10 +59,10 @@
                 </thead>
                 <tbody>
                 {% if not object_list%}
-                <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
+                    <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
                 {% endif %}
                 {% for invoice in object_list %}
-                    <tr>
+                    <tr class="text-center">
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{{invoice.invoice_date_received|date:date_format }}</td>
                         <td>{{invoice.taxpayer.business_name}}</td>
@@ -71,7 +71,7 @@
                         <td>{{invoice.invoice_due_date|date:date_format }}</td>
                         <td>{{invoice.invoice_number}}</td>
                         <td>{{invoice.po_number}}</td>
-                        <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>
+                        <td>{{invoice.currency}} {{invoice.total_amount}}</td>
                         <td>{% if invoice.status == INVOICE_STATUS_PENDING %}
                             <span class="badge badge-primary">{{invoice.get_status_display}}</span>
                             {% endif %}
