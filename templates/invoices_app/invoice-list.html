@@ -59,11 +59,7 @@
                 </thead>
                 <tbody>
                 {% if not object_list%}
-                    {% if user.is_AP %}
-                        <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
-                    {% else %}
                     <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
-                    {% endif %}
                 {% endif %}
                 {% for invoice in object_list %}
                     <tr class="text-center">
