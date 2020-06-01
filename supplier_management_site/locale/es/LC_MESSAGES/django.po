@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-01 14:50+0000\n"
+"POT-Creation-Date: 2020-06-01 15:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1832,7 +1832,7 @@ msgstr "Por favor setea un workday ID para poder aprobar la factura"
 msgid "Please add a comment to request changes"
 msgstr "Porfavor agregue un comentario para pedir cambios"
 
-#: invoices_app/__init__.py:64 users_app/views.py:157
+#: invoices_app/__init__.py:64 users_app/views.py:159
 msgid "Thank you"
 msgstr "Gracias"
 
@@ -2728,16 +2728,16 @@ msgid "Create"
 msgstr "Crear"
 
 #: templates/registration/admins-list.html:9
-msgid "Admins List"
-msgstr "Lista de administradores"
+msgid "Users List"
+msgstr "Lista de Usuarios"
 
 #: templates/registration/admins-list.html:17
 msgid "Only AP"
-msgstr ""
+msgstr "Solo AP"
 
 #: templates/registration/admins-list.html:18
 msgid "All eb users"
-msgstr ""
+msgstr "Empleados de eb"
 
 #: templates/registration/admins-list.html:29
 msgid "User ID"
@@ -3143,11 +3143,11 @@ msgstr "Superusuario debe tener is_superuser=True"
 msgid "email address"
 msgstr "Email"
 
-#: users_app/views.py:152
+#: users_app/views.py:154
 msgid "You have been invited to BriteSu as AP"
 msgstr "Has sido invitado a BriteSu"
 
-#: users_app/views.py:153
+#: users_app/views.py:155
 msgid "Please Login as AP with the link below"
 msgstr "Porfavor ingrese como AP con el siguiente link"
 
@@ -3190,6 +3190,9 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "Admins List"
+#~ msgstr "Lista de administradores"
 
 #~ msgid "Create Invoice"
 #~ msgstr "Crear Factura"
