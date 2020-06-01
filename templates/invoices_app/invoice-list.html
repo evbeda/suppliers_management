@@ -59,13 +59,20 @@
                     </tr>
                 </thead>
                 <tbody>
+
                 {% if not object_list%}
                     {% if user.is_AP %}
                         <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
                     {% else %}
+                    {% if has_approved_taxpayer %}
+                        <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
+                    {% else %}
                         <tr><td  class="table-danger text-center" colspan="11">{% trans "You must have an approved organization in order to upload an invoice" %}</td> </tr>
-                    {% endif %}
+                        {% endif %}
+                    
+                        {% endif %}
                 {% endif %}
+
                 {% for invoice in object_list %}
                     <tr class="text-center">
                         <th scope="row">{{ forloop.counter }}</th>
