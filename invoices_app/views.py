@@ -138,7 +138,11 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
         context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['date_format'] = DATE_FORMAT
-        context['all_taxpayers'] = self.get_taxpayers()
+        all_taxpayers = self.get_taxpayers()
+        context['all_taxpayers'] = all_taxpayers
+        if not self.request.user.is_AP:
+            context['has_approved_taxpayer'] = any(taxpayer.taxpayer_state == 'APPROVED' for taxpayer in all_taxpayers)
+        
         return context
 
     def get_queryset(self):

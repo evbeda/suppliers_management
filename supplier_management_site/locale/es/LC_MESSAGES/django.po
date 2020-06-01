@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-01 15:29+0000\n"
+"POT-Creation-Date: 2020-06-01 18:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1877,7 +1877,7 @@ msgstr ""
 
 #: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
-#: templates/invoices_app/invoice-list.html:55
+#: templates/invoices_app/invoice-list.html:56
 #: templates/invoices_app/invoice_detail.html:45
 #: templates/invoices_app/supplier-invoice-list.html:36
 #: templates/supplier_app/ap-taxpayers.html:24
@@ -1887,29 +1887,29 @@ msgid "Status"
 msgstr "Estado"
 
 #: invoices_app/filters.py:29 invoices_app/views.py:233
-#: invoices_app/views.py:302 templates/invoices_app/invoice-list.html:50
+#: invoices_app/views.py:302 templates/invoices_app/invoice-list.html:51
 msgid "Invoice Date"
 msgstr "Fecha de factura"
 
 #: invoices_app/filters.py:30 invoices_app/models.py:43
-#: templates/invoices_app/invoice-list.html:51
+#: templates/invoices_app/invoice-list.html:52
 msgid "Due Date"
 msgstr "Fecha de vencimiento"
 
 #: invoices_app/filters.py:32 templates/invoices_app/history-list.html:26
-#: templates/invoices_app/invoice-list.html:54
+#: templates/invoices_app/invoice-list.html:55
 #: templates/invoices_app/supplier-invoice-list.html:35
 msgid "Total Amount"
 msgstr "Monto Total"
 
 #: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
-#: templates/invoices_app/invoice-list.html:48
+#: templates/invoices_app/invoice-list.html:49
 msgid "Taxpayer"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
 #: supplier_app/models.py:55 supplier_app/models.py:126
-#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:49
+#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:50
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/html-to-pdf-page.html:153
@@ -1919,15 +1919,15 @@ msgstr "Entidad Fiscal"
 msgid "Country"
 msgstr "País"
 
-#: invoices_app/forms.py:32 invoices_app/forms.py:60
+#: invoices_app/forms.py:30 invoices_app/forms.py:58
 msgid "e.g. 124246346"
 msgstr "ej. 124246346"
 
-#: invoices_app/forms.py:53 templates/invoices_app/history-list.html:24
+#: invoices_app/forms.py:51 templates/invoices_app/history-list.html:24
 msgid "Net Amount"
 msgstr "Neto"
 
-#: invoices_app/forms.py:63
+#: invoices_app/forms.py:61
 msgid "Workday ID"
 msgstr "Workday ID"
 
@@ -1948,29 +1948,25 @@ msgid "Date Received"
 msgstr "Fecha recepción"
 
 #: invoices_app/models.py:45 templates/invoices_app/history-list.html:22
-#: templates/invoices_app/invoice-list.html:52
+#: templates/invoices_app/invoice-list.html:53
 #: templates/invoices_app/supplier-invoice-list.html:33
 msgid "Invoice Number"
 msgstr "Número de factura"
 
-#: invoices_app/models.py:46
-msgid "Invoice Type"
-msgstr "Tipo de factura"
-
-#: invoices_app/models.py:48
+#: invoices_app/models.py:47
 msgid "Net amount"
 msgstr "Neto"
 
-#: invoices_app/models.py:57 templates/invoices_app/history-list.html:25
+#: invoices_app/models.py:56 templates/invoices_app/history-list.html:25
 #: templates/invoices_app/invoice_detail.html:100
 msgid "Tax Liens"
 msgstr "Gravámenes"
 
-#: invoices_app/models.py:63 templates/invoices_app/invoice_detail.html:108
+#: invoices_app/models.py:62 templates/invoices_app/invoice_detail.html:108
 msgid "Total"
 msgstr "Total"
 
-#: invoices_app/models.py:71 templates/invoices_app/invoices_form.html:147
+#: invoices_app/models.py:70 templates/invoices_app/invoices_form.html:136
 msgid "Invoice File"
 msgstr "Factura"
 
@@ -2472,37 +2468,41 @@ msgid "Modified"
 msgstr "Modificado"
 
 #: templates/invoices_app/history-list.html:23
-#: templates/invoices_app/invoice-list.html:53
+#: templates/invoices_app/invoice-list.html:54
 #: templates/invoices_app/supplier-invoice-list.html:34
 msgid "PO Number"
 msgstr "Número de orden de compra"
 
-#: templates/invoices_app/invoice-list.html:12
+#: templates/invoices_app/invoice-list.html:13
 msgid "Invoice List"
 msgstr "Lista de facturas"
 
-#: templates/invoices_app/invoice-list.html:24
+#: templates/invoices_app/invoice-list.html:25
 #: templates/invoices_app/invoices_form.html:31
 msgid "Upload Invoice"
 msgstr "Subir Factura"
 
-#: templates/invoices_app/invoice-list.html:31
+#: templates/invoices_app/invoice-list.html:32
 msgid "Taxpayer still in progress"
 msgstr "La entidad fiscal está en progreso"
 
-#: templates/invoices_app/invoice-list.html:47
+#: templates/invoices_app/invoice-list.html:48
 msgid "Received"
 msgstr "Recibido"
 
-#: templates/invoices_app/invoice-list.html:57
+#: templates/invoices_app/invoice-list.html:58
 #: templates/invoices_app/supplier-invoice-list.html:37
 msgid "View"
 msgstr "Ver"
 
-#: templates/invoices_app/invoice-list.html:62
+#: templates/invoices_app/invoice-list.html:66
 #: templates/invoices_app/supplier-invoice-list.html:43
 msgid "No invoices"
 msgstr "No hay facturas"
+
+#: templates/invoices_app/invoice-list.html:68
+msgid "You must have an approved organization in order to upload an invoice"
+msgstr "Debes tener una entidad fiscal aprobada para poder subir facturas"
 
 #: templates/invoices_app/invoice_detail.html:30
 msgid "Invoice #"
@@ -2578,23 +2578,23 @@ msgstr "Historial de facturas"
 msgid "Recent updates"
 msgstr "Cambios recientes"
 
-#: templates/invoices_app/invoice_detail.html:198
+#: templates/invoices_app/invoice_detail.html:197
 msgid "Make a comment"
 msgstr "Hacer un comentario"
 
-#: templates/invoices_app/invoice_detail.html:206
+#: templates/invoices_app/invoice_detail.html:205
 msgid "Post a comment"
 msgstr "Comentar"
 
-#: templates/invoices_app/invoice_detail.html:212
+#: templates/invoices_app/invoice_detail.html:211
 msgid "Choose a file"
 msgstr "Elige un archivo"
 
-#: templates/invoices_app/invoice_detail.html:228
+#: templates/invoices_app/invoice_detail.html:226
 msgid "Administrator"
 msgstr "Administrador"
 
-#: templates/invoices_app/invoice_detail.html:233
+#: templates/invoices_app/invoice_detail.html:231
 msgid "Attachment: "
 msgstr "Archivo Adjunto: "
 
@@ -2612,29 +2612,29 @@ msgstr "Filtros"
 msgid "Update Invoice"
 msgstr "Editar Factura"
 
-#: templates/invoices_app/invoices_form.html:73
+#: templates/invoices_app/invoices_form.html:62
 msgid ""
 "Get the Purchase Order Number for your invoice from your contact/buyer at "
 "Eventbrite"
 msgstr ""
 "Obtén el Número de Orden de tu factura de tu contacto/comprador en Eventbrite"
 
-#: templates/invoices_app/invoices_form.html:83
+#: templates/invoices_app/invoices_form.html:72
 msgid "Eventbrite entity"
 msgstr "Entidad de Eventbrite"
 
-#: templates/invoices_app/invoices_form.html:84
+#: templates/invoices_app/invoices_form.html:73
 msgid "Eventbrite company to which you bill"
 msgstr "Entidad de Eventbrite a la que le facturas"
 
-#: templates/invoices_app/invoices_form.html:166
+#: templates/invoices_app/invoices_form.html:155
 #: templates/steper_example.html:36
 #: templates/supplier_app/Supplier/taxpayer-creation.html:114
 msgid "Submit"
 msgstr "Enviar"
 
-#: templates/invoices_app/invoices_form.html:169
-#: templates/invoices_app/invoices_form.html:171
+#: templates/invoices_app/invoices_form.html:158
+#: templates/invoices_app/invoices_form.html:160
 #: templates/registration/admin_create.html:34
 #: templates/supplier_app/AP/company_creation.html:25
 #: templates/supplier_app/edit-address-information.html:25
@@ -3190,6 +3190,16 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "Invoice Type"
+#~ msgstr "Tipo de factura"
+
+#~ msgid ""
+#~ "Once your taxpayer is approved you can start uploading invoices by "
+#~ "clicking the button above"
+#~ msgstr ""
+#~ "Una ves que su Entifad fiscal sea aprobada podra comenzar a subir "
+#~ "facturas clickeando en el boton de arriba"
 
 #~ msgid "Admins List"
 #~ msgstr "Lista de administradores"
