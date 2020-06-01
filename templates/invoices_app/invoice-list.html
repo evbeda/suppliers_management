@@ -6,6 +6,7 @@
 
 {% include 'navbar.html' %}
 
+
     <div class="row">
         <div class="col">
             <div class="pb-3 pt-3">
@@ -27,7 +28,7 @@
                         {% for taxpayer in all_taxpayers %}
                             {% if taxpayer.taxpayer_state == 'APPROVED' %}
                                 <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}" class="dropdown-item">{{taxpayer.business_name}}</a>
-                            {% else %}
+                                {% else %}
                                 <span class="dropdown-item text-muted">{{taxpayer.business_name}} ({% trans "Taxpayer still in progress"%})</span>
                             {% endif %}
                         {% endfor %}
@@ -58,8 +59,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
+                    <h1></h1>
                 {% if not object_list%}
-                    <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
+                    {% if user.is_AP %}
+                        <tr><td  class="table-danger text-center" colspan="11">{% trans "No invoices" %}</td> </tr>
+                    {% else %}
+                        <tr><td  class="table-danger text-center" colspan="11">{% trans "You must have an approved organization in order to upload an invoice" %}</td> </tr>
+                    {% endif %}
                 {% endif %}
                 {% for invoice in object_list %}
                     <tr class="text-center">
