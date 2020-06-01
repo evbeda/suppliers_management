@@ -63,16 +63,16 @@
                 {% endif %}
                 {% for invoice in object_list %}
                     <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{invoice.invoice_date_received|date:date_format }}</td>
-                        <td>{{invoice.taxpayer.business_name}}</td>
-                        <td>{{invoice.taxpayer.country}}</td>
-                        <td>{{invoice.invoice_date|date:date_format }}</td>
-                        <td>{{invoice.invoice_due_date|date:date_format }}</td>
-                        <td>{{invoice.invoice_number}}</td>
-                        <td>{{invoice.po_number}}</td>
+                        <th class="text-center" scope="row">{{ forloop.counter }}</th>
+                        <td class="text-center">{{invoice.invoice_date_received|date:date_format }}</td>
+                        <td class="text-center">{{invoice.taxpayer.business_name}}</td>
+                        <td class="text-center">{{invoice.taxpayer.country}}</td>
+                        <td class="text-center">{{invoice.invoice_date|date:date_format }}</td>
+                        <td class="text-center">{{invoice.invoice_due_date|date:date_format }}</td>
+                        <td class="text-center">{{invoice.invoice_number}}</td>
+                        <td class="text-center">{{invoice.po_number}}</td>
                         <td class="text-center">{{invoice.currency}} {{invoice.total_amount}}</td>
-                        <td>{% if invoice.status == INVOICE_STATUS_PENDING %}
+                        <td class="text-center">{% if invoice.status == INVOICE_STATUS_PENDING %}
                             <span class="badge badge-primary">{{invoice.get_status_display}}</span>
                             {% endif %}
                             {% if invoice.status == INVOICE_STATUS_REJECTED %}
