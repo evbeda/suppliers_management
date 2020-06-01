@@ -100,6 +100,3 @@ class Comment(models.Model):
         upload_to='file',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
-
-    def __str__(self):
-        return self.message
