@@ -28,7 +28,7 @@
                         {% for taxpayer in all_taxpayers %}
                             {% if taxpayer.taxpayer_state == 'APPROVED' %}
                                 <a href="{% url 'invoice-create' taxpayer_id=taxpayer.id %}" class="dropdown-item">{{taxpayer.business_name}}</a>
-                                {% else %}
+                            {% else %}
                                 <span class="dropdown-item text-muted">{{taxpayer.business_name}} ({% trans "Taxpayer still in progress"%})</span>
                             {% endif %}
                         {% endfor %}
