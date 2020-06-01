@@ -16,7 +16,6 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = (
             'invoice_date',
-            'invoice_type',
             'invoice_number',
             'po_number',
             'currency',
@@ -27,7 +26,6 @@ class InvoiceForm(forms.ModelForm):
             'workday_id',
         )
         widgets = {
-            'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
             'vat': forms.NumberInput(

@@ -36,18 +36,7 @@
         </div>
         <div class="col-md-10 align-self-center">
           <div class="row">
-            <div class="form-group col-md-3">
-              {{ form.invoice_type.label_tag }}
-              {{ form.invoice_type }}
-              <small class="text-danger">
-                {{ form.invoice_type.errors }}
-              </small>
-              {% if form.invoice_type.help_text %}
-              <p class="help">{{ form.invoice_type.help_text|safe }}</p>
-              {% endif %}
-              {{ form.select_example }}
-            </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
               {{ form.invoice_number.label_tag }}
               {{ form.invoice_number }}
               <small class="text-danger">
