@@ -21,7 +21,6 @@ class InvoiceFactory(factory.django.DjangoModelFactory):
     po_number = '98876'
     invoice_file = file_mock
     currency = 'ARS'
-    invoice_type = 'A'
     invoice_number = '1234'
     net_amount = '4000'
     vat = '1200'
