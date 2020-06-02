@@ -77,4 +77,4 @@ class DetailInvoiceTest(TestBase):
                 }
             )
         )
-        self.assertFalse(Invoice.objects.filter(pk=self.invoice.id).last().new_comment_from_supplier)
+        self.assertFalse(Invoice.objects.get(pk=self.invoice.id).new_comment_from_supplier)

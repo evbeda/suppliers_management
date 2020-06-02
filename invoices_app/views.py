@@ -448,7 +448,8 @@ def post_a_comment(request, pk):
         message=request.POST['message'],
         comment_file=request.FILES.get('invoice_file'),
     )
-    Invoice.objects.filter(pk=invoice.id).update(new_comment_from_supplier=True)
+    invoice.new_comment_from_supplier = True
+    invoice.save()
     if request.user.is_AP:
         _send_email_when_posting_a_comment(request, invoice)
 
