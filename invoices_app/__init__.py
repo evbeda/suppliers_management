@@ -32,6 +32,8 @@ INVOICE_STATUS = [
     (INVOICE_STATUS_IN_PROGRESS_CODE, _('IN PROGRESS')),
 ]
 
+INVOICE_STATUSES_DICT = {n:m for n, m in INVOICE_STATUS}
+
 ARS_INVOICE_TYPES = [
     ('A', 'A'),
     ('C', 'C'),
