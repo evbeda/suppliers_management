@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-01 18:55+0000\n"
+"POT-Creation-Date: 2020-06-02 15:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1942,7 +1942,7 @@ msgstr ""
 
 #: invoices_app/filters.py:27 invoices_app/models.py:39
 #: templates/invoices_app/history-list.html:27
-#: templates/invoices_app/invoice-list.html:56
+#: templates/invoices_app/invoice-list.html:59
 #: templates/invoices_app/invoice_detail.html:45
 #: templates/invoices_app/supplier-invoice-list.html:36
 #: templates/supplier_app/ap-taxpayers.html:24
@@ -1951,30 +1951,30 @@ msgstr ""
 msgid "Status"
 msgstr "Status"
 
-#: invoices_app/filters.py:29 invoices_app/views.py:233
-#: invoices_app/views.py:302 templates/invoices_app/invoice-list.html:51
+#: invoices_app/filters.py:29 invoices_app/views.py:237
+#: invoices_app/views.py:306 templates/invoices_app/invoice-list.html:54
 msgid "Invoice Date"
 msgstr "Data da fatura"
 
 #: invoices_app/filters.py:30 invoices_app/models.py:43
-#: templates/invoices_app/invoice-list.html:52
+#: templates/invoices_app/invoice-list.html:55
 msgid "Due Date"
 msgstr "Data de Vencimento"
 
 #: invoices_app/filters.py:32 templates/invoices_app/history-list.html:26
-#: templates/invoices_app/invoice-list.html:55
+#: templates/invoices_app/invoice-list.html:58
 #: templates/invoices_app/supplier-invoice-list.html:35
 msgid "Total Amount"
 msgstr "Valor total"
 
 #: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
-#: templates/invoices_app/invoice-list.html:49
+#: templates/invoices_app/invoice-list.html:52
 msgid "Taxpayer"
 msgstr "Contribuinte"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
 #: supplier_app/models.py:55 supplier_app/models.py:126
-#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:50
+#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:53
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/html-to-pdf-page.html:153
@@ -2013,7 +2013,7 @@ msgid "Date Received"
 msgstr "data recebida"
 
 #: invoices_app/models.py:45 templates/invoices_app/history-list.html:22
-#: templates/invoices_app/invoice-list.html:53
+#: templates/invoices_app/invoice-list.html:56
 #: templates/invoices_app/supplier-invoice-list.html:33
 msgid "Invoice Number"
 msgstr "Número da fatura"
@@ -2035,11 +2035,11 @@ msgstr "Total"
 msgid "Invoice File"
 msgstr "Arquivo de fatura"
 
-#: invoices_app/views.py:204
+#: invoices_app/views.py:208
 msgid "Taxpayer not approved yet"
 msgstr "Contribuinte ainda não aprovado"
 
-#: invoices_app/views.py:207
+#: invoices_app/views.py:211
 msgid "The invoice {} already exists"
 msgstr "A fatura {} já existe"
 
@@ -2560,47 +2560,54 @@ msgid "Modified"
 msgstr "Modificado"
 
 #: templates/invoices_app/history-list.html:23
-#: templates/invoices_app/invoice-list.html:54
+#: templates/invoices_app/invoice-list.html:57
 #: templates/invoices_app/supplier-invoice-list.html:34
 msgid "PO Number"
 msgstr "Número do pedido"
 
-#: templates/invoices_app/invoice-list.html:13
+#: templates/invoices_app/invoice-list.html:16
 msgid "Invoice List"
 msgstr "Lista de faturas"
 
-#: templates/invoices_app/invoice-list.html:25
+#: templates/invoices_app/invoice-list.html:28
 #: templates/invoices_app/invoices_form.html:31
 #, fuzzy
 #| msgid "Download Invoice"
 msgid "Upload Invoice"
 msgstr "Baixe o Invoice"
 
-#: templates/invoices_app/invoice-list.html:32
+#: templates/invoices_app/invoice-list.html:35
 #, fuzzy
 #| msgid "Taxpayer History"
 msgid "Taxpayer still in progress"
 msgstr "História do Contribuinte"
 
-#: templates/invoices_app/invoice-list.html:48
+#: templates/invoices_app/invoice-list.html:51
 msgid "Received"
 msgstr "Recebido"
 
-#: templates/invoices_app/invoice-list.html:58
+#: templates/invoices_app/invoice-list.html:61
 #: templates/invoices_app/supplier-invoice-list.html:37
 msgid "View"
 msgstr "Visão"
 
-#: templates/invoices_app/invoice-list.html:66
+#: templates/invoices_app/invoice-list.html:69
+#: templates/invoices_app/invoice-list.html:72
 #: templates/invoices_app/supplier-invoice-list.html:43
 msgid "No invoices"
 msgstr "Nenhuma fatura"
 
-#: templates/invoices_app/invoice-list.html:68
+#: templates/invoices_app/invoice-list.html:74
 #, fuzzy
 #| msgid "Please provide a Workday ID in order to approve an invoice"
 msgid "You must have an approved organization in order to upload an invoice"
 msgstr "Forneça um ID do Workday para aprovar uma fatura"
+
+#: templates/invoices_app/invoice-list.html:115
+#, fuzzy
+#| msgid "Make a comment"
+msgid "New unread commments"
+msgstr "Faça um comentário"
 
 #: templates/invoices_app/invoice_detail.html:30
 msgid "Invoice #"

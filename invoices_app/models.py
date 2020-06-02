@@ -77,6 +77,8 @@ class Invoice(models.Model):
 
     invoice_eb_entity = models.ForeignKey(EBEntity, default=None)
 
+    new_comment_from_supplier = models.BooleanField(default=False)
+
     history = HistoricalRecords()
 
     @property
