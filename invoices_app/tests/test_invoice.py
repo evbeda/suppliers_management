@@ -36,7 +36,6 @@ from invoices_app.tests.test_base import TestBase
 from invoices_app.views import (
     _send_email_when_change_invoice_status,
     _send_email_when_posting_a_comment,
-    _send_email_when_editing_invoice
 )
 
 from utils.invoice_lookup import invoice_status_lookup
@@ -416,8 +415,7 @@ class TestInvoice(TestBase):
             invoice_status_lookup(INVOICE_STATUS_PENDING)
         )
 
-    @patch('invoices_app.views._send_email_when_editing_invoice')
-    def test_ap_invoice_edit(self, _):
+    def test_ap_invoice_edit(self):
         self.client.force_login(self.ap_user)
         res = self.client.post(
             reverse(
@@ -463,8 +461,7 @@ class TestInvoice(TestBase):
         )
         self.assertContains(res, 'This field is required.')
 
-    @patch('invoices_app.views._send_email_when_editing_invoice')
-    def test_supplier_invoice_edit_permissions(self, _):
+    def test_supplier_invoice_edit_permissions(self):
         self.client.force_login(self.user)
 
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
@@ -486,8 +483,7 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(res.status_code, HTTPStatus.OK)
 
-    @patch('invoices_app.views._send_email_when_editing_invoice')
-    def test_ap_invoice_edit_permissions(self, _):
+    def test_ap_invoice_edit_permissions(self):
         self.client.force_login(self.ap_user)
         self.invoice.status = invoice_status_lookup(INVOICE_STATUS_APPROVED)
         self.invoice.save()
@@ -663,30 +659,6 @@ class TestInvoice(TestBase):
         invoice = Invoice.objects.get(invoice_number=self.invoice_post_data['invoice_number'])
         self.assertEqual(invoice.invoice_due_date, invoice.invoice_date + timedelta(days=time_to_due))
 
-    def test_send_email_when_ap_edits_invoice(self):
-        self.client.force_login(self.ap_user)
-        user2 = UserFactory()
-        CompanyUserPermissionFactory(
-            company=self.company,
-            user=user2
-        )
-        user3 = UserFactory()
-        CompanyUserPermissionFactory(
-            company=self.company,
-            user=user3
-        )
-        self.client.post(
-            reverse(
-                'taxpayer-invoice-update',
-                kwargs={
-                    'taxpayer_id': self.taxpayer.id,
-                    'pk': self.invoice.id
-                }
-            ),
-            self.invoice_post_data
-        )
-        self.assertEqual(len(mail.outbox), 3)
-        self.assertEqual(len(mail.outbox[0].to), 1)
 
     def test_do_not_send_email_when_user_edits_invoice(self):
         self.client.force_login(self.user)
@@ -703,9 +675,9 @@ class TestInvoice(TestBase):
         self.assertEqual(len(mail.outbox), 0)
 
     @parameterized.expand([
-        ('en', 'PAID', 'Invoice {} changed status to {}'),
-        ('es', 'PAGADA', 'La factura {} cambió de estado a {}'),
-        ('pt-br','PAGO', 'A fatura {} alterou o status para {}'),
+        ('en', '5', 'Your invoice #{} for Eventbrite has been paid'),
+        ('es', '5', 'La factura {} cambió de estado a {}'),
+        ('pt-br','5', 'A fatura {} alterou o status para {}'),
     ])
     def test_send_email_when_change_invoice_status_with_user_preferred_language(
         self,
@@ -752,7 +724,7 @@ class TestInvoice(TestBase):
         # And another logged user within the company
         self.user.preferred_language = language
         self.user.save()
-
+        self.invoice.status = '1'
         self.logged_user = UserFactory()
         supplier_group = Group.objects.get(name='supplier')
         self.logged_user.groups.add(supplier_group)
@@ -846,42 +818,6 @@ class TestInvoice(TestBase):
 
         # Then session language of the logged user remain
         self.assertEqual(request.user.preferred_language, get_language())
-
-    @parameterized.expand([
-        ('en', 'Eventbrite Invoice Edited', "Your Invoice # {} was edited by an administrator. Please check your invoice"),
-        ('es', 'Factura de Eventbrite editada', "Tu factura # {} fue modificada por un administrador. Por favor revise su factura."),
-        ('pt-br', 'Fatura da Eventbrite editada', "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"),
-    ])
-    def test_send_email_when_editing_an_invoice_in_user_preferred_language(
-        self,
-        language,
-        expected_subject,
-        expected_message,
-    ):
-        # Given an invoice with state CHANGES REQUIRED
-        # An AP user and a supplier user with a preferred language
-
-        # ap_user: self.ap_user
-        self.invoice.status = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
-        self.user.preferred_language = language
-        self.user.save()
-
-        form = Form()
-        form.instance = self.invoice
-
-        # When an email is sent when editing an invoice
-        with patch('invoices_app.views._send_email') as patch_send_email:
-            _send_email_when_editing_invoice(form.instance, self.ap_user)
-
-        # Then an email must be sent to user in his languages preferences
-        params, _ = patch_send_email.call_args
-        subject = params[0]
-        message = params[1]
-
-        self.assertEqual(subject, expected_subject)
-        self.assertTrue(
-            expected_message.format(self.invoice.invoice_number, message) in params[1]
-        )
 
     def test_invoice_export_to_xls(self):
         self.client.force_login(self.ap_user)
