@@ -27,26 +27,28 @@ def invoice_history_comments(invoice):
         delta = next_record.diff_against(record)
         message = _('Changed: \n')
         for change in delta.changes:
-            if change.field != 'status':
-                old_value = change.old
-                new_value = change.new
-            else:
-                old_value = get_status_display(change.old)
-                new_value = get_status_display(change.new)
-            message += _('{} from {} to {}\n').format(
-                Invoice._meta.get_field(change.field).verbose_name,
-                old_value,
-                new_value,
-            )
+            if change.field != 'new_comment_from_ap' and change.field != 'new_comment_from_supplier':
+                if change.field != 'status':
+                    old_value = change.old
+                    new_value = change.new
+                else:
+                    old_value = get_status_display(change.old)
+                    new_value = get_status_display(change.new)
+                message += _('{} from {} to {}\n').format(
+                    Invoice._meta.get_field(change.field).verbose_name,
+                    old_value,
+                    new_value,
+                )
         if next_record.history_change_reason:
             message += gettext('\nChange reason:\n')
             message += next_record.history_change_reason
-        comment = Comment(
-            user=next_record.history_user,
-            invoice=next_record.instance,
-            message=message,
-            comment_date_received=next_record.history_date
-        )
-        comments.append(comment)
+        if message != _('Changed: \n'):
+            comment = Comment(
+                user=next_record.history_user,
+                invoice=next_record.instance,
+                message=message,
+                comment_date_received=next_record.history_date
+            )
+            comments.append(comment)
         record = next_record
     return comments
