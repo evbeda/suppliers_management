@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-02 15:52+0000\n"
+"POT-Creation-Date: 2020-06-02 17:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1977,6 +1977,10 @@ msgstr "Entidad fiscal no aprobado aún"
 #: invoices_app/views.py:211
 msgid "The invoice {} already exists"
 msgstr "La factura {} ya existe."
+
+#: invoices_app/views.py:362
+msgid "Invoice status has changed to "
+msgstr "El estado de la factura cambio a "
 
 #: supplier_app/__init__.py:18
 msgid "15 days"

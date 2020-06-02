@@ -358,6 +358,12 @@ def change_invoice_status(request, pk):
         )
 
     invoice.save()
+    invoice_statuses_json = {n:m for n, m in INVOICE_STATUS}
+    invoice_changed = _('Invoice status has changed to ')
+    messages.success(
+                request,
+                f'{invoice_changed}{invoice_statuses_json[status]}',
+            )
     if status == INVOICE_STATUS_CHANGES_REQUEST_CODE:
         _send_email_when_posting_a_comment(request, invoice)
     else:
