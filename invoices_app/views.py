@@ -404,6 +404,10 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
             if invoice.new_comment_from_supplier is True:
                 invoice.new_comment_from_supplier = False
                 invoice.save()
+        elif self.request.user.is_supplier:
+            if invoice.new_comment_from_ap is True:
+                invoice.new_comment_from_ap = False
+                invoice.save()
         context['invoice'] = invoice
         father_taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['is_AP'] = self.request.user.is_AP
@@ -454,11 +458,13 @@ def post_a_comment(request, pk):
         message=request.POST['message'],
         comment_file=request.FILES.get('invoice_file'),
     )
-    invoice.new_comment_from_supplier = True
-    invoice.save()
     if request.user.is_AP:
+        invoice.new_comment_from_ap = True
+        invoice.save()
         _send_email_when_posting_a_comment(request, invoice)
-
+    elif request.user.is_supplier:
+        invoice.new_comment_from_supplier = True
+        invoice.save()
     return redirect(
         reverse(
             'invoices-detail',

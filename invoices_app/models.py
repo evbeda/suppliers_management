@@ -79,6 +79,8 @@ class Invoice(models.Model):
 
     new_comment_from_supplier = models.BooleanField(default=False)
 
+    new_comment_from_ap = models.BooleanField(default=False)
+
     history = HistoricalRecords()
 
     @property
