@@ -16,7 +16,6 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = (
             'invoice_date',
-            'invoice_type',
             'invoice_number',
             'po_number',
             'currency',
@@ -27,19 +26,8 @@ class InvoiceForm(forms.ModelForm):
             'workday_id',
         )
         widgets = {
-            'invoice_type': forms.Select(attrs={'class': 'custom-select'}),
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
-            'invoice_file': forms.FileInput(
-                attrs={
-                    'type': 'file',
-                    'class': 'custom-file-input',
-                    'name': 'invoice_file',
-                    'id': 'inputGroupFile01',
-                    'aria-describedby': 'inputGroupFileAddon01',
-                    'accept': 'application/pdf',
-                }
-            ),
             'vat': forms.NumberInput(
                 attrs={
                     'id': 'vat',

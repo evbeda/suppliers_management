@@ -87,6 +87,7 @@ from invoices_app import (
     INVOICE_DATE_FORMAT,
     INVOICE_EDIT_INVOICE_UPPER_TEXT,
     INVOICE_STATUS,
+    INVOICE_STATUSES_DICT,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PENDING,
@@ -97,7 +98,10 @@ from invoices_app import (
     NO_COMMENT_ERROR,
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
+    DISCLAIMER,
+    INVOICE_STATUS_IN_PROGRESS, INVOICE_STATUS_CHANGES_REQUEST_CODE,
 )
+
 
 from invoices_app.change_status_strategy import get_change_status_strategy
 from invoices_app.filters import InvoiceFilter
@@ -122,7 +126,7 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         else:
             return TaxPayer.objects.filter(
                 company__companyuserpermission__user=user
-            ).values('business_name')
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,8 +137,13 @@ class InvoiceListView(PermissionRequiredMixin, PaginationMixin, FilterView):
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['date_format'] = DATE_FORMAT
-        context['all_taxpayers'] = self.get_taxpayers()
+        all_taxpayers = self.get_taxpayers()
+        context['all_taxpayers'] = all_taxpayers
+        if not self.request.user.is_AP:
+            context['has_approved_taxpayer'] = any(taxpayer.taxpayer_state == 'APPROVED' for taxpayer in all_taxpayers)
+        
         return context
 
     def get_queryset(self):
@@ -174,6 +183,7 @@ class SupplierInvoiceListView(
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['date_format'] = DATE_FORMAT
         return context
 
@@ -186,7 +196,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
     raise_exception = True
 
     def get_success_url(self):
-        return reverse_lazy('supplier-invoice-list', kwargs={'taxpayer_id': self.kwargs['taxpayer_id']})
+        return reverse_lazy('invoices-list')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -214,6 +224,7 @@ class SupplierInvoiceCreateView(PermissionRequiredMixin, TaxPayerPermissionMixin
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         context['is_AP'] = self.request.user.is_AP
         context['eb_entities'] = TaxPayer.objects.get(pk=context['taxpayer_id']).eb_entities
+        context['taxpayer'] = TaxPayer.objects.get(id=self.kwargs['taxpayer_id'])
         return context
 
     def get_form_class(self):
@@ -251,8 +262,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         taxpayer_id = self.kwargs.get('taxpayer_id')
         if taxpayer_id:
             return reverse_lazy(
-                'supplier-invoice-list',
-                kwargs={'taxpayer_id': taxpayer_id}
+                'invoices-list',
             )
         else:
             return reverse_lazy(
@@ -282,7 +292,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
     def get_login_url(self):
         taxpayer_id = self.kwargs.get('taxpayer_id')
         if taxpayer_id:
-            return reverse('supplier-invoice-list', kwargs={'taxpayer_id': taxpayer_id})
+            return reverse('invoices-list')
         else:
             return reverse('invoices-list')
 
@@ -318,6 +328,7 @@ class InvoiceHistory(PermissionRequiredMixin, PaginationMixin, ListView):
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         return context
 
 
@@ -327,7 +338,7 @@ def change_invoice_status(request, pk):
 
     status = request.POST.get('status')
 
-    if status not in [status for status, _ in INVOICE_STATUS]:
+    if status not in INVOICE_STATUSES_DICT.keys():
         return HttpResponseBadRequest()
 
     strategy = get_change_status_strategy(status)
@@ -348,7 +359,15 @@ def change_invoice_status(request, pk):
         )
 
     invoice.save()
-    _send_email_when_change_invoice_status(request, invoice)
+    invoice_changed = _('Invoice status has changed to ')
+    messages.success(
+                request,
+                f'{invoice_changed}{INVOICE_STATUSES_DICT[status]}',
+            )
+    if status == INVOICE_STATUS_CHANGES_REQUEST_CODE:
+        _send_email_when_posting_a_comment(request, invoice)
+    else:
+        _send_email_when_change_invoice_status(request, invoice)
 
     return redirect(
         '{}?status={}'.format(
@@ -381,6 +400,14 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        if self.request.user.is_AP:
+            if invoice.new_comment_from_supplier is True:
+                invoice.new_comment_from_supplier = False
+                invoice.save()
+        elif self.request.user.is_supplier:
+            if invoice.new_comment_from_ap is True:
+                invoice.new_comment_from_ap = False
+                invoice.save()
         context['invoice'] = invoice
         father_taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['is_AP'] = self.request.user.is_AP
@@ -391,6 +418,7 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
         context['INVOICE_STATUS_CHANGES_REQUEST'] = invoice_status_lookup(INVOICE_STATUS_CHANGES_REQUEST)
         context['INVOICE_STATUS_REJECTED'] = invoice_status_lookup(INVOICE_STATUS_REJECTED)
         context['INVOICE_STATUS_PAID'] = invoice_status_lookup(INVOICE_STATUS_PAID)
+        context['INVOICE_STATUS_IN_PROGRESS'] = invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS)
         context['comments'] = self.get_comments(invoice)
         context['date_format'] = DATE_FORMAT
         return context
@@ -430,10 +458,13 @@ def post_a_comment(request, pk):
         message=request.POST['message'],
         comment_file=request.FILES.get('invoice_file'),
     )
-
     if request.user.is_AP:
+        invoice.new_comment_from_ap = True
+        invoice.save()
         _send_email_when_posting_a_comment(request, invoice)
-
+    elif request.user.is_supplier:
+        invoice.new_comment_from_supplier = True
+        invoice.save()
     return redirect(
         reverse(
             'invoices-detail',
@@ -475,7 +506,8 @@ def _send_email_when_posting_a_comment(request, invoice):
         message = build_mail_html(
             invoice.taxpayer.business_name,
             upper_text,
-            THANK_YOU
+            THANK_YOU,
+            DISCLAIMER,
         )
         _send_email(subject, message, [user.email])
 
@@ -500,7 +532,8 @@ def _send_email_when_change_invoice_status(request, invoice):
         message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,
-                THANK_YOU
+                THANK_YOU,
+                DISCLAIMER,
             )
         _send_email(subject, message, [user.email])
 
@@ -519,7 +552,8 @@ def _send_email_when_editing_invoice(instance, ap_user):
         message = build_mail_html(
             instance.taxpayer.business_name,
             upper_text,
-            str(THANK_YOU)
+            str(THANK_YOU),
+            DISCLAIMER,
         )
 
         _send_email(subject, message, [user.email])

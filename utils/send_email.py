@@ -46,12 +46,14 @@ def company_invitation_notification(company, token, email, language):
     subject = _(email_notifications['company_invitation']['subject'])
     upper_text = _(email_notifications['company_invitation']['body']['upper_text'])
     lower_text = _(email_notifications['company_invitation']['body']['lower_text'])
+    disclaimer = _(email_notifications['company_invitation']['body']['disclaimer'])
     btn_text = _(email_notifications['company_invitation']['body']['btn_text'])
     btn_url = email_notifications['company_invitation']['body']['btn_url']
     message = build_mail_html(
         company.name,
         upper_text,
         lower_text,
+        disclaimer,
         btn_text,
         '{}/{}'.format(btn_url, token),
     )
@@ -62,12 +64,14 @@ def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, 
     subject = _(email_notifications[change_type]['subject'])
     upper_text = _(email_notifications[change_type]['body']['upper_text'])
     lower_text = _(email_notifications[change_type]['body']['lower_text'])
+    disclaimer = _(email_notifications[change_type]['body']['disclaimer'])
     btn_text = _(email_notifications[change_type]['body']['btn_text'])
     btn_url = email_notifications[change_type]['body']['btn_url']
     message = build_mail_html(
         taxpayer.business_name,
         upper_text,
         lower_text,
+        disclaimer,
         btn_text,
         btn_url,
     )
@@ -76,7 +80,7 @@ def get_message_and_subject(change_type: str, taxpayer: TaxPayer) -> Tuple[str, 
 
 def get_supplier_language_by_taxpayer(taxpayer):
     company_id = TaxPayer.objects.get(pk=taxpayer.id).company.id
-    supplier_language = CompanyUserPermission.objects.get(pk=company_id).user.preferred_language
+    supplier_language = CompanyUserPermission.objects.filter(company_id=company_id).order_by('user_id').reverse()[0].user.preferred_language
     return supplier_language
 
 
@@ -114,6 +118,7 @@ def build_mail_html(
     supplier_name,
     upper_text,
     lower_text,
+    disclaimer,
     btn_text=GO_TO_BRITESU,
     btn_url='{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL)
 ):
@@ -123,6 +128,7 @@ def build_mail_html(
             'supplier_name': supplier_name,
             'upper_text': upper_text,
             'lower_text': lower_text,
+            'disclaimer': disclaimer,
             'btn_text': btn_text,
             'btn_url': btn_url,
         }

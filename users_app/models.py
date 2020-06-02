@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
+LANGUAGES = ['es', 'pt-br']
 
 
 class UserManager(BaseUserManager):
@@ -13,9 +14,13 @@ class UserManager(BaseUserManager):
         """
         Create and save a User with the given email and password.
         """
+        if User.objects.filter(email=email).exists():
+            return User.objects.get(email=email)
         if not email:
             raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
+        if extra_fields.get('preferred_language') not in LANGUAGES:
+            extra_fields['preferred_language'] = 'en'
         user = self.model(email=email, **extra_fields)
         if password:
             user.set_password(password)

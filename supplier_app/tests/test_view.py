@@ -79,6 +79,7 @@ from supplier_app.models import (
     TaxPayerArgentina,
     TaxpayerComment,
     ContactInformation,
+    InvitingBuyer,
 )
 from supplier_app.tests import (
     file_mock,
@@ -110,12 +111,14 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierHome,
 )
+from utils import reports
 from utils.exceptions import CouldNotSendEmailError
 from users_app.models import User
 from users_app.factory_boy import (
     UserFactory,
     ApUserFactory,
 )
+from supplier_app.change_status_strategy import StrategyStatusChange
 
 
 class TestCreateTaxPayer(TestCase):
@@ -737,15 +740,15 @@ class TestSupplierDetailsView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(
             response,
-            "CBU"
+            "Bank account certificate"
         )
         self.assertContains(
             response,
-            'AFIP certificate'
+            'AFIP registration certificate'
         )
         self.assertContains(
             response,
-            'Withholding taxes'
+            'Certificate of no income withholding'
         )
 
     def test_details_view_has_pending_button_when_AP_has_set_workday_id(self):
@@ -775,6 +778,22 @@ class TestSupplierDetailsView(TestCase):
         self.assertNotContains(
             response, 'Edit',
         )
+    
+    def test_pdf(self):
+        
+        InvitingBuyer.objects.create(company=self.taxpayer.company, inviting_buyer=self.ap_user)
+        response = self.client.get(
+            reverse_lazy(
+            'pdf-web',
+            kwargs=self.kwargs
+            )
+        )
+
+        self.assertEqual(
+            self.taxpayer,
+            response.context['taxpayer']
+        )
+        
 
     @parameterized.expand([
         ("APPROVED", "1"),
@@ -1839,7 +1858,7 @@ class TestCompanyInvite(TestCase):
 
     def test_company_invite_sends_email_notification_in_spanish(self,):
         self._make_post("es")
-        self.assertIn("Bienvenido a BriteSu!\nPor favor accede al siguiente link.", mail.outbox[0].body)
+        self.assertIn("Bienvenido a BriteSu! Por favor accede al siguiente link", mail.outbox[0].body)
         self.assertIn("¡Gracias!", mail.outbox[0].body)
 
     def test_company_invite_sends_email_notification(self):
@@ -2859,3 +2878,22 @@ class TestTaxpayerCommentView(TestCase):
             [redirect[0] for redirect in response.redirect_chain],
         )
         self.assertContains(response, TAXPAYER_REQUEST_CHANGE_MESSAGE)
+
+
+class TestChangeStrategy(TestCase):
+
+    def setUp(self):
+        self.main = StrategyStatusChange()
+    
+
+    def test_send_email_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.send_email()
+    
+    def test_change_taxpayer_status_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.change_taxpayer_status("request")
+    
+    def test_show_message_raise_exception(self):
+        with self.assertRaises(NotImplementedError):
+            self.main.show_message()

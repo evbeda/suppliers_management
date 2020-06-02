@@ -14,12 +14,14 @@ INVOICE_STATUS_PENDING = 'PENDING'
 INVOICE_STATUS_CHANGES_REQUEST = 'CHANGES REQUESTED'
 INVOICE_STATUS_REJECTED = 'REJECTED'
 INVOICE_STATUS_PAID = 'PAID'
+INVOICE_STATUS_IN_PROGRESS = 'IN PROGRESS'
 
 INVOICE_STATUS_APPROVED_CODE = '1'
 INVOICE_STATUS_PENDING_CODE = '2'
 INVOICE_STATUS_CHANGES_REQUEST_CODE = '3'
 INVOICE_STATUS_REJECTED_CODE = '4'
 INVOICE_STATUS_PAID_CODE = '5'
+INVOICE_STATUS_IN_PROGRESS_CODE = '6'
 
 INVOICE_STATUS = [
     (INVOICE_STATUS_APPROVED_CODE, _('APPROVED')),
@@ -27,7 +29,10 @@ INVOICE_STATUS = [
     (INVOICE_STATUS_CHANGES_REQUEST_CODE, _('CHANGES REQUESTED')),
     (INVOICE_STATUS_REJECTED_CODE, _('REJECTED')),
     (INVOICE_STATUS_PAID_CODE, _('PAID')),
+    (INVOICE_STATUS_IN_PROGRESS_CODE, _('IN PROGRESS')),
 ]
+
+INVOICE_STATUSES_DICT = {n:m for n, m in INVOICE_STATUS}
 
 ARS_INVOICE_TYPES = [
     ('A', 'A'),
@@ -60,7 +65,9 @@ NO_COMMENT_ERROR = _('Please add a comment to request changes')
 
 THANK_YOU = _('Thank you')
 EVENTBRITE_INVOICE_COMMENTED = _('Eventbrite Invoice {} commented')
-NEW_COMMENT_EMAIL_TEXT = _('You have a new comment on Invoice # {}. Please check your invoice. COMMENT:{}')
+NEW_COMMENT_EMAIL_TEXT = _('You have a new comment on Invoice # {}. Please check your invoice. COMMENT: {}')
 INVOICE_CHANGE_STATUS_TEXT_EMAIL = _('Invoice {} changed status to {}')
 EVENTBRITE_INVOICE_EDITED = _('Eventbrite Invoice Edited')
 INVOICE_EDIT_INVOICE_UPPER_TEXT = _('Your Invoice # {} was edited by an administrator. Please check your invoice')
+
+DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),

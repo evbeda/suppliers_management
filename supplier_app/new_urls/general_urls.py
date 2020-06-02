@@ -6,7 +6,8 @@ from supplier_app.views import (
     EditTaxpayerView,
     SupplierDetailsView,
     TaxpayerCommentView,
-    EditContactInformationView
+    EditContactInformationView,
+    GeneratePdf
 )
 
 taxpayer_pattern = [
@@ -32,8 +33,9 @@ taxpayer_pattern = [
         name='taxpayer-comment'
     ),
     url(r'^edit/$', EditTaxpayerView.as_view(), name='taxpayer-update'),
+    url(r'^pdf/', GeneratePdf.as_view(), name='pdf-web'),
 ]
 
 urlpatterns = [
-    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern))
+    url(r'^taxpayer/(?P<taxpayer_id>[0-9]+)/', include(taxpayer_pattern)),
 ]

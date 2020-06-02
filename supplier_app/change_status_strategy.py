@@ -21,10 +21,11 @@ from supplier_app.constants.custom_messages import (
 from utils.send_email import taxpayer_notification, buyer_notification
 
 
-def _taxpayer_exists_with_workday_id(workday_id):
+def _taxpayer_exists_with_workday_id(workday_id, taxpayer):
 
-    if TaxPayer.objects.filter(workday_id=workday_id).exists():
+    if TaxPayer.objects.filter(workday_id=workday_id).exists() and taxpayer.workday_id != workday_id:
         raise TaxpayerUniqueWorkdayId()
+
 
 
 class StrategyStatusChange():
@@ -60,9 +61,9 @@ class StrategyApprove(StrategyStatusChange):
     def change_taxpayer_status(taxpayer, request=None):
         try:
             workday_id = request.POST['workday_id']
-            _taxpayer_exists_with_workday_id(workday_id)
-            if workday_id == "" and not taxpayer.workday_id:
+            if not workday_id:
                 raise NoWorkdayIDException()
+            _taxpayer_exists_with_workday_id(workday_id, taxpayer)
             taxpayer.workday_id = workday_id or taxpayer.workday_id
         except KeyError:
             raise NoWorkdayIDException()
@@ -71,7 +72,6 @@ class StrategyApprove(StrategyStatusChange):
 
     def show_message(request):
         messages.success(request, TAXPAYER_APPROVE_MESSAGE)
-
 
 class StrategyChangeRequired(StrategyStatusChange):
 

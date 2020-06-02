@@ -43,7 +43,6 @@ class Invoice(models.Model):
     invoice_due_date = models.DateField(verbose_name=_('Due Date'))
     invoice_date_received = models.DateTimeField(auto_now_add=True, verbose_name=_('Date Received'))
     invoice_number = models.CharField(max_length=20, verbose_name=_('Invoice Number'))
-    invoice_type = models.CharField(max_length=200, choices=ARS_INVOICE_TYPES, verbose_name=_('Invoice Type'))
     net_amount = models.DecimalField(
         verbose_name=_('Net amount'),
         max_digits=20,
@@ -78,6 +77,10 @@ class Invoice(models.Model):
 
     invoice_eb_entity = models.ForeignKey(EBEntity, default=None)
 
+    new_comment_from_supplier = models.BooleanField(default=False)
+
+    new_comment_from_ap = models.BooleanField(default=False)
+
     history = HistoricalRecords()
 
     @property
@@ -101,6 +104,3 @@ class Comment(models.Model):
         upload_to='file',
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
-
-    def __str__(self):
-        return self.message

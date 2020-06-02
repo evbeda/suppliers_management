@@ -52,7 +52,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.mail.mail_validation',
     'users_app.pipeline.pipeline.check_user_backend',
-    'social_core.pipeline.user.create_user',
+    'users_app.pipeline.pipeline.create_user',
     'users_app.pipeline.pipeline.add_user_to_group',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
@@ -166,7 +166,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 # EMAIL NOTIFICATION URLS
 BRITESU_BASE_URL = 'http://127.0.0.1:8000'
 # CELERY REDIS CONFIG
-BROKER_URL = 'redis://:{}@{}'.format(get_env_variable('REDISLAB_PASSWORD'), get_env_variable('REDISLAB_ENDPOINT'))
+BROKER_URL = 'redis://{}:{}@{}'.format(get_env_variable('REDIS_USER'), get_env_variable('REDIS_PASSWORD'), get_env_variable('REDIS_ENDPOINT'))
 BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
@@ -177,3 +177,4 @@ CELERY_ALWAYS_EAGER = False
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 
 SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD = True
+USER_FIELDS = ['username', 'email', 'preferred_language']

@@ -4,15 +4,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db import DatabaseError
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.views.generic.edit import (
     CreateView,
     FormView,
     UpdateView,
 )
+from datetime import datetime
 from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
@@ -34,13 +35,14 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_NOT_EXISTS_MESSAGE,
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
+    THANKS,
 )
 from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
     TAXPAYER_STATUS_CHANGE_REQUIRED,
     TAXPAYER_STATUS_DENIED,
-    TAXPAYER_STATUS_IN_PROGRESS
-)
+    TAXPAYER_STATUS_IN_PROGRESS,
+    TAXPAYER_STATUS_CHANGES_PENDING)
 from supplier_app.filters import TaxPayerFilter
 from supplier_app.forms import (
     AddressCreateForm,
@@ -84,9 +86,11 @@ from users_app import (
     COMPANY_USER_CAN_APPROVE_PERM,
     SUPPLIER_ROLE_PERM,
 )
+from users_app.models import User
+from utils import reports
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import company_invitation_notification
-
+from utils.htmltopdf import render_to_pdf
 
 class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
@@ -227,7 +231,11 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
             self.save_bankaccount(forms, taxpayer)
             messages.success(
                 self.request,
-                TAXPAYER_CREATION_SUCCESS_MESSAGE
+                TAXPAYER_CREATION_SUCCESS_MESSAGE,
+            )
+            messages.success(
+                self.request,
+                THANKS,
             )
         except ObjectDoesNotExist:
             messages.error(
@@ -241,6 +249,7 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         taxpayer = forms['taxpayer_form'].save(commit=False)
         company = Company.objects.get(companyuserpermission__user=self.request.user)
         taxpayer.company = company
+        
         taxpayer.save()
         eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
         for eb_entity in eb_entities:
@@ -327,9 +336,14 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         )
         self.object.set_current_eb_entities(eb_entities)
         form = self.get_form()
-        if request.user.is_supplier:
-            form.instance.set_changes_pending_taxpayer()
+
         if form.is_valid():
+            if request.user.is_supplier:
+                except_field = ['csrfmiddlewaretoken', 'eb_entities']
+                taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+                text_to_coment = reports.get_field_changes(form, except_field, taxpayer_to_compare)
+                TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
+                form.instance.set_changes_pending_taxpayer()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -339,6 +353,7 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         context['taxpayer_id'] = self.kwargs['taxpayer_id']
         taxpayer = TaxPayerArgentina.objects.get(pk=context['taxpayer_id'])
         form = context['form']
+        
         form.fields['afip_registration_file'].initial = taxpayer.afip_registration_file
         form.fields['witholding_taxes_file'].initial = taxpayer.witholding_taxes_file
         form.fields['eb_entities'].initial = taxpayer.eb_entities
@@ -377,7 +392,12 @@ class EditAddressView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin,
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_supplier:
+        form = self.get_form()
+        if form.is_valid() and request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = Address.objects.get(taxpayer_id=kwargs['taxpayer_id'])
+            text_to_coment = reports.get_field_changes(form, [], model_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
@@ -409,7 +429,12 @@ class EditContactInformationView(UserLoginPermissionRequiredMixin, TaxPayerPermi
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_supplier:
+        form = self.get_form()
+        if form.is_valid() and request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = ContactInformation.objects.get(taxpayer_id=kwargs['taxpayer_id'])
+            text_to_coment = reports.get_field_changes(form, [], model_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
@@ -444,7 +469,12 @@ class EditBankAccountView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
         return reverse('supplier-details', kwargs={'taxpayer_id': taxpayer_id})
 
     def post(self, request, *args, **kwargs):
+        form = self.get_form()
         if request.user.is_supplier:
+            taxpayer_to_compare = TaxPayerArgentina.objects.get(pk=kwargs['taxpayer_id'])
+            model_to_compare = BankAccount.objects.get(taxpayer_id=kwargs['taxpayer_id'])
+            text_to_coment = reports.get_field_changes(form, ['bank_cbu_file'], model_to_compare)
+            TaxpayerComment.objects.create(user=request.user, message=text_to_coment, taxpayer=taxpayer_to_compare)
             taxpayer = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id'])
             taxpayer.set_changes_pending_taxpayer()
             taxpayer.save()
@@ -570,3 +600,35 @@ def change_taxpayer_status(request, taxpayer_id):
                 'taxpayer_id': taxpayer_id
             }
         ))
+
+class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
+    template_name = 'supplier_app/html-to-pdf-page.html'
+    permission_required = (CAN_VIEW_TAXPAYER_PERM)
+
+    def handle_no_permission(self):
+        return HttpResponseRedirect(Http404)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).company
+        context['company'] = company
+        context['buyer'] = InvitingBuyer.objects.get(company=company.id)
+        supplier = TaxPayerArgentina.history.filter(id=self.kwargs['taxpayer_id'])
+        context['supplier'] = supplier[len(supplier)-1]
+        approved_object_query = TaxPayer.history.filter(id=self.kwargs['taxpayer_id'], taxpayer_state='APPROVED')
+        approved_object = None
+        context['approved_by'] = None
+        if len(approved_object_query) > 0:
+            approved_object = approved_object_query[0]
+            context['approved_by'] = User.objects.get(pk=approved_object.history_user_id)
+        context['approved_object'] = approved_object
+        context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        context['taxpayer_address'] = context['taxpayer'].address_set.get()
+        context['taxpayer_contact'] = context['taxpayer'].contactinformation_set.get()
+        context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        pdf = render_to_pdf('supplier_app/html-to-pdf-page.html', self.get_context_data())
+        return HttpResponse(pdf, content_type='application/pdf')
+

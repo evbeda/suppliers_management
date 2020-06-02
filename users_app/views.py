@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.i18n import set_language
 from django.views.generic import (
     CreateView,
-    TemplateView,
+    TemplateView, UpdateView,
 )
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
@@ -73,11 +73,26 @@ class AdminList(PaginationMixin, PermissionRequiredMixin, ListView):
     template_name = 'registration/admins-list.html'
     permission_required = CAN_MANAGE_APS_PERM
     paginate_by = 10
+    filter = False
+
+    def change_filter(self):
+        if self.request.GET.get('only_ap'):
+            self.filter = True
+        elif self.request.GET.get('all_eb_users'):
+            self.filter = False
 
     def get_queryset(self):
-        perm = Permission.objects.get(codename='ap_role')
-        queryset = User.objects.filter(
-            Q(groups__permissions=perm)).distinct()
+        self.change_filter()
+        if self.filter:
+            perm_ap = Permission.objects.get(codename='ap_role')
+            queryset = User.objects.filter(
+                Q(groups__permissions=perm_ap)).distinct()
+        else:
+            perm_ap = Permission.objects.get(codename='ap_role')
+            perm_buyer = Permission.objects.get(codename='buyer_role')
+            queryset = User.objects.filter(
+                Q(groups__permissions=perm_buyer) | Q(groups__permissions=perm_ap)
+            ).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):

@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block styles %}
+{% load static %}
+<script src="{% static 'js/pdf_validation.js' %}" type="text/javascript"></script>
+{% endblock %}
+
 {% block extrahead %}
 {{ form.media }}
 {% endblock %}
@@ -23,7 +28,7 @@
       {% if invoice %}
       <p class="text-center py-4 h3">{% trans "Update Invoice" %}</p>
       {% else %}
-      <p class="text-center py-4 h3">{% trans "Create Invoice" %}</p>
+      <p class="text-center py-4 h3">{{taxpayer.business_name}} > {% trans "Upload Invoice" %}</p>
       {% endif %}
     </div>
       <form id="invoiceForm" method="post" class="form-row" enctype="multipart/form-data">
@@ -31,18 +36,7 @@
         </div>
         <div class="col-md-10 align-self-center">
           <div class="row">
-            <div class="form-group col-md-3">
-              {{ form.invoice_type.label_tag }}
-              {{ form.invoice_type }}
-              <small class="text-danger">
-                {{ form.invoice_type.errors }}
-              </small>
-              {% if form.invoice_type.help_text %}
-              <p class="help">{{ form.invoice_type.help_text|safe }}</p>
-              {% endif %}
-              {{ form.select_example }}
-            </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
               {{ form.invoice_number.label_tag }}
               {{ form.invoice_number }}
               <small class="text-danger">
@@ -64,7 +58,11 @@
           </div>
           <div class="row">
             <div class="form-group col-md-6">
-              {{ form.po_number.label_tag }} {{ form.po_number }}
+              {{ form.po_number.label_tag }}
+              <a data-toggle="tooltip" data-placement="right" title="{% trans 'Get the Purchase Order Number for your invoice from your contact/buyer at Eventbrite' %}">
+                <i class="fas fa-info-circle"></i>
+              </a>
+              {{ form.po_number }}
               <small class="text-danger">
                 {{ form.po_number.errors }}
               </small>
@@ -134,15 +132,12 @@
             </div>
           </div>
           <div class="row ml-0 mr-0 mb-3">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupFileAddon01">{% trans "Invoice File" %}</span>
-                  </div>
-                  <div class="custom-file">
-                    {{ form.invoice_file }}
-                    <label class="custom-file-label" id='id-custom-file-label1' for="inputGroupFile01">{% trans "Choose file" %}</label>
-                  </div>
-                </div>
+            <div class="col">
+              <div class="row mb-2">{% trans "Invoice File" %}</div>
+              <div class="row"><p>{{ form.invoice_file }}</p></div>
+            </div>
+            
+            
           </div>
           {% if form.invoice_file.errors %}
             {% for error in form.invoice_file.errors %}
@@ -161,10 +156,8 @@
           </button>
           {% if invoice %}
           <a class='btn btn-danger' href="{% url 'invoices-detail' taxpayer_id=taxpayer_id pk=invoice.id %}">{% trans "Cancel" %}</a>
-          {% elif is_AP %}
-          <a class='btn btn-danger' href="{% url 'invoices-list' %}">{% trans "Cancel" %}</a>
           {% else %}
-          <a class='btn btn-danger' href="{% url 'supplier-invoice-list' taxpayer_id=taxpayer_id %}">{% trans "Cancel" %}</a>
+          <a class='btn btn-danger' href="{% url 'invoices-list' %}">{% trans "Cancel" %}</a>
           {% endif %}
         </div>
         {% csrf_token %}

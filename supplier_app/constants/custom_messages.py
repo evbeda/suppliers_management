@@ -19,3 +19,5 @@ TAXPAYER_NOT_EXISTS_MESSAGE = _("The taxpayer you try to access/modify doesnt ex
 TAXPAYER_REQUEST_CHANGE_MESSAGE = _("Requested changes successfully")
 TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE = _("You did not set workday id")
 TAXPAYER_WORKDAY_UNIQUE_ERROR = _("There is other taxpayer with that workday id")
+
+THANKS = _("Thank you. We'll get back to you shortly.")
