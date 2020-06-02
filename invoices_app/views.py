@@ -87,6 +87,7 @@ from invoices_app import (
     INVOICE_DATE_FORMAT,
     INVOICE_EDIT_INVOICE_UPPER_TEXT,
     INVOICE_STATUS,
+    INVOICE_STATUSES_DICT,
     INVOICE_STATUS_APPROVED,
     INVOICE_STATUS_CHANGES_REQUEST,
     INVOICE_STATUS_PENDING,
@@ -337,7 +338,7 @@ def change_invoice_status(request, pk):
 
     status = request.POST.get('status')
 
-    if status not in [status for status, _ in INVOICE_STATUS]:
+    if status not in INVOICE_STATUSES_DICT.keys():
         return HttpResponseBadRequest()
 
     strategy = get_change_status_strategy(status)
@@ -358,11 +359,10 @@ def change_invoice_status(request, pk):
         )
 
     invoice.save()
-    invoice_statuses_json = {n:m for n, m in INVOICE_STATUS}
     invoice_changed = _('Invoice status has changed to ')
     messages.success(
                 request,
-                f'{invoice_changed}{invoice_statuses_json[status]}',
+                f'{invoice_changed}{INVOICE_STATUSES_DICT[status]}',
             )
     if status == INVOICE_STATUS_CHANGES_REQUEST_CODE:
         _send_email_when_posting_a_comment(request, invoice)
