@@ -34,6 +34,7 @@ INVOICE_STATUS = [
 
 INVOICE_STATUSES_DICT = {n:m for n, m in INVOICE_STATUS}
 
+
 INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
 
 EXPORT_TO_XLS_FULL = {

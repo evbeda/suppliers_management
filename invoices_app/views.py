@@ -366,6 +366,7 @@ def change_invoice_status(request, pk):
                 request,
                 f'{invoice_changed}{INVOICE_STATUSES_DICT[status]}',
             )
+
     if status != INVOICE_STATUS_PENDING_CODE:
         _send_email_when_change_invoice_status(request, invoice)
 
