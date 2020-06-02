@@ -724,7 +724,7 @@ class TestInvoice(TestBase):
         # And another logged user within the company
         self.user.preferred_language = language
         self.user.save()
-        self.invoice.status = '1'
+        self.invoice.status = '4'
         self.logged_user = UserFactory()
         supplier_group = Group.objects.get(name='supplier')
         self.logged_user.groups.add(supplier_group)
