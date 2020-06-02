@@ -63,7 +63,7 @@ class DetailInvoiceTest(TestBase):
             ),
         )
 
-    def test_get_detail_invoice_with_new_comment(self):
+    def test_get_detail_invoice_with_new_comment_from_supplier(self):
         self.client.force_login(self.ap_user)
         self.invoice.new_comment_from_supplier = True
         self.invoice.save()
@@ -78,3 +78,19 @@ class DetailInvoiceTest(TestBase):
             )
         )
         self.assertFalse(Invoice.objects.get(pk=self.invoice.id).new_comment_from_supplier)
+
+    def test_get_detail_invoice_with_new_comment_from_ap(self):
+        self.client.force_login(self.user)
+        self.invoice.new_comment_from_ap = True
+        self.invoice.save()
+
+        self.client.get(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': self.invoice.taxpayer.id,
+                    'pk': self.invoice.id,
+                }
+            )
+        )
+        self.assertFalse(Invoice.objects.get(pk=self.invoice.id).new_comment_from_ap)
