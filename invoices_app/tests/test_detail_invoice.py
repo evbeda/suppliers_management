@@ -3,6 +3,7 @@ from http import HTTPStatus
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from invoices_app.models import Invoice
 from invoices_app.tests.test_base import TestBase
 
 
@@ -17,7 +18,7 @@ class DetailInvoiceTest(TestBase):
                         'taxpayer_id': self.invoice.taxpayer.id,
                         'pk': self.invoice.id,
                     }
-            ),
+                    ),
         )
         self.assertEqual(HTTPStatus.OK, response.status_code)
 
@@ -27,7 +28,7 @@ class DetailInvoiceTest(TestBase):
                     kwargs={
                         'taxpayer_id': self.invoice.taxpayer.id,
                         'pk': self.invoice.id,
-                        }
+                    }
                     ),
         )
         self.assertEqual(type(response), HttpResponseRedirect)
@@ -48,7 +49,7 @@ class DetailInvoiceTest(TestBase):
                     kwargs={
                         'taxpayer_id': self.invoice_from_other_user.taxpayer.id,
                         'pk': self.invoice_from_other_user.id,
-                        }
+                    }
                     ),
         )
 
@@ -61,3 +62,19 @@ class DetailInvoiceTest(TestBase):
                 self.invoice_from_other_user.id
             ),
         )
+
+    def test_get_detail_invoice_with_new_comment(self):
+        self.client.force_login(self.ap_user)
+        self.invoice.new_comment_from_supplier = True
+        self.invoice.save()
+
+        self.client.get(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': self.invoice.taxpayer.id,
+                    'pk': self.invoice.id,
+                }
+            )
+        )
+        self.assertFalse(Invoice.objects.filter(pk=self.invoice.id).last().new_comment_from_supplier)

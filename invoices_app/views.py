@@ -394,6 +394,10 @@ class InvoiceDetailView(PermissionRequiredMixin, IsUserCompanyInvoice, DetailVie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         invoice = get_object_or_404(Invoice, id=self.kwargs['pk'])
+        if self.request.user.is_AP:
+            if invoice.new_comment_from_supplier is True:
+                invoice.new_comment_from_supplier = False
+                invoice.save()
         context['invoice'] = invoice
         father_taxpayer = get_object_or_404(TaxPayer, id=self.kwargs['taxpayer_id'])
         context['is_AP'] = self.request.user.is_AP
@@ -444,7 +448,7 @@ def post_a_comment(request, pk):
         message=request.POST['message'],
         comment_file=request.FILES.get('invoice_file'),
     )
-
+    Invoice.objects.filter(pk=invoice.id).update(new_comment_from_supplier=True)
     if request.user.is_AP:
         _send_email_when_posting_a_comment(request, invoice)
 
