@@ -116,6 +116,12 @@
                                     <i class='far fa-comment-dots' style='font-size:24px'></i>
                                 </a>
                                 {% endif %}
+                             {% elif user.is_supplier %}
+                                {% if invoice.new_comment_from_ap == True %}
+                                <a data-toggle="tooltip" data-placement="bottom" title="{% trans 'New unread commments' %}">
+                                    <i class='far fa-comment-dots' style='font-size:24px'></i>
+                                </a>
+                                {% endif %}
                              {% endif %}
                         </td>
                     </tr>
