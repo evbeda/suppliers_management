@@ -676,8 +676,7 @@ class TestInvoice(TestBase):
 
     @parameterized.expand([
         ('en', '5', 'Your invoice #{} for Eventbrite has been paid'),
-        ('es', '5', 'La factura {} cambió de estado a {}'),
-        ('pt-br','5', 'A fatura {} alterou o status para {}'),
+        ('es', '5', 'La factura #{} para Eventbrite ha sido pagada'),
     ])
     def test_send_email_when_change_invoice_status_with_user_preferred_language(
         self,
