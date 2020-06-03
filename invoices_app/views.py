@@ -110,7 +110,8 @@ from invoices_app import (
     INVOICE_STATUS_PAID_EMAIL,
     INVOICE_STATUS_IN_PROGRESS_EMAIL,
     INVOICE_STATUS_PENDING_CODE,
-    SINCERELY)
+    SINCERELY,
+)
 
 
 from invoices_app.change_status_strategy import get_change_status_strategy
