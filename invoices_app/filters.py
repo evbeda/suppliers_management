@@ -8,11 +8,12 @@ from django_filters import (
     DateFromToRangeFilter,
     FilterSet,
     MultipleChoiceFilter,
-    RangeFilter
+    RangeFilter,
+    BooleanFilter,
 )
 from django.utils.translation import ugettext_lazy as _
 
-from invoices_app import INVOICE_STATUS
+from invoices_app import INVOICE_STATUS, INVOICE_SHOW_ONLY_NEW_MESSAGES
 from invoices_app.models import Invoice
 from utils.custom_filters import (
     NumericRangeWidget,
@@ -47,9 +48,21 @@ class InvoiceFilter(FilterSet):
         label=_('Country'),
     )
 
+    new_comment_from_ap = MultipleChoiceFilter(
+        choices=INVOICE_SHOW_ONLY_NEW_MESSAGES,
+        widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+        label=_('Messages'),
+    )
+
+    new_comment_from_supplier = MultipleChoiceFilter(
+        choices=INVOICE_SHOW_ONLY_NEW_MESSAGES,
+        widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
+        label=_('Messages'),
+    )
+
     class Meta:
         model = Invoice
-        fields = ('invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer__business_name', 'taxpayer__country')
+        fields = ('new_comment_from_ap', 'new_comment_from_supplier', 'invoice_date', 'invoice_due_date', 'status', 'total_amount', 'taxpayer__business_name', 'taxpayer__country')
 
     def get_form_class(self):
         form = super(FilterSet, self).get_form_class()

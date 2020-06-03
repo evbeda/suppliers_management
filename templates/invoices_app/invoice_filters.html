@@ -77,6 +77,32 @@
                         <p class="help">{{ filter.form.status.help_text|safe }}</p>
                         {% endif %}
                     </div>
+
+                    {% if user.is_AP %}
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.new_comment_from_supplier.label_tag }}
+                        {{ filter.form.new_comment_from_supplier }}
+                        <small class="text-danger">
+                            {{ filter.form.new_comment_from_supplier.errors }}
+                        </small>
+                        {% if filter.form.new_comment_from_supplier.help_text %}
+                        <p class="help">{{ filter.form.new_comment_from_supplier.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="form-group col-sm-3">
+                        {{ filter.form.new_comment_from_ap.label_tag }}
+                        {{ filter.form.new_comment_from_ap }}
+                        <small class="text-danger">
+                            {{ filter.form.new_comment_from_ap.errors }}
+                        </small>
+                        {% if filter.form.new_comment_from_ap.help_text %}
+                        <p class="help">{{ filter.form.new_comment_from_ap.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+
                 </div>
                 <div class="row pr-5">
                     <div class="col-sm-12 text-right">
@@ -87,6 +113,7 @@
                 </div>
                 
             </form>
+
         </div>
         <div class="col-md-1"> 
             <div class="row justify-content end">
@@ -101,6 +128,8 @@
     </div>
 
 </div>
+
+
 <script>
 $("#toggleFilter").click(function(){
   $("#filter-form").slideToggle();
