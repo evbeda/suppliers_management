@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-02 20:22+0000\n"
+"POT-Creation-Date: 2020-06-03 17:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2280,31 +2280,31 @@ msgstr "PAGO"
 msgid "IN PROGRESS"
 msgstr ""
 
-#: invoices_app/__init__.py:54
+#: invoices_app/__init__.py:55
 msgid "MM/DD/YYYY"
 msgstr "DD/MM/YYYY"
 
-#: invoices_app/__init__.py:55
+#: invoices_app/__init__.py:56
 msgid "en"
 msgstr "en"
 
-#: invoices_app/__init__.py:58
+#: invoices_app/__init__.py:59
 msgid "Please provide a Workday ID in order to approve an invoice"
 msgstr "Forneça um ID do Workday para aprovar uma fatura"
 
-#: invoices_app/__init__.py:59
+#: invoices_app/__init__.py:60
 msgid "Please add a comment to request changes"
 msgstr "Adicione um comentário para solicitar alterações"
 
-#: invoices_app/__init__.py:61 users_app/views.py:159
+#: invoices_app/__init__.py:62 users_app/views.py:159
 msgid "Thank you"
 msgstr "Obrigado"
 
-#: invoices_app/__init__.py:62
+#: invoices_app/__init__.py:63
 msgid "Eventbrite Invoice {} commented"
 msgstr "Fatura da Eventbrite {} comentada"
 
-#: invoices_app/__init__.py:63
+#: invoices_app/__init__.py:64
 #, fuzzy
 #| msgid ""
 #| "You have a new comment on Invoice # {}. Please check your invoice. "
@@ -2316,76 +2316,73 @@ msgstr ""
 "Você tem um novo comentário na fatura # {}. Por favor, verifique sua fatura. "
 "COMENTE:{}"
 
-#: invoices_app/__init__.py:65
+#: invoices_app/__init__.py:66
 msgid "Invoice #{} for Eventbrite is now {}"
 msgstr ""
 
-#: invoices_app/__init__.py:66
+#: invoices_app/__init__.py:67
 msgid "Eventbrite Invoice Edited"
 msgstr "Fatura da Eventbrite editada"
 
-#: invoices_app/__init__.py:67
+#: invoices_app/__init__.py:68
 msgid ""
 "Your Invoice # {} was edited by an administrator. Please check your invoice"
 msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 
-#: invoices_app/__init__.py:68
+#: invoices_app/__init__.py:69
 #, fuzzy
 #| msgid "Your taxpayer has been approved"
 msgid "Your invoice #{} for Eventbrite has been approved"
 msgstr "Seu contribuinte foi aprovado"
 
-#: invoices_app/__init__.py:69
+#: invoices_app/__init__.py:70
 msgid ""
 "Your invoice #{} for Eventbrite has been approved. We’ll let you know once "
 "it is paid."
 msgstr ""
 
-#: invoices_app/__init__.py:72
+#: invoices_app/__init__.py:73
 msgid "Your Invoice #{} for Eventbrite has required changes"
 msgstr ""
 
-#: invoices_app/__init__.py:73
+#: invoices_app/__init__.py:74
 msgid ""
 "An Eventbrite administrator has required some changes on invoice #{} Please "
 "check your invoice on BriteSu and apply the required changes. COMMENT: {}"
 msgstr ""
 
-#: invoices_app/__init__.py:77
+#: invoices_app/__init__.py:78
 msgid ""
 "Your invoice #{} is being processed by Eventbrite. We’ll let you know about "
 "its progress soon."
 msgstr ""
 
-#: invoices_app/__init__.py:80
+#: invoices_app/__init__.py:81
 #, fuzzy
 #| msgid "Your taxpayer has been rejected"
 msgid "Your invoice #{} for Eventbrite has been rejected"
 msgstr "Seu contribuinte foi rejeitado"
 
-#: invoices_app/__init__.py:81
+#: invoices_app/__init__.py:82
 msgid ""
 "Your invoice #{} for Eventbrite has been rejected. Please login into BriteSu "
 "to see any additional information."
 msgstr ""
 
-#: invoices_app/__init__.py:84
+#: invoices_app/__init__.py:85
 msgid "Your invoice #{} for Eventbrite has been paid"
 msgstr ""
 
-#: invoices_app/__init__.py:85
+#: invoices_app/__init__.py:86
 msgid ""
 "Your invoice #{} for Eventbrite has been paid. Please login into BriteSu to "
 "see any additional information."
 msgstr ""
 
-#: invoices_app/__init__.py:88 supplier_app/constants/email_notifications.py:25
-#: supplier_app/constants/email_notifications.py:35
-#: supplier_app/constants/email_notifications.py:45
-#: supplier_app/constants/email_notifications.py:55
+#: invoices_app/__init__.py:89
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
-"into Britesu and make a comment in the section related to your question.\""
+"into BriteSu and make a comment in the section related to your question.\""
 msgstr ""
 
 #: invoices_app/filters.py:27 invoices_app/models.py:38
@@ -2399,8 +2396,8 @@ msgstr ""
 msgid "Status"
 msgstr "Status"
 
-#: invoices_app/filters.py:29 invoices_app/views.py:240
-#: invoices_app/views.py:309 templates/invoices_app/invoice-list.html:54
+#: invoices_app/filters.py:29 invoices_app/views.py:248
+#: invoices_app/views.py:308 templates/invoices_app/invoice-list.html:54
 msgid "Invoice Date"
 msgstr "Data da fatura"
 
@@ -2483,15 +2480,15 @@ msgstr "Total"
 msgid "Invoice File"
 msgstr "Arquivo de fatura"
 
-#: invoices_app/views.py:211
+#: invoices_app/views.py:219
 msgid "Taxpayer not approved yet"
 msgstr "Contribuinte ainda não aprovado"
 
-#: invoices_app/views.py:214
+#: invoices_app/views.py:222
 msgid "The invoice {} already exists"
 msgstr "A fatura {} já existe"
 
-#: invoices_app/views.py:364
+#: invoices_app/views.py:363
 #, fuzzy
 #| msgid "Invoice {} changed status to {}"
 msgid "Invoice status has changed to "
@@ -2646,6 +2643,15 @@ msgid ""
 "you receive it, you'll need to include the Purchase Order Number on your "
 "invoice as reference. Finally, send your invoice to payables-ar@eventbrite."
 "com"
+msgstr ""
+
+#: supplier_app/constants/email_notifications.py:25
+#: supplier_app/constants/email_notifications.py:35
+#: supplier_app/constants/email_notifications.py:45
+#: supplier_app/constants/email_notifications.py:55
+msgid ""
+"\"Please do not reply to this email. If you have any questions, please login "
+"into Britesu and make a comment in the section related to your question.\""
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:26
@@ -3784,15 +3790,15 @@ msgid ""
 " Limit size: {}MB."
 msgstr ""
 
-#: utils/history.py:28
+#: utils/history.py:33 utils/history.py:50
 msgid "Changed: \n"
 msgstr "Alterado: \n"
 
-#: utils/history.py:36
+#: utils/history.py:42
 msgid "{} from {} to {}\n"
 msgstr "{} de {} para {}\n"
 
-#: utils/history.py:42
+#: utils/history.py:48
 #, fuzzy
 #| msgid "Changed: \n"
 msgid ""
