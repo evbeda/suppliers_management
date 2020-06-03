@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from simple_history.models import HistoricalRecords
 
 from invoices_app import (
-    ARS_INVOICE_TYPES,
     CURRENCIES,
     INVOICE_STATUS,
     INVOICE_STATUS_PENDING,

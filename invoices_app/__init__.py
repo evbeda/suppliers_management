@@ -34,10 +34,6 @@ INVOICE_STATUS = [
 
 INVOICE_STATUSES_DICT = {n:m for n, m in INVOICE_STATUS}
 
-ARS_INVOICE_TYPES = [
-    ('A', 'A'),
-    ('C', 'C'),
-]
 
 INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
 
@@ -65,9 +61,30 @@ NO_COMMENT_ERROR = _('Please add a comment to request changes')
 
 THANK_YOU = _('Thank you')
 EVENTBRITE_INVOICE_COMMENTED = _('Eventbrite Invoice {} commented')
-NEW_COMMENT_EMAIL_TEXT = _('You have a new comment on Invoice # {}. Please check your invoice. COMMENT: {}')
-INVOICE_CHANGE_STATUS_TEXT_EMAIL = _('Invoice {} changed status to {}')
+NEW_COMMENT_EMAIL_TEXT = _('An Eventbrite administrator left a new comment on your Invoice #{}. Please check your '
+                           'invoice on BriteSu. COMMENT: {}')
+INVOICE_CHANGE_STATUS_TEXT_EMAIL = _('Invoice #{} for Eventbrite is now {}')
 EVENTBRITE_INVOICE_EDITED = _('Eventbrite Invoice Edited')
 INVOICE_EDIT_INVOICE_UPPER_TEXT = _('Your Invoice # {} was edited by an administrator. Please check your invoice')
+INVOICE_STATUS_APPROVED_UPPER = _('Your invoice #{} for Eventbrite has been approved')
+INVOICE_STATUS_APPROVED_EMAIL = _('Your invoice #{} for Eventbrite has been approved. '
+                                  'We’ll let you know once it is paid.')
 
-DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
+INVOICE_STATUS_CHANGES_REQUEST_UPPER = _('Your Invoice #{} for Eventbrite has required changes')
+INVOICE_STATUS_CHANGES_REQUEST_EMAIL = _('An Eventbrite administrator has required some changes on invoice #{} '
+                                         'Please check your invoice on BriteSu and apply the required changes. '
+                                         'COMMENT: {}')
+
+INVOICE_STATUS_IN_PROGRESS_EMAIL = _('Your invoice #{} is being processed by Eventbrite. We’ll let you know about its '
+                                     'progress soon.')
+
+INVOICE_STATUS_REJECTED_UPPER = _('Your invoice #{} for Eventbrite has been rejected')
+INVOICE_STATUS_REJECTED_EMAIL = _('Your invoice #{} for Eventbrite has been rejected. '
+                                  'Please login into BriteSu to see any additional information.')
+
+INVOICE_STATUS_PAID_UPPER = _('Your invoice #{} for Eventbrite has been paid')
+INVOICE_STATUS_PAID_EMAIL = _('Your invoice #{} for Eventbrite has been paid. '
+                              'Please login into BriteSu to see any additional information.')
+
+DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into BriteSu and make a '
+               'comment in the section related to your question."')
