@@ -99,7 +99,17 @@ from invoices_app import (
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
     DISCLAIMER,
-    INVOICE_STATUS_IN_PROGRESS, INVOICE_STATUS_CHANGES_REQUEST_CODE,
+    INVOICE_STATUS_IN_PROGRESS,
+    INVOICE_STATUS_APPROVED_UPPER,
+    INVOICE_STATUS_APPROVED_EMAIL,
+    INVOICE_STATUS_CHANGES_REQUEST_UPPER,
+    INVOICE_STATUS_CHANGES_REQUEST_EMAIL,
+    INVOICE_STATUS_REJECTED_UPPER,
+    INVOICE_STATUS_REJECTED_EMAIL,
+    INVOICE_STATUS_PAID_UPPER,
+    INVOICE_STATUS_PAID_EMAIL,
+    INVOICE_STATUS_IN_PROGRESS_EMAIL,
+    INVOICE_STATUS_PENDING_CODE,
 )
 
 
@@ -271,11 +281,6 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
 
     def form_valid(self, form):
         form.instance.status = invoice_status_lookup(INVOICE_STATUS_PENDING)
-
-        if self.request.user.is_AP:
-            user = self.request.user
-            _send_email_when_editing_invoice(form.instance, user)
-
         return super().form_valid(form)
 
     def user_has_permission(self):
@@ -290,11 +295,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         return self.user_has_permission
 
     def get_login_url(self):
-        taxpayer_id = self.kwargs.get('taxpayer_id')
-        if taxpayer_id:
-            return reverse('invoices-list')
-        else:
-            return reverse('invoices-list')
+        return reverse('invoices-list')
 
     def get_form_class(self):
         form = self.form_class
@@ -364,9 +365,8 @@ def change_invoice_status(request, pk):
                 request,
                 f'{invoice_changed}{INVOICE_STATUSES_DICT[status]}',
             )
-    if status == INVOICE_STATUS_CHANGES_REQUEST_CODE:
-        _send_email_when_posting_a_comment(request, invoice)
-    else:
+
+    if status != INVOICE_STATUS_PENDING_CODE:
         _send_email_when_change_invoice_status(request, invoice)
 
     return redirect(
@@ -520,15 +520,7 @@ def _send_email_when_change_invoice_status(request, invoice):
 
     for user in users:
         activate(user.preferred_language)
-
-        subject = INVOICE_CHANGE_STATUS_TEXT_EMAIL.format(
-                invoice.invoice_number,
-                invoice.get_status_display(),
-            )
-        upper_text = INVOICE_CHANGE_STATUS_TEXT_EMAIL.format(
-                    invoice.invoice_number,
-                    invoice.get_status_display(),
-                )
+        subject, upper_text = get_upper_and_email_text(invoice, request.POST.get('message'))
         message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,
@@ -540,27 +532,6 @@ def _send_email_when_change_invoice_status(request, invoice):
     activate(request.user.preferred_language)
 
 
-def _send_email_when_editing_invoice(instance, ap_user):
-    recipient_list = get_user_emails_by_tax_payer_id(instance.taxpayer.id)
-
-    users = User.objects.filter(email__in=recipient_list)
-    for user in users:
-        activate(user.preferred_language)
-
-        subject = str(EVENTBRITE_INVOICE_EDITED)
-        upper_text = str(INVOICE_EDIT_INVOICE_UPPER_TEXT.format(instance.invoice_number))
-        message = build_mail_html(
-            instance.taxpayer.business_name,
-            upper_text,
-            str(THANK_YOU),
-            DISCLAIMER,
-        )
-
-        _send_email(subject, message, [user.email])
-
-    activate(ap_user.preferred_language)
-
-
 def _send_email(
     subject,
     message,
@@ -568,3 +539,32 @@ def _send_email(
 ):
     if subject and message and recipient_list:
         send_email_notification.apply_async([subject, message, recipient_list])
+
+
+def get_upper_and_email_text(invoice: Invoice, message = None):
+    email_cases = {
+        "1": [
+            INVOICE_STATUS_APPROVED_UPPER.format(invoice.invoice_number),
+            INVOICE_STATUS_APPROVED_EMAIL.format(invoice.invoice_number),
+        ],
+        "3": [
+            INVOICE_STATUS_CHANGES_REQUEST_UPPER.format(invoice.invoice_number),
+            INVOICE_STATUS_CHANGES_REQUEST_EMAIL.format(
+                invoice.invoice_number, message
+            ),
+        ],
+        "4": [
+            INVOICE_STATUS_REJECTED_UPPER.format(invoice.invoice_number),
+            INVOICE_STATUS_REJECTED_EMAIL.format(invoice.invoice_number),
+        ],
+        "5": [
+            INVOICE_STATUS_PAID_UPPER.format(invoice.invoice_number),
+            INVOICE_STATUS_PAID_EMAIL.format(invoice.invoice_number),
+        ],
+        "6": [
+            INVOICE_CHANGE_STATUS_TEXT_EMAIL.format(
+                invoice.invoice_number, invoice.get_status_display().lower()),
+            INVOICE_STATUS_IN_PROGRESS_EMAIL.format(invoice.invoice_number),
+        ],
+    }
+    return email_cases[invoice.status]
