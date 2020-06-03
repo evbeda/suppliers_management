@@ -63,8 +63,7 @@ class CommentsTest(TestBase):
         self.assertEqual(comment.user, self.ap_user)
         self.assertEqual(HTTPStatus.FOUND, response.status_code)
 
-    @patch('invoices_app.views._send_email_when_editing_invoice')
-    def test_supplier_invoice_edit_and_it_exists_a_new_comment(self, _):
+    def test_supplier_invoice_edit_and_it_exists_a_new_comment(self):
         # Given an invoice and a logged Supplier
         # invoice : self.invoice
         self.client.force_login(self.user)
