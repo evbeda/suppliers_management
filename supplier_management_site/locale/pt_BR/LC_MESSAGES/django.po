@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-03 17:43+0000\n"
+"POT-Creation-Date: 2020-06-03 21:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2296,15 +2296,21 @@ msgstr "Forneça um ID do Workday para aprovar uma fatura"
 msgid "Please add a comment to request changes"
 msgstr "Adicione um comentário para solicitar alterações"
 
-#: invoices_app/__init__.py:62 users_app/views.py:159
-msgid "Thank you"
+#: invoices_app/__init__.py:62
+#, fuzzy
+#| msgid "Thank you"
+msgid "Thank you,"
 msgstr "Obrigado"
 
 #: invoices_app/__init__.py:63
+msgid "Sincerely,"
+msgstr ""
+
+#: invoices_app/__init__.py:64
 msgid "Eventbrite Invoice {} commented"
 msgstr "Fatura da Eventbrite {} comentada"
 
-#: invoices_app/__init__.py:64
+#: invoices_app/__init__.py:65
 #, fuzzy
 #| msgid ""
 #| "You have a new comment on Invoice # {}. Please check your invoice. "
@@ -2316,70 +2322,70 @@ msgstr ""
 "Você tem um novo comentário na fatura # {}. Por favor, verifique sua fatura. "
 "COMENTE:{}"
 
-#: invoices_app/__init__.py:66
+#: invoices_app/__init__.py:67
 msgid "Invoice #{} for Eventbrite is now {}"
 msgstr ""
 
-#: invoices_app/__init__.py:67
+#: invoices_app/__init__.py:68
 msgid "Eventbrite Invoice Edited"
 msgstr "Fatura da Eventbrite editada"
 
-#: invoices_app/__init__.py:68
+#: invoices_app/__init__.py:69
 msgid ""
 "Your Invoice # {} was edited by an administrator. Please check your invoice"
 msgstr "Sua fatura # {} foi editada por um administrador. Verifique sua fatura"
 
-#: invoices_app/__init__.py:69
+#: invoices_app/__init__.py:70
 #, fuzzy
 #| msgid "Your taxpayer has been approved"
 msgid "Your invoice #{} for Eventbrite has been approved"
 msgstr "Seu contribuinte foi aprovado"
 
-#: invoices_app/__init__.py:70
+#: invoices_app/__init__.py:71
 msgid ""
 "Your invoice #{} for Eventbrite has been approved. We’ll let you know once "
 "it is paid."
 msgstr ""
 
-#: invoices_app/__init__.py:73
+#: invoices_app/__init__.py:74
 msgid "Your Invoice #{} for Eventbrite has required changes"
 msgstr ""
 
-#: invoices_app/__init__.py:74
+#: invoices_app/__init__.py:75
 msgid ""
 "An Eventbrite administrator has required some changes on invoice #{} Please "
 "check your invoice on BriteSu and apply the required changes. COMMENT: {}"
 msgstr ""
 
-#: invoices_app/__init__.py:78
+#: invoices_app/__init__.py:79
 msgid ""
 "Your invoice #{} is being processed by Eventbrite. We’ll let you know about "
 "its progress soon."
 msgstr ""
 
-#: invoices_app/__init__.py:81
+#: invoices_app/__init__.py:82
 #, fuzzy
 #| msgid "Your taxpayer has been rejected"
 msgid "Your invoice #{} for Eventbrite has been rejected"
 msgstr "Seu contribuinte foi rejeitado"
 
-#: invoices_app/__init__.py:82
+#: invoices_app/__init__.py:83
 msgid ""
 "Your invoice #{} for Eventbrite has been rejected. Please login into BriteSu "
 "to see any additional information."
 msgstr ""
 
-#: invoices_app/__init__.py:85
+#: invoices_app/__init__.py:86
 msgid "Your invoice #{} for Eventbrite has been paid"
 msgstr ""
 
-#: invoices_app/__init__.py:86
+#: invoices_app/__init__.py:87
 msgid ""
 "Your invoice #{} for Eventbrite has been paid. Please login into BriteSu to "
 "see any additional information."
 msgstr ""
 
-#: invoices_app/__init__.py:89
+#: invoices_app/__init__.py:90
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into BriteSu and make a comment in the section related to your question.\""
@@ -3763,6 +3769,10 @@ msgstr "Você foi convidado a BriteSu"
 #: users_app/views.py:155
 msgid "Please Login as AP with the link below"
 msgstr "Faça o login como AP com o link abaixo"
+
+#: users_app/views.py:159
+msgid "Thank you"
+msgstr "Obrigado"
 
 #: utils/__init__.py:4
 #, fuzzy

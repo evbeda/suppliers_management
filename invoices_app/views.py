@@ -110,7 +110,7 @@ from invoices_app import (
     INVOICE_STATUS_PAID_EMAIL,
     INVOICE_STATUS_IN_PROGRESS_EMAIL,
     INVOICE_STATUS_PENDING_CODE,
-)
+    SINCERELY)
 
 
 from invoices_app.change_status_strategy import get_change_status_strategy
@@ -520,11 +520,11 @@ def _send_email_when_change_invoice_status(request, invoice):
 
     for user in users:
         activate(user.preferred_language)
-        subject, upper_text = get_upper_and_email_text(invoice, request.POST.get('message'))
+        subject, upper_text, lower_text = get_upper_and_email_text(invoice, request.POST.get('message'))
         message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,
-                THANK_YOU,
+                lower_text,
                 DISCLAIMER,
             )
         _send_email(subject, message, [user.email])
@@ -546,25 +546,29 @@ def get_upper_and_email_text(invoice: Invoice, message = None):
         "1": [
             INVOICE_STATUS_APPROVED_UPPER.format(invoice.invoice_number),
             INVOICE_STATUS_APPROVED_EMAIL.format(invoice.invoice_number),
+            SINCERELY,
         ],
         "3": [
             INVOICE_STATUS_CHANGES_REQUEST_UPPER.format(invoice.invoice_number),
             INVOICE_STATUS_CHANGES_REQUEST_EMAIL.format(
-                invoice.invoice_number, message
-            ),
+                invoice.invoice_number, message),
+            THANK_YOU,
         ],
         "4": [
             INVOICE_STATUS_REJECTED_UPPER.format(invoice.invoice_number),
             INVOICE_STATUS_REJECTED_EMAIL.format(invoice.invoice_number),
+            SINCERELY,
         ],
         "5": [
             INVOICE_STATUS_PAID_UPPER.format(invoice.invoice_number),
             INVOICE_STATUS_PAID_EMAIL.format(invoice.invoice_number),
+            SINCERELY,
         ],
         "6": [
             INVOICE_CHANGE_STATUS_TEXT_EMAIL.format(
                 invoice.invoice_number, invoice.get_status_display().lower()),
             INVOICE_STATUS_IN_PROGRESS_EMAIL.format(invoice.invoice_number),
+            SINCERELY,
         ],
     }
     return email_cases[invoice.status]

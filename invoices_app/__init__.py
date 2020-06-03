@@ -59,7 +59,8 @@ DEFAULT_NUMBER_PAGINATION = 10
 NO_WORKDAY_ID_ERROR = _("Please provide a Workday ID in order to approve an invoice")
 NO_COMMENT_ERROR = _('Please add a comment to request changes')
 
-THANK_YOU = _('Thank you')
+THANK_YOU = _('Thank you,')
+SINCERELY = _('Sincerely,')
 EVENTBRITE_INVOICE_COMMENTED = _('Eventbrite Invoice {} commented')
 NEW_COMMENT_EMAIL_TEXT = _('An Eventbrite administrator left a new comment on your Invoice #{}. Please check your '
                            'invoice on BriteSu. COMMENT: {}')
