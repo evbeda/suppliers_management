@@ -12,7 +12,7 @@ from invoices_app import (
     NO_COMMENT_ERROR,
 )
 from invoices_app.factory_boy import InvoiceFactory
-from invoices_app.models import Comment
+from invoices_app.models import Comment, Invoice
 from invoices_app.tests.test_base import TestBase
 
 from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
@@ -513,3 +513,33 @@ class CommentsTest(TestBase):
         )
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertContains(response, NO_COMMENT_ERROR)
+
+    def test_supplier_comment_new_state_not_generate_extra_comment_with_new_state(self):
+        # Given an invoice and a logged supplier
+        # invoice : self.invoice
+        self.client.force_login(self.user)
+        # When supplier writes a comment the boolean turns True
+        self.invoice.new_comment_from_ap = True
+        self.invoice.save()
+        # Redirect to reload the new comment
+        self.client.get(
+            reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': self.invoice.id}),
+        )
+        # Then the invoice should not have a comment associated
+        comment = Comment.objects.all()
+        self.assertEqual(len(comment), 0)
+
+    def test_ap_comment_new_state_not_generate_extra_comment_with_new_state(self):
+        # Given an invoice and a logged ap
+        # invoice : self.invoice
+        self.client.force_login(self.ap_user)
+        # When ap writes a comment the value of boolean turns True
+        self.invoice.new_comment_from_ap = True
+        self.invoice.save()
+        # Redirect to reload the new comment
+        self.client.get(
+            reverse('invoices-detail', kwargs={'taxpayer_id': self.taxpayer.id, 'pk': self.invoice.id}),
+        )
+        # Then the invoice should not have a comment associated
+        comment = Comment.objects.all()
+        self.assertEqual(len(comment), 0)
