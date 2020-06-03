@@ -34,6 +34,9 @@ INVOICE_STATUS = [
 
 INVOICE_STATUSES_DICT = {n:m for n, m in INVOICE_STATUS}
 
+INVOICE_SHOW_ONLY_NEW_MESSAGES = [
+    (1, _('Show only invoices with new messages'))
+]
 
 INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
 
