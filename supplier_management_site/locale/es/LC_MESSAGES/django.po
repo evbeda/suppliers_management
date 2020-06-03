@@ -1837,6 +1837,7 @@ msgstr "Por favor setea un workday ID para poder aprobar la factura"
 msgid "Please add a comment to request changes"
 msgstr "Porfavor agregue un comentario para pedir cambios"
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:65 users_app/views.py:159
 msgid "Thank you"
 msgstr "Gracias"
@@ -1846,6 +1847,21 @@ msgid "Eventbrite Invoice {} commented"
 msgstr "Factura de Eventbrite {} comentada"
 
 #: invoices_app/__init__.py:67
+=======
+#: invoices_app/__init__.py:62
+msgid "Thank you,"
+msgstr "Gracias,"
+
+#: invoices_app/__init__.py:63
+msgid "Sincerely,"
+msgstr "Saludos,"
+
+#: invoices_app/__init__.py:64
+msgid "Eventbrite Invoice {} commented"
+msgstr "Factura de Eventbrite {} comentada"
+
+#: invoices_app/__init__.py:65
+>>>>>>> Stashed changes
 msgid ""
 "An Eventbrite administrator left a new comment on your Invoice #{}. Please "
 "check your invoice on BriteSu. COMMENT: {}"
@@ -1853,6 +1869,7 @@ msgstr ""
 "Tienes un nuevo comentario en la factura # {}. Por favor revise su factura. "
 "COMENTARIO: {}"
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:69
 msgid "Invoice #{} for Eventbrite is now {}"
 msgstr "La factura #{} para Eventbrite está {}"
@@ -1862,17 +1879,36 @@ msgid "Eventbrite Invoice Edited"
 msgstr "Factura de Eventbrite editada"
 
 #: invoices_app/__init__.py:71
+=======
+#: invoices_app/__init__.py:67
+msgid "Invoice #{} for Eventbrite is now {}"
+msgstr "La factura #{} para Eventbrite está {}"
+
+#: invoices_app/__init__.py:68
+msgid "Eventbrite Invoice Edited"
+msgstr "Factura de Eventbrite editada"
+
+#: invoices_app/__init__.py:69
+>>>>>>> Stashed changes
 msgid ""
 "Your Invoice # {} was edited by an administrator. Please check your invoice"
 msgstr ""
 "Tu factura # {} fue modificada por un administrador. Por favor revise su "
 "factura."
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:72
 msgid "Your invoice #{} for Eventbrite has been approved"
 msgstr "La factura #{} para Eventbrite ha sido aprobada"
 
 #: invoices_app/__init__.py:73
+=======
+#: invoices_app/__init__.py:70
+msgid "Your invoice #{} for Eventbrite has been approved"
+msgstr "La factura #{} para Eventbrite ha sido aprobada"
+
+#: invoices_app/__init__.py:71
+>>>>>>> Stashed changes
 msgid ""
 "Your invoice #{} for Eventbrite has been approved. We’ll let you know once "
 "it is paid."
@@ -1880,11 +1916,19 @@ msgstr ""
 "La factura #{} para Eventbrite ha sido aprobada. Te haremos saber cuando "
 "haya sido pagada."
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:76
 msgid "Your Invoice #{} for Eventbrite has required changes"
 msgstr "Eventbrite ha requerido cambios en la factura #{}"
 
 #: invoices_app/__init__.py:77
+=======
+#: invoices_app/__init__.py:74
+msgid "Your Invoice #{} for Eventbrite has required changes"
+msgstr "Eventbrite ha requerido cambios en la factura #{}"
+
+#: invoices_app/__init__.py:75
+>>>>>>> Stashed changes
 msgid ""
 "An Eventbrite administrator has required some changes on invoice #{} Please "
 "check your invoice on BriteSu and apply the required changes. COMMENT: {}"
@@ -1893,7 +1937,11 @@ msgstr ""
 "#{}.Por favor revise su factura y aplique los cambios solicitados. "
 "COMENTARIO: {}"
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:81
+=======
+#: invoices_app/__init__.py:79
+>>>>>>> Stashed changes
 msgid ""
 "Your invoice #{} is being processed by Eventbrite. We’ll let you know about "
 "its progress soon."
@@ -1901,11 +1949,19 @@ msgstr ""
 "La factura #{} está siendo procesada por Eventbrite. Pronto te informaremos "
 "sobre su progreso."
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:84
 msgid "Your invoice #{} for Eventbrite has been rejected"
 msgstr "La factura #{} para Eventbrite ha sido rechazada"
 
 #: invoices_app/__init__.py:85
+=======
+#: invoices_app/__init__.py:82
+msgid "Your invoice #{} for Eventbrite has been rejected"
+msgstr "La factura #{} para Eventbrite ha sido rechazada"
+
+#: invoices_app/__init__.py:83
+>>>>>>> Stashed changes
 msgid ""
 "Your invoice #{} for Eventbrite has been rejected. Please login into BriteSu "
 "to see any additional information."
@@ -1913,11 +1969,19 @@ msgstr ""
 "Tu factura #{} para Eventbrite ha sido rechazada. Por favor visita BriteSu "
 "para ver cualquier información adicional."
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:88
 msgid "Your invoice #{} for Eventbrite has been paid"
 msgstr "La factura #{} para Eventbrite ha sido pagada"
 
 #: invoices_app/__init__.py:89
+=======
+#: invoices_app/__init__.py:86
+msgid "Your invoice #{} for Eventbrite has been paid"
+msgstr "La factura #{} para Eventbrite ha sido pagada"
+
+#: invoices_app/__init__.py:87
+>>>>>>> Stashed changes
 msgid ""
 "Your invoice #{} for Eventbrite has been paid. Please login into BriteSu to "
 "see any additional information."
@@ -1925,7 +1989,11 @@ msgstr ""
 "La factura #{} para Eventbrite ha sido pagada. Por favor visita BriteSu para "
 "ver cualquier información adicional."
 
+<<<<<<< Updated upstream
 #: invoices_app/__init__.py:92
+=======
+#: invoices_app/__init__.py:90
+>>>>>>> Stashed changes
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into BriteSu and make a comment in the section related to your question.\""
