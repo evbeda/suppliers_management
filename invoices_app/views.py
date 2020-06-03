@@ -99,10 +99,18 @@ from invoices_app import (
     NO_WORKDAY_ID_ERROR,
     THANK_YOU,
     DISCLAIMER,
-    INVOICE_STATUS_IN_PROGRESS, INVOICE_STATUS_CHANGES_REQUEST_CODE,
-    INVOICE_STATUS_APPROVED_UPPER, INVOICE_STATUS_APPROVED_EMAIL, INVOICE_STATUS_CHANGES_REQUEST_UPPER,
-    INVOICE_STATUS_CHANGES_REQUEST_EMAIL, INVOICE_STATUS_REJECTED_UPPER, INVOICE_STATUS_REJECTED_EMAIL,
-    INVOICE_STATUS_PAID_UPPER, INVOICE_STATUS_PAID_EMAIL, INVOICE_STATUS_IN_PROGRESS_EMAIL, INVOICE_STATUS_PENDING_CODE)
+    INVOICE_STATUS_IN_PROGRESS,
+    INVOICE_STATUS_APPROVED_UPPER,
+    INVOICE_STATUS_APPROVED_EMAIL,
+    INVOICE_STATUS_CHANGES_REQUEST_UPPER,
+    INVOICE_STATUS_CHANGES_REQUEST_EMAIL,
+    INVOICE_STATUS_REJECTED_UPPER,
+    INVOICE_STATUS_REJECTED_EMAIL,
+    INVOICE_STATUS_PAID_UPPER,
+    INVOICE_STATUS_PAID_EMAIL,
+    INVOICE_STATUS_IN_PROGRESS_EMAIL,
+    INVOICE_STATUS_PENDING_CODE,
+)
 
 
 from invoices_app.change_status_strategy import get_change_status_strategy
@@ -273,11 +281,6 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
 
     def form_valid(self, form):
         form.instance.status = invoice_status_lookup(INVOICE_STATUS_PENDING)
-
-        if self.request.user.is_AP:
-            user = self.request.user
-            # _send_email_when_editing_invoice(form.instance, user) ISSUE IN BACKLOG
-
         return super().form_valid(form)
 
     def user_has_permission(self):
@@ -521,9 +524,7 @@ def _send_email_when_change_invoice_status(request, invoice):
 
     for user in users:
         activate(user.preferred_language)
-        texts = get_upper_and_email_text(invoice, request)
-        subject = texts[0]
-        upper_text = texts[1]
+        subject, upper_text = get_upper_and_email_text(invoice, request)
         message = build_mail_html(
                 invoice.taxpayer.business_name,
                 upper_text,

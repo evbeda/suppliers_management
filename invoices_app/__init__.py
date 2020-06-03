@@ -86,5 +86,5 @@ INVOICE_STATUS_PAID_UPPER = _('Your invoice #{} for Eventbrite has been paid')
 INVOICE_STATUS_PAID_EMAIL = _('Your invoice #{} for Eventbrite has been paid. '
                               'Please login into BriteSu to see any additional information.')
 
-DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a '
+DISCLAIMER = _('"Please do not reply to this email. If you have any questions, please login into BriteSu and make a '
                'comment in the section related to your question."')
