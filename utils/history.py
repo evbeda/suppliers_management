@@ -3,6 +3,11 @@ from django.utils.translation import gettext, gettext_lazy as _
 from invoices_app import INVOICE_STATUS
 from invoices_app.models import Comment, Invoice
 
+AVOID_COMMENTS = [
+    'new_comment_from_ap',
+    'new_comment_from_supplier',
+]
+
 
 def get_status_display(status):
     for k, v in INVOICE_STATUS:
@@ -27,7 +32,7 @@ def invoice_history_comments(invoice):
         delta = next_record.diff_against(record)
         message = _('Changed: \n')
         for change in delta.changes:
-            if change.field != 'new_comment_from_ap' and change.field != 'new_comment_from_supplier':
+            if change.field not in AVOID_COMMENTS:
                 if change.field != 'status':
                     old_value = change.old
                     new_value = change.new
