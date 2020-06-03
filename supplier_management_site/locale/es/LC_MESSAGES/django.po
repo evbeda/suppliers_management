@@ -20,7 +20,7 @@ msgstr ""
 #: env/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
 #: invoices_app/filters.py:53 invoices_app/filters.py:59
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #: env/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
 msgid "Site Maps"
@@ -1819,7 +1819,7 @@ msgstr "EN PROGRESO"
 
 #: invoices_app/__init__.py:38
 msgid "Show only invoices with new messages"
-msgstr ""
+msgstr "Mostrar solo facturas con nuevos mensajes"
 
 #: invoices_app/__init__.py:58
 msgid "MM/DD/YYYY"
@@ -1850,10 +1850,6 @@ msgid "Eventbrite Invoice {} commented"
 msgstr "Factura de Eventbrite {} comentada"
 
 #: invoices_app/__init__.py:68
-#, fuzzy
-#| msgid ""
-#| "You have a new comment on Invoice # {}. Please check your invoice. "
-#| "COMMENT: {}"
 msgid ""
 "An Eventbrite administrator left a new comment on your Invoice #{}. Please "
 "check your invoice on BriteSu. COMMENT: {}"
