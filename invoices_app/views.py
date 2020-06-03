@@ -567,8 +567,7 @@ def get_upper_and_email_text(invoice: Invoice, message = None):
         ],
         "6": [
             INVOICE_CHANGE_STATUS_TEXT_EMAIL.format(
-                invoice.invoice_number, invoice.get_status_display().lower()
-            ),
+                invoice.invoice_number, invoice.get_status_display().lower()),
             INVOICE_STATUS_IN_PROGRESS_EMAIL.format(invoice.invoice_number),
         ],
     }
