@@ -295,11 +295,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, IsUserCompanyInvoice, UserPasse
         return self.user_has_permission
 
     def get_login_url(self):
-        taxpayer_id = self.kwargs.get('taxpayer_id')
-        if taxpayer_id:
-            return reverse('invoices-list')
-        else:
-            return reverse('invoices-list')
+        return reverse('invoices-list')
 
     def get_form_class(self):
         form = self.form_class
