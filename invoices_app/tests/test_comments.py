@@ -12,7 +12,7 @@ from invoices_app import (
     NO_COMMENT_ERROR,
 )
 from invoices_app.factory_boy import InvoiceFactory
-from invoices_app.models import Comment
+from invoices_app.models import Comment, Invoice
 from invoices_app.tests.test_base import TestBase
 
 from supplier_app.tests.factory_boy import CompanyUserPermissionFactory
@@ -514,3 +514,69 @@ class CommentsTest(TestBase):
         )
         self.assertEqual(HTTPStatus.OK, response.status_code)
         self.assertContains(response, NO_COMMENT_ERROR)
+
+    @parameterized.expand([
+        ('False',),
+    ])
+    @patch('invoices_app.views._send_email_when_change_invoice_status')
+    def test_supplier_comment_new_state_not_generate_extra_comment_with_new_state(
+        self,
+        new_status,
+        __,
+    ):
+        # Given an invoice and a logged supplier
+        # invoice : self.invoice
+        self.client.force_login(self.user)
+
+        # When supplier writes a comment
+        self.client.post(
+            reverse(
+                'post-comment',
+                kwargs={
+                    'pk': self.invoice.id,
+                },
+            ),
+            {'new_comment_from_supplier': invoice_status_lookup(new_status)}
+        )
+
+        # Then the invoice should have a comment associated to it with its message
+        comment = invoice_history_comments(self.invoice)
+
+        self.assertEqual(
+            len(Comment.objects.filter(invoice=self.invoice)),
+            0
+        )
+        self.assertEqual(len(comment), 0)
+
+    @parameterized.expand([
+        ('False',),
+    ])
+    @patch('invoices_app.views._send_email_when_change_invoice_status')
+    def test_ap_comment_new_state_not_generate_extra_comment_with_new_state(
+            self,
+            new_status,
+            __,
+    ):
+        # Given an invoice and a logged supplier
+        # invoice : self.invoice
+        self.client.force_login(self.ap_user)
+
+        # When ap writes a comment
+        self.client.post(
+            reverse(
+                'post-comment',
+                kwargs={
+                    'pk': self.invoice.id,
+                },
+            ),
+            {'new_comment_from_ap': invoice_status_lookup(new_status)}
+        )
+
+        # Then the invoice should have a comment associated to it with its message
+        comment = invoice_history_comments(self.invoice)
+
+        self.assertEqual(
+            len(Comment.objects.filter(invoice=self.invoice)),
+            0
+        )
+        self.assertEqual(len(comment), 0)
