@@ -20,7 +20,7 @@ email_notifications = {
     'taxpayer_approval': {
         'subject': _('Your supplier registration request has been approved'),
         'body': {
-            'upper_text': _("Soon your contact at Eventbrite will send you a Purchase Order Number. Once you receive it, you'll need to include the Purchase Order Number on your invoice as reference. Finally, send your invoice to payables-ar@eventbrite.com"),
+            'upper_text': _("Soon your contact at Eventbrite will send you a Purchase Order Number. Once you receive it, you'll be able to upload your invoice on BriteSu"),
             'lower_text': _('Thank you!'),
             'disclaimer': _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
             'btn_text': _('Go to BriteSu'),
