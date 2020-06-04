@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 13:09+0000\n"
+"POT-Creation-Date: 2020-06-04 21:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2025,10 +2025,11 @@ msgstr "Data de Vencimento"
 msgid "Total Amount"
 msgstr "Valor total"
 
-#: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
-#: templates/invoices_app/invoice-list.html:52
-msgid "Taxpayer"
-msgstr "Contribuinte"
+#: invoices_app/filters.py:39 templates/invoices_app/invoice-list.html:52
+#, fuzzy
+#| msgid "Options"
+msgid "Organization"
+msgstr "Açao"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
 #: supplier_app/models.py:55 supplier_app/models.py:126
@@ -2390,8 +2391,10 @@ msgid "In Progress"
 msgstr ""
 
 #: supplier_app/filters.py:19
-msgid "Taxpayer state"
-msgstr "Estado do contribuinte"
+#, fuzzy
+#| msgid "Options"
+msgid "Organization state"
+msgstr "Açao"
 
 #: supplier_app/forms.py:52
 msgid "e.g. Adolfo sourdeaux"
@@ -2630,6 +2633,10 @@ msgstr "Do utilizador"
 msgid "Modified"
 msgstr "Modificado"
 
+#: templates/invoices_app/history-list.html:21
+msgid "Taxpayer"
+msgstr "Contribuinte"
+
 #: templates/invoices_app/history-list.html:23
 #: templates/invoices_app/invoice-list.html:57
 #: templates/invoices_app/supplier-invoice-list.html:34
@@ -2856,8 +2863,10 @@ msgid "Invoices"
 msgstr "Faturas"
 
 #: templates/navbar.html:24 templates/supplier_app/ap-taxpayers.html:14
-msgid "Taxpayers"
-msgstr "Contribuintes"
+#, fuzzy
+#| msgid "Options"
+msgid "Organizations"
+msgstr "Açao"
 
 #: templates/navbar.html:28
 msgid "Manage Admins"
@@ -2884,8 +2893,10 @@ msgid "Supplier"
 msgstr "Fornecedor"
 
 #: templates/navbar.html:93
-msgid "My Taxpayers"
-msgstr "Meus contribuintes"
+#, fuzzy
+#| msgid "Options"
+msgid "My Organizations"
+msgstr "Açao"
 
 #: templates/navbar.html:134
 msgid "Log out"
@@ -3317,8 +3328,10 @@ msgid "Zip_Code"
 msgstr "Código postal"
 
 #: templates/supplier_app/supplier-home.html:18
-msgid "Create a new taxpayer"
-msgstr "Criar um novo contribuinte"
+#, fuzzy
+#| msgid "Create a new admin"
+msgid "Create a new organization"
+msgstr "Crie uma nova empresa"
 
 #: templates/supplier_app/supplier-home.html:31
 msgid "Options"
@@ -3420,6 +3433,33 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#~ msgid "Taxpayer state"
+#~ msgstr "Estado do contribuinte"
+
+#, fuzzy
+#~| msgid "Taxpayer Identification Number"
+#~ msgid "Organization Identification Number"
+#~ msgstr "Número de Identificação Fiscal"
+
+#, fuzzy
+#~| msgid "Taxpayer identification number"
+#~ msgid "Organization identification number"
+#~ msgstr "Número de Identificação Fiscal"
+
+#, fuzzy
+#~| msgid "Options"
+#~ msgid "Organization condition"
+#~ msgstr "Açao"
+
+#~ msgid "Taxpayers"
+#~ msgstr "Contribuintes"
+
+#~ msgid "My Taxpayers"
+#~ msgstr "Meus contribuintes"
+
+#~ msgid "Create a new taxpayer"
+#~ msgstr "Criar um novo contribuinte"
 
 #~ msgid "Invoice {} changed status to {}"
 #~ msgstr "A fatura {} alterou o status para {}"

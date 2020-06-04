@@ -16,7 +16,7 @@ class TaxPayerFilter(FilterSet):
     taxpayer_state = MultipleChoiceFilter(
         choices=get_taxpayer_status_choices,
         widget=CheckboxSelectMultiple(attrs={'class': 'list-unstyled'}),
-        label=_("Taxpayer state")
+        label=_("Organization state")
     )
     taxpayer_date = DateFromToRangeFilter()
 
