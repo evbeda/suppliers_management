@@ -36,7 +36,7 @@ class InvoiceFilter(FilterSet):
             'class': 'form-control',
             "list": "taxpayers",
             }),
-        label=_('Taxpayer'),
+        label=_('Organization'),
     )
 
     taxpayer__country = CharFilter(

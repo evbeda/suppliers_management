@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 13:09+0000\n"
+"POT-Creation-Date: 2020-06-04 21:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1965,9 +1965,8 @@ msgstr "Fecha de vencimiento"
 msgid "Total Amount"
 msgstr "Monto Total"
 
-#: invoices_app/filters.py:39 templates/invoices_app/history-list.html:21
-#: templates/invoices_app/invoice-list.html:52
-msgid "Taxpayer"
+#: invoices_app/filters.py:39 templates/invoices_app/invoice-list.html:52
+msgid "Organization"
 msgstr "Entidad Fiscal"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
@@ -2317,8 +2316,8 @@ msgid "In Progress"
 msgstr "En Progreso"
 
 #: supplier_app/filters.py:19
-msgid "Taxpayer state"
-msgstr "Estados de la entidad fiscal"
+msgid "Organization state"
+msgstr "Estados de la Entidad Fiscal"
 
 #: supplier_app/forms.py:52
 msgid "e.g. Adolfo sourdeaux"
@@ -2543,6 +2542,10 @@ msgstr "Usuario"
 msgid "Modified"
 msgstr "Modificado"
 
+#: templates/invoices_app/history-list.html:21
+msgid "Taxpayer"
+msgstr "Entidad Fiscal"
+
 #: templates/invoices_app/history-list.html:23
 #: templates/invoices_app/invoice-list.html:57
 #: templates/invoices_app/supplier-invoice-list.html:34
@@ -2762,8 +2765,8 @@ msgid "Invoices"
 msgstr "Facturas"
 
 #: templates/navbar.html:24 templates/supplier_app/ap-taxpayers.html:14
-msgid "Taxpayers"
-msgstr "Entidades fiscales"
+msgid "Organizations"
+msgstr "Entidades Fiscales"
 
 #: templates/navbar.html:28
 msgid "Manage Admins"
@@ -2790,8 +2793,8 @@ msgid "Supplier"
 msgstr "Proveedor"
 
 #: templates/navbar.html:93
-msgid "My Taxpayers"
-msgstr "Mis entidades fiscales"
+msgid "My Organizations"
+msgstr "Mis Entidades Fiscales"
 
 #: templates/navbar.html:134
 msgid "Log out"
@@ -3177,8 +3180,8 @@ msgid "Zip_Code"
 msgstr "Código postal"
 
 #: templates/supplier_app/supplier-home.html:18
-msgid "Create a new taxpayer"
-msgstr "Crear entidad fiscal"
+msgid "Create a new organization"
+msgstr "Crear un nueva entidad fiscal"
 
 #: templates/supplier_app/supplier-home.html:31
 msgid "Options"
@@ -3276,6 +3279,27 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "Taxpayer state"
+#~ msgstr "Estados de la entidad fiscal"
+
+#~ msgid "Organization Identification Number"
+#~ msgstr "CUIT"
+
+#~ msgid "Organization identification number"
+#~ msgstr "CUIT"
+
+#~ msgid "Organization condition"
+#~ msgstr "Condición Impositiva"
+
+#~ msgid "Taxpayers"
+#~ msgstr "Entidades fiscales"
+
+#~ msgid "My Taxpayers"
+#~ msgstr "Mis entidades fiscales"
+
+#~ msgid "Create a new taxpayer"
+#~ msgstr "Crear entidad fiscal"
 
 #~ msgid "Invoice {} changed status to {}"
 #~ msgstr "La factura {} cambió de estado a {}"
