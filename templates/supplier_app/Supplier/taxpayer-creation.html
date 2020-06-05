@@ -20,9 +20,9 @@
 <form id="msform" method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     <ul id="progressbar">
-        <li class="active">Organization Info</li>
-        <li>Bank Info</li>
-        <li>Tax Condition and attachments</li>
+        <li class="active"></li>
+        <li></li>
+        <li></li>
     </ul>
 
     {% for hidden_field in taxpayer_form.hidden_fields %}
@@ -33,7 +33,7 @@
     {% endfor %}
 
     <fieldset id="f1">
-        <h2 class="fs-title mb-4">- {% trans "Taxpayer Info" %} -</h2>
+        <h2 class="fs-title mb-4">- {% trans "Organization Info" %} -</h2>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
         <div class="div-input mandatory">{{ taxpayer_form.business_name }}</div>
         <div class="text-left hidden">{{ taxpayer_form.payment_type.label_tag }}</div>

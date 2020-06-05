@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 21:08+0000\n"
+"POT-Creation-Date: 2020-06-05 12:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3010,8 +3010,8 @@ msgid "Next"
 msgstr "Siguiente"
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:36
-msgid "Taxpayer Info"
-msgstr "Información de la entidad fiscal"
+msgid "Organization Info"
+msgstr "Informacion de la Entidad Fiscal"
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:56
 msgid "Address Info"
@@ -3279,6 +3279,9 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "Taxpayer Info"
+#~ msgstr "Información de la entidad fiscal"
 
 #~ msgid "Taxpayer state"
 #~ msgstr "Estados de la entidad fiscal"

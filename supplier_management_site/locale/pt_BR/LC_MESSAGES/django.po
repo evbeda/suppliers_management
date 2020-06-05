@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 21:08+0000\n"
+"POT-Creation-Date: 2020-06-05 12:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3123,9 +3123,9 @@ msgstr ""
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:36
 #, fuzzy
-#| msgid "Taxpayer info"
-msgid "Taxpayer Info"
-msgstr "Informações do contribuinte"
+#| msgid "Options"
+msgid "Organization Info"
+msgstr "Açao"
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:56
 #, fuzzy
@@ -3433,6 +3433,11 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#, fuzzy
+#~| msgid "Taxpayer info"
+#~ msgid "Taxpayer Info"
+#~ msgstr "Informações do contribuinte"
 
 #~ msgid "Taxpayer state"
 #~ msgstr "Estado do contribuinte"
