@@ -104,6 +104,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
     ContactFactory,
+    EbEntityCompanyFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
@@ -1846,13 +1847,14 @@ class TestCompanyInvite(TestCase):
     def setUp(self):
         CompanyFactory()
         self.client = Client()
+        self.entities = EbEntityCompanyFactory()
 
     def _make_post(self, language='en'):
         response = self.client.post(
             path=reverse('company-invite'),
             data={
                 'email': 'something@eventbrite.com',
-                'company_id': '1',
+                'company_id': '2',
                 'language': language,
             },
         )
@@ -2343,6 +2345,8 @@ class TestNotifyMessages(TestCase):
         self.supplier_user = UserFactory()
         self.supplier_user.groups.add(self.supplier_group)
         self.supplier_without_company = UserFactory()
+        self.eb_entity_factory = EbEntityCompanyFactory()
+        self.eb_entity = EBEntityFactory()
         self.supplier_without_company.groups.add(self.supplier_group)
         CompanyUserPermissionFactory(user=self.supplier_user)
         self.client.force_login(self.supplier_user)

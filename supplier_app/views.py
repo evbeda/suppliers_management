@@ -552,7 +552,9 @@ def company_invite(request):
         company_unique_token.assing_company_token
         company_unique_token.save()
         token = company_unique_token.token
-        company_invitation_notification(company, token, email, language)
+        id_ebentity = EBEntityCompany.objects.get(company=company).eb_entity_id
+        eb_entity = EBEntity.objects.get(pk=id_ebentity)
+        company_invitation_notification(company, token, email, language, eb_entity.eb_name)
         messages.success(request, EMAIL_SUCCESS_MESSAGE)
     except CouldNotSendEmailError:
         messages.error(request, EMAIL_ERROR_MESSAGE)
