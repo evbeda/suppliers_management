@@ -124,7 +124,6 @@ def build_mail_html(
         btn_text=GO_TO_BRITESU,
         btn_url='{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         second_text='',
-
 ):
     html_message = render_to_string(
         'mail_template.html',
