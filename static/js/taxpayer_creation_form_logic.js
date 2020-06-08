@@ -6,12 +6,15 @@ $(document).ready(function(){
     $(".hidden").hide();
     $("input").prop("required", false);
     $("select").prop("required", false);
+    $('#spinner').hide();
+    $('form').on("submit",function(){
+        $('#spinner').show();
+    });
     set_optionals();
     set_mandatory();
     country_change();
     arg_bank_change();
 });
-
 // Removes the required prop from optional fields
 function set_optionals(){
     $(".optional>input").prop("required", false);
