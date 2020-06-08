@@ -11,7 +11,7 @@
         "model": "supplier_app.EBEntity",
         "pk": 2,
         "fields": {
-            "eb_name": "Eventbrite, Inc.",
+            "eb_name": "Eventbrite Inc.",
             "eb_country": "EU"
         }
     }
