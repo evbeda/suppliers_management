@@ -1712,8 +1712,10 @@ class TestEditBankAccountInfo(TestCase):
 
 class TestCompanyCreateView(TestCase):
     def setUp(self):
+        self.eb_entity = EBEntityFactory()
         self.company_constants = {
             'name': 'Eventbrite',
+            'eb_entity':'1',
             'description':
                 'Bringing the world together through live experiences',
         }

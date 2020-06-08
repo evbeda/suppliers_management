@@ -15,6 +15,16 @@
                 </div>
                 <input type="text" name="name" maxlength="200" required="" id="id_name" class='form-control'>
             </div>
+            <div>
+                <div class="m-3 text-center">
+                    <h6>{% trans "Eventbrite entities to bill" %}</h6>
+                </div>
+                <select class="form-control form-control-sm" name="eb_entity" class="selectpicker" data-width="fit">
+                    {% for entity in eb_entities %}
+                    <option value="{{ entity.pk }}">{{ entity.eb_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="form-group">
                 <div class="m-3 text-center">
                     <h6>{% trans "Description" %}</h6>
