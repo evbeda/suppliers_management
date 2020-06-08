@@ -16,8 +16,8 @@
         <div class="col">
             <div class="text-left arg arg-bank">
                 {{ taxpayer_form.payment_term.label_tag }}
-                <a class="tooltip-dark" data-toggle="tooltip" data-placement="right" title="{% trans 'The payment term agreed with your contact/buyer at Eventbrite. This value will be later verified.' %}">
-                    <i class="fas fa-info-circle"></i>
+                <a data-toggle="tooltip" data-placement="right" title="{% trans 'The payment term agreed with your contact/buyer at Eventbrite. This value will be later verified.' %}">
+                    <i class="fas fa-info-circle tooltip-orange"></i>
                 </a>
             </div>
             <div class="div-input arg arg-bank">{{ taxpayer_form.payment_term}}</div>

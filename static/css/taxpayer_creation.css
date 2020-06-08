@@ -163,6 +163,6 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
 	width: fit-content;
 }
 
-.tooltip-dark{
-	color: rgba(255, 125, 0) !important;
+.tooltip-orange{
+	color: rgba(255, 125, 0);
 }

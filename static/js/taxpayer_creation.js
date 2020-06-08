@@ -25,18 +25,18 @@ function check_completed_form_section(section){
 // Click the "next" button, and sends corresponding inputs to inspect for completion
 $(".next").click(function(){
 	var can_advance = true
-	// if ($(this).is("#first-next")){
-	// 	var first_fieldset_mandatory_inputs = $(".mandatory>input:text, .mandatory>input[type='number'], .mandatory>select, .mandatory>input[type='email'], .mandatory>input[type='checkbox']")
-	// 	if (check_completed_form_section(first_fieldset_mandatory_inputs) == false){
-	// 		can_advance = false;
-	// 	}
-	// }
-	// else if ($(this).is("#arg-bank-next")){
-	// 	var arg_bank_mandatory_inputs = $(".arg-bank>input:text, .arg-bank>input[type='number'], .arg-bank>select")
-	// 	if (check_completed_form_section(arg_bank_mandatory_inputs) == false){
-	// 		can_advance = false;
-	// 	}
-	// } // Add future fieldests to this 'if' statement, sending their inputs
+	if ($(this).is("#first-next")){
+		var first_fieldset_mandatory_inputs = $(".mandatory>input:text, .mandatory>input[type='number'], .mandatory>select, .mandatory>input[type='email'], .mandatory>input[type='checkbox']")
+		if (check_completed_form_section(first_fieldset_mandatory_inputs) == false){
+			can_advance = false;
+		}
+	}
+	else if ($(this).is("#arg-bank-next")){
+		var arg_bank_mandatory_inputs = $(".arg-bank>input:text, .arg-bank>input[type='number'], .arg-bank>select")
+		if (check_completed_form_section(arg_bank_mandatory_inputs) == false){
+			can_advance = false;
+		}
+	} // Add future fieldests to this 'if' statement, sending their inputs
 
 	if (can_advance){
 		next_page($(this));
