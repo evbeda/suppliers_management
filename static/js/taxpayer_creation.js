@@ -36,7 +36,7 @@ $(".next").click(function(){
 		if (check_completed_form_section(arg_bank_mandatory_inputs) == false){
 			can_advance = false;
 		}
-	} // Add future fieldests to this if statement sending their inputs
+	} // Add future fieldests to this 'if' statement, sending their inputs
 
 	if (can_advance){
 		next_page($(this));
