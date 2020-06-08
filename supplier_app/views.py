@@ -69,7 +69,7 @@ from supplier_app.models import (
     TaxpayerComment,
     TaxPayerEBEntity,
     ContactInformation,
-    InvitingBuyer)
+    InvitingBuyer, EBEntityCompany)
 from users_app.mixins import (
     TaxPayerPermissionMixin,
     UserLoginPermissionRequiredMixin,
@@ -101,9 +101,15 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         CAN_CREATE_COMPANY_PERM,
     )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['eb_entities'] = EBEntity.objects.all()
+        return context
+
     def form_valid(self, form):
         company = self.save_company(form)
         InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
+        EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
         return HttpResponseRedirect(self.get_success_url())
 
     def save_company(self, forms):

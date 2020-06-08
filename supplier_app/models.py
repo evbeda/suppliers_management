@@ -69,6 +69,10 @@ class Company(models.Model):
         return self.name.capitalize()
 
 
+class EBEntityCompany(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE,default=None)
+
 class InvitingBuyer(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     inviting_buyer = models.ForeignKey(
