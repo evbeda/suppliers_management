@@ -71,7 +71,8 @@ class Company(models.Model):
 
 class EBEntityCompany(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE,default=None)
+    eb_entity = models.ForeignKey(EBEntity, on_delete=models.CASCADE, default=None)
+
 
 class InvitingBuyer(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)

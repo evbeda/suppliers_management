@@ -69,7 +69,9 @@ from supplier_app.models import (
     TaxpayerComment,
     TaxPayerEBEntity,
     ContactInformation,
-    InvitingBuyer, EBEntityCompany)
+    InvitingBuyer,
+    EBEntityCompany
+)
 from users_app.mixins import (
     TaxPayerPermissionMixin,
     UserLoginPermissionRequiredMixin,
