@@ -564,6 +564,8 @@ class TestApTaxpayers(TestCase):
             business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
             taxpayer_state=STATUS_CHANGE_REQUIRED,
+            cuit='20392379685',
+            company=self.company2,
         )
         self.taxpayer_usa1 = TaxPayerUnitedStatedFactory(
             workday_id='3',
@@ -575,6 +577,9 @@ class TestApTaxpayers(TestCase):
         self.taxpayer_usa1 = TaxPayerUnitedStatedFactory(
             workday_id='3',
             taxpayer_state=STATUS_PENDING,
+            taxpayer_id_number='12345678',
+            company=self.company2,
+            country='USA',
         )
         self.user_ap = User.objects.create_user(email='ap@eventbrite.com')
         self.user_ap.groups.add(Group.objects.get(name='ap_administrator'))
