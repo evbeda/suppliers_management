@@ -5,6 +5,7 @@ DBTuple = namedtuple('DBTuple', 'value verbose_name')
 
 COUNTRIES = {
     "AR": DBTuple("AR", _("Argentina")),
+    "USA": DBTuple("USA", _("United States")),
 }
 
 
