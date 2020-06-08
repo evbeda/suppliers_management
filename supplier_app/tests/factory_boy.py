@@ -14,6 +14,7 @@ from supplier_app.models import (
     TaxPayerArgentina,
     TaxPayerEBEntity,
     ContactInformation,
+    EBEntityCompany,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO
@@ -50,7 +51,6 @@ class CompanyFactory(factory.django.DjangoModelFactory):
 
 
 class CompanyUserPermissionFactory(factory.django.DjangoModelFactory):
-
     class Meta:
         model = CompanyUserPermission
 
@@ -58,8 +58,15 @@ class CompanyUserPermissionFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
 
 
-class CompanyUniqueTokenFactory(factory.django.DjangoModelFactory):
+class EbEntityCompanyFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = EBEntityCompany
 
+    company = factory.SubFactory(CompanyFactory)
+    eb_entity = factory.SubFactory(EBEntityFactory)
+
+
+class CompanyUniqueTokenFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CompanyUniqueToken
 
