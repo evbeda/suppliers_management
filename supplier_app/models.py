@@ -42,6 +42,7 @@ from supplier_app.constants.payment_ar import (
     get_transaction_type_info_choices,
     get_account_type_info_choices,
 )
+from supplier_app.constants.usa_taxpayer_id_type import get_usa_taxpayer_id_info_choices
 from utils.file_validator import FileSizeValidator
 
 
@@ -339,8 +340,59 @@ class TaxPayerArgentina(TaxPayer):
         return self.cuit
 
 
+class TaxPayerUnitedStates(TaxPayer):
+    taxpayer_id_number = models.CharField(
+        max_length=9,
+        unique=True,
+        validators=[
+            RegexValidator(
+                r'^[0-9]+$',
+                message=_('CUIT must only have numbers'),
+                code='invalid_cuit'
+            ),
+            MaxLengthValidator(9),
+            MinLengthValidator(9),
+        ]
+    )
+    taxpayer_id_number_type = models.IntegerField(
+        choices=get_usa_taxpayer_id_info_choices(),
+        verbose_name=_('Taxpayer id type')
+    )
+    taxpayer_condition = models.CharField(
+        max_length=100,
+        choices=get_conditions_choices(),
+        verbose_name=_("Taxpayer Condition"),
+    )
+    payment_type = models.CharField(
+        max_length=20,
+        choices=PAYMENT_TYPES,
+        default="BANK",
+        verbose_name=_("Payment type")
+    )
+    payment_term = models.IntegerField(
+        choices=PAYMENT_TERMS,
+        verbose_name=_("Payment term")
+    )
+    w9_file = models.FileField(
+        upload_to='file',
+        blank=False,
+        verbose_name=_('AFIP registration certificate'),
+        validators=[
+            FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
+            FileSizeValidator(
+                limit_size=TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
+                code='invalid_file_size',
+                ),
+            ],
+        )
+
+    def get_taxpayer_identifier(self):
+        return self.taxpayer_id_number
+
+
 COUNTRIES = {
     'AR': TaxPayerArgentina,
+    'USA': TaxPayerUnitedStates,
 }
 
 
