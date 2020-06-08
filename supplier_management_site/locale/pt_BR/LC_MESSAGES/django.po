@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 13:41+0000\n"
+"POT-Creation-Date: 2020-06-08 19:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2004,7 +2004,7 @@ msgstr ""
 #: templates/invoices_app/invoice_detail.html:45
 #: templates/invoices_app/supplier-invoice-list.html:36
 #: templates/supplier_app/ap-taxpayers.html:24
-#: templates/supplier_app/supplier-home.html:30
+#: templates/supplier_app/supplier-home.html:31
 #: templates/supplier_app/taxpayer-details.html:35
 msgid "Status"
 msgstr "Status"
@@ -2032,8 +2032,8 @@ msgid "Organization"
 msgstr "Açao"
 
 #: invoices_app/filters.py:47 supplier_app/filters.py:28
-#: supplier_app/models.py:55 supplier_app/models.py:126
-#: supplier_app/models.py:367 templates/invoices_app/invoice-list.html:53
+#: supplier_app/models.py:55 supplier_app/models.py:131
+#: supplier_app/models.py:372 templates/invoices_app/invoice-list.html:53
 #: templates/supplier_app/AP/taxpayer-history-list.html:22
 #: templates/supplier_app/AP/taxpayer-history-list.html:55
 #: templates/supplier_app/html-to-pdf-page.html:153
@@ -2430,7 +2430,7 @@ msgstr ""
 msgid "Only numbers, whitout / or -"
 msgstr ""
 
-#: supplier_app/forms.py:153
+#: supplier_app/forms.py:153 templates/supplier_app/AP/company_creation.html:20
 msgid "Eventbrite entities to bill"
 msgstr "Nome da entidade da Eventbrite"
 
@@ -2449,7 +2449,7 @@ msgstr "Nome da entidade da Eventbrite"
 msgid "Name"
 msgstr "Nome"
 
-#: supplier_app/models.py:117
+#: supplier_app/models.py:122
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
 #: templates/supplier_app/ap-taxpayers.html:22
 #: templates/supplier_app/html-to-pdf-page.html:133
@@ -2458,146 +2458,146 @@ msgstr "Nome"
 msgid "Business name"
 msgstr "Nome da empresa"
 
-#: supplier_app/models.py:129 templates/supplier_app/html-to-pdf-page.html:113
+#: supplier_app/models.py:134 templates/supplier_app/html-to-pdf-page.html:113
 msgid "Creation date"
 msgstr "Data de criação"
 
-#: supplier_app/models.py:230
+#: supplier_app/models.py:235
 msgid "CUIT must only have numbers"
 msgstr "CUIT deve ter apenas números"
 
-#: supplier_app/models.py:240
+#: supplier_app/models.py:245
 #, fuzzy
 #| msgid "Taxpayer info"
 msgid "Taxpayer Condition"
 msgstr "Informações do contribuinte"
 
-#: supplier_app/models.py:246
+#: supplier_app/models.py:251
 msgid "Payment type"
 msgstr "Tipo de pagamento"
 
-#: supplier_app/models.py:250
+#: supplier_app/models.py:255
 msgid "Payment term"
 msgstr "Termo de pagamento"
 
-#: supplier_app/models.py:255 templates/supplier_app/taxpayer-details.html:120
+#: supplier_app/models.py:260 templates/supplier_app/taxpayer-details.html:120
 msgid "AFIP registration certificate"
 msgstr "Certificado de registro AFIP"
 
-#: supplier_app/models.py:269 templates/supplier_app/taxpayer-details.html:150
+#: supplier_app/models.py:274 templates/supplier_app/taxpayer-details.html:150
 msgid "AFIP No Retention"
 msgstr ""
 
-#: supplier_app/models.py:283 templates/supplier_app/taxpayer-details.html:129
+#: supplier_app/models.py:288 templates/supplier_app/taxpayer-details.html:129
 #, fuzzy
 #| msgid "AFIP registration certificate"
 msgid "IIBB registration certificate"
 msgstr "Certificado de registro AFIP"
 
-#: supplier_app/models.py:297 templates/supplier_app/taxpayer-details.html:161
+#: supplier_app/models.py:302 templates/supplier_app/taxpayer-details.html:161
 msgid "IIBB No Retention"
 msgstr ""
 
-#: supplier_app/models.py:310 templates/supplier_app/taxpayer-details.html:139
+#: supplier_app/models.py:315 templates/supplier_app/taxpayer-details.html:139
 #, fuzzy
 #| msgid "Certificate of no tax withholding of Tax liens, income or SUSS"
 msgid "Certificate of no income withholding"
 msgstr "Certificado sem retenção na fonte de renda"
 
-#: supplier_app/models.py:323 templates/supplier_app/taxpayer-details.html:172
+#: supplier_app/models.py:328 templates/supplier_app/taxpayer-details.html:172
 msgid "Certificate of no SUSS withholding"
 msgstr "Certificado sem retenção na fonte de SUSS"
 
-#: supplier_app/models.py:345
+#: supplier_app/models.py:350
 #: templates/supplier_app/AP/taxpayer-history-list.html:50
 #: templates/supplier_app/html-to-pdf-page.html:251
 #: templates/supplier_app/taxpayer-details.html:359
 msgid "Street"
 msgstr "Rua"
 
-#: supplier_app/models.py:347
+#: supplier_app/models.py:352
 #: templates/supplier_app/AP/taxpayer-history-list.html:51
 #: templates/supplier_app/html-to-pdf-page.html:252
 #: templates/supplier_app/taxpayer-details.html:362
 msgid "Number"
 msgstr "Número"
 
-#: supplier_app/models.py:348
+#: supplier_app/models.py:353
 #: templates/supplier_app/AP/taxpayer-history-list.html:52
 msgid "Zip code"
 msgstr "Código postal"
 
-#: supplier_app/models.py:351
+#: supplier_app/models.py:356
 #: templates/supplier_app/AP/taxpayer-history-list.html:53
 #: templates/supplier_app/html-to-pdf-page.html:263
 #: templates/supplier_app/taxpayer-details.html:387
 msgid "City"
 msgstr "Cidade"
 
-#: supplier_app/models.py:355
+#: supplier_app/models.py:360
 #: templates/supplier_app/AP/taxpayer-history-list.html:54
 #: templates/supplier_app/html-to-pdf-page.html:264
 #: templates/supplier_app/taxpayer-details.html:390
 msgid "State"
 msgstr "Estado"
 
-#: supplier_app/models.py:359
+#: supplier_app/models.py:364
 msgid "City name must only have letters"
 msgstr "O nome da cidade deve conter apenas letras"
 
-#: supplier_app/models.py:376 templates/supplier_app/html-to-pdf-page.html:222
+#: supplier_app/models.py:381 templates/supplier_app/html-to-pdf-page.html:222
 #: templates/supplier_app/taxpayer-details.html:288
 msgid "Contact person"
 msgstr ""
 
-#: supplier_app/models.py:377 templates/supplier_app/html-to-pdf-page.html:223
+#: supplier_app/models.py:382 templates/supplier_app/html-to-pdf-page.html:223
 #: templates/supplier_app/taxpayer-details.html:291
 #, fuzzy
 #| msgid "PO number"
 msgid "Phone number"
 msgstr "Número do pedido"
 
-#: supplier_app/models.py:378 templates/registration/admins-list.html:30
+#: supplier_app/models.py:383 templates/registration/admins-list.html:30
 #: templates/supplier_app/html-to-pdf-page.html:233
 #: templates/supplier_app/taxpayer-details.html:311
 msgid "Email"
 msgstr "O email"
 
-#: supplier_app/models.py:379 templates/supplier_app/html-to-pdf-page.html:234
+#: supplier_app/models.py:384 templates/supplier_app/html-to-pdf-page.html:234
 #: templates/supplier_app/taxpayer-details.html:327
 msgid "Web site"
 msgstr ""
 
-#: supplier_app/models.py:387
+#: supplier_app/models.py:392
 msgid "Bank account number"
 msgstr "número da conta de banco"
 
-#: supplier_app/models.py:391
+#: supplier_app/models.py:396
 msgid "Bank account must only have numbers"
 msgstr "número da conta de banco"
 
-#: supplier_app/models.py:399 templates/supplier_app/html-to-pdf-page.html:180
+#: supplier_app/models.py:404 templates/supplier_app/html-to-pdf-page.html:180
 #: templates/supplier_app/taxpayer-details.html:207
 msgid "Bank name"
 msgstr "nome do banco"
 
-#: supplier_app/models.py:409 templates/supplier_app/taxpayer-details.html:258
+#: supplier_app/models.py:414 templates/supplier_app/taxpayer-details.html:258
 msgid "Bank account certificate"
 msgstr "Certificado de conta bancária"
 
-#: supplier_app/models.py:420
+#: supplier_app/models.py:425
 #, fuzzy
 #| msgid "Creation date"
 msgid "Transaction type"
 msgstr "Data de criação"
 
-#: supplier_app/models.py:424
+#: supplier_app/models.py:429
 #, fuzzy
 #| msgid "Account number"
 msgid "Account type"
 msgstr "Número da conta"
 
-#: supplier_app/models.py:428 templates/supplier_app/html-to-pdf-page.html:193
+#: supplier_app/models.py:433 templates/supplier_app/html-to-pdf-page.html:193
 #: templates/supplier_app/taxpayer-details.html:214
 msgid "Beneficiary"
 msgstr ""
@@ -2818,14 +2818,14 @@ msgstr "Empresa Eventbrite para a qual você fatura"
 
 #: templates/invoices_app/invoices_form.html:155
 #: templates/steper_example.html:36
-#: templates/supplier_app/Supplier/taxpayer-creation.html:114
+#: templates/supplier_app/Supplier/taxpayer-creation.html:113
 msgid "Submit"
 msgstr "Enviar"
 
 #: templates/invoices_app/invoices_form.html:158
 #: templates/invoices_app/invoices_form.html:160
 #: templates/registration/admin_create.html:34
-#: templates/supplier_app/AP/company_creation.html:25
+#: templates/supplier_app/AP/company_creation.html:35
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
 #: templates/supplier_app/edit-contact-information.html:25
@@ -2864,7 +2864,7 @@ msgid "Management"
 msgstr "Gestão"
 
 #: templates/navbar.html:21 templates/navbar.html:99
-#: templates/supplier_app/supplier-home.html:47
+#: templates/supplier_app/supplier-home.html:53
 msgid "Invoices"
 msgstr "Faturas"
 
@@ -3009,12 +3009,12 @@ msgstr ""
 msgid "Create a new company"
 msgstr "Crie uma nova empresa"
 
-#: templates/supplier_app/AP/company_creation.html:20
+#: templates/supplier_app/AP/company_creation.html:30
 #: templates/supplier_app/AP/company_list.html:30
 msgid "Description"
 msgstr "Descrição"
 
-#: templates/supplier_app/AP/company_creation.html:24
+#: templates/supplier_app/AP/company_creation.html:34
 msgid "Create Company"
 msgstr "Criar Empresa"
 
@@ -3048,7 +3048,7 @@ msgid "Taxpayer History"
 msgstr "História do Contribuinte"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:18
-#: templates/supplier_app/supplier-home.html:29
+#: templates/supplier_app/supplier-home.html:30
 msgid "Taxpayer identification number"
 msgstr "Número de Identificação Fiscal"
 
@@ -3113,33 +3113,39 @@ msgstr "informação bancária"
 msgid "Enter your bank account details"
 msgstr ""
 
-#: templates/supplier_app/Supplier/bank-info-arg.html:39
+#: templates/supplier_app/Supplier/bank-info-arg.html:19
+msgid ""
+"The payment term agreed with your contact/buyer at Eventbrite. This value "
+"will be later verified."
+msgstr ""
+
+#: templates/supplier_app/Supplier/bank-info-arg.html:44
 #: templates/supplier_app/Supplier/bank-info-usa.html:3
-#: templates/supplier_app/Supplier/taxpayer-creation.html:113
+#: templates/supplier_app/Supplier/taxpayer-creation.html:112
 #, fuzzy
 #| msgid "previous"
 msgid "Previous"
 msgstr "anterior"
 
-#: templates/supplier_app/Supplier/bank-info-arg.html:40
+#: templates/supplier_app/Supplier/bank-info-arg.html:45
 #: templates/supplier_app/Supplier/bank-info-usa.html:4
-#: templates/supplier_app/Supplier/taxpayer-creation.html:103
+#: templates/supplier_app/Supplier/taxpayer-creation.html:102
 msgid "Next"
 msgstr ""
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:36
+#: templates/supplier_app/Supplier/taxpayer-creation.html:35
 #, fuzzy
 #| msgid "Options"
 msgid "Organization Info"
 msgstr "Açao"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:56
+#: templates/supplier_app/Supplier/taxpayer-creation.html:55
 #, fuzzy
 #| msgid "Address info"
 msgid "Address Info"
 msgstr "Informação do endereço"
 
-#: templates/supplier_app/Supplier/taxpayer-creation.html:82
+#: templates/supplier_app/Supplier/taxpayer-creation.html:81
 msgid "Contact Info"
 msgstr ""
 
@@ -3339,11 +3345,17 @@ msgstr "Código postal"
 msgid "Create a new organization"
 msgstr "Crie uma nova empresa"
 
-#: templates/supplier_app/supplier-home.html:31
+#: templates/supplier_app/supplier-home.html:29
+#, fuzzy
+#| msgid "Eventbrite entities to bill"
+msgid "Entity to bill"
+msgstr "Nome da entidade da Eventbrite"
+
+#: templates/supplier_app/supplier-home.html:32
 msgid "Options"
 msgstr "Açao"
 
-#: templates/supplier_app/supplier-home.html:51
+#: templates/supplier_app/supplier-home.html:57
 #: templates/supplier_app/taxpayer-details.html:27
 #: templates/supplier_app/taxpayer-details.html:198
 #: templates/supplier_app/taxpayer-details.html:277
