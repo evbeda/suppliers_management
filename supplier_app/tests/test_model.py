@@ -9,6 +9,7 @@ from supplier_app.constants.eb_entities_status import (
     CURRENT_STATUS,
     UNUSED_STATUS,
 )
+from supplier_app.constants.usa_taxpayer_id_type import TAXPAYER_ID_TYPE
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -17,7 +18,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxpayerComment,
     TaxPayerEBEntity,
-    ContactInformation,
+    ContactInformation, TaxPayerUnitedStates,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -28,7 +29,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
-    ContactFactory,
+    ContactFactory, TaxPayerUnitedStatedFactory,
 )
 from users_app.factory_boy import UserFactory
 
@@ -159,6 +160,10 @@ class TestTaxpayerModel(TestCase):
 
         self.assertEqual(str(UNUSED_STATUS), taxpayer_eb_entity_old_1.status)
         self.assertEqual(str(UNUSED_STATUS), taxpayer_eb_entity_old_2.status)
+
+    def test_create_taxpayer_usa(self):
+        taxpayer_usa = TaxPayerUnitedStatedFactory()
+        self.assertEqual(TaxPayerUnitedStates.objects.last(), taxpayer_usa)
 
 
 class TestAddressModel(TestCase):

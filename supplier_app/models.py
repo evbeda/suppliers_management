@@ -347,8 +347,8 @@ class TaxPayerUnitedStates(TaxPayer):
         validators=[
             RegexValidator(
                 r'^[0-9]+$',
-                message=_('CUIT must only have numbers'),
-                code='invalid_cuit'
+                message=_('Id number must only have numbers'),
+                code='invalid_id'
             ),
             MaxLengthValidator(9),
             MinLengthValidator(9),
@@ -357,11 +357,6 @@ class TaxPayerUnitedStates(TaxPayer):
     taxpayer_id_number_type = models.IntegerField(
         choices=get_usa_taxpayer_id_info_choices(),
         verbose_name=_('Taxpayer id type')
-    )
-    taxpayer_condition = models.CharField(
-        max_length=100,
-        choices=get_conditions_choices(),
-        verbose_name=_("Taxpayer Condition"),
     )
     payment_type = models.CharField(
         max_length=20,
@@ -376,7 +371,7 @@ class TaxPayerUnitedStates(TaxPayer):
     w9_file = models.FileField(
         upload_to='file',
         blank=False,
-        verbose_name=_('AFIP registration certificate'),
+        verbose_name=_('W9 certificate'),
         validators=[
             FileExtensionValidator(allowed_extensions=TAXPAYER_ALLOWED_FILE_EXTENSIONS),
             FileSizeValidator(

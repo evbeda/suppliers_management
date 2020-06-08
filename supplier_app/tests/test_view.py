@@ -103,7 +103,7 @@ from supplier_app.tests.factory_boy import (
     EBEntityFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
-    ContactFactory,
+    ContactFactory, TaxPayerUnitedStatedFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
@@ -560,10 +560,11 @@ class TestApTaxpayers(TestCase):
             business_name=BUSINESS_EXAMPLE_NAME_2,
             workday_id='2',
             taxpayer_state=STATUS_CHANGE_REQUIRED,
-            cuit='20392379685',
-            company=self.company2,
         )
-
+        self.taxpayer_usa1 = TaxPayerUnitedStatedFactory(
+            workday_id='3',
+            taxpayer_state=STATUS_PENDING,
+        )
         self.user_ap = User.objects.create_user(email='ap@eventbrite.com')
         self.user_ap.groups.add(Group.objects.get(name='ap_administrator'))
 
@@ -642,6 +643,7 @@ class TestApTaxpayers(TestCase):
 
     def test_get_all_taxpayers_list_as_ap(self):
         self.client.force_login(self.user_ap)
+
         response = self.client.get(reverse(self.ap_home_url))
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual('supplier_app/ap-taxpayers.html', response.template_name[0])
