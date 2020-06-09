@@ -31,7 +31,7 @@
     {% endfor %}
 
     <fieldset id="f1">
-        
+
         <h2 class="fs-title mb-4">- {% trans "Organization Info" %} -</h2>
         <div class="text-left">{{ taxpayer_form.business_name.label_tag }}</div>
         <div class="div-input mandatory">{{ taxpayer_form.business_name }}</div>
@@ -39,17 +39,22 @@
         <div class="div-input mandatory hidden">{{ taxpayer_form.payment_type }}</div>
         <div class="text-left">{{ address_form.country.label_tag }}</div>
         <div class="div-input mandatory">{{ address_form.country }}</div>
-        <div class="text-left">{{ taxpayer_form.eb_entities.label_tag }}</div>
+        <div class="text-left">{{ taxpayer_form.eb_entities.label_tag }}
+            <a data-toggle="tooltip" data-placement="right"
+               title="{% trans 'Please find the proper Eventbrite entity to bill on your invitation email or ask your contact at Eventbrite' %}">
+                <i class="fas fa-info-circle tooltip-orange"></i>
+            </a>
+        </div>
         {% for check in taxpayer_form.eb_entities%}
-            <label class="row" for="{{ check.id_for_label }}">
-                <div class="col-2"></div>
-                <div class="col-1 mandatory">
-                    {{ check.tag }} 
-                </div>
-                <div class="col-9 text-left">
-                    {{ check.choice_label }}
-                </div>
-            </label>
+        <label class="row" for="{{ check.id_for_label }}">
+            <div class="col-2"></div>
+            <div class="col-1">
+                {{ check.tag }}
+            </div>
+            <div class="col-9 text-left">
+                {{ check.choice_label }}
+            </div>
+        </label>
         {% endfor %}
 
         <h3 class="fs-title mt-3">- {% trans "Address Info" %} -</h3>
