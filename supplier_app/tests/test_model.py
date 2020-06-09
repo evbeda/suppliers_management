@@ -18,7 +18,8 @@ from supplier_app.models import (
     TaxPayer,
     TaxpayerComment,
     TaxPayerEBEntity,
-    ContactInformation, TaxPayerUnitedStates,
+    ContactInformation,
+    TaxPayerUnitedStates,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -29,7 +30,8 @@ from supplier_app.tests.factory_boy import (
     TaxPayerFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
-    ContactFactory, TaxPayerUnitedStatedFactory,
+    ContactFactory,
+    TaxPayerUnitedStatedFactory,
 )
 from users_app.factory_boy import UserFactory
 

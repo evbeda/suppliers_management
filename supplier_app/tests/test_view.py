@@ -103,7 +103,8 @@ from supplier_app.tests.factory_boy import (
     EBEntityFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
-    ContactFactory, TaxPayerUnitedStatedFactory,
+    ContactFactory,
+    TaxPayerUnitedStatedFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
