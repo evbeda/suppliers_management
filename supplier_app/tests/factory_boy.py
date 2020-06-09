@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from django.utils import timezone
 from django.core.files import File
 
+from supplier_app.constants.usa_taxpayer_id_type import TAXPAYER_ID_TYPE
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -13,6 +14,7 @@ from supplier_app.models import (
     TaxPayer,
     TaxPayerArgentina,
     TaxPayerEBEntity,
+    TaxPayerUnitedStates,
     ContactInformation,
     EBEntityCompany,
 )
@@ -111,6 +113,18 @@ class TaxPayerArgentinaFactory(TaxPayerFactory):
     iibb_registration_file = file_mock
     iibb_no_retention_taxes_file = file_mock
     taxpayer_condition = "monotributista"
+
+
+class TaxPayerUnitedStatedFactory(TaxPayerFactory):
+
+    class Meta:
+        model = TaxPayerUnitedStates
+
+    taxpayer_id_number = factory.Sequence(lambda n: "{}".format(n))
+    taxpayer_id_number_type = TAXPAYER_ID_TYPE["EIN"]
+    payment_type = PAYMENT_TYPES[0][0]
+    payment_term = PAYMENT_TERMS[0][0]
+    w9_file = file_mock
 
 
 class AddressFactory(factory.django.DjangoModelFactory):

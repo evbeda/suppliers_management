@@ -104,6 +104,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
     ContactFactory,
+    TaxPayerUnitedStatedFactory,
     EbEntityCompanyFactory,
 )
 from supplier_app.views import (
@@ -564,14 +565,18 @@ class TestApTaxpayers(TestCase):
             cuit='20392379685',
             company=self.company2,
         )
-
+        self.taxpayer_usa1 = TaxPayerUnitedStatedFactory(
+            workday_id='3',
+            taxpayer_state=STATUS_PENDING,
+            taxpayer_id_number='12345678',
+            company=self.company2,
+            country='USA',
+        )
         self.user_ap = User.objects.create_user(email='ap@eventbrite.com')
         self.user_ap.groups.add(Group.objects.get(name='ap_administrator'))
-
         self.user_with_social_evb1 = UserFactory(email='nahuel')
         self.user_with_social_evb1.groups.add(Group.objects.get(name='supplier'))
         self.user_with_social_evb2 = UserFactory(email='nicolas')
-
         self.company_user_permission1 = CompanyUserPermissionFactory(
             company=self.company1,
             user=self.user_with_social_evb1
