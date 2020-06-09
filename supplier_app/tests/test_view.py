@@ -276,8 +276,8 @@ class TestCreateTaxPayer(TestCase):
         )
 
     @patch('supplier_app.views.messages.add_message')
-    def test_new_taxpayer_should_be_related_with_3_eb_entities(self, msg_mocked):
-        eb_entities = [EBEntityFactory(), EBEntityFactory(), EBEntityFactory()]
+    def test_new_taxpayer_should_be_related_with_1_eb_entities(self, msg_mocked):
+        eb_entities = [EBEntityFactory()]
         taxpayer_creation_forms = self._get_example_forms(eb_entities=eb_entities)
 
         self.create_taxpayer_view.request = \
@@ -285,25 +285,8 @@ class TestCreateTaxPayer(TestCase):
         self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
         taxpayer_created = TaxPayer.objects.last()
 
-        self.assertEqual(3, len(taxpayer_created.taxpayerebentity_set.all()))
+        self.assertEqual(1, len(taxpayer_created.taxpayerebentity_set.all()))
 
-    @patch('supplier_app.views.messages.add_message')
-    def test_multiple_equal_eb_entities_when_create_taxpayer_should_not_create_repeated(self, msg_mocked):
-        eb_1 = EBEntityFactory()
-        eb_2 = EBEntityFactory()
-        eb_entities = [eb_1, eb_2, eb_1]
-        taxpayer_creation_forms = self._get_example_forms(eb_entities=eb_entities)
-
-        self.create_taxpayer_view.request = \
-            self._taxpayer_creation_request()
-        self.create_taxpayer_view.form_valid(taxpayer_creation_forms)
-        taxpayer_created = TaxPayer.objects.last()
-
-        eb_entities_related_with_taxpayer = \
-            [e.eb_entity for e in taxpayer_created.taxpayerebentity_set.all()]
-        self.assertEqual(2, len(taxpayer_created.taxpayerebentity_set.all()))
-        self.assertIn(eb_1, eb_entities_related_with_taxpayer)
-        self.assertIn(eb_2, eb_entities_related_with_taxpayer)
 
     @parameterized.expand([
         (

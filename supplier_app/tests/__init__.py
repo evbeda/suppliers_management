@@ -59,7 +59,7 @@ def taxpayer_creation_POST_factory(
         'taxpayer_form-business_name': 'EB ARG',
         'taxpayer_form-cuit': '20312321402',
         'taxpayer_form-country': 'AR',
-        'taxpayer_form-eb_entities': eb_entity,
+        'taxpayer_form-eb_entities': '1',
         'taxpayer_form-payment_type': 'BANK',
         'taxpayer_form-payment_term': '30',
         'taxpayer_form-taxpayer_condition': 'monotributista',

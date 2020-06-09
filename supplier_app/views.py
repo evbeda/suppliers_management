@@ -260,12 +260,11 @@ class CreateTaxPayerView(UserLoginPermissionRequiredMixin, TemplateView, FormVie
         
         taxpayer.save()
         eb_entities = forms['taxpayer_form'].cleaned_data['eb_entities']
-        for eb_entity in eb_entities:
-            eb_entity = EBEntity.objects.get(pk=eb_entity.id)
-            TaxPayerEBEntity.objects.create(
-                eb_entity=eb_entity,
-                taxpayer=taxpayer
-            )
+        eb_entity = EBEntity.objects.get(pk=eb_entities)
+        TaxPayerEBEntity.objects.create(
+            eb_entity=eb_entity,
+            taxpayer=taxpayer
+        )
         return taxpayer
 
     def save_address(self, forms, taxpayer):

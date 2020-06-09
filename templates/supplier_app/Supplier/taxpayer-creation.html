@@ -43,8 +43,8 @@
         {% for check in taxpayer_form.eb_entities%}
             <label class="row" for="{{ check.id_for_label }}">
                 <div class="col-2"></div>
-                <div class="col-1 mandatory">
-                    {{ check.tag }} 
+                <div class="col-1">
+                    {{ check.tag }}
                 </div>
                 <div class="col-9 text-left">
                     {{ check.choice_label }}

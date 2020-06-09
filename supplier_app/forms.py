@@ -3,6 +3,7 @@ from django.forms.models import ModelForm
 from django.http import QueryDict
 from django.utils.translation import ugettext_lazy as _
 
+from supplier_app.constants.eb_entities import get_eb_entities
 from supplier_app.models import (
     Address,
     BankAccount,
@@ -147,9 +148,9 @@ class BankAccountEditForm(BankAccountBaseForm):
 
 class TaxPayerArgentinaBaseForm(ModelForm):
     eb_entities = \
-        forms.ModelMultipleChoiceField(
-            widget=forms.CheckboxSelectMultiple(attrs={"class": "form-check-input"}),
-            queryset=EBEntity.objects.all(),
+        forms.ChoiceField(
+            widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
+            choices=get_eb_entities(),
             label=_("Eventbrite entities to bill"),
             initial=1,
 
