@@ -20,6 +20,7 @@ from supplier_app.models import (
     TaxPayerEBEntity,
     ContactInformation,
     TaxPayerUnitedStates,
+    BankAccountUnitedStates,
 )
 from supplier_app.tests.factory_boy import (
     AddressFactory,
@@ -31,7 +32,7 @@ from supplier_app.tests.factory_boy import (
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
     ContactFactory,
-    TaxPayerUnitedStatedFactory,
+    TaxPayerUnitedStatedFactory, BankAccountUnitedStatesFactory,
 )
 from users_app.factory_boy import UserFactory
 
@@ -214,6 +215,30 @@ class TestBankAccountModel(TestCase):
 
     def test_data_bank_account(self):
         bank_account = BankAccountFactory(
+            bank_account_number='1234567890',
+        )
+
+        self.assertEqual(
+            str(bank_account),
+            "Account_number:1234567890"
+        )
+
+
+class TestBankAccountUnitedStatesModel(TestCase):
+    def test_bank_account_creation(self):
+        taxpayer = TaxPayerFactory()
+        bank = BankAccountUnitedStatesFactory(taxpayer=taxpayer)
+        self.assertEqual(
+            bank,
+            BankAccountUnitedStates.objects.last()
+        )
+        self.assertEqual(
+            bank.taxpayer,
+            taxpayer
+        )
+
+    def test_data_bank_account(self):
+        bank_account = BankAccountUnitedStatesFactory(
             bank_account_number='1234567890',
         )
 

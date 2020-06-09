@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from django.utils import timezone
 from django.core.files import File
 
+from supplier_app.constants.payment_usa import TRANSACTION_TYPE_USA, ACCOUNT_TYPE_USA
 from supplier_app.constants.usa_taxpayer_id_type import TAXPAYER_ID_TYPE
 from supplier_app.models import (
     Address,
@@ -17,6 +18,7 @@ from supplier_app.models import (
     TaxPayerUnitedStates,
     ContactInformation,
     EBEntityCompany,
+    BankAccountUnitedStates,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO
@@ -163,3 +165,18 @@ class BankAccountFactory(factory.django.DjangoModelFactory):
     bank_beneficiary = 'John Smith'
     bank_info = BANK_INFO["BANCO DE LA NACION ARGENTINA"]
     bank_cbu_file = file_mock
+
+
+class BankAccountUnitedStatesFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = BankAccountUnitedStates
+
+    bank_account_number = factory.Sequence(lambda n: "{}".format(n))
+    bank_name = 'First Bank'
+    bank_address = '15th Street, Transylvania'
+    taxpayer = factory.SubFactory(TaxPayerFactory)
+    bank_transaction_type = TRANSACTION_TYPE_USA['Wire']
+    bank_account_type = ACCOUNT_TYPE_USA['Saving account']
+    bank_beneficiary = 'John Smith'
+    routing_number = factory.Sequence(lambda n: "{}".format(n))
+    remit_address = factory.SubFactory(AddressFactory)

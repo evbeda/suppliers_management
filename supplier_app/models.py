@@ -22,6 +22,10 @@ from supplier_app import (
     TAXPAYER_CERTIFICATE_MAX_SIZE_FILE,
     TAXPAYER_ALLOWED_FILE_EXTENSIONS,
 )
+from supplier_app.constants.payment_usa import (
+    get_transaction_type_usa_info_choices,
+    get_account_type_info_usa_choices,
+)
 
 from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS,
@@ -481,6 +485,70 @@ class BankAccount(models.Model):
         default=None
     )
 
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return "Account_number:{}".format(
+            self.bank_account_number,
+        )
+
+
+class BankAccountUnitedStates(models.Model):
+    bank_account_number = models.CharField(
+        max_length=22,
+        unique=True,
+        verbose_name=_("Bank account number"),
+        validators=[
+            RegexValidator(
+                r'^[0-9]+$',
+                message=_('Bank account must only have numbers'),
+                code='invalid_bank_number',),
+        ]
+    )
+    bank_name = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name=_("Bank name"),
+    )
+    bank_address = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name=_("Bank address"),
+    )
+    taxpayer = models.ForeignKey(
+        TaxPayer,
+        on_delete=models.CASCADE,
+        default=None
+    )
+    bank_transaction_type = models.IntegerField(
+        choices=get_transaction_type_usa_info_choices(),
+        verbose_name=_('Transaction type')
+    )
+    bank_account_type = models.IntegerField(
+        choices=get_account_type_info_usa_choices(),
+        verbose_name=_('Account type')
+    )
+    bank_beneficiary = models.CharField(
+        max_length=60,
+        verbose_name=_("Beneficiary"),
+        default=None
+    )
+    routing_number = models.CharField(
+        max_length=22,
+        unique=True,
+        verbose_name=_("Routing number"),
+        validators=[
+            RegexValidator(
+                r'^[0-9]+$',
+                message=_('Routing number must only have numbers'),
+                code='invalid_routing_number', ),
+        ]
+    )
+    remit_address = models.ForeignKey(
+        Address,
+        on_delete=models.CASCADE,
+        default=None
+    )
     history = HistoricalRecords()
 
     def __str__(self):
