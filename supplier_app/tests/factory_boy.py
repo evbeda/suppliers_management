@@ -19,6 +19,8 @@ from supplier_app.models import (
     TaxPayerUnitedStates,
     ContactInformation,
     TaxPayerUnitedStates,
+    ContactInformation,
+    TaxPayerUnitedStates,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO

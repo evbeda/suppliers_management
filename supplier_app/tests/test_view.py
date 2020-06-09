@@ -108,6 +108,8 @@ from supplier_app.tests.factory_boy import (
     EbEntityCompanyFactory,
     ContactFactory,
     TaxPayerUnitedStatedFactory,
+    ContactFactory,
+    TaxPayerUnitedStatedFactory,
 )
 from supplier_app.views import (
     CreateTaxPayerView,
