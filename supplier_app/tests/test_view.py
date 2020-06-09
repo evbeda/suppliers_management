@@ -103,11 +103,7 @@ from supplier_app.tests.factory_boy import (
     EBEntityFactory,
     TaxPayerArgentinaFactory,
     TaxPayerEBEntityFactory,
-    ContactFactory,
-    TaxPayerUnitedStatedFactory,
     EbEntityCompanyFactory,
-    ContactFactory,
-    TaxPayerUnitedStatedFactory,
     ContactFactory,
     TaxPayerUnitedStatedFactory,
 )

@@ -15,12 +15,8 @@ from supplier_app.models import (
     TaxPayerArgentina,
     TaxPayerEBEntity,
     EBEntityCompany,
-    ContactInformation,
     TaxPayerUnitedStates,
     ContactInformation,
-    TaxPayerUnitedStates,
-    ContactInformation,
-    TaxPayerUnitedStates,
 )
 
 from supplier_app.constants.bank_info import BANK_INFO
