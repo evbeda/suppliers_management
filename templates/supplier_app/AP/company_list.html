@@ -28,7 +28,11 @@
                 <tr class="row thead-eb-dark">
                     <th class="col-4">{% trans "Name"%}</th>
                     <th class="col-4">{% trans "Description"%}</th>
-                    <th class="col-4">{% trans "Email Invitation"%}</th>
+                    <th class="col-4">
+                        {% if is_AP %}
+                        {% trans "Email Invitation"%}
+                        {% endif %}
+                    </th>
                 </tr>
             </thead>
             <tbody id="tableToFilter">
@@ -44,6 +48,7 @@
                         <h6 class="p-2">{{company.description}}</h6>
                     </td>
                     <td class="col-4 text-center">
+                        {% if is_AP %}
                         <form class="form-row" action="{% url 'company-invite' %}" method="post">
                             {% csrf_token %}
                             <input class="form-control form-control-sm col-md-5 m-1 " type="email" name="email" placeholder="Email">
@@ -61,6 +66,7 @@
                             </select>
                             <input class="btn btn-sm btn-primary form-control form-control-sm col-md-3 ml-1"type="submit" value="{% trans 'Invite' %}">
                         </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
