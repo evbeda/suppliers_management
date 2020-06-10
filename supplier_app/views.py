@@ -128,6 +128,7 @@ class CompanyListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_AP'] = self.request.user.is_AP
         context['all_companies'] = Company.objects.values('name')
         return context
 
