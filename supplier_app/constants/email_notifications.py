@@ -52,11 +52,12 @@ email_notifications = {
         },
     },
     'taxpayer_in_progress': {
-        'subject': _('Your supplier registration request is now in progress'),
+        'subject': _('Your registration request as an Eventbrite Supplier is now in progress'),
         'body': {
-            'upper_text': _('Your supplier registration request  is now being processed.'),
+            'upper_text': _('Your supplier registration request for Eventbrite is now being processed.'),
             'lower_text': _("You don't need to do anything else, we will contact with you soon, Thanks!"),
-            'disclaimer': _('"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
+            'disclaimer': _(
+                '"Please do not reply to this email. If you have any questions, please login into Britesu and make a comment in the section related to your question."'),
             'btn_text': _('Go to BriteSu'),
             'btn_url': '{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         },
