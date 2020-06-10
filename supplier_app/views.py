@@ -99,6 +99,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'supplier_app/AP/company_creation.html'
+    success_url = reverse_lazy('company-list')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
     )
@@ -109,13 +110,13 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        if Company.objects.get(name=form.data['name']):
+        # import ipdb; ipdb.set_trace()
+        if Company.objects.filter(name=form.data['name']):
             return HttpResponseRedirect(self.get_failure_url())
-        else:
-            company = self.save_company(form)
-            InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
-            EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
-            return HttpResponseRedirect(self.get_success_url())
+        company = self.save_company(form)
+        InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
+        EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
+        return HttpResponseRedirect(self.get_success_url())
 
     def save_company(self, forms):
         company = forms.save(commit=False)
