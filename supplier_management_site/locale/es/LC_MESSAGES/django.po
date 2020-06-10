@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 17:45+0000\n"
+"POT-Creation-Date: 2020-06-10 18:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2660,7 +2660,8 @@ msgstr "Su solicitud de alta de proveedor de Eventbrite está en proceso"
 #: supplier_app/constants/email_notifications.py:57
 msgid ""
 "Your supplier registration request for Eventbrite is now being processed."
-msgstr "Su solicitud de alta como proveedor de Eventbrite está siendo procesada."
+msgstr ""
+"Su solicitud de alta como proveedor de Eventbrite está siendo procesada."
 
 #: supplier_app/constants/email_notifications.py:58
 msgid ""
@@ -3133,8 +3134,8 @@ msgid "Administrator"
 msgstr "Administrador"
 
 #: templates/invoices_app/invoice_detail.html:231
-msgid "Attachment: "
-msgstr "Archivo Adjunto: "
+msgid "Download: "
+msgstr "Descargar"
 
 #: templates/invoices_app/invoice_filters.html:107
 #: templates/supplier_app/AP/taxpayer_filter.html:51
@@ -3753,6 +3754,9 @@ msgid ""
 msgstr ""
 "\n"
 "Motivo de Cambio: \n"
+
+#~ msgid "Attachment: "
+#~ msgstr "Archivo Adjunto: "
 
 #~ msgid "Please find the proper \\"
 #~ msgstr ""
