@@ -1764,11 +1764,18 @@ class TestCompanyCreateView(TestCase):
         self.client.force_login(self.ap_user)
         self._make_post()
         self._make_post()
-        self._make_post()
-        self._make_post()
         self.assertEqual(
             len(Company.objects.filter(name='Eventbrite')),
             1
+        )
+    
+    def test_duplicated_company_creation_redirect_to_self(self):
+        self.client.force_login(self.ap_user)
+        self._make_post()
+        response = self._make_post()
+        self.assertEqual(
+            response.redirect_chain[0],
+            (reverse('company-create'), HTTPStatus.FOUND)
         )
 
     def test_valid_company_creation_as_buyer(self):
