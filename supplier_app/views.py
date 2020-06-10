@@ -36,6 +36,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
     THANKS,
+    COMPANY_ALREADY_EXIST,
 )
 from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
@@ -98,7 +99,6 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'supplier_app/AP/company_creation.html'
-    success_url = reverse_lazy('company-list')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
     )
@@ -109,10 +109,13 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        company = self.save_company(form)
-        InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
-        EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
-        return HttpResponseRedirect(self.get_success_url())
+        if Company.objects.get(name=form.data['name']):
+            return HttpResponseRedirect(self.get_failure_url())
+        else:
+            company = self.save_company(form)
+            InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
+            EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
+            return HttpResponseRedirect(self.get_success_url())
 
     def save_company(self, forms):
         company = forms.save(commit=False)
@@ -121,6 +124,13 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('company-list')
+    
+    def get_failure_url(self):
+        messages.error(
+                self.request,
+                COMPANY_ALREADY_EXIST,
+            )
+        return reverse('company-create')
 
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
