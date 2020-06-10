@@ -95,11 +95,11 @@ from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import company_invitation_notification
 from utils.htmltopdf import render_to_pdf
 
+
 class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
     model = Company
     fields = '__all__'
     template_name = 'supplier_app/AP/company_creation.html'
-    success_url = reverse_lazy('company-list')
     permission_required = (
         CAN_CREATE_COMPANY_PERM,
     )
@@ -115,6 +115,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         company = self.save_company(form)
         InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
         EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
+        company_invite(self.request, company)
         return HttpResponseRedirect(self.get_success_url())
 
     def save_company(self, forms):
@@ -131,6 +132,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
                 COMPANY_ALREADY_EXIST,
             )
         return reverse('company-create')
+
 
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company
@@ -550,14 +552,15 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
 
 
 @transaction.atomic
-def company_invite(request):
+def company_invite(request, company=None):
     try:
         old_language = translation.get_language()
         language = request.POST['language']
         translation.activate(language)
         email = [request.POST['email']]
-        company_id = request.POST['company_id']
-        company = Company.objects.get(pk=company_id)
+        if not company:
+            company_id = request.POST['company_id']
+            company = Company.objects.get(pk=company_id)
         company_unique_token = CompanyUniqueToken(company=company)
         company_unique_token.assing_company_token
         company_unique_token.save()
