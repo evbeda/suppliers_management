@@ -1707,6 +1707,8 @@ class TestCompanyCreateView(TestCase):
             'eb_entity':'1',
             'description':
                 'Bringing the world together through live experiences',
+            'email': 'buyer@eventbrite.com',
+            'language': 'en',
         }
         self.client = Client()
         self.ap_user = User.objects.create_user(email='ap@eventbrite.com')

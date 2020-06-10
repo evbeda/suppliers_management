@@ -32,6 +32,20 @@
                 </div>
                     <textarea name="description" cols="40" rows="10" required="" id="id_description" class='form-control'></textarea>
             </div>
+            <div class="form-row">
+            <input class="form-control form-control-sm col-md-5 m-1 " type="email" name="email" placeholder="Email">
+            <select class="form-control form-control-sm col-md-3 m-1" name="language" class="selectpicker" data-width="fit">
+                <option value="en" data-content="<span class='flag-icon flag-icon-us'></span> English">
+                    {% trans "English" %}
+                </option>
+                <option value="es" data-content='<span class="flag-icon flag-icon-br"></span> Español'>
+                    {% trans "Spanish" %}
+                </option>
+                <option value="pt-br"data-content='<span class="flag-icon flag-icon-br"></span> Portuguese'>
+                    {% trans "Portuguese" %}
+                </option>
+            </select>
+              </div>
             <input type="submit" value="{% trans 'Create Company' %}" class='btn btn-success m-2'>
             <a class="btn btn-danger" href="{% url 'company-list' %}">{% trans "Cancel" %}</a>
         </form>
