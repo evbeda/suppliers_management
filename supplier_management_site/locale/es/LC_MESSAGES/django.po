@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 19:29+0000\n"
+"POT-Creation-Date: 2020-06-10 17:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2603,7 +2603,7 @@ msgstr ""
 #: supplier_app/constants/email_notifications.py:29
 #: supplier_app/constants/email_notifications.py:39
 #: supplier_app/constants/email_notifications.py:49
-#: supplier_app/constants/email_notifications.py:59
+#: supplier_app/constants/email_notifications.py:60
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into Britesu and make a comment in the section related to your question.\""
@@ -2615,8 +2615,8 @@ msgstr ""
 #: supplier_app/constants/email_notifications.py:30
 #: supplier_app/constants/email_notifications.py:40
 #: supplier_app/constants/email_notifications.py:50
-#: supplier_app/constants/email_notifications.py:60
-#: supplier_app/constants/email_notifications.py:70 utils/__init__.py:3
+#: supplier_app/constants/email_notifications.py:61
+#: supplier_app/constants/email_notifications.py:71 utils/__init__.py:3
 msgid "Go to BriteSu"
 msgstr "Dirígete a BriteSU"
 
@@ -2654,24 +2654,25 @@ msgstr ""
 "Gracias"
 
 #: supplier_app/constants/email_notifications.py:55
-msgid "Your supplier registration request is now in progress"
-msgstr "Su solicitud de alta de proveedor está en proceso"
+msgid "Your registration request as an Eventbrite Supplier is now in progress"
+msgstr "Su solicitud de alta de proveedor de Eventbrite está en proceso"
 
 #: supplier_app/constants/email_notifications.py:57
-msgid "Your supplier registration request  is now being processed."
-msgstr "Su solicitud de alta como proveedor está siendo procesada."
+msgid ""
+"Your supplier registration request for Eventbrite is now being processed."
+msgstr "Su solicitud de alta como proveedor de Eventbrite está siendo procesada."
 
 #: supplier_app/constants/email_notifications.py:58
 msgid ""
 "You don't need to do anything else, we will contact with you soon, Thanks!"
 msgstr "No tienes que hacer nada, te contactaremos pronto, Gracias!"
 
-#: supplier_app/constants/email_notifications.py:65
+#: supplier_app/constants/email_notifications.py:66
 msgid "Now you can create a Purchase Requisition for this supplier on Workday."
 msgstr ""
 "Ahora puedes crear una Solicitud de Compra para este Proveedor en Workday."
 
-#: supplier_app/constants/email_notifications.py:67
+#: supplier_app/constants/email_notifications.py:68
 msgid ""
 "Now you can create a Purchase Requisition for this supplier from Workday. "
 "Once the purchase requisition is approved, you will receive a Purchase Order "
@@ -2681,7 +2682,7 @@ msgstr ""
 "proveedor en Workday. Una vez que la solicitud de compra haya sido aprobada "
 "recibirás un número de Orden De Compra de Workday."
 
-#: supplier_app/constants/email_notifications.py:68
+#: supplier_app/constants/email_notifications.py:69
 msgid ""
 "Remember to inform the supplier on the Purchase Order Number as soon as you "
 "get it so that the supplier can include it as a reference within the invoice."
@@ -2958,12 +2959,12 @@ msgid "Routing number must only have numbers"
 msgstr "El número de ruta solo debe tener numeros"
 
 #: supplier_management_site/settings/base.py:146
-#: templates/supplier_app/AP/company_list.html:53
+#: templates/supplier_app/AP/company_list.html:58
 msgid "English"
 msgstr "Inglés"
 
 #: supplier_management_site/settings/base.py:147
-#: templates/supplier_app/AP/company_list.html:56
+#: templates/supplier_app/AP/company_list.html:61
 msgid "Spanish"
 msgstr "Español"
 
@@ -3367,15 +3368,15 @@ msgstr "Lista de grupos económicos"
 msgid "Search by name"
 msgstr "Buscar por nombre"
 
-#: templates/supplier_app/AP/company_list.html:31
+#: templates/supplier_app/AP/company_list.html:33
 msgid "Email Invitation"
 msgstr "Invitación vía email"
 
-#: templates/supplier_app/AP/company_list.html:59
+#: templates/supplier_app/AP/company_list.html:64
 msgid "Portuguese"
 msgstr "Portugués"
 
-#: templates/supplier_app/AP/company_list.html:62
+#: templates/supplier_app/AP/company_list.html:67
 msgid "Invite"
 msgstr "Invitar"
 
@@ -3479,7 +3480,8 @@ msgid ""
 "Please find the proper Eventbrite entity to bill on your invitation email or "
 "ask your contact at Eventbrite"
 msgstr ""
-"Por favor encuentra la Entidad de Eventbrite a facturar correcta en el correo de invitación o pregúntale a tu contacto en Eventbrite."
+"Por favor encuentra la Entidad de Eventbrite a facturar correcta en el "
+"correo de invitación o pregúntale a tu contacto en Eventbrite."
 
 #: templates/supplier_app/Supplier/taxpayer-creation.html:60
 msgid "Address Info"

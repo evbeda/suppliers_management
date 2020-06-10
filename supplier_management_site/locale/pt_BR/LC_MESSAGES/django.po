@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 19:29+0000\n"
+"POT-Creation-Date: 2020-06-10 17:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2671,7 +2671,7 @@ msgstr ""
 #: supplier_app/constants/email_notifications.py:29
 #: supplier_app/constants/email_notifications.py:39
 #: supplier_app/constants/email_notifications.py:49
-#: supplier_app/constants/email_notifications.py:59
+#: supplier_app/constants/email_notifications.py:60
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please login "
 "into Britesu and make a comment in the section related to your question.\""
@@ -2680,8 +2680,8 @@ msgstr ""
 #: supplier_app/constants/email_notifications.py:30
 #: supplier_app/constants/email_notifications.py:40
 #: supplier_app/constants/email_notifications.py:50
-#: supplier_app/constants/email_notifications.py:60
-#: supplier_app/constants/email_notifications.py:70 utils/__init__.py:3
+#: supplier_app/constants/email_notifications.py:61
+#: supplier_app/constants/email_notifications.py:71 utils/__init__.py:3
 msgid "Go to BriteSu"
 msgstr "Vá para BriteSu"
 
@@ -2728,30 +2728,35 @@ msgstr ""
 "Entre em contato com o funcionário da eventbrite que o contratou, Obrigado!"
 
 #: supplier_app/constants/email_notifications.py:55
-msgid "Your supplier registration request is now in progress"
-msgstr ""
+#, fuzzy
+#| msgid "Your taxpayer has been approved"
+msgid "Your registration request as an Eventbrite Supplier is now in progress"
+msgstr "Seu contribuinte foi aprovado"
 
 #: supplier_app/constants/email_notifications.py:57
-msgid "Your supplier registration request  is now being processed."
-msgstr ""
+#, fuzzy
+#| msgid "Your taxpayer has been approved"
+msgid ""
+"Your supplier registration request for Eventbrite is now being processed."
+msgstr "Seu contribuinte foi aprovado"
 
 #: supplier_app/constants/email_notifications.py:58
 msgid ""
 "You don't need to do anything else, we will contact with you soon, Thanks!"
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:65
+#: supplier_app/constants/email_notifications.py:66
 msgid "Now you can create a Purchase Requisition for this supplier on Workday."
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:67
+#: supplier_app/constants/email_notifications.py:68
 msgid ""
 "Now you can create a Purchase Requisition for this supplier from Workday. "
 "Once the purchase requisition is approved, you will receive a Purchase Order "
 "Number on Workday."
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:68
+#: supplier_app/constants/email_notifications.py:69
 msgid ""
 "Remember to inform the supplier on the Purchase Order Number as soon as you "
 "get it so that the supplier can include it as a reference within the invoice."
@@ -3060,12 +3065,12 @@ msgid "Routing number must only have numbers"
 msgstr "número da conta de banco"
 
 #: supplier_management_site/settings/base.py:146
-#: templates/supplier_app/AP/company_list.html:53
+#: templates/supplier_app/AP/company_list.html:58
 msgid "English"
 msgstr "Inglês"
 
 #: supplier_management_site/settings/base.py:147
-#: templates/supplier_app/AP/company_list.html:56
+#: templates/supplier_app/AP/company_list.html:61
 msgid "Spanish"
 msgstr "Espanhol"
 
@@ -3483,15 +3488,15 @@ msgstr "Lista de empresas"
 msgid "Search by name"
 msgstr "Procura por nome"
 
-#: templates/supplier_app/AP/company_list.html:31
+#: templates/supplier_app/AP/company_list.html:33
 msgid "Email Invitation"
 msgstr "Convite por e-mail"
 
-#: templates/supplier_app/AP/company_list.html:59
+#: templates/supplier_app/AP/company_list.html:64
 msgid "Portuguese"
 msgstr "Português"
 
-#: templates/supplier_app/AP/company_list.html:62
+#: templates/supplier_app/AP/company_list.html:67
 msgid "Invite"
 msgstr "Convite"
 
