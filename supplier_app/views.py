@@ -36,6 +36,7 @@ from supplier_app.constants.custom_messages import (
     TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE,
     TAXPAYER_WORKDAY_UNIQUE_ERROR,
     THANKS,
+    COMPANY_ALREADY_EXIST,
 )
 from supplier_app.constants.taxpayer_status import (
     TAXPAYER_STATUS_APPROVED,
@@ -109,6 +110,8 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        if Company.objects.filter(name=form.data['name']).exists():
+            return HttpResponseRedirect(self.get_failure_url())
         company = self.save_company(form)
         InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
         EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
@@ -121,6 +124,13 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('company-list')
+    
+    def get_failure_url(self):
+        messages.error(
+                self.request,
+                COMPANY_ALREADY_EXIST,
+            )
+        return reverse('company-create')
 
 class CompanyListView(LoginRequiredMixin, ListView):
     model = Company

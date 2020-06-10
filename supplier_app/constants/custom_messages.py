@@ -21,3 +21,5 @@ TAXPAYER_WITHOUT_WORKDAY_ID_MESSAGE = _("You did not set workday id")
 TAXPAYER_WORKDAY_UNIQUE_ERROR = _("There is other taxpayer with that workday id")
 
 THANKS = _("Thank you. We'll get back to you shortly.")
+
+COMPANY_ALREADY_EXIST = _('That company name and/or email is already in use!')
