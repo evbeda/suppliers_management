@@ -227,12 +227,12 @@
             {% endif %}
             <p class="font-italic mb-0">{{ comment.comment_date_received }}</p>
             {% if comment.comment_file %}
-            <div class="row ml-0 mb-0">
-              <p class="mr-1 mb-0">{% trans "Attachment: " %}</p>
-              <a target="_blank" href="http://docs.google.com/gview?url={{ comment.comment_file.url }}">
-                <i class="fas fa-paperclip"></i>
-              </a>
-            </div>
+            <button target="_blank" href="http://docs.google.com/gview?url={{ comment.comment_file.url }}"
+                    class="btn btn-primary row ml-0 mb-0">
+              <p style='font-size:12px' class="mr-1 mb-0">{% trans "Download: " %}
+                <i class="fas fa-download"></i>
+              </p>
+            </button>
             {% endif %}
             <p class="mb-0">{{ comment.message | linebreaksbr }}</p>
 
