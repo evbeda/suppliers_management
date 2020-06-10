@@ -110,7 +110,6 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        # import ipdb; ipdb.set_trace()
         if Company.objects.filter(name=form.data['name']):
             return HttpResponseRedirect(self.get_failure_url())
         company = self.save_company(form)
