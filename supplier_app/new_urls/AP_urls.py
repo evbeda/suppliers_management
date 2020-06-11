@@ -18,10 +18,10 @@ from users_app.views import (
 
 
 company_pattern = [
-    url(r'^$', CompanyListView.as_view(), name='company-list'),
+    url(r'^deprecated$', CompanyListView.as_view(), name='company-list-deprecated'),
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
-    url(r'^taxpayerList$', BuyerTaxpayersList.as_view(), name='buyer-taxpayer-list'),
+    url(r'^$', BuyerTaxpayersList.as_view(), name='company-list'),
 ]
 
 taxpayer_pattern = [
