@@ -2911,3 +2911,60 @@ class TestChangeStrategy(TestCase):
     def test_show_message_raise_exception(self):
         with self.assertRaises(NotImplementedError):
             self.main.show_message()
+
+
+class TestBuyerTaxpayersList(TestCase):
+    def setUp(self):
+        self.company1 = CompanyFactory(
+            name='Empresa 1',
+            description='Descripcion de la empresa 1'
+        )
+        self.company2 = CompanyFactory(
+            name='Empresa 2',
+            description='Descripcion de la empresa 2'
+        )
+        self.taxpayer_ar1 = TaxPayerArgentinaFactory(
+            business_name=BUSINESS_EXAMPLE_NAME_1,
+            workday_id='1',
+            taxpayer_state=STATUS_PENDING,
+            cuit='20317899653',
+            company=self.company1,
+        )
+        self.taxpayer_ar2 = TaxPayerArgentinaFactory(
+            business_name=BUSINESS_EXAMPLE_NAME_2,
+            workday_id='2',
+            taxpayer_state=STATUS_CHANGE_REQUIRED,
+            cuit='20392379685',
+            company=self.company2,
+        )
+        self.taxpayerebentity_1 = TaxPayerEBEntityFactory(
+            taxpayer=self.taxpayer_ar1,
+        )
+        self.taxpayerebentity_2 = TaxPayerEBEntityFactory(
+            taxpayer=self.taxpayer_ar2,
+        )
+        self.company_list = [
+            CompanyFactory(),
+            CompanyFactory(),
+            CompanyFactory(),
+        ]
+        self.user_buyer_with_google_social = UserFactory(email='buyer@eventbrite.com')
+        self.buyer_group = Group.objects.get(name='buyer')
+        self.user_buyer_with_google_social.groups.add(self.buyer_group)
+        self.client = Client()
+        self.client.force_login(self.user_buyer_with_google_social)
+
+    def test_taxpayer_eb_list(self):
+        response = self.client.get(reverse('buyer-taxpayer-list'))
+        company1 = response.context[0]['company_list'][0]
+        self.assertIn(company1, self.company_list)
+        self.assertTrue(
+            len(response.context[0]['taxpayerebentity_list']) == 2
+        )
+        self.assertTrue(
+            len(response.context[0]['company_list']) == 3
+        )
+
+    def test_taxpayer_eb_list_template(self):
+        response = self.client.get(reverse('buyer-taxpayer-list'))
+        self.assertTemplateUsed(response, 'supplier_app/Buyer/taxpayer_list.html')

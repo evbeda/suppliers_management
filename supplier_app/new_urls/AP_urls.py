@@ -7,6 +7,7 @@ from supplier_app.views import (
     TaxpayerHistory,
     change_taxpayer_status,
     company_invite,
+    BuyerTaxpayersList,
 )
 
 from users_app.views import (
@@ -20,6 +21,7 @@ company_pattern = [
     url(r'^$', CompanyListView.as_view(), name='company-list'),
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
+    url(r'^taxpayerList$', BuyerTaxpayersList.as_view(), name='buyer-taxpayer-list'),
 ]
 
 taxpayer_pattern = [

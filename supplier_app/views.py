@@ -656,3 +656,25 @@ class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, Tem
         pdf = render_to_pdf('supplier_app/html-to-pdf-page.html', self.get_context_data())
         return HttpResponse(pdf, content_type='application/pdf')
 
+
+class BuyerTaxpayersList(UserLoginPermissionRequiredMixin, ListView):
+    model = TaxPayerArgentina
+    template_name = 'supplier_app/Buyer/taxpayer_list.html'
+    permission_required = (
+        CAN_CREATE_COMPANY_PERM,
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company_list = list(Company.objects.all())
+        taxpayereb_list = context['taxpayerebentity_list']
+        for taxpayereb in taxpayereb_list:
+            for company in company_list:
+                if taxpayereb.taxpayer.company == company:
+                    company_list.remove(company)
+        context['company_list'] = company_list
+        return context
+
+    def get_queryset(self):
+        queryset = TaxPayerEBEntity.objects.all()
+        return queryset
