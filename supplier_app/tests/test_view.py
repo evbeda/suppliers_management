@@ -1819,7 +1819,7 @@ class TestCompanyListView(TestCase):
         self.client.force_login(self.user)
 
     def test_company_list(self):
-        response = self.client.get(reverse('company-list'))
+        response = self.client.get(reverse('company-list-deprecated'))
         company1 = response.context[0]['company_list'][0]
         self.assertIn(company1, self.company_list)
         self.assertTrue(
@@ -1827,7 +1827,7 @@ class TestCompanyListView(TestCase):
         )
 
     def test_company_list_template(self):
-        response = self.client.get(reverse('company-list'))
+        response = self.client.get(reverse('company-list-deprecated'))
         self.assertTemplateUsed(response, 'supplier_app/AP/company_list.html')
 
     def test_company_search(self):
@@ -1842,7 +1842,7 @@ class TestCompanyListView(TestCase):
             CompanyFactory(name='tes name'),
         ]
         response = self.client.get(
-            reverse('company-list'),
+            reverse('company-list-deprecated'),
             {'company': 'test'},
         )
         for company in company_list:
@@ -2955,7 +2955,7 @@ class TestBuyerTaxpayersList(TestCase):
         self.client.force_login(self.user_buyer_with_google_social)
 
     def test_taxpayer_eb_list(self):
-        response = self.client.get(reverse('buyer-taxpayer-list'))
+        response = self.client.get(reverse('company-list'))
         company1 = response.context[0]['company_list'][0]
         self.assertIn(company1, self.company_list)
         self.assertTrue(
@@ -2966,5 +2966,5 @@ class TestBuyerTaxpayersList(TestCase):
         )
 
     def test_taxpayer_eb_list_template(self):
-        response = self.client.get(reverse('buyer-taxpayer-list'))
+        response = self.client.get(reverse('company-list'))
         self.assertTemplateUsed(response, 'supplier_app/Buyer/taxpayer_list.html')
