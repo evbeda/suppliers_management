@@ -110,7 +110,8 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        if Company.objects.filter(name=form.data['name']).exists():
+        lowercase_company_names = [name[0].lower() for name in Company.objects.values_list('name')]
+        if form.data['name'].lower() in lowercase_company_names or User.objects.filter(email=self.request.POST['email']):
             return HttpResponseRedirect(self.get_failure_url())
         company = self.save_company(form)
         InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
