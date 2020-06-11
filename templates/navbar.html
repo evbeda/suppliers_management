@@ -46,6 +46,7 @@
                     {% endif %}
                 </div>
             </li>
+        </ul>
             {% endif %}
         </ul>
     </div>
@@ -78,6 +79,8 @@
             </li>
         {% endif %}
         </ul>
+        
+
     </div>
         
     {% else %}
@@ -119,6 +122,12 @@
     </div>
     {% endif %}
     <div class="collapse navbar-collapse justify-content-end">
+        {% if request.get_full_path == "/users/ap/company/" %}
+            <a class="mr-5" id="how" href="" data-toggle="modal" data-target="#company-modal">
+                <i class="far fa-question-circle"></i>
+                {% trans "How to use" %}
+            </a>
+        {% endif %}
         <div class='pr-2'>
             {% include 'language_selector.html' %}
         </div>

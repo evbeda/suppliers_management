@@ -1,0 +1,22 @@
+{% load i18n %}
+<div class="modal fade" id="company-modal" tabindex="-1" role="dialog" aria-labelledby="company-modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content ">
+        <div class="modal-header blue-eb">
+          <h5 class="modal-title text-light-orange-eb" id="company-modalLabel">{% trans 'How to use' %}</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <p>{% trans 'First, check that the supplier does not yet exist on BriteSu by searching the taxpayer name.' %}</p>
+            <p>{% trans "If it doesn't exist, then you can create a company and send an invitation to the new supplier." %}</p>
+            <p>{% trans "If the taxpayer already exists and status is 'Approved', then you can create a Purchase Requisition on Workday." %}</p>
+            <p>{% trans "If the taxpayer exists but it's not approved, then reach out the Eventbrite Account Payables team so that they can manage your inquire." %}</p>
+          </div>
+        <div class="modal-footer ">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+        </div>
+      </div>
+    </div>
+  </div>

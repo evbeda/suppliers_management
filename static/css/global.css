@@ -19,6 +19,10 @@ html, body{
     color : #D1410C;
 }
 
+.text-light-orange-eb{
+    color : rgb(250, 125, 0);
+}
+
 .a:hover{
     background-color: rgb(223, 79, 51);
     text-decoration: none;
@@ -100,4 +104,16 @@ table.stepper>tbody>tr>th{
     padding-right: 25px;
     text-align: right;
     
+}
+
+nav #how{
+    padding: 5px 10px;
+    color: rgb(250, 125, 0);
+    border: 1px solid orange;
+    border-radius: 5px;
+}
+
+#how:hover{
+    font-size: 1.2rem;
+    text-decoration: none;
 }

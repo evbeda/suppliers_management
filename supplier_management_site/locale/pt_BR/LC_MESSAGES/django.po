@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 18:20+0000\n"
+"POT-Creation-Date: 2020-06-11 20:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2906,12 +2906,12 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: templates/invoices_app/supplier-invoice-list.html:11
-#: templates/navbar.html:115
+#: templates/navbar.html:112
 msgid "My Invoices"
 msgstr "Minhas faturas"
 
 #: templates/invoices_app/supplier-invoice-list.html:21
-#: templates/navbar.html:118
+#: templates/navbar.html:115
 msgid "New Invoice"
 msgstr "Nova fatura"
 
@@ -2935,12 +2935,12 @@ msgstr "Oi"
 msgid "Management"
 msgstr "Gestão"
 
-#: templates/navbar.html:21 templates/navbar.html:105
+#: templates/navbar.html:21 templates/navbar.html:102
 #: templates/supplier_app/supplier-home.html:53
 msgid "Invoices"
 msgstr "Faturas"
 
-#: templates/navbar.html:24 templates/supplier_app/Buyer/taxpayer_list.html:14
+#: templates/navbar.html:24 templates/supplier_app/Buyer/taxpayer_list.html:15
 #: templates/supplier_app/ap-taxpayers.html:14
 #, fuzzy
 #| msgid "Options"
@@ -2951,37 +2951,37 @@ msgstr "Açao"
 msgid "Manage Admins"
 msgstr "Gerenciar administradores"
 
-#: templates/navbar.html:36 templates/navbar.html:66
+#: templates/navbar.html:36 templates/navbar.html:67
 msgid "Companies"
 msgstr "Empresas"
 
-#: templates/navbar.html:41 templates/navbar.html:71
+#: templates/navbar.html:41 templates/navbar.html:72
 msgid "See all"
 msgstr "Ver tudo"
 
-#: templates/navbar.html:45 templates/navbar.html:75
+#: templates/navbar.html:45 templates/navbar.html:76
 msgid "Create one"
 msgstr "Crie um"
 
-#: templates/navbar.html:57
+#: templates/navbar.html:58
 msgid "Buyer"
 msgstr "Comprador"
 
-#: templates/navbar.html:82
-msgid "Taxpayers"
-msgstr "Contribuintes"
-
-#: templates/navbar.html:92 templates/supplier_app/html-to-pdf-page.html:111
+#: templates/navbar.html:89 templates/supplier_app/html-to-pdf-page.html:111
 msgid "Supplier"
 msgstr "Fornecedor"
 
-#: templates/navbar.html:99
+#: templates/navbar.html:96
 #, fuzzy
 #| msgid "Options"
 msgid "My Organizations"
 msgstr "Açao"
 
-#: templates/navbar.html:140
+#: templates/navbar.html:128 templates/supplier_app/AP/companies_modal.html:6
+msgid "How to use"
+msgstr ""
+
+#: templates/navbar.html:143
 msgid "Log out"
 msgstr "Sair"
 
@@ -3082,13 +3082,41 @@ msgstr ""
 msgid "prev step"
 msgstr ""
 
+#: templates/supplier_app/AP/companies_modal.html:12
+msgid ""
+"First, check that the supplier does not yet exist on BriteSu by searching "
+"the taxpayer name."
+msgstr ""
+
+#: templates/supplier_app/AP/companies_modal.html:13
+msgid ""
+"If it doesn't exist, then you can create a company and send an invitation to "
+"the new supplier."
+msgstr ""
+
+#: templates/supplier_app/AP/companies_modal.html:14
+msgid ""
+"If the taxpayer already exists and status is 'Approved', then you can create "
+"a Purchase Requisition on Workday."
+msgstr ""
+
+#: templates/supplier_app/AP/companies_modal.html:15
+msgid ""
+"If the taxpayer exists but it's not approved, then reach out the Eventbrite "
+"Account Payables team so that they can manage your inquire."
+msgstr ""
+
+#: templates/supplier_app/AP/companies_modal.html:18
+msgid "Close"
+msgstr ""
+
 #: templates/supplier_app/AP/company_creation.html:8
 msgid "Create a new company"
 msgstr "Crie uma nova empresa"
 
 #: templates/supplier_app/AP/company_creation.html:31
 #: templates/supplier_app/AP/company_list.html:30
-#: templates/supplier_app/Buyer/taxpayer_list.html:22
+#: templates/supplier_app/Buyer/taxpayer_list.html:23
 msgid "Description"
 msgstr "Descrição"
 
@@ -3164,31 +3192,31 @@ msgstr "Nome do banco"
 msgid "Bank Account Number"
 msgstr "Número da conta de banco"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:21
+#: templates/supplier_app/Buyer/taxpayer_list.html:22
 #, fuzzy
 #| msgid "Invite"
 msgid "Invited as(Company)"
 msgstr "Convite"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:23
+#: templates/supplier_app/Buyer/taxpayer_list.html:24
 #, fuzzy
 #| msgid "Taxpayer state"
 msgid "Taxpayer Name"
 msgstr "Estado do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:24
+#: templates/supplier_app/Buyer/taxpayer_list.html:25
 #, fuzzy
 #| msgid "Taxpayer state"
 msgid "Taxpayer Status"
 msgstr "Estado do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:25
+#: templates/supplier_app/Buyer/taxpayer_list.html:26
 #, fuzzy
 #| msgid "Taxpayer info"
 msgid "Taxpayer Country"
 msgstr "Informações do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:26
+#: templates/supplier_app/Buyer/taxpayer_list.html:27
 #, fuzzy
 #| msgid "Eventbrite entities to bill"
 msgid "EB entity to bill"
@@ -3566,6 +3594,9 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#~ msgid "Taxpayers"
+#~ msgstr "Contribuintes"
 
 #, fuzzy
 #~| msgid "Taxpayer History"
