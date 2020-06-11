@@ -1707,7 +1707,7 @@ class TestCompanyCreateView(TestCase):
             'eb_entity':'1',
             'description':
                 'Bringing the world together through live experiences',
-            'email': 'buyer@eventbrite.com',
+            'email': 'supplier@gmail.com',
             'language': 'en',
         }
         self.client = Client()
