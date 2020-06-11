@@ -37,7 +37,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% if perms.users_app.can_send_company_invite %}
-                    <a class="dropdown-item" href="{% url 'company-list' %}"><i
+                    <a class="dropdown-item" href="{% url 'company-list-deprecated' %}"><i
                         class="fa fa-building mr-2"></i>{% trans "See all" %}</a>
                     {% endif %}
                     {% if perms.users_app.can_create_company %}
