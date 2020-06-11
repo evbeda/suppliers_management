@@ -7,6 +7,7 @@
 
 {% block content %}
 {% include 'navbar.html' %}
+{% include 'supplier_app/AP/companies_modal.html' %}
 <div class="container h-100 w-100 mt-3">
     {% include 'messages_notification.html'%}
         <div class="row justify-content-center">
@@ -56,4 +57,10 @@
         </table>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(window).on('load', function(){
+        $('#company-modal').modal('show');
+    });
+</script>
 {% endblock %}
