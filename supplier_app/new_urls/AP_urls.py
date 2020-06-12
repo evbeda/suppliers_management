@@ -24,7 +24,6 @@ company_pattern = [
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
     url(r'^$', BuyerTaxpayersList.as_view(), name='company-list'),
-    url(r'^taxpayerList$', BuyerTaxpayersList.as_view(), name='buyer-taxpayer-list'),
     url(r'^manage$', CompanyManage.as_view(), name='company-manage'),
     url(r'^(?P<pk>[0-9]+)/change-user-status$', change_user_status, name='change-user-status'),
 ]

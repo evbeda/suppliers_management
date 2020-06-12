@@ -141,6 +141,8 @@ class CompanyManage(LoginRequiredMixin, ListView):
     template_name = 'supplier_app/Supplier/company_manage.html'
 
     def get_queryset(self):
+        # TODO: First resolve the error that does not allow duplicate inserts in this table to use the next line
+        # company = CompanyUserPermission.objects.get(user_id=self.request.user.id)
         company = CompanyUserPermission.objects.filter(user_id=self.request.user.id).first()
         return User.objects.filter(companyuserpermission__company=company.company)
 
