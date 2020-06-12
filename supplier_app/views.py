@@ -94,6 +94,7 @@ from utils import reports
 from utils.exceptions import CouldNotSendEmailError
 from utils.send_email import company_invitation_notification
 from utils.htmltopdf import render_to_pdf
+from django.contrib.auth.decorators import permission_required as permission_required_decorator
 
 
 class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
@@ -126,13 +127,33 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('company-list')
-    
+
     def get_failure_url(self):
         messages.error(
-                self.request,
-                COMPANY_ALREADY_EXIST,
-            )
+            self.request,
+            COMPANY_ALREADY_EXIST,
+        )
         return reverse('company-create')
+
+
+class CompanyManage(LoginRequiredMixin, ListView):
+    model = User
+    template_name = 'supplier_app/supplier/company_manage.html'
+
+    def get_queryset(self):
+        company = CompanyUserPermission.objects.filter(user_id=self.request.user.id).first()
+        return User.objects.filter(companyuserpermission__company=company.company)
+
+
+def change_user_status(request, pk):
+    new_status = request.POST.get('active')
+    user = get_object_or_404(User, id=pk)
+    if new_status == 'activate':
+        user.is_active = True
+    elif new_status == 'deactivate':
+        user.is_active = False
+    user.save()
+    return redirect('company-manage')
 
 
 class CompanyListView(LoginRequiredMixin, ListView):
