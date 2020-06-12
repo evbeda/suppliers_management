@@ -106,7 +106,7 @@ def get_user_emails_by_tax_payer_id(tax_payer_id):
     emails = CompanyUserPermission.objects.values_list(
         'user__email',
         flat=True,
-    ).filter(company=company)
+    ).filter(company=company, user__is_active=True)
     return list(emails)
 
 

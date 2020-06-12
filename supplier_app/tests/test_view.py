@@ -406,6 +406,71 @@ class TestCreateTaxPayer(TestCase):
         )
 
 
+class TestManageCompanyUser(TestCase):
+
+    def setUp(self):
+        self.factory = RequestFactory()
+
+        self.company = CompanyFactory(
+            name='Supra',
+            description='Best catering worldwide'
+        )
+        self.user_with_social_evb = UserFactory(email='Axel')
+        self.user_with_social_evb2 = UserFactory(email='Axel2')
+
+        self.company_user_permission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user_with_social_evb
+        )
+        self.company_user_permission = CompanyUserPermissionFactory(
+            company=self.company,
+            user=self.user_with_social_evb2
+        )
+        self.client = Client()
+        self.manage_company = 'company-manage'
+        self.update_state_user = 'change-user-status'
+        self.kwargs = {
+            'pk': self.user_with_social_evb2.id,
+        }
+        self.STATUS_ACTIVE = {
+            'active': 'deactivate',
+        }
+        self.STATUS_DEACTIVATE = {
+            'active': 'activate',
+        }
+
+    def test_login_page_correct(self):
+        self.client.force_login(self.user_with_social_evb)
+        response = self.client.get(
+            reverse(self.manage_company),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        self.assertContains(response, 'Axel2')
+
+    def test_post_active_inactive(self):
+        self.client.force_login(self.user_with_social_evb)
+        self.client.post(
+            reverse(
+                self.update_state_user,
+                kwargs=self.kwargs
+            ),
+            data=self.STATUS_ACTIVE
+        )
+        self.assertFalse(User.objects.get(pk=self.user_with_social_evb2.id).is_active)
+
+    def test_post_active_active(self):
+        self.client.force_login(self.user_with_social_evb)
+        self.client.post(
+            reverse(
+                self.update_state_user,
+                kwargs=self.kwargs
+            ),
+            data=self.STATUS_DEACTIVATE
+        )
+        self.assertTrue(User.objects.get(pk=self.user_with_social_evb2.id).is_active)
+
+
 class TestSupplierHome(TestCase):
 
     def setUp(self):

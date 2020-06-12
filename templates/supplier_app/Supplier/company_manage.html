@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+
+{% include 'navbar.html' %}
+<br/>
+<h1 class="text-center"> {% trans "Users List"%}</h1>
+
+<br/>
+<div class="row">
+    <div class="col-md-2">
+        <div class="row mt-3">
+            <input id="searchInput" class="form-control mx-3" placeholder='{% trans "Search User" %}'>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <table class="table table-hover table-sm">
+            <thead class="thead-eb-dark">
+            <tr>
+                <th scope="col">{% trans "User ID"%}</th>
+                <th scope="col">{% trans "Email"%}</th>
+                <th scope="col">{% trans "Registered"%}</th>
+                <th class="text-center" scope="col">{% trans "Active User"%}</th>
+            </tr>
+            </thead>
+            <tbody id="tableToFilter">
+            {% for user in object_list %}
+            <tr>
+                <th scope="row">{{user.first_name}} {{user.last_name}}</th>
+                <td>{{user.email}}</td>
+                <td>{% if user.social_auth.all %}
+                    <i class="text-success fas fa-circle"></i>
+                    {% else %}
+                    <i class="text-danger fas fa-circle"></i>
+                    {% endif %}
+                </td>
+                <td colspan="3">
+                    <form method="POST" class="form-grid" action='{% url "change-user-status" pk=user.id %}'>
+                        <div class="row justify-content-around">
+                            {% csrf_token %}
+                            <div class="col text-center">
+                                {% if user.is_active %}
+                                <button type="submit" name='active' class="btn" value="deactivate"><i
+                                        class="fas fa-check text-success"></i></button>
+                                {% else %}
+                                <button type="submit" name='active' class="btn" value="activate"><i
+                                        class="fas fa-times text-danger"></i></button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% include "_pagination.html" %}
+{% endblock%}

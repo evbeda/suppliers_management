@@ -8,6 +8,8 @@ from supplier_app.views import (
     change_taxpayer_status,
     company_invite,
     BuyerTaxpayersList,
+    CompanyManage,
+    change_user_status,
 )
 
 from users_app.views import (
@@ -22,6 +24,8 @@ company_pattern = [
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
     url(r'^$', BuyerTaxpayersList.as_view(), name='company-list'),
+    url(r'^manage$', CompanyManage.as_view(), name='company-manage'),
+    url(r'^(?P<pk>[0-9]+)/change-user-status$', change_user_status, name='change-user-status'),
 ]
 
 taxpayer_pattern = [
