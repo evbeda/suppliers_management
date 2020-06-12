@@ -138,7 +138,7 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
 
 class CompanyManage(LoginRequiredMixin, ListView):
     model = User
-    template_name = 'supplier_app/supplier/company_manage.html'
+    template_name = 'supplier_app/Supplier/company_manage.html'
 
     def get_queryset(self):
         company = CompanyUserPermission.objects.filter(user_id=self.request.user.id).first()
