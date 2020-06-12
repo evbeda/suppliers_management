@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 20:21+0000\n"
+"POT-Creation-Date: 2020-06-12 13:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2965,28 +2965,34 @@ msgstr "paso previo"
 msgid ""
 "First, check that the supplier does not yet exist on BriteSu by searching "
 "the taxpayer name."
-msgstr "Primero, verifica que el proveedor no exista en BriteSu buscando "
-"el nombre de la entidad fiscal."
+msgstr ""
+"Primero, verifica que el proveedor no exista en BriteSu buscando el nombre "
+"de la entidad fiscal."
 
 #: templates/supplier_app/AP/companies_modal.html:13
 msgid ""
 "If it doesn't exist, then you can create a company and send an invitation to "
 "the new supplier."
-msgstr "Si no existe aún, entonces puedes crear una compañía y enviar la invitación al "
-"nuevo proveedor."
+msgstr ""
+"Si no existe aún, entonces puedes crear una compañía y enviar la invitación "
+"al nuevo proveedor."
 
 #: templates/supplier_app/AP/companies_modal.html:14
 msgid ""
 "If the taxpayer already exists and status is 'Approved', then you can create "
 "a Purchase Requisition on Workday."
-msgstr "Si la entidad fiscal existe y su estado es 'aprobada', podrás cargar "
+msgstr ""
+"Si la entidad fiscal existe y su estado es 'aprobada', podrás cargar "
 "directamente una solicitud de compra en Workday para ese proveedor."
+
 #: templates/supplier_app/AP/companies_modal.html:15
 msgid ""
 "If the taxpayer exists but it's not approved, then reach out the Eventbrite "
 "Account Payables team so that they can manage your inquire."
-msgstr "Si la entidad fiscal ya existe pero su estado no es 'aprobada', entonces contacta a al equipo de Account Payables "
-"de Eventbrite para que puedan gestionar tu consulta."
+msgstr ""
+"Si la entidad fiscal ya existe pero su estado no es 'aprobada', entonces "
+"contacta a al equipo de Account Payables de Eventbrite para que puedan "
+"gestionar tu consulta."
 
 #: templates/supplier_app/AP/companies_modal.html:18
 msgid "Close"
@@ -2998,7 +3004,7 @@ msgstr "Crear un nuevo grupo económico"
 
 #: templates/supplier_app/AP/company_creation.html:31
 #: templates/supplier_app/AP/company_list.html:30
-#: templates/supplier_app/Buyer/taxpayer_list.html:23
+#: templates/supplier_app/Buyer/taxpayer_list.html:33
 msgid "Description"
 msgstr "Descripción"
 
@@ -3075,22 +3081,26 @@ msgid "Bank Account Number"
 msgstr "CBU"
 
 #: templates/supplier_app/Buyer/taxpayer_list.html:22
+msgid "Search: "
+msgstr "Buscar: "
+
+#: templates/supplier_app/Buyer/taxpayer_list.html:32
 msgid "Invited as(Company)"
 msgstr "Invitado como(Compañía)"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:24
+#: templates/supplier_app/Buyer/taxpayer_list.html:34
 msgid "Taxpayer Name"
 msgstr "Entidad fiscal"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:25
+#: templates/supplier_app/Buyer/taxpayer_list.html:35
 msgid "Taxpayer Status"
 msgstr "Estado"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:26
+#: templates/supplier_app/Buyer/taxpayer_list.html:36
 msgid "Taxpayer Country"
 msgstr "País"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:27
+#: templates/supplier_app/Buyer/taxpayer_list.html:37
 msgid "EB entity to bill"
 msgstr "Entidad a Facturar"
 

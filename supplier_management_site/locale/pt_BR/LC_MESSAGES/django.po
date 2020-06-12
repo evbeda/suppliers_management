@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-11 20:21+0000\n"
+"POT-Creation-Date: 2020-06-12 13:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3116,7 +3116,7 @@ msgstr "Crie uma nova empresa"
 
 #: templates/supplier_app/AP/company_creation.html:31
 #: templates/supplier_app/AP/company_list.html:30
-#: templates/supplier_app/Buyer/taxpayer_list.html:23
+#: templates/supplier_app/Buyer/taxpayer_list.html:33
 msgid "Description"
 msgstr "Descrição"
 
@@ -3194,29 +3194,35 @@ msgstr "Número da conta de banco"
 
 #: templates/supplier_app/Buyer/taxpayer_list.html:22
 #, fuzzy
+#| msgid "Search by name"
+msgid "Search"
+msgstr "Procura por nome"
+
+#: templates/supplier_app/Buyer/taxpayer_list.html:32
+#, fuzzy
 #| msgid "Invite"
 msgid "Invited as(Company)"
 msgstr "Convite"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:24
+#: templates/supplier_app/Buyer/taxpayer_list.html:34
 #, fuzzy
 #| msgid "Taxpayer state"
 msgid "Taxpayer Name"
 msgstr "Estado do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:25
+#: templates/supplier_app/Buyer/taxpayer_list.html:35
 #, fuzzy
 #| msgid "Taxpayer state"
 msgid "Taxpayer Status"
 msgstr "Estado do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:26
+#: templates/supplier_app/Buyer/taxpayer_list.html:36
 #, fuzzy
 #| msgid "Taxpayer info"
 msgid "Taxpayer Country"
 msgstr "Informações do contribuinte"
 
-#: templates/supplier_app/Buyer/taxpayer_list.html:27
+#: templates/supplier_app/Buyer/taxpayer_list.html:37
 #, fuzzy
 #| msgid "Eventbrite entities to bill"
 msgid "EB entity to bill"
