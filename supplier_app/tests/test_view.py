@@ -446,9 +446,7 @@ class TestManageCompanyUser(TestCase):
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-        self.assertContains(
-            response, 'Axel2'
-        )
+        self.assertContains(response, 'Axel2')
 
     def test_post_active_inactive(self):
         self.client.force_login(self.user_with_social_evb)
@@ -459,7 +457,7 @@ class TestManageCompanyUser(TestCase):
             ),
             data=self.STATUS_ACTIVE
         )
-        self.assertEqual(User.objects.get(pk=self.user_with_social_evb2.id).is_active, False)
+        self.assertFalse(User.objects.get(pk=self.user_with_social_evb2.id).is_active)
 
     def test_post_active_active(self):
         self.client.force_login(self.user_with_social_evb)
@@ -470,7 +468,7 @@ class TestManageCompanyUser(TestCase):
             ),
             data=self.STATUS_DEACTIVATE
         )
-        self.assertEqual(User.objects.get(pk=self.user_with_social_evb2.id).is_active, True)
+        self.assertTrue(User.objects.get(pk=self.user_with_social_evb2.id).is_active)
 
 
 class TestSupplierHome(TestCase):
