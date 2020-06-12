@@ -432,8 +432,11 @@ class TestManageCompanyUser(TestCase):
         self.kwargs = {
             'pk': self.user_with_social_evb2.id,
         }
-        self.STATUS_POST = {
+        self.STATUS_ACTIVE = {
             'active': 'deactivate',
+        }
+        self.STATUS_DEACTIVATE = {
+            'active': 'activate',
         }
 
     def test_login_page_correct(self):
@@ -454,9 +457,20 @@ class TestManageCompanyUser(TestCase):
                 self.update_state_user,
                 kwargs=self.kwargs
             ),
-            data=self.STATUS_POST
+            data=self.STATUS_ACTIVE
         )
         self.assertEqual(User.objects.get(pk=self.user_with_social_evb2.id).is_active, False)
+
+    def test_post_active_active(self):
+        self.client.force_login(self.user_with_social_evb)
+        self.client.post(
+            reverse(
+                self.update_state_user,
+                kwargs=self.kwargs
+            ),
+            data=self.STATUS_DEACTIVATE
+        )
+        self.assertEqual(User.objects.get(pk=self.user_with_social_evb2.id).is_active, True)
 
 
 class TestSupplierHome(TestCase):
