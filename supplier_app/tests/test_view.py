@@ -1920,7 +1920,9 @@ class TestCompanyInvite(TestCase):
     def setUp(self):
         CompanyFactory()
         self.client = Client()
+        self.user = UserFactory()
         self.entities = EbEntityCompanyFactory()
+        self.client.force_login(self.user)
 
     def _make_post(self, language='en'):
         response = self.client.post(
@@ -1962,6 +1964,7 @@ class TestCompanyInvite(TestCase):
 
     def test_company_invite_redirect_to_companies_upon_email_invitation(self):
         response = self._make_post()
+        
         self.assertEqual(
             response.url,
             reverse_lazy('company-list')

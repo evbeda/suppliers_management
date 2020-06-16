@@ -597,7 +597,11 @@ def company_invite(request, company=None):
         messages.error(request, EMAIL_ERROR_MESSAGE)
     finally:
         translation.activate(old_language)
-        return redirect('company-list')
+        
+        if request.user.is_AP:
+            return redirect('company-list-deprecated')
+        else:
+            return redirect('company-list')
 
 
 def company_join(request, *args, **kwargs):
