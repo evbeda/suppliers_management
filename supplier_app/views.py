@@ -652,9 +652,6 @@ class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, Tem
     template_name = 'supplier_app/html-to-pdf-page.html'
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
 
-    def handle_no_permission(self):
-        return HttpResponseRedirect(Http404)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         company = TaxPayer.objects.get(pk=self.kwargs['taxpayer_id']).company
