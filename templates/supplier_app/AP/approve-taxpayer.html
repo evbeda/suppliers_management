@@ -6,7 +6,7 @@
         {% if taxpayer.workday_id %}
             <input type="hidden" class="form-control" name="workday_id" placeholder="Workday ID" value="{{taxpayer.workday_id}}">
         {% else %}
-            <input type="number" class="form-control" name="workday_id" placeholder="Workday ID">
+            <input class="form-control" name="workday_id" placeholder="Workday ID">
         {% endif %}
 
 	<input type="hidden" name="action" value="{{approve}}">                

@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     UserPassesTestMixin,
 )
+from django.db import IntegrityError
 from django.forms import ValidationError
 from django.http import (
     HttpResponseBadRequest,
@@ -350,6 +351,17 @@ def change_invoice_status(request, pk):
         strategy(invoice, status, request)
     except ValidationError as err:
         messages.error(request, err.message)
+        return redirect(
+            reverse(
+                'invoices-detail',
+                kwargs={
+                    'taxpayer_id': invoice.taxpayer.id,
+                    'pk': pk,
+                }
+            )
+        )
+    except IntegrityError as err:
+        messages.error(request, err)
         return redirect(
             reverse(
                 'invoices-detail',

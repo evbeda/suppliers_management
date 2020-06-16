@@ -58,7 +58,6 @@ class InvoiceForm(forms.ModelForm):
                     'placeholder': _('e.g. 124246346'),
                 }
             ),
-            'workday_id': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('Workday ID')}),
-
+            'workday_id': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('Workday ID')}),
         }
 

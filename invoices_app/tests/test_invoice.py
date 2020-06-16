@@ -355,7 +355,7 @@ class TestInvoice(TestBase):
 
         invoice = get_object_or_404(Invoice, pk=self.invoice.id)
         self.assertEqual(invoice.status, invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS))
-        self.assertEqual(invoice.workday_id, 123123)
+        self.assertEqual(invoice.workday_id, '123123')
 
     def test_invoice_change_status_code_to_approved(self):
         self.client.force_login(self.ap_user)
@@ -373,8 +373,10 @@ class TestInvoice(TestBase):
         )
         self.assertEqual(request.status_code, 302)
 
-    def test_invoice_change_status_invalid_workday_id(self):
+    def test_invoice_change_status_repeated_workday_id(self):
         self.client.force_login(self.ap_user)
+        self.invoice.workday_id = 'G-180'
+        self.invoice.save()
         response = self.client.post(
             reverse(
                 'change-invoice-status',
@@ -384,11 +386,11 @@ class TestInvoice(TestBase):
             ),
             {
                 'status': invoice_status_lookup(INVOICE_STATUS_IN_PROGRESS),
-                'workday_id': "invalid id",
+                'workday_id': "G-180",
             },
             follow=True
         )
-        self.assertContains(response, 'Enter a valid integer.')
+        self.assertContains(response, 'Workday ID already exist')
 
     def test_supplier_invoice_edit(self):
         self.client.force_login(self.user)

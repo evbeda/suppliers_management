@@ -1,6 +1,7 @@
 from django.core.validators import validate_integer
+from django.db import IntegrityError
 from django.forms import ValidationError
-
+from django.utils.translation import ugettext_lazy as _
 from invoices_app import (
     INVOICE_STATUS_APPROVED_CODE,
     INVOICE_STATUS_CHANGES_REQUEST_CODE,
@@ -10,6 +11,8 @@ from invoices_app import (
     NO_COMMENT_ERROR,
     NO_WORKDAY_ID_ERROR,
     INVOICE_STATUS_IN_PROGRESS_CODE)
+from invoices_app.models import Invoice
+from supplier_app.exceptions.taxpayer_exceptions import TaxpayerUniqueWorkdayId
 
 
 def change_status(invoice, status, *args):
@@ -21,7 +24,8 @@ def strategy_change_to_in_progress(invoice, status, request):
     workday_id = request.POST.get('workday_id')
     if not workday_id:
         raise ValidationError(NO_WORKDAY_ID_ERROR)
-    validate_integer(workday_id)
+    if Invoice.objects.filter(workday_id=workday_id).exists():
+        raise IntegrityError(_("Workday ID already exist"))
     invoice.workday_id = workday_id
 
 
