@@ -149,7 +149,7 @@
                  action="{% url 'change-invoice-status' pk=invoice.id %}">
              {% csrf_token %}
              <div class="input-group mb-3">
-               <input type="number" required class="form-control" name="workday_id" placeholder="Workday ID">
+               <input required class="form-control" name="workday_id" placeholder="Workday ID">
                <div class="input-group-append">
                  <button type="submit" name='status' class="btn btn-warning" value="{{ INVOICE_STATUS_IN_PROGRESS }}">{% trans "In Progress" %}
                  </button>

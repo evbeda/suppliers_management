@@ -72,7 +72,7 @@ class Invoice(models.Model):
             FileSizeValidator(limit_size=INVOICE_MAX_SIZE_FILE),
         ]
     )
-    workday_id = models.PositiveIntegerField(blank=True, null=True)
+    workday_id = models.CharField(max_length=50, blank=True, null=True)
 
     invoice_eb_entity = models.ForeignKey(EBEntity, default=None)
 
