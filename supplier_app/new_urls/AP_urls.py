@@ -20,7 +20,7 @@ from users_app.views import (
 
 
 company_pattern = [
-    url(r'^deprecated$', CompanyListView.as_view(), name='company-list-deprecated'),
+    url(r'^administration$', CompanyListView.as_view(), name='company-list-deprecated'),
     url(r'^create$', CompanyCreatorView.as_view(), name='company-create'),
     url(r'^invite$', company_invite, name='company-invite'),
     url(r'^$', BuyerTaxpayersList.as_view(), name='company-list'),

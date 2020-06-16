@@ -597,7 +597,7 @@ def company_invite(request, company=None):
         messages.error(request, EMAIL_ERROR_MESSAGE)
     finally:
         translation.activate(old_language)
-        return redirect('company-list')
+        return redirect('company-list-deprecated') if request.user.is_AP else redirect('company-list')
 
 
 def company_join(request, *args, **kwargs):
@@ -651,9 +651,6 @@ def change_taxpayer_status(request, taxpayer_id):
 class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
     template_name = 'supplier_app/html-to-pdf-page.html'
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
-
-    def handle_no_permission(self):
-        return HttpResponseRedirect(Http404)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
