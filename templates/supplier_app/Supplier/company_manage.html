@@ -21,6 +21,7 @@
             <tr>
                 <th scope="col">{% trans "User ID"%}</th>
                 <th scope="col">{% trans "Email"%}</th>
+                <th scope="col">{% trans "Company"%}</th>
                 <th scope="col">{% trans "Registered"%}</th>
                 <th class="text-center" scope="col">{% trans "Active User"%}</th>
             </tr>
@@ -30,6 +31,7 @@
             <tr>
                 <th scope="row">{{user.first_name}} {{user.last_name}}</th>
                 <td>{{user.email}}</td>
+                <td>{{user.company}}</td>
                 <td>{% if user.social_auth.all %}
                     <i class="text-success fas fa-circle"></i>
                     {% else %}

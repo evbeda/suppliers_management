@@ -17,15 +17,18 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'invoices-list' %}?status=2">
-                            <i class="fa fa-file-invoice mr-1"></i>
-                            {% trans "Invoices" %}
+                        <i class="fa fa-file-invoice mr-1"></i>
+                        {% trans "Invoices" %}
                     </a>
                     <a class="dropdown-item" href="{% url 'ap-taxpayers' %}">
                         <i class="fa fa-store"></i>{% trans "Organizations" %}
                     </a>
+                    <a class="dropdown-item" href="{% url 'company-manage' %}">
+                        <i class="fas fa-user-shield mr-1"></i>{% trans "Manage Supplier" %}
+                    </a>
                     {% if perms.users_app.can_manage_aps %}
                     <a class="dropdown-item" href="{% url 'manage-admins' %}">
-                            <i class="fas fa-user-shield mr-1"></i>{% trans "Manage Admins" %}
+                        <i class="fas fa-user-shield mr-1"></i>{% trans "Manage Admins" %}
                     </a>
                     {% endif %}
             </li>
