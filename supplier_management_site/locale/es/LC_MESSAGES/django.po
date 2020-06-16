@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 19:44+0000\n"
+"POT-Creation-Date: 2020-06-16 20:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2571,13 +2571,13 @@ msgid "Routing number must only have numbers"
 msgstr "El número de ruta solo debe tener numeros"
 
 #: supplier_management_site/settings/base.py:146
-#: templates/supplier_app/AP/company_creation.html:39
+#: templates/supplier_app/AP/company_creation.html:42
 #: templates/supplier_app/AP/company_list.html:58
 msgid "English"
 msgstr "Inglés"
 
 #: supplier_management_site/settings/base.py:147
-#: templates/supplier_app/AP/company_creation.html:42
+#: templates/supplier_app/AP/company_creation.html:45
 #: templates/supplier_app/AP/company_list.html:61
 msgid "Spanish"
 msgstr "Español"
@@ -2789,7 +2789,7 @@ msgstr "Enviar"
 #: templates/invoices_app/invoices_form.html:158
 #: templates/invoices_app/invoices_form.html:160
 #: templates/registration/admin_create.html:34
-#: templates/supplier_app/AP/company_creation.html:50
+#: templates/supplier_app/AP/company_creation.html:65
 #: templates/supplier_app/edit-address-information.html:25
 #: templates/supplier_app/edit-bank-account-information.html:25
 #: templates/supplier_app/edit-contact-information.html:25
@@ -3020,12 +3020,36 @@ msgstr "Crear un nuevo grupo económico"
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/supplier_app/AP/company_creation.html:45
+#: templates/supplier_app/AP/company_creation.html:37
+msgid "Invitation"
+msgstr "Invitación"
+
+#: templates/supplier_app/AP/company_creation.html:48
 #: templates/supplier_app/AP/company_list.html:64
 msgid "Portuguese"
 msgstr "Portugués"
 
-#: templates/supplier_app/AP/company_creation.html:49
+#: templates/supplier_app/AP/company_creation.html:56
+msgid "Instructions on next steps"
+msgstr "Instrucciones en pasos siguientes"
+
+#: templates/supplier_app/AP/company_creation.html:57
+msgid ""
+"This supplier will have to accept the invitation, sign up on BriteSu, and "
+"then complete the supplier registration request. We'll notify you once it's "
+"approved so that you can create a Purchase Requisition on Workday for this "
+"supplier."
+msgstr ""
+"Este proveedor deberá aceptar la invitación, registrarse en BriteSu, y luego "
+"completar el formulario de alta de proveedor. Te notificaremos una vez "
+"que éste sea aprobado para que puedas crear una solicitud de compra "
+"en Workday."
+
+#: templates/supplier_app/AP/company_creation.html:60
+msgid "I Understand"
+msgstr "He comprendido"
+
+#: templates/supplier_app/AP/company_creation.html:64
 msgid "Create Company"
 msgstr "Crear un nuevo grupo económico"
 
@@ -3528,9 +3552,6 @@ msgstr ""
 
 #~ msgid "Details"
 #~ msgstr "Detalles"
-
-#~ msgid "Instructions on next steps,"
-#~ msgstr "Instrucciones a seguir,"
 
 #~ msgid ""
 #~ "First, Soon your contact at Eventbrite will send you a Purchase Order "

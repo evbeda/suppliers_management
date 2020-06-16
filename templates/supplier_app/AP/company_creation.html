@@ -32,20 +32,35 @@
                 </div>
                     <textarea name="description" cols="40" rows="10" required="" id="id_description" class='form-control'></textarea>
             </div>
-            <div class="form-row">
-            <input class="form-control form-control-sm col-md-5 m-1 " type="email" name="email" placeholder="Email">
-            <select class="form-control form-control-sm col-md-3 m-1" name="language" class="selectpicker" data-width="fit">
-                <option value="en" data-content="<span class='flag-icon flag-icon-us'></span> English">
-                    {% trans "English" %}
-                </option>
-                <option value="es" data-content='<span class="flag-icon flag-icon-br"></span> Español'>
-                    {% trans "Spanish" %}
-                </option>
-                <option value="pt-br"data-content='<span class="flag-icon flag-icon-br"></span> Portuguese'>
-                    {% trans "Portuguese" %}
-                </option>
-            </select>
-              </div>
+            <div class="row justify-content-center">
+                <div class="col">
+                    <h6>{% trans "Invitation" %}</h6>
+                    <div>
+                        <input class="form-control form-control-sm col-md-5 m-1 d-inline" type="email" name="email" placeholder="Email" required>
+                        <select class="form-control form-control-sm col-md-3 m-1 d-inline" name="language" class="selectpicker" data-width="fit">
+                            <option value="en" data-content="<span class='flag-icon flag-icon-us'></span> English">
+                                {% trans "English" %}
+                            </option>
+                            <option value="es" data-content='<span class="flag-icon flag-icon-br"></span> Español'>
+                                {% trans "Spanish" %}
+                            </option>
+                            <option value="pt-br"data-content='<span class="flag-icon flag-icon-br"></span> Portuguese'>
+                                {% trans "Portuguese" %}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-3 justify-content-center">
+                <h6>{% trans "Instructions on next steps" %}</h6>
+                <p>{% trans "This supplier will have to accept the invitation, sign up on BriteSu, and then complete the supplier registration request. We'll notify you once it's approved so that you can create a Purchase Requisition on Workday for this supplier." %}</p>
+                <label for="fede">
+                    <input type="checkbox" name="fede" id="fede" required> 
+                    {% trans "I Understand" %}
+                </label>
+                
+            </div>
             <input type="submit" value="{% trans 'Create Company' %}" class='btn btn-success m-2'>
             <a class="btn btn-danger" href="{% url 'company-list' %}">{% trans "Cancel" %}</a>
         </form>
