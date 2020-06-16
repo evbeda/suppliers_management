@@ -15,6 +15,12 @@
             </h1>
         </div>
     {% include 'supplier_app/AP/taxpayer_filter.html' %}
+    <div class="row p-3">
+        <label for="search">{% trans "Search: " %}</label>
+        <div class="col-sm-3">
+                    <input id="searchInput" class="form-control mx-3">
+        </div>
+    </div>
     <div class="row justify-content-center">
         <table class="table table-hover table-striped table-sm">
             <thead class="thead-eb-dark text-center">
@@ -25,7 +31,7 @@
                     <th scope="col">{% trans "Action" %}</th>
                 </tr>
             </thead>
-            <tbody class="text-center">
+            <tbody class="text-center" id="tableToFilter">
                 {% for taxpayer in taxpayer_list %}
                 <tr>
                     <td>{{taxpayer.business_name}}</td>
