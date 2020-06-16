@@ -411,6 +411,11 @@ class TestManageCompanyUser(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
 
+        self.ap_group = Group.objects.get(name="ap_administrator")
+        self.supplier_group = Group.objects.get(name="supplier")
+        self.ap_user = UserFactory(email='ap@eventbrite.com')
+        self.ap_user.groups.add(self.ap_group)
+
         self.company = CompanyFactory(
             name='Supra',
             description='Best catering worldwide'
@@ -426,6 +431,9 @@ class TestManageCompanyUser(TestCase):
             company=self.company,
             user=self.user_with_social_evb2
         )
+        self.user_with_social_evb.groups.add(self.supplier_group)
+        self.user_with_social_evb2.groups.add(self.supplier_group)
+
         self.client = Client()
         self.manage_company = 'company-manage'
         self.update_state_user = 'change-user-status'
@@ -441,6 +449,15 @@ class TestManageCompanyUser(TestCase):
 
     def test_login_page_correct(self):
         self.client.force_login(self.user_with_social_evb)
+        response = self.client.get(
+            reverse(self.manage_company),
+        )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        self.assertContains(response, 'Axel2')
+
+    def test_login_page_correct_as_ap(self):
+        self.client.force_login(self.ap_user)
         response = self.client.get(
             reverse(self.manage_company),
         )
