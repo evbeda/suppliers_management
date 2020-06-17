@@ -13,7 +13,8 @@ email_notifications = {
             'upper_text': _(
                 'Welcome to BriteSu! Please click on the following link to complete the supplier registration form before doing business with Eventbrite..'),
             'second_text': _(
-                'IMPORTANT:  During the registration process you’ll be required to enter the Eventbrite entity your company will bill. Please remember to select the following entity during your registration: {}'),
+                'IMPORTANT:  During the registration process you’ll be required to enter the Eventbrite entity your company will bill. Please remember to select the following entity during your registration:'),
+            'third_text': _('{}'),
             'lower_text': _('Thank you!'),
             'disclaimer': _(
                 '"Please do not reply to this email. If you have any questions, please click on the “Join” button, register, and then make a comment in the section related to your question."'),
