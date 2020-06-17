@@ -128,7 +128,10 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         return company
 
     def get_success_url(self):
-        return reverse('company-list')
+        if self.request.user.is_AP:
+            return reverse('company-list-deprecated')
+        else:
+            return reverse('company-list')
 
     def get_failure_url(self):
         messages.error(
