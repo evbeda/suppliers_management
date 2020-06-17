@@ -18,6 +18,7 @@ from django.views.generic.list import ListView
 from django.utils import translation
 from django_filters.views import FilterView
 
+from invoices_app import EXPORT_TO_XLS_FULL, EXPORT_TO_XLS_TAXPAYER
 from supplier_app import DATE_FORMAT
 from supplier_app.change_status_strategy import (
     run_strategy_taxpayer_status,
@@ -92,6 +93,7 @@ from users_app import (
 from users_app.models import User
 from utils import reports
 from utils.exceptions import CouldNotSendEmailError
+from utils.reports import ExcelReportInputParams, generate_xls, generate_response_xls
 from utils.send_email import company_invitation_notification
 from utils.htmltopdf import render_to_pdf
 from django.contrib.auth.decorators import permission_required as permission_required_decorator
@@ -659,6 +661,7 @@ def change_taxpayer_status(request, taxpayer_id):
             }
         ))
 
+
 class GeneratePdf(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin, TemplateView):
     template_name = 'supplier_app/html-to-pdf-page.html'
     permission_required = (CAN_VIEW_TAXPAYER_PERM)
@@ -709,3 +712,16 @@ class BuyerTaxpayersList(UserLoginPermissionRequiredMixin, ListView):
     def get_queryset(self):
         queryset = TaxPayerEBEntity.objects.all()
         return queryset
+
+
+@permission_required_decorator(CAN_VIEW_TAXPAYER_PERM)
+def export_to_xlsx_taxpayer(request):
+    queryset = TaxPayerFilter(request.GET, queryset=TaxPayer.objects.all()).qs
+    params = ExcelReportInputParams(
+        model=queryset,
+        tab_name='Taxpayer',
+        headers_attrs=EXPORT_TO_XLS_TAXPAYER,
+    )
+    xls_file = generate_xls(params)
+
+    return generate_response_xls(xls_file, 'Taxpayer')
