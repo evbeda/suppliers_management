@@ -26,6 +26,7 @@
             <thead class="thead-eb-dark text-center">
                 <tr>
                     <th scope="col">{% trans "Business name"%}</th>
+                    <th scope="col">{% trans "Entity to bill"%}</th>
                     <th scope="col">{% trans "Taxpayer Identification Number"%}</th>
                     <th scope="col">{% trans "Status"%}</th>
                     <th scope="col">{% trans "Action" %}</th>
@@ -35,6 +36,11 @@
                 {% for taxpayer in taxpayer_list %}
                 <tr>
                     <td>{{taxpayer.business_name}}</td>
+                    <td>
+                        {% for eb_entity in taxpayer.eb_entities%}
+                        {{eb_entity}}
+                        {% endfor%}
+                    </td>
                     <td>{{taxpayer.taxpayer_identifier}}</td>
                     <td>
                         <span class="{{taxpayer.get_badge}}">
