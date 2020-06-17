@@ -31,12 +31,11 @@
       <p class="text-center py-4 h3">{{taxpayer.business_name}} > {% trans "Upload Invoice" %}</p>
       {% endif %}
     </div>
+  </div>
       <form id="invoiceForm" method="post" class="form-row" enctype="multipart/form-data">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-10 align-self-center">
-          <div class="row">
-            <div class="form-group col-md-6">
+        <div class="col">
+          <div class="d-flex justify-content-center">
+            <div class="form-group col-4">
               {{ form.invoice_number.label_tag }}
               {{ form.invoice_number }}
               <small class="text-danger">
@@ -46,7 +45,7 @@
               <p class="help">{{ form.invoice_number.help_text|safe }}</p>
               {% endif %}
             </div>
-            <div class="form-group col-md-5">
+            <div class="form-group col-4">
               {{ form.invoice_date.label_tag }} {{ form.invoice_date }}
               <small class="text-danger">
                 {{ form.invoice_date.errors }}
@@ -56,8 +55,8 @@
               {% endif %}
             </div>
           </div>
-          <div class="row">
-            <div class="form-group col-md-6">
+          <div class="d-flex justify-content-center">
+            <div class="form-group col-5">
               {{ form.po_number.label_tag }}
               <a data-toggle="tooltip" data-placement="right" title="{% trans 'Get the Purchase Order Number for your invoice from your contact/buyer at Eventbrite' %}">
                 <i class="fas fa-info-circle"></i>
@@ -67,7 +66,7 @@
                 {{ form.po_number.errors }}
               </small>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-3">
               <label for="eb-entity">
                 {% trans "Eventbrite entity" %}
                 <a data-toggle="tooltip" data-placement="right" title="{% trans 'Eventbrite company to which you bill' %}">
@@ -81,7 +80,7 @@
               </select>
             </div>
             {% if user.is_AP%}
-            <div class="form-group col-md-5">
+            <div class="form-group col">
                 {{ form.workday_id.label_tag }} {{ form.workday_id }}
                 <small class="text-danger">
                   {{ form.workday_id.errors }}
@@ -92,8 +91,8 @@
             </div>
             {% endif %}
           </div>
-          <div class="row">
-            <div class="form-group col-md-2">
+          <div class="d-flex justify-content-center">
+            <div class="form-group col-4">
               {{ form.currency.label_tag }} {{ form.currency }}
               <small class="text-danger">
                 {{ form.currency.errors }}
@@ -102,7 +101,7 @@
               <p class="help">{{ form.currency.help_text|safe }}</p>
               {% endif %}
             </div>
-            <div class="form-group col-md-3">
+            <!--<div class="form-group col-md-3">
                 {{ form.net_amount.label_tag }}
               {{ form.net_amount }}
               <small class="text-danger">
@@ -120,8 +119,8 @@
               {% if form.vat.help_text %}
               <p class="help">{{ form.vat.help_text|safe }}</p>
               {% endif %}
-            </div>
-            <div class="form-group col-md-3">
+            </div> -->
+            <div class="form-group col-4">
               {{ form.total_amount.label_tag }} {{ form.total_amount }}
               <small class="text-danger">
                 {{ form.total_amount.errors }}
