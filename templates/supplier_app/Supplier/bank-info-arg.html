@@ -26,7 +26,12 @@
 
     <div class="row">
         <div class="col">
-            <div class="text-left arg arg-bank">{{ bank_account_form.bank_beneficiary.label_tag }}</div>
+            <div class="text-left arg arg-bank">{{ bank_account_form.bank_beneficiary.label_tag }}
+                <a data-toggle="tooltip" data-placement="right"
+                   title="{% trans 'Beneficiary Name must match Business Name information' %}">
+                    <i class="fas fa-info-circle tooltip-orange"></i>
+                </a>
+            </div>
             <div class="div-input arg arg-bank">{{ bank_account_form.bank_beneficiary }}</div>
         </div>
         <div class="col">
