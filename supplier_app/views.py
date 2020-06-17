@@ -410,7 +410,8 @@ class EditTaxpayerView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMixin
         
         form.fields['afip_registration_file'].initial = taxpayer.afip_registration_file
         form.fields['witholding_taxes_file'].initial = taxpayer.witholding_taxes_file
-        form.fields['eb_entities'].initial = taxpayer.eb_entities
+        # Todo: migrate relation to OneToOne
+        form.fields['eb_entities'].initial = taxpayer.eb_entities.pop().id
         return context
 
     def handle_no_permission(self):

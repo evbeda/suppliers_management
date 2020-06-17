@@ -1002,6 +1002,7 @@ class TestEditTaxPayerInfo(TestCase):
             rmtree('file')
 
     def test_get_success_url_should_redirect_to_details_view_when_click_in_update_button(self):
+        TaxPayerEBEntityFactory(taxpayer=self.taxpayer)
         response = self.client.get(
             reverse(
                 self.taxpayer_edit_url,
@@ -1179,7 +1180,7 @@ class TestEditTaxPayerInfo(TestCase):
             status_approved
         )
 
-    def test_taxpayer_edit_view_should_render_eb_entities_related(self):
+    def test_taxpayer_edit_view_should_render_last_eb_entities(self):
         taxpayer = TaxPayerArgentinaFactory(
             company=self.taxpayer.company,
         )
@@ -1194,7 +1195,7 @@ class TestEditTaxPayerInfo(TestCase):
             ),
         )
         self.assertEqual(
-            [taxpayer_eb_entity_1.eb_entity, taxpayer_eb_entity_2.eb_entity],
+            taxpayer_eb_entity_2.eb_entity.id,
             response.context_data['form'].fields['eb_entities'].initial)
 
     def test_form_valid_method_should_update_eb_entities(self):
@@ -1232,6 +1233,7 @@ class TestEditTaxPayerInfo(TestCase):
         self.taxpayer.iibb_no_retention_taxes_file = self.file_mock
         self.taxpayer.iibb_registration_file = self.file_mock
         self.taxpayer.save()
+        TaxPayerEBEntityFactory(taxpayer=self.taxpayer)
 
         response = self.client.get(
             reverse(

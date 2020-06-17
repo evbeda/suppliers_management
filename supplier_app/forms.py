@@ -152,7 +152,6 @@ class TaxPayerArgentinaBaseForm(ModelForm):
             widget=forms.RadioSelect(attrs={"class": "form-check-input"}),
             choices=get_eb_entities(),
             label=_("Eventbrite entities to bill"),
-            initial=1,
 
         )
 
