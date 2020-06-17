@@ -41,7 +41,6 @@ INVOICE_SHOW_ONLY_NEW_MESSAGES = [
 INVOICE_FILE_FIELDS = ['invoice_file', 'po_file']
 
 EXPORT_TO_XLS_FULL = {
-    'ID': 'pk',
     'Invoice Number': 'invoice_number',
     'Invoice Date': 'invoice_date',
     'Status': 'get_status_display',
@@ -52,9 +51,18 @@ EXPORT_TO_XLS_FULL = {
     'Net Amount': 'net_amount',
     'VAT': 'vat',
     'Total Amount': 'total_amount',
-    'Workday ID': 'workday_id'
-}
+    'Workday ID': 'workday_id',
+    'PO Number': 'po_number'
 
+}
+EXPORT_TO_XLS_TAXPAYER = {
+    'Taxpayer ID': 'pk',
+    'Business name': 'business_name',
+    'EB Entity to bill': 'get_eb_entity',
+    'Submission Date': 'taxpayer_date',
+    'Status': 'taxpayer_state',
+    'Workday Id': 'workday_id',
+}
 INVOICE_DATE_FORMAT = _("MM/DD/YYYY")
 ENGLISH_LANGUAGE_CODE = _('en')
 

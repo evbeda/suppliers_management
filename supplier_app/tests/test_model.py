@@ -63,6 +63,12 @@ class TestTaxpayerModel(TestCase):
         self.assertEqual('Eventbrite', str(taxpayer))
         self.assertEqual(TaxPayer.objects.last(), taxpayer)
 
+    def test_get_eb_entity(self):
+        self.taxpayer_eb_entity_2 = TaxPayerEBEntityFactory(
+            taxpayer=self.taxpayer_without_eb_entities
+        )
+        self.assertEqual(self.taxpayer_without_eb_entities.get_eb_entity, self.taxpayer_eb_entity_2.eb_entity.eb_name)
+
     def test_taxpayer_creation_first_time_should_have_PENDING_status(self):
         self.assertEqual(self.taxpayer.taxpayer_state, "PENDING")
 
