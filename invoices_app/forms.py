@@ -27,7 +27,7 @@ class InvoiceForm(forms.ModelForm):
         )
         widgets = {
             'currency': forms.Select(attrs={'class': 'custom-select'}),
-            'po_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
+            'po_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
             'vat': forms.NumberInput(
                 attrs={
                     'id': 'vat',
