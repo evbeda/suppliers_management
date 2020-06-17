@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 13:55+0000\n"
+"POT-Creation-Date: 2020-06-17 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2647,9 +2647,9 @@ msgstr "Certificado de conta bancária"
 
 #: supplier_app/models.py:476 supplier_app/models.py:525
 #, fuzzy
-#| msgid "Creation date"
-msgid "Transaction type"
-msgstr "Data de criação"
+#| msgid "Payment type"
+msgid "Payment method"
+msgstr "Tipo de pagamento"
 
 #: supplier_app/models.py:480 supplier_app/models.py:529
 #, fuzzy
@@ -3666,6 +3666,11 @@ msgid ""
 "\n"
 "Change reason:\n"
 msgstr "Alterado: \n"
+
+#, fuzzy
+#~| msgid "Creation date"
+#~ msgid "Transaction type"
+#~ msgstr "Data de criação"
 
 #~ msgid "Taxpayers"
 #~ msgstr "Contribuintes"
