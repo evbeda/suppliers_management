@@ -9,16 +9,20 @@
 {% include 'navbar.html' %}
 <div class="container h-100 w-100 mt-3">
     {% include 'messages_notification.html'%}
-        <div class="row justify-content-center">
-            <h1>
-                {% trans "Organizations" %}
-            </h1>
-        </div>
+    <div class="row justify-content-center">
+        <h1>
+            {% trans "Organizations" %}
+        </h1>
+    </div>
     {% include 'supplier_app/AP/taxpayer_filter.html' %}
     <div class="row p-3">
         <label for="search">{% trans "Search: " %}</label>
         <div class="col-sm-3">
-                    <input id="searchInput" class="form-control mx-3">
+            <input id="searchInput" class="form-control mx-3">
+        </div>
+        <div class="col">
+            <a class='float-right text-success' href="{% url 'taxpayer-to-xls' %}?{{ filter_to_xls }}"><i
+                    class="far fa-2x fa-file-excel"></i></a>
         </div>
     </div>
     <div class="row justify-content-center">

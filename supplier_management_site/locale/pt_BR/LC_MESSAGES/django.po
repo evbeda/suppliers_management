@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 15:30+0000\n"
+"POT-Creation-Date: 2020-06-17 17:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2474,7 +2474,7 @@ msgstr ""
 msgid "Eventbrite entities to bill"
 msgstr "Nome da entidade da Eventbrite"
 
-#: supplier_app/forms.py:163
+#: supplier_app/forms.py:162
 #, fuzzy
 #| msgid "Business name"
 msgid "Business Name"
@@ -3311,7 +3311,11 @@ msgid ""
 "will be later verified."
 msgstr ""
 
-#: templates/supplier_app/Supplier/bank-info-arg.html:44
+#: templates/supplier_app/Supplier/bank-info-arg.html:31
+msgid "Beneficiary Name must match Business Name information"
+msgstr ""
+
+#: templates/supplier_app/Supplier/bank-info-arg.html:49
 #: templates/supplier_app/Supplier/bank-info-usa.html:3
 #: templates/supplier_app/Supplier/taxpayer-creation.html:117
 #, fuzzy
@@ -3319,7 +3323,7 @@ msgstr ""
 msgid "Previous"
 msgstr "anterior"
 
-#: templates/supplier_app/Supplier/bank-info-arg.html:45
+#: templates/supplier_app/Supplier/bank-info-arg.html:50
 #: templates/supplier_app/Supplier/bank-info-usa.html:4
 #: templates/supplier_app/Supplier/taxpayer-creation.html:107
 msgid "Next"

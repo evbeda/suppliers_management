@@ -152,6 +152,11 @@ class TaxPayer(models.Model):
         return [txe.eb_entity for txe in self.taxpayerebentity_set.filter(status=CURRENT_STATUS)]
 
     @property
+    def get_eb_entity(self):
+        for txe in self.taxpayerebentity_set.filter(status=CURRENT_STATUS):
+            return txe.eb_entity.eb_name
+
+    @property
     def get_badge(self):
         return TAXPAYER_STATUS[self.taxpayer_state.title()]['css-class']
 
