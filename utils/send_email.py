@@ -45,7 +45,8 @@ def send_email_notification(subject, message, recipient_list):
 def company_invitation_notification(company, token, email, language, eb_entity_name):
     subject = _(email_notifications['company_invitation']['subject'])
     upper_text = _(email_notifications['company_invitation']['body']['upper_text'])
-    second_text = _(email_notifications['company_invitation']['body']['second_text'].format(eb_entity_name))
+    second_text = _(email_notifications['company_invitation']['body']['second_text'])
+    third_text = _(email_notifications['company_invitation']['body']['third_text'].format(eb_entity_name))
     lower_text = _(email_notifications['company_invitation']['body']['lower_text'])
     disclaimer = _(email_notifications['company_invitation']['body']['disclaimer'])
     btn_text = _(email_notifications['company_invitation']['body']['btn_text'])
@@ -58,6 +59,7 @@ def company_invitation_notification(company, token, email, language, eb_entity_n
         btn_text,
         '{}/{}'.format(btn_url, token),
         second_text,
+        third_text,
     )
     send_email_notification.apply_async([subject, message, email])
 
@@ -124,6 +126,7 @@ def build_mail_html(
         btn_text=GO_TO_BRITESU,
         btn_url='{}{}'.format(settings.BRITESU_BASE_URL, SUPPLIER_HOME_URL),
         second_text='',
+        third_text='',
 ):
     html_message = render_to_string(
         'mail_template.html',
@@ -135,6 +138,7 @@ def build_mail_html(
             'btn_text': btn_text,
             'btn_url': btn_url,
             'second_text': second_text,
+            'third_text': third_text,
         }
     )
 

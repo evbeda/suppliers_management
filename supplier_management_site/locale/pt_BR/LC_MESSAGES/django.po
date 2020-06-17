@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-16 20:29+0000\n"
+"POT-Creation-Date: 2020-06-17 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2407,7 +2407,7 @@ msgstr "A fatura {} já existe"
 #: templates/invoices_app/invoice-list.html:59
 #: templates/invoices_app/invoice_detail.html:45
 #: templates/invoices_app/supplier-invoice-list.html:36
-#: templates/supplier_app/ap-taxpayers.html:24
+#: templates/supplier_app/ap-taxpayers.html:30
 #: templates/supplier_app/supplier-home.html:31
 #: templates/supplier_app/taxpayer-details.html:35
 msgid "Status"
@@ -2644,64 +2644,68 @@ msgstr ""
 msgid ""
 "IMPORTANT:  During the registration process you’ll be required to enter the "
 "Eventbrite entity your company will bill. Please remember to select the "
-"following entity during your registration: {}"
+"following entity during your registration:"
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:17
-#: supplier_app/constants/email_notifications.py:28
-#: supplier_app/constants/email_notifications.py:38
+msgid "{}"
+msgstr ""
+
+#: supplier_app/constants/email_notifications.py:18
+#: supplier_app/constants/email_notifications.py:29
+#: supplier_app/constants/email_notifications.py:39
 #, fuzzy
 #| msgid "Thank you!"
 msgid "Thank you!"
 msgstr "Obrigado!"
 
-#: supplier_app/constants/email_notifications.py:19
+#: supplier_app/constants/email_notifications.py:20
 msgid ""
 "\"Please do not reply to this email. If you have any questions, please click "
 "on the “Join” button, register, and then make a comment in the section "
 "related to your question.\""
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:20
+#: supplier_app/constants/email_notifications.py:21
 msgid "Join"
 msgstr "Junte-se"
 
-#: supplier_app/constants/email_notifications.py:25
+#: supplier_app/constants/email_notifications.py:26
 #, fuzzy
 #| msgid "Your taxpayer has been approved"
 msgid "Your supplier registration request has been approved"
 msgstr "Seu contribuinte foi aprovado"
 
-#: supplier_app/constants/email_notifications.py:27
+#: supplier_app/constants/email_notifications.py:28
 msgid ""
 "Soon your contact at Eventbrite will send you a Purchase Order Number. Once "
 "you receive it, you'll be able to upload your invoice on BriteSu"
-msgstr ""
-
-#: supplier_app/constants/email_notifications.py:29
-#: supplier_app/constants/email_notifications.py:39
-#: supplier_app/constants/email_notifications.py:49
-#: supplier_app/constants/email_notifications.py:60
-msgid ""
-"\"Please do not reply to this email. If you have any questions, please login "
-"into Britesu and make a comment in the section related to your question.\""
 msgstr ""
 
 #: supplier_app/constants/email_notifications.py:30
 #: supplier_app/constants/email_notifications.py:40
 #: supplier_app/constants/email_notifications.py:50
 #: supplier_app/constants/email_notifications.py:61
-#: supplier_app/constants/email_notifications.py:71 utils/__init__.py:3
+msgid ""
+"\"Please do not reply to this email. If you have any questions, please login "
+"into Britesu and make a comment in the section related to your question.\""
+msgstr ""
+
+#: supplier_app/constants/email_notifications.py:31
+#: supplier_app/constants/email_notifications.py:41
+#: supplier_app/constants/email_notifications.py:51
+#: supplier_app/constants/email_notifications.py:62
+#: supplier_app/constants/email_notifications.py:72 utils/__init__.py:3
 msgid "Go to BriteSu"
 msgstr "Vá para BriteSu"
 
-#: supplier_app/constants/email_notifications.py:35
+#: supplier_app/constants/email_notifications.py:36
 #, fuzzy
 #| msgid "Your taxpayer has some pending modifications"
 msgid "Your supplier registration request has some pending modifications"
 msgstr "Seu contribuinte tem algumas modificações pendentes"
 
-#: supplier_app/constants/email_notifications.py:37
+#: supplier_app/constants/email_notifications.py:38
 #, fuzzy
 #| msgid ""
 #| "Please visit your taxpayer and read comments.\n"
@@ -2715,11 +2719,11 @@ msgstr ""
 " Uma vez que as alterações forem aprovadas pela eventbrite, \n"
 " enviaremos um e-mail. \n"
 
-#: supplier_app/constants/email_notifications.py:45
+#: supplier_app/constants/email_notifications.py:46
 msgid "Your taxpayer has been rejected"
 msgstr "Seu contribuinte foi rejeitado"
 
-#: supplier_app/constants/email_notifications.py:47
+#: supplier_app/constants/email_notifications.py:48
 #, fuzzy
 #| msgid ""
 #| "We are afraid that the taxpayer you were trying to submit is invalid\n"
@@ -2732,41 +2736,41 @@ msgstr ""
 "inválido \n"
 " Entre em contato com o funcionário da eventbrite que o contratou. \n"
 
-#: supplier_app/constants/email_notifications.py:48
+#: supplier_app/constants/email_notifications.py:49
 msgid "Please contact the Eventbrite employee that hired you, Thank you!"
 msgstr ""
 "Entre em contato com o funcionário da eventbrite que o contratou, Obrigado!"
 
-#: supplier_app/constants/email_notifications.py:55
+#: supplier_app/constants/email_notifications.py:56
 #, fuzzy
 #| msgid "Your taxpayer has been approved"
 msgid "Your registration request as an Eventbrite Supplier is now in progress"
 msgstr "Seu contribuinte foi aprovado"
 
-#: supplier_app/constants/email_notifications.py:57
+#: supplier_app/constants/email_notifications.py:58
 #, fuzzy
 #| msgid "Your taxpayer has been approved"
 msgid ""
 "Your supplier registration request for Eventbrite is now being processed."
 msgstr "Seu contribuinte foi aprovado"
 
-#: supplier_app/constants/email_notifications.py:58
+#: supplier_app/constants/email_notifications.py:59
 msgid ""
 "You don't need to do anything else, we will contact with you soon, Thanks!"
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:66
+#: supplier_app/constants/email_notifications.py:67
 msgid "Now you can create a Purchase Requisition for this supplier on Workday."
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:68
+#: supplier_app/constants/email_notifications.py:69
 msgid ""
 "Now you can create a Purchase Requisition for this supplier from Workday. "
 "Once the purchase requisition is approved, you will receive a Purchase Order "
 "Number on Workday."
 msgstr ""
 
-#: supplier_app/constants/email_notifications.py:69
+#: supplier_app/constants/email_notifications.py:70
 msgid ""
 "Remember to inform the supplier on the Purchase Order Number as soon as you "
 "get it so that the supplier can include it as a reference within the invoice."
@@ -2885,7 +2889,7 @@ msgstr "Nome"
 
 #: supplier_app/models.py:127
 #: templates/supplier_app/AP/taxpayer-history-list.html:17
-#: templates/supplier_app/ap-taxpayers.html:22
+#: templates/supplier_app/ap-taxpayers.html:28
 #: templates/supplier_app/html-to-pdf-page.html:133
 #: templates/supplier_app/supplier-home.html:28
 #: templates/supplier_app/taxpayer-details.html:50
@@ -3635,6 +3639,7 @@ msgid "Bank Account Number"
 msgstr "Número da conta de banco"
 
 #: templates/supplier_app/Buyer/taxpayer_list.html:22
+#: templates/supplier_app/ap-taxpayers.html:19
 #, fuzzy
 #| msgid "Search by name"
 msgid "Search: "
@@ -3756,17 +3761,17 @@ msgstr "Informação do endereço"
 msgid "Contact Info"
 msgstr ""
 
-#: templates/supplier_app/ap-taxpayers.html:23
+#: templates/supplier_app/ap-taxpayers.html:29
 #: templates/supplier_app/html-to-pdf-page.html:136
 #: templates/supplier_app/taxpayer-details.html:53
 msgid "Taxpayer Identification Number"
 msgstr "Número de Identificação Fiscal"
 
-#: templates/supplier_app/ap-taxpayers.html:25
+#: templates/supplier_app/ap-taxpayers.html:31
 msgid "Action"
 msgstr "Açao"
 
-#: templates/supplier_app/ap-taxpayers.html:40
+#: templates/supplier_app/ap-taxpayers.html:46
 msgid "More details"
 msgstr "Mais detalhes"
 
