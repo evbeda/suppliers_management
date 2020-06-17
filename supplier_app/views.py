@@ -120,15 +120,19 @@ class CompanyCreatorView(UserLoginPermissionRequiredMixin, CreateView):
         InvitingBuyer.objects.create(company=company, inviting_buyer=self.request.user)
         EBEntityCompany.objects.create(company=company, eb_entity=EBEntity.objects.get(pk=form.data['eb_entity']))
         company_invite(self.request, company)
-        return HttpResponseRedirect(self.get_success_url())
+        
+        return HttpResponseRedirect(self.get_success_url_ap()) if self.request.user.is_AP else HttpResponseRedirect(self.get_success_url_buyer())
 
     def save_company(self, forms):
         company = forms.save(commit=False)
         company.save()
         return company
 
-    def get_success_url(self):
+    def get_success_url_buyer(self):
         return reverse('company-list')
+
+    def get_success_url_ap(self):
+        return reverse('company-list-deprecated')
 
     def get_failure_url(self):
         messages.error(

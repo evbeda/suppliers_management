@@ -1884,7 +1884,7 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0],
-            (reverse('company-list'), HTTPStatus.FOUND)
+            (reverse('company-list-deprecated'), HTTPStatus.FOUND)
         )
 
     def test_valid_redirection_after_company_creation_as_buyer(self):
@@ -1893,7 +1893,7 @@ class TestCompanyCreateView(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(
             response.redirect_chain[0],
-            (reverse('company-list'), HTTPStatus.FOUND)
+            (reverse('company-list-deprecated'), HTTPStatus.FOUND)
         )
 
 
