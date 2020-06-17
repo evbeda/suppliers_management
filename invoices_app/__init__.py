@@ -54,7 +54,14 @@ EXPORT_TO_XLS_FULL = {
     'Total Amount': 'total_amount',
     'Workday ID': 'workday_id'
 }
-
+EXPORT_TO_XLS_TAXPAYER = {
+    'Taxpayer ID': 'pk',
+    'Business name': 'business_name',
+    'EB Entity to bill': 'get_eb_entity',
+    'Submission Date': 'taxpayer_date',
+    'Status': 'taxpayer_state',
+    'Workday Id': 'workday_id',
+}
 INVOICE_DATE_FORMAT = _("MM/DD/YYYY")
 ENGLISH_LANGUAGE_CODE = _('en')
 

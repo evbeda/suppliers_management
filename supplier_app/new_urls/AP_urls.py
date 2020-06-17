@@ -10,7 +10,7 @@ from supplier_app.views import (
     BuyerTaxpayersList,
     CompanyManage,
     change_user_status,
-)
+    export_to_xlsx_taxpayer)
 
 from users_app.views import (
     AdminList,
@@ -36,6 +36,7 @@ taxpayer_pattern = [
 admins_pattern = [
     url(r'^$', AdminList.as_view(), name='manage-admins'),
     url(r'^create/$', CreateAdmin.as_view(), name='create-admin'),
+    url(r'^xls_taxpayer/', export_to_xlsx_taxpayer, name='taxpayer-to-xls'),
     url(r'^(?P<pk>[0-9]+)/change-ap-permission$', change_ap_permission, name='change-ap-permission'),
 ]
 

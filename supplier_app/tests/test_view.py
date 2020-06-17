@@ -726,6 +726,12 @@ class TestApTaxpayers(TestCase):
         self.assertEqual('supplier_app/supplier-home.html', response.template_name[0])
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
+    def test_invoice_export_to_xls(self):
+        self.client.force_login(self.user_ap)
+        response = self.client.get(
+            reverse('taxpayer-to-xls'),
+        )
+        self.assertTrue(response._headers['content-disposition'][1].endswith('.xlsx'))
 
 class TestSupplierDetailsView(TestCase):
 
