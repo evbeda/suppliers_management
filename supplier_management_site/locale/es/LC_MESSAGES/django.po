@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-17 13:55+0000\n"
+"POT-Creation-Date: 2020-06-17 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2549,8 +2549,8 @@ msgid "Bank account certificate"
 msgstr "Constancia de CBU"
 
 #: supplier_app/models.py:476 supplier_app/models.py:525
-msgid "Transaction type"
-msgstr "Transacción"
+msgid "Payment method"
+msgstr "Medio de Pago"
 
 #: supplier_app/models.py:480 supplier_app/models.py:529
 msgid "Account type"
@@ -2687,7 +2687,7 @@ msgstr "Detalles:"
 
 #: templates/invoices_app/invoice_detail.html:78
 msgid "Taxpayer Identification Number:"
-msgstr "CUIT"
+msgstr "TAX ID"
 
 #: templates/invoices_app/invoice_detail.html:79
 msgid "Payment Option:"
@@ -3088,7 +3088,7 @@ msgstr "Historial del proveedor"
 #: templates/supplier_app/AP/taxpayer-history-list.html:18
 #: templates/supplier_app/supplier-home.html:30
 msgid "Taxpayer identification number"
-msgstr "CUIT"
+msgstr "TAX ID"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:19
 #: templates/supplier_app/html-to-pdf-page.html:151
@@ -3100,7 +3100,7 @@ msgstr "Tipo de pago"
 #: templates/supplier_app/html-to-pdf-page.html:152
 #: templates/supplier_app/taxpayer-details.html:80
 msgid "Payment Term"
-msgstr "Período de pago"
+msgstr "Plazo de pago"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:21
 #: templates/supplier_app/taxpayer-details.html:439
@@ -3176,9 +3176,7 @@ msgstr "Ingrese los datos de su cuenta bancaria"
 msgid ""
 "The payment term agreed with your contact/buyer at Eventbrite. This value "
 "will be later verified."
-msgstr ""
-"Plazo acordado con tu contacto de Eventbrite. "
-" Sujeto a verificación"
+msgstr "Plazo acordado con tu contacto de Eventbrite.  Sujeto a verificación"
 
 #: templates/supplier_app/Supplier/bank-info-arg.html:44
 #: templates/supplier_app/Supplier/bank-info-usa.html:3
@@ -3233,7 +3231,7 @@ msgstr "Entidad de Eventbrite a Facturar"
 #: templates/supplier_app/html-to-pdf-page.html:136
 #: templates/supplier_app/taxpayer-details.html:53
 msgid "Taxpayer Identification Number"
-msgstr "CUIT"
+msgstr "TAX ID"
 
 #: templates/supplier_app/ap-taxpayers.html:32
 msgid "Action"
@@ -3488,6 +3486,9 @@ msgstr ""
 "\n"
 "Motivo de Cambio: \n"
 
+#~ msgid "Transaction type"
+#~ msgstr "Transacción"
+
 #~ msgid "Taxpayers"
 #~ msgstr "Entidades fiscales"
 
@@ -3503,10 +3504,10 @@ msgstr ""
 #~ msgstr "Información de la entidad fiscal"
 
 #~ msgid "Organization Identification Number"
-#~ msgstr "CUIT"
+#~ msgstr "TAX ID"
 
 #~ msgid "Organization identification number"
-#~ msgstr "CUIT"
+#~ msgstr "TAX ID"
 
 #~ msgid "Organization condition"
 #~ msgstr "Condición Impositiva"

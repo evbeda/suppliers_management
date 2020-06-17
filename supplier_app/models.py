@@ -473,7 +473,7 @@ class BankAccount(models.Model):
     )
     bank_transaction_type = models.IntegerField(
         choices=get_transaction_type_info_choices(),
-        verbose_name=_('Transaction type')
+        verbose_name=_('Payment method')
     )
     bank_account_type = models.IntegerField(
         choices=get_account_type_info_choices(),
@@ -522,7 +522,7 @@ class BankAccountUnitedStates(models.Model):
     )
     bank_transaction_type = models.IntegerField(
         choices=get_transaction_type_usa_info_choices(),
-        verbose_name=_('Transaction type')
+        verbose_name=_('Payment method')
     )
     bank_account_type = models.IntegerField(
         choices=get_account_type_info_usa_choices(),
