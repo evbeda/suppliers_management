@@ -368,7 +368,7 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
             if taxpayer.new_comment_from_supplier is True:
                 taxpayer.new_comment_from_supplier = False
                 taxpayer.save()
-        elif self.request.user.is_supplier:
+        if self.request.user.is_supplier:
             if taxpayer.new_comment_from_ap is True:
                 taxpayer.new_comment_from_ap = False
                 taxpayer.save()

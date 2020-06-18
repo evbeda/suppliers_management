@@ -89,6 +89,8 @@ class TaxPayerFactory(factory.django.DjangoModelFactory):
     taxpayer_state = "PENDING"
     company = factory.SubFactory(CompanyFactory)
     country = "AR"
+    new_comment_from_supplier = True
+    new_comment_from_ap = True
 
 
 class TaxPayerEBEntityFactory(factory.django.DjangoModelFactory):
