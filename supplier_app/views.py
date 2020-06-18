@@ -158,7 +158,9 @@ class CompanyManage(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         for u in self.object_list:
-            u.company = CompanyUserPermission.objects.filter(user=u).first().company.name
+            queryset = CompanyUserPermission.objects.filter(user=u).first()
+            if queryset is not None:
+                u.company = queryset.company.name
         return context
 
 
