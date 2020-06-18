@@ -3088,7 +3088,7 @@ msgstr "Historial del proveedor"
 #: templates/supplier_app/AP/taxpayer-history-list.html:18
 #: templates/supplier_app/supplier-home.html:30
 msgid "Taxpayer identification number"
-msgstr "TAX ID"
+msgstr "CUIT"
 
 #: templates/supplier_app/AP/taxpayer-history-list.html:19
 #: templates/supplier_app/html-to-pdf-page.html:151
@@ -3508,7 +3508,7 @@ msgstr ""
 #~ msgstr "Información de la entidad fiscal"
 
 #~ msgid "Organization Identification Number"
-#~ msgstr "TAX ID"
+#~ msgstr "CUIT"
 
 #~ msgid "Organization identification number"
 #~ msgstr "TAX ID"
