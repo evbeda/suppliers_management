@@ -3307,7 +3307,7 @@ msgstr "Entidad de Eventbrite"
 
 #: templates/supplier_app/html-to-pdf-page.html:81
 msgid "Address"
-msgstr "Domicilio"
+msgstr "Dirección"
 
 #: templates/supplier_app/html-to-pdf-page.html:95
 msgid "Name and Last name"
@@ -3320,7 +3320,7 @@ msgstr "Información Bancaria"
 #: templates/supplier_app/html-to-pdf-page.html:106
 #: templates/supplier_app/taxpayer-details.html:242
 msgid "Bank code"
-msgstr "Código Bancario"
+msgstr "Código bancario"
 
 #: templates/supplier_app/html-to-pdf-page.html:109
 #: templates/supplier_app/taxpayer-details.html:221
@@ -3335,11 +3335,11 @@ msgstr "CBU"
 #: templates/supplier_app/html-to-pdf-page.html:111
 #: templates/supplier_app/taxpayer-details.html:235
 msgid "Taxpayer condition"
-msgstr "Condición Impositiva"
+msgstr "Condición impositiva"
 
 #: templates/supplier_app/html-to-pdf-page.html:115
 msgid "Administrative Process"
-msgstr "Proceso Administrativa"
+msgstr "Proceso Administrativo"
 
 #: templates/supplier_app/html-to-pdf-page.html:118
 msgid "Invited by"
@@ -3347,7 +3347,7 @@ msgstr "Invitado por"
 
 #: templates/supplier_app/html-to-pdf-page.html:119
 msgid "Invitation date"
-msgstr "Fecha de Invitación"
+msgstr "Fecha de invitación"
 
 #: templates/supplier_app/html-to-pdf-page.html:121
 msgid "Supplier user"
@@ -3364,7 +3364,7 @@ msgstr "Todavia no fue Aprobado"
 
 #: templates/supplier_app/html-to-pdf-page.html:130
 msgid "Approved date"
-msgstr "Fecha de Aprobación"
+msgstr "Fecha de aprobación"
 
 #: templates/supplier_app/supplier-home.html:18
 msgid "Create a new organization"
@@ -3496,7 +3496,7 @@ msgstr ""
 "Motivo de Cambio: \n"
 
 #~ msgid "Payment Method"
-#~ msgstr "Medio de Pago"
+#~ msgstr "Medio de pago"
 
 #~ msgid "Approved by: "
 #~ msgstr "Aprobado"
@@ -3623,7 +3623,7 @@ msgstr ""
 #~ msgstr "Información de la entidad fiscal"
 
 #~ msgid "Address info"
-#~ msgstr "Domicilio"
+#~ msgstr "Dirección"
 
 #~ msgid "Create taxpayer"
 #~ msgstr "Crear entidad fiscal"
