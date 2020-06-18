@@ -365,7 +365,16 @@ class SupplierDetailsView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['taxpayer'] = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id']).get_taxpayer_child()
+        if self.request.user.is_AP:
+            if taxpayer.new_comment_from_supplier is True:
+                taxpayer.new_comment_from_supplier = False
+                taxpayer.save()
+        if self.request.user.is_supplier:
+            if taxpayer.new_comment_from_ap is True:
+                taxpayer.new_comment_from_ap = False
+                taxpayer.save()
+        context['taxpayer'] = taxpayer
         context['taxpayer_address'] = context['taxpayer'].address_set.get()
         context['taxpayer_contact'] = context['taxpayer'].contactinformation_set.get()
         context['taxpayer_bank_account'] = context['taxpayer'].bankaccount_set.get()
@@ -571,9 +580,16 @@ class TaxpayerCommentView(UserLoginPermissionRequiredMixin, TaxPayerPermissionMi
     def form_valid(self, form):
         form = self.set_required_fields(form)
         action = self.request.POST['action']
-        if self.request.user.is_AP and action == TAXPAYER_STATUS_CHANGE_REQUIRED:
-            taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
-            run_strategy_taxpayer_status(action, taxpayer, self.request)
+        taxpayer = get_object_or_404(TaxPayer, pk=self.kwargs['taxpayer_id'])
+        if self.request.user.is_AP:
+            taxpayer.new_comment_from_ap = True
+            taxpayer.save()
+            if action == TAXPAYER_STATUS_CHANGE_REQUIRED:
+                run_strategy_taxpayer_status(action, taxpayer, self.request)
+        elif self.request.user.is_supplier:
+            taxpayer.new_comment_from_supplier = True
+            taxpayer.save()
+
         return super().form_valid(form)
 
     def form_invalid(self, forms):
