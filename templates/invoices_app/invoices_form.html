@@ -132,12 +132,11 @@
           </div>
           <div class="row ml-0 mr-0 mb-3">
             <div class="col">
-              <div class="row mb-2">{% trans "Invoice File" %}</div>
-              <div class="row"><p>{{ form.invoice_file }}</p></div>
+              <div class="row mb-2 justify-content-center">{% trans "Invoice File" %}</div>
+              <div class="row justify-content-center"><p>{{ form.invoice_file }}</p></div>
             </div>
-            
-            
           </div>
+
           {% if form.invoice_file.errors %}
             {% for error in form.invoice_file.errors %}
               <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
