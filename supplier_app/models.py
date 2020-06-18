@@ -137,7 +137,8 @@ class TaxPayer(models.Model):
     )
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     taxpayer_date = models.DateField(auto_now_add=True, verbose_name=_("Creation date"))
-
+    new_comment_from_supplier = models.BooleanField(default=False)
+    new_comment_from_ap = models.BooleanField(default=False)
     history = HistoricalRecords(inherit=True)
 
     def __str__(self):

@@ -53,9 +53,14 @@
                                 {% trans "Invoices" %}
                             </a> -->
                             <a class='btn btn-info'
-                                href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">
+                               href="{% url 'supplier-details' taxpayer_id=taxpayer.id %}">
                                 {% trans "Edit" %}
                             </a>
+                            {% if taxpayer.new_comment_from_ap%}
+                            <a data-toggle="tooltip" data-placement="right" title="{% trans 'New unread commments' %}">
+                                <i class='far fa-comment-dots' style='font-size:24px'></i>
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
