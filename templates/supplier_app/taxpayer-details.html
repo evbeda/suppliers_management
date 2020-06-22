@@ -42,21 +42,10 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-md-3">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Workday id" %}</h6>
-                        </div>
-                        <div class="col-md-4">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Business name" %}</h6>
-                        </div>
-                        <div class="col-md-5">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Taxpayer Identification Number" %}</h6>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="card-text">
+                            <h6 class="card-subtitle text-muted d-inline">{% trans "Workday id" %}:</h6>
+                            <p class="card-text d-inline">
                                 {% if taxpayer.workday_id%}
                                 {{taxpayer.workday_id}}
                                 {% else %}
@@ -65,56 +54,40 @@
                             </p>
                         </div>
                         <div class="col-md-4">
-                            <p>{{taxpayer.business_name}}</p>
+                            <h6 class="card-subtitle text-muted  d-inline">{% trans "Business name" %}:</h6>
+                            <p class="d-inline">{{taxpayer.business_name}}</p>
                         </div>
                         <div class="col-md-5">
-                            <p>{{taxpayer.cuit}}</p>
+                            <h6 class="card-subtitle text-muted d-inline">{% trans "Taxpayer Identification Number" %}:</h6>
+                            <p class="d-inline">{{taxpayer.cuit}}</p>
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
+                        <div class="col-md-4" style="padding-right:0">
+                            <h6 class="card-subtitle text-muted d-inline" >{% trans "Payment Type" %}:</h6>
+                            <p class="d-inline">{{taxpayer.get_payment_type_display}}</p>
+                        </div>
                         <div class="col-md-3">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Payment Type" %}</h6>
+                            <h6 class="card-subtitle text-muted d-inline">{% trans "Payment Term" %}:</h6>
+                            <p class="d-inline">{{taxpayer.payment_term}}</p>
                         </div>
-                        <div class="col-md-4">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Payment Term" %}</h6>
-                        </div>
-                        <div class="col-md-5">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "EB entities" %}</h6>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="card-text">{{taxpayer.get_payment_type_display}}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <p>{{taxpayer.payment_term}}</p>
-                        </div>
-                        <div class="col-md-5">
+                        <div class="col-md-5"  style="padding-right:0">
+                            <h6 class="card-subtitle text-muted d-inline">{% trans "EB entities" %}:</h6>
                             {% for eb_entity in taxpayer.eb_entities%}
-                            <p>{{eb_entity}}</p>
+                            <p class="d-inline">{{eb_entity}}</p>
                             {% endfor%}
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-3">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Country" %}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted d-inline">{% trans "Country" %}:</h6>
+                            <p class="d-inline">{{taxpayer.country}}</p>
                         </div>
                         <div class="col-md-4">
-                            <h6 class="card-subtitle mb-2 text-muted">{% trans "Files" %}</h6>
-                        </div>
-                        <div class="col-md-5">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <p class="card-text">{{taxpayer.country}}</p>
-                        </div>
-                        <div class="col-md-4">
-
-                            <!-- AFIP CERTIFICATE -->
-                            <a target="_blank"
+                            <h6 class="card-subtitle mb-2 text-muted  d-inline">{% trans "Files" %}:</h6>
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "AFIP registration certificate" %}
@@ -123,7 +96,7 @@
                             </a>
 
                             <!-- IIBB CERTIFICATE -->
-                            <a target="_blank"
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.iibb_registration_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "IIBB registration certificate" %}
@@ -133,7 +106,7 @@
 
                             <!-- WITHOLDING TAXES -->
                             {% if taxpayer.witholding_taxes_file %}
-                            <a target="_blank"
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "Certificate of no income withholding" %}
@@ -144,7 +117,7 @@
 
                             <!-- AFIP NO RETENTION -->
                             {% if taxpayer.afip_no_retention_taxes_file %}
-                            <a target="_blank"
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.afip_no_retention_taxes_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "AFIP No Retention" %}
@@ -155,7 +128,7 @@
 
                             <!-- IIBB NO RETENTION -->
                             {% if taxpayer.iibb_no_retention_taxes_file %}
-                            <a target="_blank"
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.iibb_no_retention_taxes_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "IIBB No Retention" %}
@@ -166,7 +139,7 @@
 
                             <!-- WITHOLDING SUSS -->
                             {% if taxpayer.witholding_suss_file %}
-                            <a target="_blank"
+                            <a target="_blank" class="d-inline"
                                 href="http://docs.google.com/gview?url={{ taxpayer.witholding_suss_file.url }}">
                                 <span class="badge badge-info">
                                     {% trans "Certificate of no SUSS withholding" %}
@@ -174,11 +147,8 @@
                                 </span>
                             </a>
                             {% endif %}
-
-                            
-                            <div class="col-md-5">
-
-                            </div>
+                        </div>
+                        <div class="col-md-5">
                         </div>
                     </div>
                 </div>
@@ -187,7 +157,7 @@
 
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="col-md-12">
                                 <div class="row">
                                     <h5 class="card-title pr-3">{% trans "Bank info" %}</h5>
@@ -265,7 +235,7 @@
                             </div>
 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
 
                             <div class="col-md-12">
                                 <div class="row">
@@ -285,37 +255,8 @@
                                     <div class="col-md-12">
                                         <div class="row mb-2">
                                             <div class="col">
-                                                <h6 class="card-subtitle text-muted">{% trans "Contact person" %}</h6>
-                                            </div>
-                                            <div class="col">
-                                                <h6 class="card-subtitle text-muted">{% trans "Phone number" %}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="card-text">{{taxpayer_contact.contact_person}}</p>
-                                            </div>
-                                            <div class="col">
-                                                <p class="card-text">{{taxpayer_contact.phone_number}}</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col-md-6">
-                                                <h6 class="card-subtitle text-muted">{% trans "Email" %}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col">
-                                                <p class="card-text">{{taxpayer_contact.email}}</p>
+                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Contact person" %}:</h6>
+                                                <p class="card-text d-inline">{{taxpayer_contact.contact_person}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -323,15 +264,29 @@
                                 <div class="row mt-3 mb-3">
                                     <div class="col-md-12">
                                         <div class="row mb-2">
-                                            <div class="col-md-6">
-                                                <h6 class="card-subtitle text-muted">{% trans "Web site" %}</h6>
+                                            <div class="col"  style="padding-right:0">
+                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Phone number" %}:</h6>
+                                                <p class="card-text d-inline">{{taxpayer_contact.phone_number}}</p>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row mt-3 mb-3">
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <p class="card-text">{{taxpayer_contact.website}}</p>
+                                        <div class="row mb-2">
+                                            <div class="col"  style="padding-right:0">
+                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Email" %}:</h6>
+                                                <p class="card-text d-inline">{{taxpayer_contact.email}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 mb-3">
+                                    <div class="col-md-12">
+                                        <div class="row mb-2">
+                                            <div class="col"  style="padding-right:0">
+                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Web site" %}:</h6>
+                                                <p class="card-text d-inline">{{taxpayer_contact.website}}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -353,59 +308,35 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "Street"%}</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "Number"%}</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "Zip_Code"%}</h6>
-                                            </div>
-                                        </div>
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Street"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.street}}</p>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.street}}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.number}}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.zip_code}}</p>
-                                            </div>
-                                        </div>
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Number"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.number}}</p>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "City"%}</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "State"%}</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <h6 class="card-subtitle text-muted">{% trans "Country"%}</h6>
-                                            </div>
-                                        </div>
+
+                                <div class="row mt-3 mb-3">
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "City"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.city}}</p>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.city}}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.state}}</p>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <p class="card-text">{{taxpayer_address.country}}</p>
-                                            </div>
-                                        </div>
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Zip_Code"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.zip_code}}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3 mb-3">
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "State"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.state}}</p>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Country"%}:</h6>
+                                        <p class="card-text d-inline">{{taxpayer_address.country}}</p>
                                     </div>
                                 </div>
                             </div>
