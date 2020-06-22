@@ -206,4 +206,6 @@ class TaxPayerEditForm(TaxPayerArgentinaBaseForm):
             'company',
             'taxpayer_date',
             'workday_id',
-            ]
+            'new_comment_from_supplier',
+            'new_comment_from_ap',
+        ]
