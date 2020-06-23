@@ -1,4 +1,5 @@
 [run]
+branch = True
 source =
     AP_app
     invoices_app
