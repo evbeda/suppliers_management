@@ -9,6 +9,6 @@ install:
   - pip install -r reqdev.txt
 # command to run tests
 script:
-  - coverage run --source='.' ./manage.py test --setting=supplier_management_site.settings.testing
+  - coverage run --branch --source='.' ./manage.py test --setting=supplier_management_site.settings.testing
 after_success:
   - coveralls
