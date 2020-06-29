@@ -13,142 +13,223 @@
     {% include 'messages_notification.html' %}
     <div class="row">
         <div class="card col-md-9">
-            <div class="card-body">
 
-                <div class="col-md-12">
-                    <div class="row justify-content-between">
-                        <div class="col-md-8">
-                            <div class="row">
-                                <h5 class="card-title col-md-4">{% trans "General information" %}</h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <!-- GENERAL INFORMATION -->
+                                <h5 class="card-title d-inline mr-3">{% trans "General information" %}</h5>
                                 <strong> | </strong>
                                 {% if taxpayer.taxpayer_state != 'DENIED' %}
-                                <a class='card-link'
+                                <a class='card-link d-inline mr-4'
                                     href="{% url 'taxpayer-update' taxpayer_id=taxpayer.id %}">
                                     {% trans "Edit" %}
                                     <i class="fa fa-edit"></i>
                                 </a>
                                 {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row justify-content-around">
-                                <strong>{% trans "Status" %}:</strong>
-                                <p>
-                                    <span class="{{taxpayer.get_badge}}">
+                                <strong class="d-inline">{% trans "Status" %}:</strong>
+                                <p class="d-inline">
+                                    <span class="{{taxpayer.get_badge}} d-inline">
                                         {{ taxpayer.get_taxpayer_state_display}}
                                     </span>
                                 </p>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <h6 class="card-subtitle text-muted d-inline">{% trans "Workday id" %}:</h6>
-                            <p class="card-text d-inline">
-                                {% if taxpayer.workday_id%}
-                                {{taxpayer.workday_id}}
-                                {% else %}
-                                {% trans "No workday id" %}
-                                {% endif%}
-                            </p>
+                        <div class="row mb-2 pl-3">
+                                <p class="card-subtitle text-muted">{% trans "Workday id" %}:</p>
+                                <p class="card-subtitle ml-2">
+                                    {% if taxpayer.workday_id%}
+                                    {{taxpayer.workday_id}}
+                                    {% else %}
+                                    {% trans "No workday id" %}
+                                    {% endif%}
+                                </p>
                         </div>
-                        <div class="col-md-4">
-                            <h6 class="card-subtitle text-muted  d-inline">{% trans "Business name" %}:</h6>
-                            <p class="d-inline">{{taxpayer.business_name}}</p>
-                        </div>
-                        <div class="col-md-5">
-                            <h6 class="card-subtitle text-muted d-inline">{% trans "Taxpayer Identification Number" %}:</h6>
-                            <p class="d-inline">{{taxpayer.cuit}}</p>
-                        </div>
-                    </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-4" style="padding-right:0">
-                            <h6 class="card-subtitle text-muted d-inline" >{% trans "Payment Type" %}:</h6>
-                            <p class="d-inline">{{taxpayer.get_payment_type_display}}</p>
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "Business name" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer.business_name}}</p>
                         </div>
-                        <div class="col-md-3">
-                            <h6 class="card-subtitle text-muted d-inline">{% trans "Payment Term" %}:</h6>
-                            <p class="d-inline">{{taxpayer.payment_term}}</p>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "Taxpayer Identification Number" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer.cuit}}</p>
                         </div>
-                        <div class="col-md-5"  style="padding-right:0">
-                            <h6 class="card-subtitle text-muted d-inline">{% trans "EB entities" %}:</h6>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "Payment Type" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer.get_payment_type_display}}</p>
+                        </div>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "Payment Term" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer.payment_term}}</p>
+                        </div>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "EB entities" %}:</p>
                             {% for eb_entity in taxpayer.eb_entities%}
-                            <p class="d-inline">{{eb_entity}}</p>
-                            {% endfor%}
+                                <p class="card-subtitle d-inline ml-2">{{eb_entity}}</p>
+                                {% endfor%}
+                        </div>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted">{% trans "Country" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer.country}}</p>
+                        </div>
+
+                        <div class="row mb-2 pl-3" style="width: fit-content;">
+                            <div class="col-2" style="padding:0;">
+                                <p class="card-subtitle text-muted">{% trans "Files" %}:</p>
+                            </div>
+
+                            <div class="col-6 justify-content-start" style="padding:0; margin: -6px 0 0 0px;">
+                                <a target="_blank" class=""
+                                    href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "AFIP registration certificate" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+
+                                <!-- IIBB CERTIFICATE -->
+                                <a target="_blank" class="d-inline"
+                                    href="http://docs.google.com/gview?url={{ taxpayer.iibb_registration_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "IIBB registration certificate" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+
+                                <!-- WITHOLDING TAXES -->
+                                {% if taxpayer.witholding_taxes_file %}
+                                <a target="_blank" class="d-inline"
+                                    href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "Certificate of no income withholding" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+
+                                <!-- AFIP NO RETENTION -->
+                                {% if taxpayer.afip_no_retention_taxes_file %}
+                                <a target="_blank" class="d-inline"
+                                    href="http://docs.google.com/gview?url={{ taxpayer.afip_no_retention_taxes_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "AFIP No Retention" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+
+                                <!-- IIBB NO RETENTION -->
+                                {% if taxpayer.iibb_no_retention_taxes_file %}
+                                <a target="_blank" class="d-inline"
+                                    href="http://docs.google.com/gview?url={{ taxpayer.iibb_no_retention_taxes_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "IIBB No Retention" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+
+                                <!-- WITHOLDING SUSS -->
+                                {% if taxpayer.witholding_suss_file %}
+                                <a target="_blank" class="d-inline"
+                                    href="http://docs.google.com/gview?url={{ taxpayer.witholding_suss_file.url }}">
+                                    <span class="badge badge-info">
+                                        {% trans "Certificate of no SUSS withholding" %}
+                                        <i class="fa fa-eye ml-2"></i>
+                                    </span>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mb-2 pl-3">
+                            <p class="card-subtitle text-muted"></p>
+                            <p class="card-subtitle ml-2"></p>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3">
-                            <h6 class="card-subtitle mb-2 text-muted d-inline">{% trans "Country" %}:</h6>
-                            <p class="d-inline">{{taxpayer.country}}</p>
+                    <!-- CONTACT INFORMATION -->
+                    <div class="col-md-5">
+                        <div class="row mb-2">
+                            <h5 class="card-title pr-3 d-inline">{% trans "Contact information" %}</h5>
+                        <strong> |</strong>
+                        {% if taxpayer.taxpayer_state != 'DENIED' %}
+                        <a class='card-link  d-inline'
+                            href="{% url 'contact-update' taxpayer_id=taxpayer.id contact_id=taxpayer_contact.id %}">
+                            {% trans "Edit" %}
+                            <i class="fa fa-edit d-inline"></i>
+                        </a>
+                        {% endif %}
                         </div>
-                        <div class="col-md-4">
-                            <h6 class="card-subtitle mb-2 text-muted  d-inline">{% trans "Files" %}:</h6>
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.afip_registration_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "AFIP registration certificate" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
 
-                            <!-- IIBB CERTIFICATE -->
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.iibb_registration_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "IIBB registration certificate" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
-
-                            <!-- WITHOLDING TAXES -->
-                            {% if taxpayer.witholding_taxes_file %}
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.witholding_taxes_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "Certificate of no income withholding" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
-                            {% endif %}
-
-                            <!-- AFIP NO RETENTION -->
-                            {% if taxpayer.afip_no_retention_taxes_file %}
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.afip_no_retention_taxes_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "AFIP No Retention" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
-                            {% endif %}
-
-                            <!-- IIBB NO RETENTION -->
-                            {% if taxpayer.iibb_no_retention_taxes_file %}
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.iibb_no_retention_taxes_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "IIBB No Retention" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
-                            {% endif %}
-
-                            <!-- WITHOLDING SUSS -->
-                            {% if taxpayer.witholding_suss_file %}
-                            <a target="_blank" class="d-inline"
-                                href="http://docs.google.com/gview?url={{ taxpayer.witholding_suss_file.url }}">
-                                <span class="badge badge-info">
-                                    {% trans "Certificate of no SUSS withholding" %}
-                                    <i class="fa fa-eye ml-2"></i>
-                                </span>
-                            </a>
-                            {% endif %}
+                        <div class="row mb-2" style="width: 400px;">
+                            <p class="card-subtitle text-muted d-inline">{% trans "Contact person" %}:</p>
+                            <p class="card-subtitle ml-2 d-inline">{{taxpayer_contact.contact_person}}</p>
                         </div>
-                        <div class="col-md-5">
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Phone number" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_contact.phone_number}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Email" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_contact.email}}</p>
+                        </div>
+
+                        <div class="row mb-3">
+                            <p class="card-subtitle text-muted">{% trans "Web site" %}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_contact.website}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <h5 class="card-title pr-3 d-inline">{% trans "Address information" %}</h5>
+                        <strong> |</strong>
+                        {% if taxpayer.taxpayer_state != 'DENIED' %}
+                        <a class='card-link d-inline'
+                            href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">
+                            {% trans "Edit" %}
+                            <i class="fa fa-edit d-inline"></i>
+                        </a>
+                        {% endif %}
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Street"%}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_address.street}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Number"%}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_address.number}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "City"%}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_address.city}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Zip_Code"%}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_address.zip_code}}</p>
+                        </div>
+
+                        <div class="row mb-2" style="width: 400px;">
+                            <p class="card-subtitle text-muted">{% trans "State"%}:</p>
+                            <p class="card-subtitle ml-2" >{{taxpayer_address.state}}</p>
+                        </div>
+
+                        <div class="row mb-2">
+                            <p class="card-subtitle text-muted">{% trans "Country"%}:</p>
+                            <p class="card-subtitle ml-2">{{taxpayer_address.country}}</p>
                         </div>
                     </div>
                 </div>
@@ -173,54 +254,54 @@
 
                             </div>
                             <div class="col-md-12">
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Bank name" %}:</p>
                                     <p class="card-subtitle pl-2">
                                         {{taxpayer_bank_account.get_bank_info_display}}
                                     </p>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Beneficiary" %}:</p>
                                     <p class="card-subtitle pl-2">
                                         {{taxpayer_bank_account.bank_beneficiary}}
                                     </p>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Bank account type" %}:</p>
                                     <p class="card-subtitle pl-2">
                                         {{taxpayer_bank_account.get_bank_account_type_display}}
                                     </p>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Bank transaction type" %}:</p>
                                     <p class="card-subtitle pl-2">
                                         {{taxpayer_bank_account.get_bank_transaction_type_display}}
                                     </p>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Taxpayer condition" %}:</p>
                                     <p class="card-subtitle pl-2">
                                         {{taxpayer.get_taxpayer_condition_display}}
                                     </p>
                                 </div>
 
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Bank code" %}:</p>
                                     <p class="card-subtitle pr-2 pl-3">
                                         {{taxpayer_bank_account.bank_info}}
                                     </p>
                                 </div>
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Account number" %}:</p>
                                     <p class="card-subtitle pr-2 pl-3">
                                         {{taxpayer_bank_account.bank_account_number}}
                                     </p>
                                 </div>
-                                <div class="row mb-3">
+                                <div class="row mb-2">
                                     <p class="card-subtitle text-muted">{% trans "Files" %}:</p>
                                     <a target="_blank" class="card-subtitle pr-2 pl-3"
                                         href="http://docs.google.com/gview?url={{ taxpayer_bank_account.bank_cbu_file.url }}">
@@ -229,115 +310,6 @@
                                             <i class="fa fa-eye ml-2"></i>
                                         </span>
                                     </a>
-
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-5">
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <h5 class="card-title pr-3">{% trans "Contact information" %}</h5>
-                                    <strong> |</strong>
-                                    {% if taxpayer.taxpayer_state != 'DENIED' %}
-                                    <a class='card-link'
-                                        href="{% url 'contact-update' taxpayer_id=taxpayer.id contact_id=taxpayer_contact.id %}">
-                                        {% trans "Edit" %}
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col">
-                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Contact person" %}:</h6>
-                                                <p class="card-text d-inline">{{taxpayer_contact.contact_person}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col"  style="padding-right:0">
-                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Phone number" %}:</h6>
-                                                <p class="card-text d-inline">{{taxpayer_contact.phone_number}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col"  style="padding-right:0">
-                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Email" %}:</h6>
-                                                <p class="card-text d-inline">{{taxpayer_contact.email}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-12">
-                                        <div class="row mb-2">
-                                            <div class="col"  style="padding-right:0">
-                                                <h6 class="card-subtitle text-muted d-inline">{% trans "Web site" %}:</h6>
-                                                <p class="card-text d-inline">{{taxpayer_contact.website}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <h5 class="card-title pr-3">{% trans "Address information" %}</h5>
-                                    <strong> |</strong>
-                                    {% if taxpayer.taxpayer_state != 'DENIED' %}
-                                    <a class='card-link'
-                                        href="{% url 'address-update' taxpayer_id=taxpayer.id address_id=taxpayer_address.id %}">
-                                        {% trans "Edit" %}
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row mt-3 mb-3">
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Street"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.street}}</p>
-                                    </div>
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Number"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.number}}</p>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-3 mb-3">
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "City"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.city}}</p>
-                                    </div>
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Zip_Code"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.zip_code}}</p>
-                                    </div>
-                                </div>
-
-                                <div class="row mt-3 mb-3">
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "State"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.state}}</p>
-                                    </div>
-                                    <div class="col">
-                                        <h6 class="card-subtitle text-muted d-inline">{% trans "Country"%}:</h6>
-                                        <p class="card-text d-inline">{{taxpayer_address.country}}</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -354,14 +326,13 @@
                         </a>
                         {% endif %}
                     </div>
-                        
+
                     <a href="{% url 'taxpayer-history' taxpayer_id=taxpayer.id %}" class="btn btn-primary">
                         {% trans "Taxpayer History" %}
                         <i class="fas fa-history"></i>
                     </a>
                     {% endif %}
                 </div>
-
             </div>
         </div>
 
