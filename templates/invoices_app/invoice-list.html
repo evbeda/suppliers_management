@@ -53,6 +53,7 @@
                         <th scope="col">{% trans "Country"%}</th>
                         <th scope="col">{% trans "Invoice Date"%}</th>
                         <th scope="col">{% trans "Due Date"%}</th>
+                        <th scope="col">{% trans "Eventbrite Entity"%}</th>
                         <th scope="col">{% trans "Invoice Number"%}</th>
                         <th scope="col">{% trans "PO Number"%}</th>
                         <th scope="col">{% trans "Total Amount"%}</th>
@@ -84,6 +85,7 @@
                         <td>{{invoice.taxpayer.country}}</td>
                         <td>{{invoice.invoice_date|date:date_format }}</td>
                         <td>{{invoice.invoice_due_date|date:date_format }}</td>
+                        <td>{{invoice.invoice_eb_entity}}</td>
                         <td>{{invoice.invoice_number}}</td>
                         <td>{{invoice.po_number}}</td>
                         <td>{{invoice.currency}} {{invoice.total_amount}}</td>

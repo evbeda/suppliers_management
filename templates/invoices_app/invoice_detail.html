@@ -75,6 +75,7 @@
           </div>
           <div class="col-sm-8">
             <h6 class="mb-3">{% trans "Details:" %}</h6>
+            <div><strong>{% trans "Eventbrite Entity" %}</strong> {{invoice.invoice_eb_entity}}</div>
             <div><strong>{% trans "Taxpayer Identification Number:" %}</strong> {{taxpayer.cuit}}</div>
             <div><strong>{% trans "Payment Option:" %}</strong> {{taxpayer.get_payment_term_display}}</div>
             <div><strong>{% trans "PO number:" %}</strong> {{invoice.po_number}}</div>
