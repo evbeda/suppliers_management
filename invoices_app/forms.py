@@ -19,8 +19,6 @@ class InvoiceForm(forms.ModelForm):
             'invoice_number',
             'po_number',
             'currency',
-            'net_amount',
-            'vat',
             'total_amount',
             'invoice_file',
             'workday_id',
@@ -28,14 +26,6 @@ class InvoiceForm(forms.ModelForm):
         widgets = {
             'currency': forms.Select(attrs={'class': 'custom-select'}),
             'po_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': _('e.g. 124246346')}),
-            'vat': forms.NumberInput(
-                attrs={
-                    'id': 'vat',
-                    'class': 'form-control',
-                    'placeholder': '0',
-                    'onChange': 'calculate_total_amount()',
-                }
-            ),
             'total_amount': forms.NumberInput(
                 attrs={
                     'id': 'total',
@@ -43,15 +33,6 @@ class InvoiceForm(forms.ModelForm):
                     'placeholder': '0'
                 }
             ),
-            'net_amount': forms.NumberInput(
-                attrs={
-                    'id': 'net_amount',
-                    'class': 'form-control',
-                    'placeholder': '0',
-                    'label': _('Net Amount'),
-                    'onChange': 'calculate_total_amount()',
-                    }
-                ),
             'invoice_number': forms.TextInput(
                 attrs={
                     'class': 'form-control',

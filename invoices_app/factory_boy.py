@@ -22,8 +22,6 @@ class InvoiceFactory(factory.django.DjangoModelFactory):
     invoice_file = file_mock
     currency = 'ARS'
     invoice_number = '1234'
-    net_amount = '4000'
-    vat = '1200'
     total_amount = '5200'
     invoice_eb_entity = factory.SubFactory(EBEntityFactory)
 
