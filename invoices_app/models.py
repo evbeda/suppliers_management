@@ -47,12 +47,16 @@ class Invoice(models.Model):
         max_digits=20,
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.01'))],
+        blank=True,
+        null=True,
     )
     vat = models.DecimalField(
         max_digits=20,
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.00'))],
         verbose_name=_('Tax Liens'),
+        blank=True,
+        null=True,
     )
     total_amount = models.DecimalField(
         max_digits=20,
