@@ -48,8 +48,6 @@ EXPORT_TO_XLS_FULL = {
     'Due Date': 'invoice_due_date',
     'Date Received': 'invoice_date_received',
     'Currency': 'currency',
-    'Net Amount': 'net_amount',
-    'VAT': 'vat',
     'Total Amount': 'total_amount',
     'Workday ID': 'workday_id',
     'PO Number': 'po_number'

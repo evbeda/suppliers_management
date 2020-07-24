@@ -81,11 +81,9 @@ class TestBase(TestCase):
                 'invoice_number': '987654321',
                 'invoice_type': 'A',
                 'eb_entity': self.eb_entity_example.id,
-                'net_amount': '4000',
                 'po_number': '98876',
                 'taxpayer': self.taxpayer.id,
                 'total_amount': '5200',
-                'vat': '1200',
                 'user': self.user.id,
             }
 

@@ -42,18 +42,7 @@ class Invoice(models.Model):
     invoice_due_date = models.DateField(verbose_name=_('Due Date'))
     invoice_date_received = models.DateTimeField(auto_now_add=True, verbose_name=_('Date Received'))
     invoice_number = models.CharField(max_length=20, verbose_name=_('Invoice Number'))
-    net_amount = models.DecimalField(
-        verbose_name=_('Net amount'),
-        max_digits=20,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-    )
-    vat = models.DecimalField(
-        max_digits=20,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.00'))],
-        verbose_name=_('Tax Liens'),
-    )
+
     total_amount = models.DecimalField(
         max_digits=20,
         decimal_places=2,
