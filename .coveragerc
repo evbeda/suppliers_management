@@ -1,4 +1,6 @@
 [run]
+plugins =
+    django_coverage_plugin
 source =
     AP_app
     invoices_app
