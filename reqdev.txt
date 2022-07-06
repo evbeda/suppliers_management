@@ -54,7 +54,7 @@ isodate==0.6.0
 jdcal==1.4.1
 jedi==0.15.1
 kombu==4.6.5
-lxml==4.4.1
+lxml==4.9.1
 mccabe==0.6.1
 more-itertools==7.2.0
 oauthlib==3.1.0
